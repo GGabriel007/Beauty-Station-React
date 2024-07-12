@@ -32,7 +32,7 @@ function App() {
       <Router>
         <div className="App">
           <Header />
-          <Routes>
+          <Routes basename= "/Beauty-Station-React">
             <Route path="/" element={<BeautyStation />} />
             <Route path="/classes" element={<BeautySClasses />} />
             <Route path="/servicio-a-domicilio" element={<BeautySDomicilio />} />

@@ -35,11 +35,11 @@
   bottom: 40px;
   right: 40px;
   background-color: #ffffff;
-  color: rgb(0, 0, 0);
+  color: #ed93b4;
   border: none;
   border-radius: 50%;
   width: 75px;
-  height: 70px;
+  height: 75px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -52,13 +52,21 @@
 
 .cart-button:hover {
   background-color: #ed93b4;
+  color: white;
 }
 
 .cart-button span {
-  background: #ed93b4;
-  color: white;
-  border-radius: 100%;
-  padding: 1px 6px;
+  padding: 3px 3px;
+}
+
+@media (max-width: 768px) {
+  /*Header*/
+  .cart-button {
+    bottom: 100px;
+    right: 20px;
+  }
+  
+
 }
 
 
