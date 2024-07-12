@@ -1,0 +1,42 @@
+// src/pages/BeautySClasses.js
+import React from 'react';
+import '../styles/beauty-SClasses.css';
+import { Link } from 'react-router-dom';
+
+const BeautySClasses = () => {
+  return (
+    <>
+      <div className="information-classes">
+        <div className="top-information-classes">
+            <h2 className="header-information-classes"><strong>Clases 2024</strong></h2>
+        </div>
+        <div className="mid-information-classes">
+            <div className="center-classes">
+                <Link to = "/classes/classes-1">
+                    <img className="icon-classes" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos"/>
+                </Link>
+                <div className="text-classes">
+                    <Link to = "/classes/classes-1">
+                        <p className = "class_links-classes">Cursos Profesionales de Peinado</p>
+                    </Link>
+                    <p>Este curso de peinado profesional resume tips, materiales y técnicas actuales. No necesitas experiencia previa. Adquirirás conocimientos y herramientas para emprender. Las clases son prácticas y efectivas. Necesitarás cabezote y otros materiales; se dará asesoría. En algunas clases, necesitarás modelo previo aviso. El curso tiene 3 módulos, que puedes comprar por separado si deseas actualizarte.</p>
+                </div>
+            </div>
+            <div className="center-classes">
+                <Link to = "/classes/classes-2">
+                    <img className="icon-classes" src={`${process.env.PUBLIC_URL}/images/CursosInfo1.jpeg`} alt="Informacion de Cursos"/>
+                </Link>
+                <div className="text-classes">
+                        <Link to = "/classes/classes-2">
+                        <p className = "class_links-classes">Cursos Profesionales de Maquillaje</p>
+                        </Link>
+                    <p>Nuestro curso de maquillaje profesional tiene 3 módulos especializados en maquillaje social con tips, materiales y técnicas actuales. No necesitas experiencia previa. Obtendrás conocimientos, herramientas y certificación, junto con nuestro book "The Makeup Guide". Si tienes experiencia, puedes comprar módulos por separado.</p>
+            </div>
+        </div>
+    </div>
+    </div>
+    </>
+  );
+};
+
+export default BeautySClasses;

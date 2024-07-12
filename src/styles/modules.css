@@ -1,0 +1,131 @@
+
+/*Information*/
+
+.information-module {
+    width: 100%;
+    text-align: center;
+    background-color: white;
+}
+
+.mid-information-module {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f7f7f7;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 100;
+}
+
+
+.header-information-module {
+    font-size: 36px;
+    font-family: "PT Serif", serif;
+    margin: 50px;
+}
+
+.text-module {
+    margin-bottom: 10px;
+    font-size: 20px;
+    width: 615px;
+    text-align: left;
+    line-height: 1.4;
+
+}
+
+.class_links-module {
+    color: black;
+    text-decoration: underline;
+}
+
+.gallery-module {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-image-module img{
+    margin-top: 25PX;
+    width: 300px;
+    height: 515px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    background-color: white;
+    padding: 3px;
+
+}
+
+.second-image-module img{
+    margin-top: 25PX;
+    width: 375px;
+    height: 700px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    background-color: white;
+    padding: 3px;
+
+}
+
+.thumbnails-module {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.thumbnails-module img {
+    width: 100px;
+    height: 180px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    border-radius: 15px; 
+}
+
+.thumbnails-module img:hover {
+    transform: scale(1.1);
+}
+
+/*Cart style*/
+.cart {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    margin: 20px 0;
+  }
+  
+  .cart h2 {
+    margin-top: 0;
+  }
+  
+  .cart ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .cart li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+
+@media (max-width: 768px) {
+
+    /*Content*/
+
+    .main-image-module img{
+        width: 300px;
+        height: 500px;
+    }
+
+    .second-image-module img {
+        width: 345px;
+        height: 570px;
+    }
+
+    .text-module {
+        font-size: 19px;
+        width: 80%;
+    }
+
+}

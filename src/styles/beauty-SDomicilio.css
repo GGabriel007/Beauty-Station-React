@@ -1,0 +1,79 @@
+/*Information*/
+
+.information-form {
+    width: 100%;
+    text-align: center;
+    background-color: white;
+    padding-bottom: 50px; 
+}
+
+.top-information-form {
+    padding-top: 1px;
+}
+
+.header-information-form {
+    font-size: 36px;
+    font-family: "PT Serif", serif;
+    margin: 50px;
+}
+
+.mid-information-form {
+    width: 60%;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #e6e0e2;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-family: "Barlow Condensed", sans-serif;
+    font-size: 16px;
+    text-align: left;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-top: 10px;
+}
+
+input, textarea {
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 15px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 20px;
+    cursor: pointer;
+    border-radius: 4px;
+
+}
+
+textarea {
+    resize: none;
+}
+
+.second-Text {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #7b7b7b
+    ;
+}
+
+
+@media (max-width: 768px) {
+
+    /*Content*/
+
+}

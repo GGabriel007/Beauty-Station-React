@@ -1,0 +1,145 @@
+
+/* Information  */
+
+.information{
+    width: 100%;
+    text-align: center;
+}
+
+.top-information{
+    
+    margin-bottom: 15px;
+}
+
+.header-information {
+    font-size: 36px;
+    margin: 50px;
+}
+
+.mid-information{
+
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    padding-bottom: 15px;
+    gap: 70px;
+    background-color: #f7f7f7;
+    padding-top: 25px;
+}
+
+.center img {
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 275px;
+
+}
+
+
+.center img:hover{
+    transform: scale(1.05);
+    opacity: 0.8;
+}
+
+.icon {
+    height: 500px;
+    width: 275px;
+    border-radius: 15px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    padding: 3px;
+
+}
+
+.text {
+    font-size: 25px;
+    line-height: 1.4;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 100;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    padding-right: 200px;
+    padding-left: 200px;
+    background-color: rgb(238, 238, 238);
+    justify-content: flex-start;
+    font-size: 25px;
+    padding-bottom: 25px;
+}
+
+.first-text{
+    font-size: 36px;
+    color: #c66085;
+    display: flex;
+    justify-content: center;
+
+}
+
+.map-container{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+
+}
+
+.waze-logo{
+    width: 60px;
+    height: 60px;
+}
+
+.block {
+    width: 10px;
+}
+
+.waze{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.map-container iframe {
+    width: 100%;
+    max-width: 1200px;
+    height: 450px;
+    border: 0;
+}
+
+
+/* Media queries for smaller screens */
+@media (max-width: 768px) {
+
+
+    /*Content*/
+
+    .mid-information {
+        flex-direction: column;
+    }
+
+    .center {
+        width: 100%;
+    }
+
+    .content {
+        padding: 20px;
+        font-size: 20px;
+    }
+
+    .first-text {
+        font-size: 28px;
+    }
+
+    .text {
+        font-size: 27px;
+    }
+
+
+}
