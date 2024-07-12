@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Beauty-Station-React/static/css/main.4442dbb3.css",
+    "main.js": "/Beauty-Station-React/static/js/main.f9ceeb6c.js",
+    "static/js/453.77de081b.chunk.js": "/Beauty-Station-React/static/js/453.77de081b.chunk.js",
+    "index.html": "/Beauty-Station-React/index.html",
+    "main.4442dbb3.css.map": "/Beauty-Station-React/static/css/main.4442dbb3.css.map",
+    "main.f9ceeb6c.js.map": "/Beauty-Station-React/static/js/main.f9ceeb6c.js.map",
+    "453.77de081b.chunk.js.map": "/Beauty-Station-React/static/js/453.77de081b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4442dbb3.css",
+    "static/js/main.f9ceeb6c.js"
+  ]
+}
