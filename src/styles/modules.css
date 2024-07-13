@@ -86,6 +86,54 @@
     transform: scale(1.1);
 }
 
+/*schedule buttons*/
+.button-schedule{
+    list-style-type: none;
+    padding: 0;
+}
+
+.button-schedule li {
+    display: flex;
+    align-items: center;
+  }
+  
+  .button-schedule label {
+    margin-left: 5px;
+  }
+
+/* Cart button */
+
+.add-to-cart-button {
+    background-color: #ffffff; /* Green background */
+    border: none; /* Remove borders */
+    color: #ed93b4; /* White text */
+    padding: 15px 32px; /* Some padding */
+    text-align: center; /* Centered text */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Make the button fit the content */
+    font-size: 16px; /* Increase font size */
+    margin: 4px 2px; /* Some margin */
+    cursor: pointer; /* Pointer/hand icon */
+    border-radius: 12px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+  }
+  
+  .add-to-cart-button:hover {
+    background-color: #ed93b4; /* Darker green on hover */
+    color: white;
+  }
+  
+  .add-to-cart-button {
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+  }
+  
+  .add-to-cart-button {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+  
+  
+
 /*Cart style*/
 .cart {
     padding: 20px;

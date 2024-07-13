@@ -11,6 +11,9 @@ const CartPage = () => {
   const handleCheckout = async () => {
     const moduleIds = {
       'Modulo 1 Hair': 'YiqijCCEkEZAIeMVujBc',
+      'Module 1.1 Hair': 'js2jxcj3rNWxD7aEHycA',
+      'Module 1.2 Hair': 'RVzA81gMYtkv9fIdh18T',
+      'Module 1.3 Hair': 'Y152Sb3Ca3AURPUcaMUY',
       'Modulo 2 Hair': 'STw1zDaJNVOMT49f248v',
       'Modulo 3 Hair': '8ccNOMId0Gh8MLFTYlSM',
       'Modulo 4 Hair': 'c7SLqHPwsEeO7Bx7B1PI',
