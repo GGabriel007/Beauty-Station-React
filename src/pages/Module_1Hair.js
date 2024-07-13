@@ -1,11 +1,14 @@
 // src/pages/Module_1Hair.js
 import React, { useEffect, useContext } from 'react';
 import { CartContext } from '../context/CartContext'; // Import CartContext
+import { SeatContext } from '../context/SeatContext'; // Import SeatContext
 import '../styles/modules.css';
+
 
 
 const Module_1Hair = () => {
   const { addToCart } = useContext(CartContext); // Get addToCart function from context
+  const seatsAvailable = useContext(SeatContext); // Get seats data from context
 
   useEffect(() => {
     const thumbnails = document.querySelectorAll('.thumbnail-module');
@@ -76,6 +79,7 @@ const Module_1Hair = () => {
             <p><b>Precio por persona:</b> Q2,000</p>
             <p><b>Inscripción:</b> Q500</p>
             <button onClick={handleAddToCart}>Add to Cart</button>
+            <p><b>Asientos disponibles:</b> {seatsAvailable[0]}</p> {/* Display the seats available */}
           </div>
           <div className="second-image-module">
             <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos" />
