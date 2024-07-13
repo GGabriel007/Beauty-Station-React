@@ -1,28 +1,43 @@
 // src/pages/Module_2Hair.js
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
+import { CartContext } from '../context/CartContext'; // Import CartContext
+import { SeatContext } from '../context/SeatContext'; // Import SeatContext
 import '../styles/modules.css';
+
 
 const Module_2Hair = () => {
 
-    useEffect(() => {
-        const thumbnails = document.querySelectorAll('.thumbnail-module');
-        const selectedImage = document.getElementById('selectedImage-module');
-        
-        thumbnails.forEach(thumbnail => {
-            thumbnail.addEventListener('click', () => {
-                selectedImage.src = thumbnail.src;
-            });
-        });
+    const { addToCart } = useContext(CartContext); // Get addToCart function from context
+    const seatsAvailable = useContext(SeatContext); // Get seats data from context
 
-        //Cleanup function to remove event listeners when the component unmounts
-        return () => {
-            thumbnails.forEach(thumbnail => {
-                thumbnail.removeEventListener('click', () => {
-                    selectedImage.src = thumbnail.src;
-                });
-            });
-        };
-    },   []);
+  useEffect(() => {
+    const thumbnails = document.querySelectorAll('.thumbnail-module');
+    const selectedImage = document.getElementById('selectedImage-module');
+
+    const handleThumbnailClick = (event) => {
+      selectedImage.src = event.target.src;
+    };
+
+    thumbnails.forEach(thumbnail => {
+      thumbnail.addEventListener('click', handleThumbnailClick);
+    });
+
+    // Cleanup function to remove event listeners when the component unmounts
+    return () => {
+      thumbnails.forEach(thumbnail => {
+        thumbnail.removeEventListener('click', handleThumbnailClick);
+      });
+    };
+    }, []);
+
+  const handleAddToCart = () => {
+    const moduleItem = {
+      name: 'Modulo 2 Hair',
+      price: 3500
+    };
+    addToCart(moduleItem);
+  };
+
 
 
 
@@ -41,9 +56,9 @@ const Module_2Hair = () => {
 
                 </div>
                 <div className="thumbnails-module">
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 1"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_2Hair.jpeg`}/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_3Hair.jpeg`}/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 2"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos 2.1"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_3Hair.jpeg`} alt="Informacion de Cursos 2.2"/>
                 </div>
             </div>
                 <div className="text-module">
@@ -75,6 +90,8 @@ const Module_2Hair = () => {
                     </ul>
                     <p><b>Precio por persona:</b> Q3,500</p>
                     <p><b>Inscripción:</b> Q500</p>
+                    <button onClick={handleAddToCart}>Add to Cart</button>
+                    <p><b>Asientos disponibles:</b> {seatsAvailable[3]}</p>
                 </div>
             <div className="second-image-module">
             <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos"/> 

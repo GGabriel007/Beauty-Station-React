@@ -43,7 +43,7 @@ const Classes2 = () => {
                     </Link>
                 <div className="text-class">
                     <Link to = "/classes/classes-2/Module_3Mkup">
-                        <p className = "class_links-class">Maestria en novias y tendencias</p>
+                        <p className = "class_links-class">Maestria en Novias y Tendencias</p>
                     </Link>
                     <p>Ideal para actualizarte en tendencias internacionales, ALEH compartirá los tips y productos utilizados por los maquillistas de celebridades para impactar a tus clientes y resaltar tu perfil en redes sociales.</p>
                     <p>Nivel: Avanzado/Actualización</p>

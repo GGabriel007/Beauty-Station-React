@@ -1,29 +1,41 @@
 // src/pages/Module_1Hair.js
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
+import { CartContext } from '../context/CartContext'; // Import CartContext
+import { SeatContext } from '../context/SeatContext'; // Import SeatContext
 import '../styles/modules.css';
 
 const Module_4Hair = () => {
 
-    useEffect(() => {
-        const thumbnails = document.querySelectorAll('.thumbnail-module');
-        const selectedImage = document.getElementById('selectedImage-module');
-        
-        thumbnails.forEach(thumbnail => {
-            thumbnail.addEventListener('click', () => {
-                selectedImage.src = thumbnail.src;
-            });
-        });
+  const { addToCart } = useContext(CartContext); // Get addToCart function from context
+  const seatsAvailable = useContext(SeatContext); // Get seats data from context
 
-        //Cleanup function to remove event listeners when the component unmounts
-        return () => {
-            thumbnails.forEach(thumbnail => {
-                thumbnail.removeEventListener('click', () => {
-                    selectedImage.src = thumbnail.src;
-                });
-            });
-        };
-    },   []);
+  useEffect(() => {
+    const thumbnails = document.querySelectorAll('.thumbnail-module');
+    const selectedImage = document.getElementById('selectedImage-module');
 
+    const handleThumbnailClick = (event) => {
+      selectedImage.src = event.target.src;
+    };
+
+    thumbnails.forEach(thumbnail => {
+      thumbnail.addEventListener('click', handleThumbnailClick);
+    });
+
+    // Cleanup function to remove event listeners when the component unmounts
+    return () => {
+      thumbnails.forEach(thumbnail => {
+        thumbnail.removeEventListener('click', handleThumbnailClick);
+      });
+    };
+    }, []);
+
+  const handleAddToCart = () => {
+    const moduleItem = {
+      name: 'Modulo 4 Hair',
+      price: 8500
+    };
+    addToCart(moduleItem);
+  };
   return (
     <>
 
@@ -35,14 +47,14 @@ const Module_4Hair = () => {
             <div class="gallery-module">
                 <div class="main-image-module">
                     
-                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos"/> 
+                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 7"/> 
                        
 
                 </div>
                 <div class="thumbnails-module">
-                    <img class="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 1"/>
-                    <img class="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos 2"/>
-                    <img class="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_3Hair.jpeg`} alt="Informacion de Cursos 3"/>
+                    <img class="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 4"/>
+                    <img class="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos 4"/>
+                    <img class="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_3Hair.jpeg`} alt="Informacion de Cursos 4"/>
                 </div>
             </div>
             <div class="text-module">
@@ -96,16 +108,18 @@ const Module_4Hair = () => {
                 </ul>
                 <p><b>Precio por persona:</b> Q8,500</p>
                 <p><b>Inscripción:</b> Q500</p>
+                <button onClick={handleAddToCart}>Add to Cart</button>
+                <p><b>Asientos disponibles:</b> {seatsAvailable[6]}</p>
             </div>
             <div class="second-image-module">
-            <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos"/> 
+            <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_2Hair.jpeg`} alt="Informacion de Curso 4"/> 
             </div>
             <div class = "text-module">
                 <p><b>TÉRMINOS Y CONDICIONES</b></p>
                 <p>*Los pagos para este curso son necesarios para asegurar su cupo y no son reembolsables bajo ninguna circunstancia. En caso de cancelación o ausencia, incluyendo enfermedad, no se permite el canje por otros cursos, servicios o productos. La reposición de clases tiene un costo adicional y está sujeta a la disponibilidad del equipo. No se permiten acompañantes en clase, a menos que se solicite como modelo en días específicos. Es indispensable estar solvente para participar en las clases.</p>
             </div>
             <div class="second-image-module">
-                <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_3Hair.jpeg`} alt="Informacion de Cursos"/> 
+                <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_3Hair.jpeg`} alt="Informacion de Curso 4"/> 
             </div>
         </div>
     </div>

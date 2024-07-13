@@ -1,28 +1,41 @@
 // src/pages/Module_1Hair.js
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
+import { CartContext } from '../context/CartContext'; // Import CartContext
+import { SeatContext } from '../context/SeatContext'; // Import SeatContext
 import '../styles/modules.css';
 
 const Module_3Hair = () => {
-
+    const { addToCart } = useContext(CartContext); // Get addToCart function from context
+    const seatsAvailable = useContext(SeatContext); // Get seats data from context
+  
     useEffect(() => {
-        const thumbnails = document.querySelectorAll('.thumbnail-module');
-        const selectedImage = document.getElementById('selectedImage-module');
-        
+      const thumbnails = document.querySelectorAll('.thumbnail-module');
+      const selectedImage = document.getElementById('selectedImage-module');
+  
+      const handleThumbnailClick = (event) => {
+        selectedImage.src = event.target.src;
+      };
+  
+      thumbnails.forEach(thumbnail => {
+        thumbnail.addEventListener('click', handleThumbnailClick);
+      });
+  
+      // Cleanup function to remove event listeners when the component unmounts
+      return () => {
         thumbnails.forEach(thumbnail => {
-            thumbnail.addEventListener('click', () => {
-                selectedImage.src = thumbnail.src;
-            });
+          thumbnail.removeEventListener('click', handleThumbnailClick);
         });
-
-        //Cleanup function to remove event listeners when the component unmounts
-        return () => {
-            thumbnails.forEach(thumbnail => {
-                thumbnail.removeEventListener('click', () => {
-                    selectedImage.src = thumbnail.src;
-                });
-            });
-        };
-    },   []);
+      };
+      }, []);
+  
+    const handleAddToCart = () => {
+      const moduleItem = {
+        name: 'Modulo 3 Hair',
+        price: 4000
+      };
+      addToCart(moduleItem);
+    };
+  
 
 
   return (
@@ -37,13 +50,13 @@ const Module_3Hair = () => {
             <div className="gallery-module">
                 <div className="main-image-module">
                     
-                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos"/> 
+                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 3"/> 
                        
 
                 </div>
                 <div className="thumbnails-module">
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 1"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos 2"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 3"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos 3"/>
                     <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_3Hair.jpeg`} alt="Informacion de Cursos 3"/>
                 </div>
             </div>
@@ -76,6 +89,8 @@ const Module_3Hair = () => {
                 </ul>
                 <p><b>Precio por persona:</b> Q4,000</p>
                 <p><b>Inscripción:</b> Q500</p>
+                <button onClick={handleAddToCart}>Add to Cart</button>
+                <p><b>Asientos disponibles:</b> {seatsAvailable[0]}</p>
             </div>
             <div className="second-image-module">
             <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos"/> 

@@ -1,5 +1,5 @@
 // src/App.js
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -21,32 +21,10 @@ import Module_4Mkup from './pages/Module_4Mkup';
 import CartPage from './pages/CartPage'; // Adjust the import path if necessary
 import { CartProvider, CartContext } from './context/CartContext';
 import { SeatProvider } from './context/SeatContext';
-
-import { collection, getDocs } from "firebase/firestore";
-import { db } from './config/firestore';
-
 function App() {
 
-  useEffect(() => {
-    const getModulos = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "Modulos"));
-        const seatsAvailable = querySnapshot.docs.map(doc => {
-          const data = doc.data();
-          const moduleName = Object.keys(data)[0]; // Get the first key in the document
-          return data[moduleName]; // Return the value (number of seats available)
-        });
-        console.log("Asientos disponibles: ", seatsAvailable);
-        console.log("Assientos en Clase 1: ", seatsAvailable[0]);
-      } catch (error) {
-        console.error("Error fetching Modulos: ", error);
-      }
-    };
-    getModulos();
-  }, []);
-
   return (
-    <SeatProvider>
+    <SeatProvider >
     <CartProvider>
       <Router>
         <div className="App">

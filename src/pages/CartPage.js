@@ -1,42 +1,47 @@
 // src/pages/CartPage.js
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { CartContext } from '../context/CartContext';
 import { db } from '../config/firestore';
 import { doc, updateDoc, increment } from 'firebase/firestore'; 
 
 const CartPage = () => {
-  const { cartItems, removeFromCart } = useContext(CartContext);
+  const { cartItems, removeFromCart, clearCart } = useContext(CartContext);
+  const [ notification, setNotification ] = useState ("");
 
   const handleCheckout = async () => {
     const moduleIds = {
-      'Modulo 1': 'ldZlzT5c6Vzr2AW548Jv',    // Module 1 ID
-      'Modulo 2': 'lXUmhrh64uRPbPKD8b3P',    // Module 2 ID
-      'Modulo 3': '5xowU2Z9pu5U5XG1stO1',    // Module 3 ID
+      'Modulo 1 Hair': 'YiqijCCEkEZAIeMVujBc',
+      'Modulo 2 Hair': 'STw1zDaJNVOMT49f248v',
+      'Modulo 3 Hair': '8ccNOMId0Gh8MLFTYlSM',
+      'Modulo 4 Hair': 'c7SLqHPwsEeO7Bx7B1PI',
+      'Modulo 1 Mkup': 'TbtbRlZRAByiY8FdIWKV',
+      'Modulo 2 Mkup': 'jnqzTVshfEhHIbY3XCkE',
+      'Modulo 3 Mkup': 'EeXD8HxcyTG6uZ5QJnHf',
+      'Modulo 4 Mkup': 'FSPeqUuhkb6L5Q3fVqlP',
     };
   
     try {
       for (const item of cartItems) {
         const moduleId = moduleIds[item.name];
         if (moduleId) {
-          console.log(`Updating module ID: ${moduleId} for item: ${item.name}`);
           const moduleRef = doc(db, "Modulos", moduleId);
-          console.log(`Decreasing seats for ${item.name}`);
           await updateDoc(moduleRef, {
             [item.name]: increment(-1)
           });
-        } else {
-          console.warn(`No module ID found for item: ${item.name}`);
-        }
+        } 
       }
-      console.log("Seats updated successfully");
-    } catch (error) {
+        clearCart(); //Clear the cart after successfully!
+        setNotification("Purchase completed successfully!");
+      } catch (error) {
       console.error("Error updating seats: ", error);
-    }
+      setNotification("There was an error processing your purchase.");
+      }
   };
 
   return (
     <div>
       <h1>Cart</h1>
+      {notification && <p> {notification}</p>}
       {cartItems.length === 0 ? (
         <p>Your cart is empty</p>
       ) : (

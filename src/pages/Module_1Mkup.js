@@ -1,28 +1,40 @@
 // src/pages/Module_1Mkup.js
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
+import { CartContext } from '../context/CartContext'; // Import CartContext
+import { SeatContext } from '../context/SeatContext'; // Import SeatContext
 import '../styles/modules.css';
 
 const Module_1Mkup = () => {
-
+    const { addToCart } = useContext(CartContext); // Get addToCart function from context
+    const seatsAvailable = useContext(SeatContext); // Get seats data from context
+  
     useEffect(() => {
-        const thumbnails = document.querySelectorAll('.thumbnail-module');
-        const selectedImage = document.getElementById('selectedImage-module');
-        
+      const thumbnails = document.querySelectorAll('.thumbnail-module');
+      const selectedImage = document.getElementById('selectedImage-module');
+  
+      const handleThumbnailClick = (event) => {
+        selectedImage.src = event.target.src;
+      };
+  
+      thumbnails.forEach(thumbnail => {
+        thumbnail.addEventListener('click', handleThumbnailClick);
+      });
+  
+      // Cleanup function to remove event listeners when the component unmounts
+      return () => {
         thumbnails.forEach(thumbnail => {
-            thumbnail.addEventListener('click', () => {
-                selectedImage.src = thumbnail.src;
-            });
+          thumbnail.removeEventListener('click', handleThumbnailClick);
         });
-
-        //Cleanup function to remove event listeners when the component unmounts
-        return () => {
-            thumbnails.forEach(thumbnail => {
-                thumbnail.removeEventListener('click', () => {
-                    selectedImage.src = thumbnail.src;
-                });
-            });
-        };
-    },   []);
+      };
+      }, []);
+  
+    const handleAddToCart = () => {
+      const moduleItem = {
+        name: 'Modulo 1 Mkup',
+        price: 3000
+      };
+      addToCart(moduleItem);
+    };
 
 
     return (
@@ -35,14 +47,14 @@ const Module_1Mkup = () => {
             <div className="gallery-module">
                 <div className="main-image-module">
                     
-                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/CursosInfo1.jpeg`} alt="Informacion de Cursos"/> 
+                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/CursosInfo1.jpeg`} alt="Informacion de Cursos 5"/> 
                        
 
                 </div>
                 <div className="thumbnails-module">
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/CursosInfo1.jpeg`} alt="Informacion de Cursos 1"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/CursosInfo2.jpeg`} alt="Informacion de Cursos 2"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/CursosInfo3.jpeg`} alt="Informacion de Cursos 3"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/CursosInfo1.jpeg`} alt="Informacion de Cursos 5"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/CursosInfo2.jpeg`} alt="Informacion de Cursos 5"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/CursosInfo3.jpeg`} alt="Informacion de Cursos 5"/>
                 </div>
             </div>
             <div className="text-module">
@@ -71,16 +83,18 @@ const Module_1Mkup = () => {
                 <p><b>Precio por persona:</b> Q3,000</p>
                 <p><b>Inscripción:</b> Q500</p>
                 <p><b>Precio de Kit de pieles perfectas (Altamente Recomendado):</b> Q5,900</p>
+                <button onClick={handleAddToCart}>Add to Cart</button>
+                <p><b>Asientos disponibles:</b> {seatsAvailable[4]}</p>
             </div>
             <div className="second-image-module">
-            <img src={`${process.env.PUBLIC_URL}/images/CursosInfo2.jpeg`}/> 
+            <img src={`${process.env.PUBLIC_URL}/images/CursosInfo2.jpeg`} alt="Informacion de Cursos 5"/> 
             </div>
             <div className = "text-module">
                 <p><b>TÉRMINOS Y CONDICIONES</b></p>
                 <p>*Los pagos para este curso son necesarios para asegurar su cupo y no son reembolsables bajo ninguna circunstancia. En caso de cancelación o ausencia, incluyendo enfermedad, no se permite el canje por otros cursos, servicios o productos. La reposición de clases tiene un costo adicional y está sujeta a la disponibilidad del equipo. No se permiten acompañantes en clase, a menos que se solicite como modelo en días específicos. Es indispensable estar solvente para participar en las clases.</p>
             </div>
             <div className="second-image-module">
-                <img src={`${process.env.PUBLIC_URL}/images/CursosInfo3.jpeg`}/> 
+                <img src={`${process.env.PUBLIC_URL}/images/CursosInfo3.jpeg`} alt="Informacion de Cursos 5"/> 
             </div>
         </div>
     </div> 

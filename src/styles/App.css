@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #ffffff;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -60,9 +60,9 @@
 }
 
 @media (max-width: 768px) {
-  /*Header*/
+  /*Cart*/
   .cart-button {
-    bottom: 100px;
+    bottom: 20px;
     right: 20px;
   }
   

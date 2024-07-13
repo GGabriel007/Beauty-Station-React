@@ -5,7 +5,6 @@ import { SeatContext } from '../context/SeatContext'; // Import SeatContext
 import '../styles/modules.css';
 
 
-
 const Module_1Hair = () => {
   const { addToCart } = useContext(CartContext); // Get addToCart function from context
   const seatsAvailable = useContext(SeatContext); // Get seats data from context
@@ -32,7 +31,7 @@ const Module_1Hair = () => {
 
   const handleAddToCart = () => {
     const moduleItem = {
-      name: 'Module 1 Hair',
+      name: 'Modulo 1 Hair',
       price: 2000
     };
     addToCart(moduleItem);
@@ -51,8 +50,8 @@ const Module_1Hair = () => {
             </div>
             <div className="thumbnails-module">
               <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 1" />
-              <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos 2" />
-              <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_3Hair.jpeg`} alt="Informacion de Cursos 3" />
+              <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos 1" />
+              <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_3Hair.jpeg`} alt="Informacion de Cursos 1" />
             </div>
           </div>
           <div className="text-module">
@@ -79,7 +78,7 @@ const Module_1Hair = () => {
             <p><b>Precio por persona:</b> Q2,000</p>
             <p><b>Inscripción:</b> Q500</p>
             <button onClick={handleAddToCart}>Add to Cart</button>
-            <p><b>Asientos disponibles:</b> {seatsAvailable[0]}</p> {/* Display the seats available */}
+            <p><b>Asientos disponibles:</b> {seatsAvailable[5]}</p>
           </div>
           <div className="second-image-module">
             <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos" />
