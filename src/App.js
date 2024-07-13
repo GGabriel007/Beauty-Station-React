@@ -1,5 +1,5 @@
 // src/App.js
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -14,7 +14,6 @@ import Module_1Hair from './pages/Module_1Hair';
 import Module_2Hair from './pages/Module_2Hair';
 import Module_3Hair from './pages/Module_3Hair';
 import Module_4Hair from './pages/Module_4Hair';
-
 import Module_1Mkup from './pages/Module_1Mkup';
 import Module_2Mkup from './pages/Module_2Mkup';
 import Module_3Mkup from './pages/Module_3Mkup';
@@ -22,10 +21,38 @@ import Module_4Mkup from './pages/Module_4Mkup';
 import CartPage from './pages/CartPage'; // Adjust the import path if necessary
 import { CartProvider, CartContext } from './context/CartContext';
 
+import { collection, getDocs } from "firebase/firestore";
 
-
+/*
+  // Import the functions you need from the SDKs you need
+  // import { initializeApp } from "firebase/app";
+  // import { getAnalytics } from "firebase/analytics";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+  */
 
 function App() {
+/*
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
+  const firebaseConfig = {
+  apiKey: "AIzaSyC3iGrPdTzfotM6cPq4kTN1rqiHZroTx9w",
+  authDomain: "beauty-station-react.firebaseapp.com",
+  databaseURL: "https://beauty-station-react-default-rtdb.firebaseio.com",
+  projectId: "beauty-station-react",
+  storageBucket: "beauty-station-react.appspot.com",
+  messagingSenderId: "875001822116",
+  appId: "1:875001822116:web:837432708fdb56e8259f31",
+  measurementId: "G-83F64G1MR6"
+};
+
+
+// Initialize Firebase
+//const app = initializeApp(firebaseConfig);
+//const analytics = getAnalytics(app);
+*/
+
 
   return (
     <CartProvider>

@@ -5,8 +5,7 @@ import '../styles/modules.css';
 
 
 const Module_1Hair = () => {
-    const { addToCart } = useContext(CartContext);
-    console.log('addToCart function:', addToCart); // Add this line
+  const { addToCart } = useContext(CartContext); // Get addToCart function from context
 
   useEffect(() => {
     const thumbnails = document.querySelectorAll('.thumbnail-module');
@@ -28,14 +27,13 @@ const Module_1Hair = () => {
     };
     }, []);
 
-    const handleAddToCart = () => {
-        const moduleItem = {
-          name: 'Master Waves',
-          price: 2000
-        };
-        console.log('Adding to cart:', moduleItem); // Add this line
-        addToCart(moduleItem);
-      };
+  const handleAddToCart = () => {
+    const moduleItem = {
+      name: 'Master Waves',
+      price: 2000
+    };
+    addToCart(moduleItem);
+  };
 
   return (
     <>
