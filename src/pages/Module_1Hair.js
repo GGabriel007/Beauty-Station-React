@@ -51,9 +51,10 @@ const Module_1Hair = () => {
 
   const handleAddToCart = () => {
     let moduleName = 'Modulo 1 Hair';
-    if (selectedSchedule === 'Clase 2') moduleName = 'Module 1.1 Hair';
-    else if (selectedSchedule === 'Clase 3') moduleName = 'Module 1.2 Hair';
-    else if (selectedSchedule === 'Clase 4') moduleName = 'Module 1.3 Hair';
+
+    if (selectedSchedule === 'Clase 2') moduleName = 'Modulo 1.1 Hair';
+    else if (selectedSchedule === 'Clase 3') moduleName = 'Modulo 1.2 Hair';
+    else if (selectedSchedule === 'Clase 4') moduleName = 'Modulo 1.3 Hair';
 
     const moduleItem = {
       name: moduleName,
