@@ -32,7 +32,7 @@ const Module_1Hair = () => {
 
   const handleAddToCart = () => {
     const moduleItem = {
-      name: 'Master Waves',
+      name: 'Module 1 Hair',
       price: 2000
     };
     addToCart(moduleItem);
