@@ -1,5 +1,5 @@
 // src/pages/Module_2Hair.js
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { CartContext } from '../context/CartContext'; // Import CartContext
 import { SeatContext } from '../context/SeatContext'; // Import SeatContext
 import '../styles/modules.css';
@@ -9,6 +9,9 @@ const Module_2Hair = () => {
 
     const { addToCart } = useContext(CartContext); // Get addToCart function from context
     const seatsAvailable = useContext(SeatContext); // Get seats data from context
+
+    const [selectedSchedule, setSelectedSchedule] = useState('Clase 1'); // State for selected schedule
+    const [availableSeats, setAvailableSeats] = useState(0); // State for available seats
 
   useEffect(() => {
     const thumbnails = document.querySelectorAll('.thumbnail-module');
@@ -30,16 +33,32 @@ const Module_2Hair = () => {
     };
     }, []);
 
-  const handleAddToCart = () => {
-    const moduleItem = {
-      name: 'Modulo 2 Hair',
-      price: 3500
+    useEffect(() => {
+      // Updating available seats based on the selected schedule
+      switch (selectedSchedule) {
+        case 'Clase 1':
+          setAvailableSeats(seatsAvailable[2] || 0); // Adjust index as needed
+          break;
+        case 'Clase 2':
+          setAvailableSeats(seatsAvailable[3] || 0); // Adjust index as needed
+          break;
+        default:
+          setAvailableSeats(0);
+      }
+    }, [selectedSchedule, seatsAvailable]);
+
+    const handleAddToCart = () => {
+      let moduleName = 'ModuloHair2';
+  
+      if (selectedSchedule === 'Clase 2') moduleName = 'ModuloHair22';
+  
+      const moduleItem = {
+        name: moduleName,
+        price: 3500,
+        schedule: selectedSchedule
+      };
+      addToCart(moduleItem);
     };
-    addToCart(moduleItem);
-  };
-
-
-
 
   return (
     <>
@@ -66,33 +85,37 @@ const Module_2Hair = () => {
                     <p>Realza la belleza de tus clientes con diferentes técnicas de peinados, aprende diferentes tipos de trenzas, coletas, recogidos y semi recogidos</p>
                     <p>Nivel: Intermedio</p>
                     <p>Materiales: Kit completo de peinado.</p>
-                    <p className="class_links-module">Horarios:</p>
+                    <p className="class_links-module">Clases:</p>
                     <ul>
-                    <li>Clase 5: 20 de agosto</li>
-                    <p>Trenzas en tendencias.</p>
-                    <li>Clase 6: 27 de agosto</li>
-                    <p>Semirecogido con extenciones.</p>
-                    <li>Clase 7: 3 de septiembre</li>
-                    <p>Cola baja.</p>
-                    <li>Clase 8: 10 de septiembre</li>
-                    <p>Sleek Bun</p>
-                    <li>Clase 9: 17 de septiembre</li>
-                    <p>Recogido clasico</p>
-                    <li>Clase 10: 24 de septiembre</li>
-                    <p>Recogido con volumen.</p>
-                    <li>Clase 11: 1 de octubre</li>
-                    <p>Evaluacion.</p>
+                    <li>Clase 5: 20 de agosto - Trenzas en tendencias.</li>
+                    <li>Clase 6: 27 de agosto - Semirecogido con extenciones.</li>
+                    <li>Clase 7: 3 de septiembre - Cola baja.</li>
+                    <li>Clase 8: 10 de septiembre - Sleek Bun</li>
+                    <li>Clase 9: 17 de septiembre - Recogido clasico</li>
+                    <li>Clase 10: 24 de septiembre - Recogido con volumen.</li>
+                    <li>Clase 11: 1 de octubre - Evaluacion.</li>
                     </ul>
-                    <p className="class_links-module">Elige un Horario:</p>
+                    <p className="class_links-module">Horario:</p>
                     <ul>
-                    <li>Martes 2PM a 4PM</li>
-                    <li>Martes 6PM a 8PM</li>
+                      <li>Martes 2PM a 4PM</li>
+                      <li>Martes 6PM a 8PM</li>
                     </ul>
                     <p><b>Precio por persona:</b> Q3,500</p>
                     <p><b>Inscripción:</b> Q500</p>
-                    <button onClick={handleAddToCart}>Add to Cart</button>
-                    <p><b>Asientos disponibles:</b> {seatsAvailable[3]}</p>
-                </div>
+                    <p className="class_links-module">Selecciona una Clase:</p>
+                    <ul className='button-schedule'>
+                      <li>
+                        <input type="radio" id="clase1" name="schedule" value="Clase 1" checked={selectedSchedule === 'Clase 1'} onChange={() => setSelectedSchedule('Clase 1')} />
+                        <label htmlFor="clase1">Martes 2PM a 4PM</label>
+                      </li>
+                      <li>
+                        <input type="radio" id="clase2" name="schedule" value="Clase 2" checked={selectedSchedule === 'Clase 2'} onChange={() => setSelectedSchedule('Clase 2')} />
+                        <label htmlFor="clase2">Martes 6PM a 8PM</label>
+                      </li>
+                    </ul>
+                    <button className="add-to-cart-button" onClick={handleAddToCart}>Agendar Clase</button>
+                    <p><b>Asientos disponibles:</b> {availableSeats}</p>
+                  </div>
             <div className="second-image-module">
             <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos"/> 
             </div>

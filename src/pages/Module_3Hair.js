@@ -1,5 +1,5 @@
 // src/pages/Module_1Hair.js
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { CartContext } from '../context/CartContext'; // Import CartContext
 import { SeatContext } from '../context/SeatContext'; // Import SeatContext
 import '../styles/modules.css';
@@ -7,6 +7,9 @@ import '../styles/modules.css';
 const Module_3Hair = () => {
     const { addToCart } = useContext(CartContext); // Get addToCart function from context
     const seatsAvailable = useContext(SeatContext); // Get seats data from context
+
+    const [selectedSchedule, setSelectedSchedule] = useState('Clase 1'); // State for selected schedule
+    const [availableSeats, setAvailableSeats] = useState(0); // State for available seats
   
     useEffect(() => {
       const thumbnails = document.querySelectorAll('.thumbnail-module');
@@ -28,13 +31,32 @@ const Module_3Hair = () => {
       };
       }, []);
   
-    const handleAddToCart = () => {
-      const moduleItem = {
-        name: 'Modulo 3 Hair',
-        price: 4000
+      useEffect(() => {
+        // Updating available seats based on the selected schedule
+        switch (selectedSchedule) {
+          case 'Clase 1':
+            setAvailableSeats(seatsAvailable[4] || 0); // Adjust index as needed
+            break;
+          case 'Clase 2':
+            setAvailableSeats(seatsAvailable[5] || 0); // Adjust index as needed
+            break;
+          default:
+            setAvailableSeats(0);
+        }
+      }, [selectedSchedule, seatsAvailable]);
+  
+      const handleAddToCart = () => {
+        let moduleName = 'ModuloHair3';
+    
+        if (selectedSchedule === 'Clase 2') moduleName = 'ModuloHair32';
+    
+        const moduleItem = {
+          name: moduleName,
+          price: 4000,
+          schedule: selectedSchedule
+        };
+        addToCart(moduleItem);
       };
-      addToCart(moduleItem);
-    };
   
 
 
@@ -65,36 +87,37 @@ const Module_3Hair = () => {
                 <p>Ideal para actualizarte en tendencias internacionales y peinado elaborado. ALEH compartirá los tips y productos para impactar a tus clientes y resaltar tu perfil en redes sociales.</p>
                 <p>Nivel: Avanzado/Actualización</p>
                 <p>Materiales: Kit de peinado completo</p>
-                <p className="class_links-module">Horarios:</p>
+                <p className="class_links-module">Clases:</p>
                 <ul>
-                <li>Clase 12: jueves 3 de octubre</li>
-                <p>Redes e ilumicaión en linea.</p>
-                <li>Clase 13: martes 8 de octubre</li>
-                <p>Brindal Hair + List de cejas.</p>
-                <li>Clase 14: jueves 10 de octubre</li>
-                <p>Practica en modelo.</p>
-                <li>Clase 15: martes 15 de octubre</li>
-                <p>Peinado alto Kim Kardashian.</p>
-                <li>Clase 16: jueves 17 de octubre</li>
-                <p>Practica Kim Kardashian.</p>
-                <li>Clase 17: martes 22 de octubre</li>
-                <p>Peinado novia + colocación de velo.</p>
-                <li>Clase 18: jueves 24 de octubre</li>
-                <p>Evaluación final, novias, entrega de portafolio.</p>
+                <li>Clase 12: jueves 3 de octubre - Redes e ilumicaión en linea.</li>
+                <li>Clase 13: martes 8 de octubre - Brindal Hair + List de cejas.</li>
+                <li>Clase 14: jueves 10 de octubre - Practica en modelo.</li>
+                <li>Clase 15: martes 15 de octubre - Peinado alto Kim Kardashian.</li>
+                <li>Clase 16: jueves 17 de octubre - Practica Kim Kardashian.</li>
+                <li>Clase 17: martes 22 de octubre - Peinado novia + colocación de velo.</li>
+                <li>Clase 18: jueves 24 de octubre - Evaluación final, novias, entrega de portafolio.</li>
                 </ul>
-                <p className="class_links-module">Elige un Horario:</p>
+                <p className="class_links-module">Horario:</p>
                 <ul>
-                <li>Martes 2PM a 4PM</li>
-                <li>Martes 6PM a 8PM</li>
+                <li>Martes y Jueves 2PM a 4PM</li>
+                <li>Martes y Jueves 6PM a 8PM</li>
                 </ul>
                 <p><b>Precio por persona:</b> Q4,000</p>
                 <p><b>Inscripción:</b> Q500</p>
-                <button onClick={handleAddToCart}>Add to Cart</button>
-                <p><b>Asientos disponibles:</b> {seatsAvailable[0]}</p>
-            </div>
-            <div className="second-image-module">
-            <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos"/> 
-            </div>
+                <p className="class_links-module">Selecciona una Clase:</p>
+                    <ul className='button-schedule'>
+                      <li>
+                        <input type="radio" id="clase1" name="schedule" value="Clase 1" checked={selectedSchedule === 'Clase 1'} onChange={() => setSelectedSchedule('Clase 1')} />
+                        <label htmlFor="clase1">Martes y Jueves 2PM a 4PM</label>
+                      </li>
+                      <li>
+                        <input type="radio" id="clase2" name="schedule" value="Clase 2" checked={selectedSchedule === 'Clase 2'} onChange={() => setSelectedSchedule('Clase 2')} />
+                        <label htmlFor="clase2">Martes y Jueves 6PM a 8PM</label>
+                      </li>
+                    </ul>
+                    <button className="add-to-cart-button" onClick={handleAddToCart}>Agendar Clase</button>
+                    <p><b>Asientos disponibles:</b> {availableSeats}</p>
+                  </div>
             <div className = "text-module">
                 <p><b>TÉRMINOS Y CONDICIONES</b></p>
                 <p>*Los pagos para este curso son necesarios para asegurar su cupo y no son reembolsables bajo ninguna circunstancia. En caso de cancelación o ausencia, incluyendo enfermedad, no se permite el canje por otros cursos, servicios o productos. La reposición de clases tiene un costo adicional y está sujeta a la disponibilidad del equipo. No se permiten acompañantes en clase, a menos que se solicite como modelo en días específicos. Es indispensable estar solvente para participar en las clases.</p>

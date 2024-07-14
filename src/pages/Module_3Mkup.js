@@ -1,5 +1,5 @@
 // src/pages/Module_3Mkup.js
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { CartContext } from '../context/CartContext'; // Import CartContext
 import { SeatContext } from '../context/SeatContext'; // Import SeatContext
 import '../styles/modules.css';
@@ -8,11 +8,16 @@ const Module_3Mkup = () => {
 
     const { addToCart } = useContext(CartContext); // Get addToCart function from context
     const seatsAvailable = useContext(SeatContext); // Get seats data from context
+
+    const [selectedSchedule, setSelectedSchedule] = useState('Clase 1'); // State for selected schedule
+    const [availableSeats, setAvailableSeats] = useState(0); // State for available seats  
   
     useEffect(() => {
       const thumbnails = document.querySelectorAll('.thumbnail-module');
       const selectedImage = document.getElementById('selectedImage-module');
   
+
+
       const handleThumbnailClick = (event) => {
         selectedImage.src = event.target.src;
       };
@@ -29,15 +34,35 @@ const Module_3Mkup = () => {
       };
       }, []);
   
-    const handleAddToCart = () => {
-      const moduleItem = {
-        name: 'Modulo 3 Mkup',
-        price: 4000
-      };
-      addToCart(moduleItem);
-    };  
+      useEffect(() => {
+        // Updating available seats based on the selected schedule
+        switch (selectedSchedule) {
+          case 'Clase 1':
+            setAvailableSeats(seatsAvailable[12] || 0); // Adjust index as needed
+            break;
+          case 'Clase 2':
+            setAvailableSeats(seatsAvailable[13] || 0); // Adjust index as needed
+            break;
+          default:
+            setAvailableSeats(0);
+        }
+      }, [selectedSchedule, seatsAvailable]);
 
-  return (
+      const handleAddToCart = () => {
+        let moduleName = 'ModuloMkup3';
+    
+        if (selectedSchedule === 'Clase 2') moduleName = 'ModuloMkup32';
+    
+        const moduleItem = {
+          name: moduleName,
+          price: 3500,
+          schedule: selectedSchedule
+        };
+        addToCart(moduleItem);
+      };
+
+
+    return (
     <>
         <div className="information-module">
         <div className="top-information-module">
@@ -62,22 +87,15 @@ const Module_3Mkup = () => {
                 <p>Ideal para actualizarte en tendencias internacionales, ALEH compartirá los tips y productos utilizados por los maquillistas de celebridades para impactar a tus clientes y resaltar tu perfil en redes sociales.</p>
                 <p>Nivel: Avanzado/Actualización</p>
                 <p>Materiales: Kit de piel y cejas completo</p>
-                <p className="class_links-module">Horarios:</p>
+                <p className="class_links-module">Clases:</p>
                 <ul>
-                <li>Clase 12: jueves 3 de octubre</li>
-                <p>Redes e iluminación en linea.</p>
-                <li>Clase 13: miercoles 9 de octubre</li>
-                <p>Técnica Dafine hilos tensores.</p>
-                <li>Clase 14: jueves 10 de octubre</li>
-                <p>Práctica Dafine.</p>
-                <li>Clase 15: miercoles 16 de octubre</li>
-                <p>Técnica Pepe piel de Hada.</p>
-                <li>Clase 16: jueves 17 de octubre</li>
-                <p>Práctica Pepe.</p>
-                <li>Clase 17: miercoles 23 de octubre</li>
-                <p>Masterclass Técnica Airbrush.</p>
-                <li>Clase 18: jueves 24 de octubre</li>
-                <p>Evaluación final novias, sesión de fotos y entrega de portafolio.</p>
+                <li>Clase 12: jueves 3 de octubre - Redes e iluminación en linea.</li>
+                <li>Clase 13: miercoles 9 de octubre - Técnica Dafine hilos tensores.</li>
+                <li>Clase 14: jueves 10 de octubre - Práctica Dafine.</li>
+                <li>Clase 15: miercoles 16 de octubre - Técnica Pepe piel de Hada.</li>
+                <li>Clase 16: jueves 17 de octubre - Práctica Pepe.</li>
+                <li>Clase 17: miercoles 23 de octubre - Masterclass Técnica Airbrush.</li>
+                <li>Clase 18: jueves 24 de octubre - Evaluación final novias, sesión de fotos y entrega de portafolio.</li>
                 </ul>
                 <p className="class_links-module">Elige un Horario:</p>
                 <ul>
@@ -87,9 +105,20 @@ const Module_3Mkup = () => {
                 <p><b>Precio por persona:</b> Q4,000</p>
                 <p><b>Inscripción:</b> Q500</p>
                 <p><b>Precio de Kit de pieles perfectas (Altamente Recomendado):</b> Q5,900</p>
-                <button onClick={handleAddToCart}>Add to Cart</button>
-                <p><b>Asientos disponibles:</b> {seatsAvailable[1]}</p>
-            </div>
+                <p className="class_links-module">Selecciona una Clase:</p>
+            <ul className='button-schedule'>
+              <li>
+                <input type="radio" id="clase1" name="schedule" value="Clase 1" checked={selectedSchedule === 'Clase 1'} onChange={() => setSelectedSchedule('Clase 1')} />
+                <label htmlFor="clase1">Miercoles 2PM a 4PM</label>
+              </li>
+              <li>
+                <input type="radio" id="clase2" name="schedule" value="Clase 2" checked={selectedSchedule === 'Clase 2'} onChange={() => setSelectedSchedule('Clase 2')} />
+                <label htmlFor="clase2">Miercoles 6PM a 8PM</label>
+              </li>
+            </ul>
+            <button className="add-to-cart-button" onClick={handleAddToCart}>Agendar Clase</button>
+            <p><b>Asientos disponibles:</b> {availableSeats}</p>
+          </div>
             <div className="second-image-module">
             <img src={`${process.env.PUBLIC_URL}/images/CursosInfo2.jpeg`} alt="Informacion de Cursos 7"/> 
             </div>

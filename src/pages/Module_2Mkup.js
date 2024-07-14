@@ -1,5 +1,5 @@
 // src/pages/Module_2Mkup.js
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { CartContext } from '../context/CartContext'; // Import CartContext
 import { SeatContext } from '../context/SeatContext'; // Import SeatContext
 import '../styles/modules.css';
@@ -8,6 +8,9 @@ const Module_2Mkup = () => {
 
     const { addToCart } = useContext(CartContext); // Get addToCart function from context
     const seatsAvailable = useContext(SeatContext); // Get seats data from context
+
+    const [selectedSchedule, setSelectedSchedule] = useState('Clase 1'); // State for selected schedule
+    const [availableSeats, setAvailableSeats] = useState(0); // State for available seats
   
     useEffect(() => {
       const thumbnails = document.querySelectorAll('.thumbnail-module');
@@ -29,13 +32,32 @@ const Module_2Mkup = () => {
       };
       }, []);
   
-    const handleAddToCart = () => {
-      const moduleItem = {
-        name: 'Modulo 2 Mkup',
-        price: 3500
+      useEffect(() => {
+        // Updating available seats based on the selected schedule
+        switch (selectedSchedule) {
+          case 'Clase 1':
+            setAvailableSeats(seatsAvailable[10] || 0); // Adjust index as needed
+            break;
+          case 'Clase 2':
+            setAvailableSeats(seatsAvailable[11] || 0); // Adjust index as needed
+            break;
+          default:
+            setAvailableSeats(0);
+        }
+      }, [selectedSchedule, seatsAvailable]);
+
+      const handleAddToCart = () => {
+        let moduleName = 'ModuloMkup2';
+    
+        if (selectedSchedule === 'Clase 2') moduleName = 'ModuloMkup22';
+    
+        const moduleItem = {
+          name: moduleName,
+          price: 3500,
+          schedule: selectedSchedule
+        };
+        addToCart(moduleItem);
       };
-      addToCart(moduleItem);
-    };
 
   return (
     <>
@@ -62,22 +84,16 @@ const Module_2Mkup = () => {
                 <p>Realiza la belleza de tus clientes con diferentes técnicas de maquillaje para todo tipo de evento social.</p>
                 <p>Nivel: Intermedio</p>
                 <p>Materiales: Kit de piel y cejas completo</p>
-                <p className="class_links-module">Horarios:</p>
+                <p className="class_links-module">Clases:</p>
                 <ul>
-                <li>Clase 6: 28 de agosto</li>
-                <p>Fotografía para redes y delineados.</p>
-                <li>Clase 7: 4 de septiembre</li>
-                <p>Maquillaje de día express.</p>
-                <li>Clase 8: 11 de septiembre</li>
-                <p>Glam con pigmentos quinceañera.</p>
-                <li>Clase 9: 18 de septiembre</li>
-                <p>Técnica semi cut crease.</p>
-                <li>Clase 10: 25 de septiembre</li>
-                <p>Técnica smokey latte makeup.</p>
-                <li>Clase 11: 2 de octubre</li>
-                <p>Evaluacion.</p>
+                <li>Clase 6: 28 de agosto - Fotografía para redes y delineados.</li>
+                <li>Clase 7: 4 de septiembre - Maquillaje de día express.</li>
+                <li>Clase 8: 11 de septiembre - Glam con pigmentos quinceañera.</li>
+                <li>Clase 9: 18 de septiembre - Técnica semi cut crease.</li>
+                <li>Clase 10: 25 de septiembre - Técnica smokey latte makeup.</li>
+                <li>Clase 11: 2 de octubre - Evaluacion.</li>
                 </ul>
-                <p className="class_links-module">Elige un Horario:</p>
+                <p className="class_links-module">Horario:</p>
                 <ul>
                 <li>Miércoles 2PM a 4PM</li>
                 <li>Miércoles 6PM a 8PM</li>
@@ -85,9 +101,20 @@ const Module_2Mkup = () => {
                 <p><b>Precio por persona:</b> Q3,500</p>
                 <p><b>Inscripción:</b> Q500</p>
                 <p><b>Precio de Kit de pieles perfectas (Altamente Recomendado):</b> Q5,900</p>
-                <button onClick={handleAddToCart}>Add to Cart</button>
-                <p><b>Asientos disponibles:</b> {seatsAvailable[7]}</p>
-            </div>
+                    <p className="class_links-module">Selecciona una Clase:</p>
+                <ul className='button-schedule'>
+                  <li>
+                    <input type="radio" id="clase1" name="schedule" value="Clase 1" checked={selectedSchedule === 'Clase 1'} onChange={() => setSelectedSchedule('Clase 1')} />
+                    <label htmlFor="clase1">Miercoles 2PM a 4PM</label>
+                  </li>
+                  <li>
+                    <input type="radio" id="clase2" name="schedule" value="Clase 2" checked={selectedSchedule === 'Clase 2'} onChange={() => setSelectedSchedule('Clase 2')} />
+                    <label htmlFor="clase2">Miercoles 6PM a 8PM</label>
+                  </li>
+                </ul>
+                <button className="add-to-cart-button" onClick={handleAddToCart}>Agendar Clase</button>
+                <p><b>Asientos disponibles:</b> {availableSeats}</p>
+              </div>
             <div className="second-image-module">
             <img src={`${process.env.PUBLIC_URL}/images/CursosInfo2.jpeg`} alt="Informacion de Cursos 6"/> 
             </div>

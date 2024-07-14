@@ -33,16 +33,10 @@ const Module_1Hair = () => {
     // Updating available seats based on the selected schedule
     switch (selectedSchedule) {
       case 'Clase 1':
-        setAvailableSeats(seatsAvailable[7] || 0); // Adjust index as needed
+        setAvailableSeats(seatsAvailable[0] || 0); // Adjust index as needed
         break;
       case 'Clase 2':
-        setAvailableSeats(seatsAvailable[10] || 0); // Adjust index as needed
-        break;
-      case 'Clase 3':
-        setAvailableSeats(seatsAvailable[3] || 0); // Adjust index as needed
-        break;
-      case 'Clase 4':
-        setAvailableSeats(seatsAvailable[6] || 0); // Adjust index as needed
+        setAvailableSeats(seatsAvailable[1] || 0); // Adjust index as needed
         break;
       default:
         setAvailableSeats(0);
@@ -50,11 +44,9 @@ const Module_1Hair = () => {
   }, [selectedSchedule, seatsAvailable]);
 
   const handleAddToCart = () => {
-    let moduleName = 'Modulo 1 Hair';
+    let moduleName = 'ModuloHair1';
 
-    if (selectedSchedule === 'Clase 2') moduleName = 'Modulo 1.1 Hair';
-    else if (selectedSchedule === 'Clase 3') moduleName = 'Modulo 1.2 Hair';
-    else if (selectedSchedule === 'Clase 4') moduleName = 'Modulo 1.3 Hair';
+    if (selectedSchedule === 'Clase 2') moduleName = 'ModuloHair12';
 
     const moduleItem = {
       name: moduleName,
@@ -86,41 +78,32 @@ const Module_1Hair = () => {
             <p>El curso más vendido, ya que aprendes desde cero diferentes tipos de waves en tendencia, incluye las famosas retro waves.</p>
             <p>Nivel: Principiante/Intermedio</p>
             <p>Materiales: Plancha, tubo y cepillo; secadora y productos de cabello</p>
-            <p className="class_links-module">Horarios:</p>
+            <p className="class_links-module">Clases:</p>
             <ul>
               <li>Clase 1: 23 de julio - Introducción, productos y cómo hacer waves con plancha.</li>
               <li>Clase 2: 30 de julio - Cómo lograr natural waves.</li>
               <li>Clase 3: 6 de agosto - Técnicas para crear glam waves.</li>
               <li>Clase 4: 13 de agosto - Estilo Old Hollywood waves y uso de velo.</li>
             </ul>
-            <p className="class_links-module">Elige un Horario:</p>
+            <p className="class_links-module">Horario:</p>
             <ul>
               <li>Martes 2PM a 4PM</li>
               <li>Martes 6PM a 8PM</li>
             </ul>
             <p><b>Precio por persona:</b> Q2,000</p>
             <p><b>Inscripción:</b> Q500</p>
-            <p className="class_links-module">Selecciona la Clase:</p>
+            <p className="class_links-module">Selecciona una Clase:</p>
             <ul className='button-schedule'>
               <li>
                 <input type="radio" id="clase1" name="schedule" value="Clase 1" checked={selectedSchedule === 'Clase 1'} onChange={() => setSelectedSchedule('Clase 1')} />
-                <label htmlFor="clase1">Clase 1</label>
+                <label htmlFor="clase1">Martes 2PM a 4PM</label>
               </li>
               <li>
                 <input type="radio" id="clase2" name="schedule" value="Clase 2" checked={selectedSchedule === 'Clase 2'} onChange={() => setSelectedSchedule('Clase 2')} />
-                <label htmlFor="clase2">Clase 2</label>
-              </li>
-              <li>
-                <input type="radio" id="clase3" name="schedule" value="Clase 3" checked={selectedSchedule === 'Clase 3'} onChange={() => setSelectedSchedule('Clase 3')} />
-                <label htmlFor="clase3">Clase 3</label>
-              </li>
-              <li>
-                <input type="radio" id="clase4" name="schedule" value="Clase 4" checked={selectedSchedule === 'Clase 4'} onChange={() => setSelectedSchedule('Clase 4')} />
-                <label htmlFor="clase4">Clase 4</label>
+                <label htmlFor="clase2">Martes 6PM a 8PM</label>
               </li>
             </ul>
             <button className="add-to-cart-button" onClick={handleAddToCart}>Agendar Clase</button>
-            {selectedSchedule && <p><b>Clase Seleccionada:</b> {selectedSchedule}</p>}
             <p><b>Asientos disponibles:</b> {availableSeats}</p>
           </div>
           <div className="second-image-module">

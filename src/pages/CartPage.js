@@ -10,17 +10,29 @@ const CartPage = () => {
 
   const handleCheckout = async () => {
     const moduleIds = {
-      'Modulo 1 Hair': 'YiqijCCEkEZAIeMVujBc',
-      'Modulo 1.1 Hair': 'js2jxcj3rNWxD7aEHycA',
-      'Modulo 1.2 Hair': 'RVzA81gMYtkv9fIdh18T',
-      'Modulo 1.3 Hair': 'Y152Sb3Ca3AURPUcaMUY',
-      'Modulo 2 Hair': 'STw1zDaJNVOMT49f248v',
-      'Modulo 3 Hair': '8ccNOMId0Gh8MLFTYlSM',
-      'Modulo 4 Hair': 'c7SLqHPwsEeO7Bx7B1PI',
-      'Modulo 1 Mkup': 'TbtbRlZRAByiY8FdIWKV',
-      'Modulo 2 Mkup': 'jnqzTVshfEhHIbY3XCkE',
-      'Modulo 3 Mkup': 'EeXD8HxcyTG6uZ5QJnHf',
-      'Modulo 4 Mkup': 'FSPeqUuhkb6L5Q3fVqlP',
+      'ModuloHair1': '1VSwAeYljJQaGBGCtX5QS',
+      'ModuloHair12': '2VazuBcKueHnslCVblSV3',
+
+      'ModuloHair2': '3ZrzuMZtiHzP6v5zIcD3A',
+      'ModuloHair22': '4YMIzbjhX8fXINxAOe6dv',
+
+      'ModuloHair3': '5H9prBtuAlbvJtuNAYq5G',
+      'ModuloHair32': '6fUBeqqDaulVrEcTVKHWt',
+
+      'ModuloHair4': '7qLvR1MucGA6logdGDHyj',
+      'ModuloHair42': '8vfcvvqcb2YEqe2CI7rbx',
+
+      'ModuloMkup1': '967tegwAK5lwMpwU9rtFj',
+      'ModuloMkup12': '990XEge5VwLUT1zUbedxS6P',
+
+      'ModuloMkup2': '991HqChTzDLihkTsdx2o04u',
+      'ModuloMkup22': '992eF5bxq0bXkRLAQmZ6D75',
+
+      'ModuloMkup3': '993lWsaMQ5pQ3HZq2n3Mdog',
+      'ModuloMkup32': '994cmDnuUQBxtLzEzstm14C',
+
+      'ModuloMkup4': '995O9tIKvDiXZlUPjbbYqVT',
+      'ModuloMkup42': '996Ci2BZVreorvwzZP0Utr5',
     };
   
     try {
