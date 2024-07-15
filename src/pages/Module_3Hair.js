@@ -72,14 +72,14 @@ const Module_3Hair = () => {
             <div className="gallery-module">
                 <div className="main-image-module">
                     
-                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 3"/> 
+                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/Hair/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 3"/> 
                        
 
                 </div>
                 <div className="thumbnails-module">
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 3"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos 3"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_3Hair.jpeg`} alt="Informacion de Cursos 3"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/Hair/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 3"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/Hair/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos 3"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/Hair/imagen_module_3Hair.jpeg`} alt="Informacion de Cursos 3"/>
                 </div>
             </div>
             <div className="text-module">
@@ -118,12 +118,15 @@ const Module_3Hair = () => {
                     <button className="add-to-cart-button" onClick={handleAddToCart}>Agendar Clase</button>
                     <p><b>Asientos disponibles:</b> {availableSeats}</p>
                   </div>
+                  <div className="second-image-module">
+            <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/Hair/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos"/> 
+            </div>
             <div className = "text-module">
                 <p><b>TÉRMINOS Y CONDICIONES</b></p>
                 <p>*Los pagos para este curso son necesarios para asegurar su cupo y no son reembolsables bajo ninguna circunstancia. En caso de cancelación o ausencia, incluyendo enfermedad, no se permite el canje por otros cursos, servicios o productos. La reposición de clases tiene un costo adicional y está sujeta a la disponibilidad del equipo. No se permiten acompañantes en clase, a menos que se solicite como modelo en días específicos. Es indispensable estar solvente para participar en las clases.</p>
             </div>
             <div className="second-image-module">
-                <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_3Hair.jpeg`} alt="Informacion de Cursos"/> 
+                <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/Hair/imagen_module_3Hair.jpeg`} alt="Informacion de Cursos"/> 
             </div>
         </div>
     </div>

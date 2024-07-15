@@ -8,18 +8,18 @@ const BeautyStation = () => {
     <>
       <div className="information">
         <div className="top-information">
-          <h2 className="header-information">Clases 2024</h2>
+          <h2 className="header-information">Cursos</h2>
         </div>
         <div className="mid-information">
           <div className="center">
           <Link to = "/classes/classes-1">
-              <img className="icon" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos" />
+              <img className="icon" src={`${process.env.PUBLIC_URL}images/Class_1/imagen_Module_Hair.jpeg`} alt="Informacion de Cursos" />
           </Link>
             <p className="text">Cursos Profesionales de Peinado</p>
           </div>
           <div className="center">
           <Link to = "/classes/classes-2">
-              <img className="icon" src={`${process.env.PUBLIC_URL}/images/CursosInfo3.jpeg`} alt="Informacion de Cursos" />
+              <img className="icon" src={`${process.env.PUBLIC_URL}images/Class_1/imagen_Module_Mkup.jpeg`} alt="Informacion de Cursos" />
           </Link>
             <p className="text">Cursos Profesionales de Maquillaje</p>
           </div>

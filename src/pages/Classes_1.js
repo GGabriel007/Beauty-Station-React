@@ -16,7 +16,7 @@ const Classes1 = () => {
             
             <div className="center-class">
                 <Link to = "/classes/classes-1/Module_1Hair">
-                    <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos"/>
+                    <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_Hair.jpeg`} alt="Informacion de Cursos"/>
                 </Link>
                 <div className="text-class">
                     <Link to = "/classes/classes-1/Module_1Hair">
@@ -28,7 +28,7 @@ const Classes1 = () => {
             </div>
             <div className="center-class">
                 <Link to = "/classes/classes-1/Module_2Hair">
-                    <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos"/>
+                    <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_Hair.jpeg`} alt="Informacion de Cursos"/>
                 </Link>
                 <div className="text-class">
                     <Link to = "/classes/classes-1/Module_2Hair">
@@ -40,7 +40,7 @@ const Classes1 = () => {
             </div>
             <div className="center-class">
                     <Link to = "/classes/classes-1/Module_3Hair">
-                    <img className ="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos"/>
+                    <img className ="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_Hair.jpeg`} alt="Informacion de Cursos"/>
                     </Link>
                 <div className="text-class">
                     <Link to = "/classes/classes-1/Module_3Hair">
@@ -52,7 +52,7 @@ const Classes1 = () => {
             </div>
             <div className="center-class">
                 <Link to = "/classes/classes-1/Module_4Hair">
-                    <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos"/>
+                    <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_Hair.jpeg`} alt="Informacion de Cursos"/>
                 </Link>
                 <div className="text-class">
                     <Link to = "/classes/classes-1/Module_4Hair">

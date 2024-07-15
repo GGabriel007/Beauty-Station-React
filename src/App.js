@@ -27,7 +27,7 @@ function App() {
     <SeatProvider >
     <CartProvider>
       <Router>
-        <div className="App">
+        <div className="App" style={{ backgroundColor: 'white', minHeight: '100vh' }}>
           <Header />
           <Routes basename= "/Beauty-Station-React">
             <Route path="/" element={<BeautyStation />} />

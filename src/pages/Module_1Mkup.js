@@ -69,14 +69,14 @@ const Module_1Mkup = () => {
             <div className="gallery-module">
                 <div className="main-image-module">
                     
-                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/CursosInfo1.jpeg`} alt="Informacion de Cursos 5"/> 
+                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Mkup/imagen_module_1Mkup.jpeg`} alt="Informacion de Cursos 5"/> 
                        
 
                 </div>
                 <div className="thumbnails-module">
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/CursosInfo1.jpeg`} alt="Informacion de Cursos 5"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/CursosInfo2.jpeg`} alt="Informacion de Cursos 5"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/CursosInfo3.jpeg`} alt="Informacion de Cursos 5"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Mkup/imagen_module_1Mkup.jpeg`} alt="Informacion de Cursos 5"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Mkup/imagen_module_1Mkup.jpeg`} alt="Informacion de Cursos 5"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Mkup/imagen_module_1Mkup.jpeg`} alt="Informacion de Cursos 5"/>
                 </div>
             </div>
             <div className="text-module">

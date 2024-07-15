@@ -22,7 +22,7 @@
     justify-content: space-evenly;
     flex-wrap: wrap;
     padding-bottom: 15px;
-    gap: 70px;
+    gap: 40px;
     background-color: #f7f7f7;
     padding-top: 25px;
 }
@@ -46,7 +46,7 @@
 }
 
 .icon {
-    height: 500px;
+    height: 275px;
     width: 275px;
     border-radius: 15px; 
     display: flex;
@@ -136,10 +136,5 @@
     .first-text {
         font-size: 28px;
     }
-
-    .text {
-        font-size: 27px;
-    }
-
 
 }

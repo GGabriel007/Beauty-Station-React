@@ -69,14 +69,14 @@ const Module_4Hair = () => {
             <div class="gallery-module">
                 <div class="main-image-module">
                     
-                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 7"/> 
+                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 7"/> 
                        
 
                 </div>
                 <div class="thumbnails-module">
-                    <img class="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 4"/>
-                    <img class="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos 4"/>
-                    <img class="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_3Hair.jpeg`} alt="Informacion de Cursos 4"/>
+                    <img class="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 4"/>
+                    <img class="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos 4"/>
+                    <img class="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_3Hair.jpeg`} alt="Informacion de Cursos 4"/>
                 </div>
             </div>
             <div class="text-module">
@@ -128,14 +128,14 @@ const Module_4Hair = () => {
                     <p><b>Asientos disponibles:</b> {availableSeats}</p>
                   </div>
             <div class="second-image-module">
-            <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_2Hair.jpeg`} alt="Informacion de Curso 4"/> 
+            <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_2Hair.jpeg`} alt="Informacion de Curso 4"/> 
             </div>
             <div class = "text-module">
                 <p><b>TÉRMINOS Y CONDICIONES</b></p>
                 <p>*Los pagos para este curso son necesarios para asegurar su cupo y no son reembolsables bajo ninguna circunstancia. En caso de cancelación o ausencia, incluyendo enfermedad, no se permite el canje por otros cursos, servicios o productos. La reposición de clases tiene un costo adicional y está sujeta a la disponibilidad del equipo. No se permiten acompañantes en clase, a menos que se solicite como modelo en días específicos. Es indispensable estar solvente para participar en las clases.</p>
             </div>
             <div class="second-image-module">
-                <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_3Hair.jpeg`} alt="Informacion de Curso 4"/> 
+                <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_3Hair.jpeg`} alt="Informacion de Curso 4"/> 
             </div>
         </div>
     </div>
