@@ -3,9 +3,16 @@ import React, { useEffect, useContext, useState } from 'react';
 import { CartContext } from '../context/CartContext'; // Import CartContext
 import { SeatContext } from '../context/SeatContext'; // Import SeatContext
 import '../styles/modules.css';
-
+import { useLocation } from 'react-router-dom';
 
 const Module_2Hair = () => {
+
+    const location = useLocation();
+      
+    useEffect(() => {
+
+        window.scrollTo(0,0);
+    }, [location]);
 
     const { cartItems, addToCart } = useContext(CartContext); // Get addToCart function from context
     const seatsAvailable = useContext(SeatContext); // Get seats data from context

@@ -1,9 +1,17 @@
 // src/pages/Classes_2.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../styles/classes.css';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Classes2 = () => {
+
+    const location = useLocation();
+    
+    useEffect(() => {
+
+        window.scrollTo(0,0);
+    }, [location]);
+
     return (
         <>
             <div className="information-class">

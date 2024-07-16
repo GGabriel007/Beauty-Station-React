@@ -1,10 +1,19 @@
 // src/pages/CartPage.js
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { CartContext } from '../context/CartContext';
 import { db } from '../config/firestore';
 import { doc, updateDoc, increment, getDoc } from 'firebase/firestore'; 
+import { useLocation } from 'react-router-dom';
 
 const CartPage = () => {
+
+  const location = useLocation();
+    
+  useEffect(() => {
+
+      window.scrollTo(0,0);
+  }, [location]);
+
   const { cartItems, removeFromCart, clearCart } = useContext(CartContext);
   const [ notification, setNotification ] = useState ("");
 
