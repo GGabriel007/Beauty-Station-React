@@ -68,12 +68,53 @@ const Module_4Hair = () => {
       }
 
       let moduleName = 'Curso Completo Peinado 2PM a 4PM';
-  
       if (selectedSchedule === 'Clase 2') moduleName = 'Curso Completo Peinado 6PM a 8PM';
+
+      // Validation for Curso Completo classes
+      const hasCursoPeinado = cartItems.some(item =>
+        item.name === 'Curso Completo Peinado 2PM a 4PM' || item.name === 'Curso Completo Peinado 6PM a 8PM'
+      );
+
+      if (hasCursoPeinado && (moduleName === 'Curso Completo Peinado 2PM a 4PM' || moduleName === 'Curso Completo Peinado 6PM a 8PM')) {
+        setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase en el carrito.');
+        return;
+      }
+
+      // Validation for Master Waves classes
+      const hasMasterWaves = cartItems.some(item =>
+        item.name === 'Master Waves 2PM a 4PM' || item.name === 'Master Waves 6PM a 8PM'
+      );
+
+      if (hasMasterWaves) {
+        setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase en el carrito.');
+        return;
+      }
+
+      // Validation for Peinados classes
+      const hasPeinados = cartItems.some(item =>
+        item.name === 'Peinados Para Eventos 2PM a 4PM' || item.name === 'Peinados Para Eventos 6PM a 8PM'
+      );
+
+      if (hasPeinados) {
+        setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase en el carrito.');
+        return;
+      }
+
+      // Validation for Maestria classes
+      const hasMaestrias = cartItems.some(item =>
+        item.name === 'Maestrías en Novias y Tendencias 2PM a 4PM' || item.name === 'Maestrías en Novias y Tendencias 6PM a 8PM'
+      );
+
+      if (hasMaestrias) {
+        setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase en el carrito.');
+        return;
+      }
+
   
       const moduleItem = {
         name: moduleName,
         price: 8500,
+        image: `${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_Hair.jpeg`,
         schedule: selectedSchedule
       };
       addToCart(moduleItem);

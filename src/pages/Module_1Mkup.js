@@ -69,9 +69,32 @@ const Module_1Mkup = () => {
 
         let moduleName = 'Pieles Perfectas 2PM a 4PM';
         if (selectedSchedule === 'Clase 2') moduleName = 'Pieles Perfectas 6PM a 8PM';
+
+        // Validation for Pieles Perfectas
+        const hasPieles = cartItems.some(item =>
+          item.name === 'Pieles Perfectas 2PM a 4PM' || item.name === 'Pieles Perfectas 6PM a 8PM'
+        );
+
+        if (hasPieles && (moduleName === 'Pieles Perfectas 2PM a 4PM' || moduleName === 'Pieles Perfectas 6PM a 8PM')) {
+          setError('Solo puedes tener una de las clases "Pieles Perfectas" en el carrito.');
+          return;
+        }
+
+        // Validation for Curso Completo Peinado
+      const hasCursoCompleto = cartItems.some(item =>
+        item.name === 'Curso Completo Maquillaje 2PM a 4PM' || item.name === 'Curso Completo Maquillaje 6PM a 8PM'
+      );
+
+      if (hasCursoCompleto) {
+        setError('No puedes agregar otras clases si tienes "Curso Completo Maquillaje" en el carrito.');
+        return;
+      }
+
+
         const moduleItem = {
           name: moduleName,
           price: 3000,
+          image: `${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_Mkup.jpeg`,          
           schedule: selectedSchedule
         };
         addToCart(moduleItem);

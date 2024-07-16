@@ -68,9 +68,32 @@ const Module_1Hair = () => {
 
       let moduleName = 'Master Waves 2PM a 4PM';
       if (selectedSchedule === 'Clase 2') moduleName = 'Master Waves 6PM a 8PM';
+
+      // Validation for Master Waves classes
+      const hasMasterWaves = cartItems.some(item =>
+        item.name === 'Master Waves 2PM a 4PM' || item.name === 'Master Waves 6PM a 8PM'
+      );
+
+      if (hasMasterWaves && (moduleName === 'Master Waves 2PM a 4PM' || moduleName === 'Master Waves 6PM a 8PM')) {
+        setError('Solo puedes tener una de las clases "Master Waves" en el carrito.');
+        return;
+      }
+
+
+      // Validation for Curso Completo Peinado
+      const hasCursoCompleto = cartItems.some(item =>
+        item.name === 'Curso Completo Peinado 2PM a 4PM' || item.name === 'Curso Completo Peinado 6PM a 8PM'
+      );
+
+      if (hasCursoCompleto) {
+        setError('No puedes agregar otras clases si tienes "Curso Completo Peinado" en el carrito.');
+        return;
+      }
+
       const moduleItem = {
         name: moduleName,
         price: 2000,
+        image: `${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_Hair.jpeg`,
         schedule: selectedSchedule
       };
       addToCart(moduleItem);

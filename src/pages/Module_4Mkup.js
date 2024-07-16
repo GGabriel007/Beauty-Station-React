@@ -71,10 +71,51 @@ const Module_4Mkup = () => {
         let moduleName = 'Curso Completo Maquillaje 2PM a 4PM';
     
         if (selectedSchedule === 'Clase 2') moduleName = 'Curso Completo Maquillaje 6PM a 8PM';
+
+        // Validation for Curso Completo classes
+      const hasCursoPeinado = cartItems.some(item =>
+        item.name === 'Curso Completo Maquillaje 2PM a 4PM' || item.name === 'Curso Completo Maquillaje 6PM a 8PM'
+      );
+
+      if (hasCursoPeinado && (moduleName === 'Curso Completo Maquillaje 2PM a 4PM' || moduleName === 'Curso Completo Maquillaje 6PM a 8PM')) {
+        setError('No puedes agregar el "Curso Completo Maquillaje" si tienes otra clase en el carrito.');
+        return;
+      }
+
+      // Validation for Pieles Perfectas
+      const hasPieles = cartItems.some(item =>
+        item.name === 'Pieles Perfectas 2PM a 4PM' || item.name === 'Pieles Perfectas 6PM a 8PM'
+      );
+
+      if (hasPieles) {
+        setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase en el carrito.');
+        return;
+      }
+
+      // Validation for Maquillaje Social classes
+      const hasMaquillaje = cartItems.some(item =>
+        item.name === 'Maquillaje Social 2PM a 4PM' || item.name === 'Maquillaje Social 6PM a 8PM'
+      );
+
+      if (hasMaquillaje) {
+        setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase en el carrito.');
+        return;
+      }
+
+      // Validation for Maestría en Novias y Tendencias classes
+      const hasMaestrias = cartItems.some(item =>
+        item.name === 'Maestría en Novias y Tendencias 2PM a 4PM' || item.name === 'Maestría en Novias y Tendencias 6PM a 8PM'
+      );
+
+      if (hasMaestrias) {
+        setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase en el carrito.');
+        return;
+      }
     
         const moduleItem = {
           name: moduleName,
           price: 9000,
+          image: `${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_Mkup.jpeg`,
           schedule: selectedSchedule
         };
         addToCart(moduleItem);

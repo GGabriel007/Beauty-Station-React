@@ -1,0 +1,149 @@
+/* src/styles/CartPage.css */
+
+.cart-page {
+    padding: 30px;
+    background-color: #f7f7f7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.cart-container{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 25px;
+}
+
+.cart-items{
+    text-align: left;
+}
+
+.payment{
+    width: 35%;
+    padding-left: 20px;
+}
+
+.cart-items ul {
+    list-style-type: none;
+    padding: 0;
+}
+.cart-items li {
+    display: flex; 
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.cart-items img { 
+    width: 50px;
+    margin-right: 10px;
+}
+
+.payment form {
+    display: flex;
+    flex-direction: column;
+}
+
+.payment label {
+    margin: 5px 0;
+}
+
+.payment input {
+    margin-bottom: 10px;
+}
+
+.payment button {
+    margin-top: 10px;
+}
+
+.header-information-cartpage{
+    font-size: 36px;
+    font-family: "PT Serif", serif;
+    margin: 50px;
+}
+
+.cart-page ul {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.cart-page li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.cart-page button {
+    margin-left: auto;
+    padding: 8px 12px;
+    background-color: #929292;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.315);
+    gap: 10px
+}
+
+.cart-page button:hover {
+    background-color: #ed93b4;
+}
+
+.cart-page .notification {
+    margin-bottom: 20px;
+    color: red;
+}
+
+.price {
+    font-size: medium;
+    color: rgb(0, 0, 0);
+}
+
+.line {
+    top: 0;
+    left: 0;
+    width: 98%;
+    height: 1px;
+    background-color: #000000;
+}
+
+.total-price {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+}
+
+.total-text {
+    font-size: larger;
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+.total-number{
+}
+
+.name-price{
+    padding-right: 20px;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+    .cart-container{
+        flex-direction: column;
+    }
+
+    .cart-total-price,
+    .payment {
+        width: 100%;
+        padding: 0;
+    }
+
+    .payment {
+        padding-top: 20px;
+    }
+}

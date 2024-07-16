@@ -71,10 +71,31 @@ const Module_2Mkup = () => {
         let moduleName = 'Maquillaje Social 2PM a 4PM';
     
         if (selectedSchedule === 'Clase 2') moduleName = 'Maquillaje Social 6PM a 8PM';
+
+        // Validation for Maquillaje Social
+        const hasMaquillaje = cartItems.some(item =>
+          item.name === 'Maquillaje Social 2PM a 4PM' || item.name === 'Maquillaje Social 6PM a 8PM'
+        );
+
+        if (hasMaquillaje && (moduleName === 'Maquillaje Social 2PM a 4PM' || moduleName === 'Maquillaje Social 6PM a 8PM')) {
+          setError('Solo puedes tener una de las clases "Maquillaje Social" en el carrito.');
+          return;
+        }
+
+        // Validation for Curso Completo Peinado
+      const hasCursoCompleto = cartItems.some(item =>
+        item.name === 'Curso Completo Maquillaje 2PM a 4PM' || item.name === 'Curso Completo Maquillaje 6PM a 8PM'
+      );
+
+      if (hasCursoCompleto) {
+        setError('No puedes agregar otras clases si tienes "Curso Completo Maquillaje" en el carrito.');
+        return;
+      }
     
         const moduleItem = {
           name: moduleName,
           price: 3500,
+          image: `${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_Mkup.jpeg`,
           schedule: selectedSchedule
         };
         addToCart(moduleItem);

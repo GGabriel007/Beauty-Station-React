@@ -4,6 +4,7 @@ import { CartContext } from '../context/CartContext';
 import { db } from '../config/firestore';
 import { doc, updateDoc, increment, getDoc } from 'firebase/firestore'; 
 import { useLocation } from 'react-router-dom';
+import '../styles/CartPage.css';
 
 const CartPage = () => {
 
@@ -45,49 +46,88 @@ const CartPage = () => {
     };
   
     try {
+      // Pre-check for seat availability
       for (const item of cartItems) {
         const moduleId = moduleIds[item.name];
         if (moduleId) {
           const moduleRef = doc(db, "Modulos", moduleId);
           const docSnap = await getDoc(moduleRef);
 
-          if (docSnap.exists() && docSnap.data()[item.name] > 0) {
-            await updateDoc(moduleRef, {
-              [item.name]: increment(-1)
-          });
-        } else {
-          throw new Error (`No hay más asientos disponibles para ${item.name}.`);
+          if (!docSnap.exists() || docSnap.data()[item.name] <= 0) {
+            throw new Error (` No hay más asientos disponibles para ${item.name}.`);
+          }
         }
       }
-    }
+
+      // Proceed with the seat update if all items have available seats
+      for (const item of cartItems){
+        const moduleId = moduleIds[item.name];
+        if (moduleId) {
+          const moduleRef = doc(db, "Modulos", moduleId);
+          await updateDoc(moduleRef, {
+            [item.name]: increment(-1)
+          });
+        }
+      }
       clearCart(); //Clear the cart after successfully!
-      setNotification("Purchase completed successfully!");
+      setNotification("¡Compra completada exitosamente!");
     } catch (error) {
-      console.error("Error updating seats: ", error);
-      setNotification("There was an error processing your purchase." + error.message);
+      setNotification("Hubo un error al procesar tu compra." + error.message);
     }
   };
 
+  const getTotalPrice = () => {
+    return cartItems.reduce((total, item) => total + item.price, 0);
+  };
+
   return (
-    <div>
-      <h1>Cart</h1>
-      {notification && <p> {notification}</p>}
-      {cartItems.length === 0 ? (
-        <p>Your cart is empty</p>
-      ) : (
-        <ul>
-          {cartItems.map((item, index) => (
-            <li key={index}>
-              {item.name}  Q{item.price}
-              <button onClick={() => removeFromCart(item)}>Remove</button>
-            </li>
-          ))}
-        </ul>
-      )}
-      {cartItems.length > 0 && (
-        <button onClick = {handleCheckout}>Checkout</button>
-      )}
-    </div>
+<div>
+  <h1 className="header-information-cartpage">Carro</h1>
+  <div className="cart-page">
+    {notification && <p className="notification">{notification}</p>}
+    {cartItems.length === 0 ? (
+      <p>Tu carrito esta vacío 🥺</p>
+    ) : (
+      <div className="cart-container">
+        <div className="cart-total-price">
+        <div className="cart-items">
+          <ul>
+            {cartItems.map((item, index) => (
+              <li key={index}>
+                <img src={item.image} alt={item.name} />
+                <div className="name-price">{item.name}  
+                <div className="price"> Q{item.price}.00 </div>
+                </div>
+                <button onClick={() => removeFromCart(item)}>Remover</button>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="line"></div>
+        <div className="total-price">
+          <div className='total-text'>TOTAL</div><div className='total-number'>Q{getTotalPrice()}.00</div>
+        </div>
+        </div>
+        <div className="payment">
+          <h2>Información del pago</h2>
+          <form>
+            {/* Add your payment form elements here */}
+            <label htmlFor="cardNumber">Número de tarjeta:</label>
+            <input type="text" id="cardNumber" name="cardNumber" />
+            <label htmlFor="expiryDate">Fecha de caducidad:</label>
+            <input type="text" id="expiryDate" name="expiryDate" />
+            <label htmlFor="cvv">CVV:</label>
+            <input type="text" id="cvv" name="cvv" />
+            <button type="submit">Pagar</button>
+          </form>
+        </div>
+      </div>
+    )}
+    {cartItems.length > 0 && (
+      <button className="checkout-button" onClick={handleCheckout}>Checkout</button>
+    )}
+  </div>
+</div>
   );
 };
 

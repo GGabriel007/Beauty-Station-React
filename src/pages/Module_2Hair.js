@@ -69,9 +69,31 @@ const Module_2Hair = () => {
 
       let moduleName = 'Peinados Para Eventos 2PM a 4PM';
       if (selectedSchedule === 'Clase 2') moduleName = 'Peinados Para Eventos 6PM a 8PM';
+
+      // Validation for Peinado Para Eventos
+      const hasPeinados = cartItems.some(item => 
+        item.name === 'Peinados Para Eventos 2PM a 4PM' || item.name === 'Peinados Para Eventos 6PM a 8PM'  
+      );
+
+      if (hasPeinados && (moduleName === 'Peinados Para Eventos 2PM a 4PM' || moduleName === 'Peinados Para Eventos 6PM a 8PM')){
+        setError('Solo puedes tener una de las clases "Peinados Para Eventos" en el carrito.');
+        return;
+      }
+
+      // Validation for Curso Completo Peinado 
+      const hasCursoCompleto = cartItems.some (item =>
+        item.name === 'Curso Completo Peinado 2PM a 4PM' || item.name === 'Curso Completo Peinado 6PM a 8PM'
+      );
+
+      if (hasCursoCompleto) {
+        setError('No puedes agregar otras clases si tienes "Curso Completo Peinado" en el carrito.');
+        return;
+      }
+
       const moduleItem = {
         name: moduleName,
         price: 3500,
+        image: `${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_Hair.jpeg`,
         schedule: selectedSchedule
       };
       addToCart(moduleItem);

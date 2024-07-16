@@ -71,9 +71,30 @@ const Module_3Mkup = () => {
     
         if (selectedSchedule === 'Clase 2') moduleName = 'Maestría en Novias y Tendencias 6PM a 8PM';
     
+        // Validation for Maestría en Novias y Tendencias
+        const hasMaestrias = cartItems.some(item =>
+          item.name === 'Maestría en Novias y Tendencias 2PM a 4PM' || item.name === 'Maestría en Novias y Tendencias 6PM a 8PM'
+        );
+
+        if (hasMaestrias && (moduleName === 'Maestría en Novias y Tendencias 2PM a 4PM' || moduleName === 'Maestría en Novias y Tendencias 6PM a 8PM')) {
+          setError('Solo puedes tener una de las clases "Maestría en Novias y Tendencias" en el carrito.');
+          return;
+        }
+
+        // Validation for Curso Completo Peinado
+      const hasCursoCompleto = cartItems.some(item =>
+        item.name === 'Curso Completo Maquillaje 2PM a 4PM' || item.name === 'Curso Completo Maquillaje 6PM a 8PM'
+      );
+
+      if (hasCursoCompleto) {
+        setError('No puedes agregar otras clases si tienes "Curso Completo Maquillaje" en el carrito.');
+        return;
+      }
+
         const moduleItem = {
           name: moduleName,
           price: 4000,
+          image: `${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_Mkup.jpeg`,
           schedule: selectedSchedule
         };
         addToCart(moduleItem);
