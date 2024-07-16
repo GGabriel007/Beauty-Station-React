@@ -2,7 +2,7 @@
 import React, { useContext, useState } from 'react';
 import { CartContext } from '../context/CartContext';
 import { db } from '../config/firestore';
-import { doc, updateDoc, increment } from 'firebase/firestore'; 
+import { doc, updateDoc, increment, getDoc } from 'firebase/firestore'; 
 
 const CartPage = () => {
   const { cartItems, removeFromCart, clearCart } = useContext(CartContext);
@@ -10,29 +10,29 @@ const CartPage = () => {
 
   const handleCheckout = async () => {
     const moduleIds = {
-      'ModuloHair1': '1VSwAeYljJQaGBGCtX5QS',
-      'ModuloHair12': '2VazuBcKueHnslCVblSV3',
+      'Master Waves 2PM a 4PM': '1Qk3ZTR8Mu9cvxdGGVYER',
+      'Master Waves 6PM a 8PM': '2lAsVcE1N0gZl4Iiki3GP',
 
-      'ModuloHair2': '3ZrzuMZtiHzP6v5zIcD3A',
-      'ModuloHair22': '4YMIzbjhX8fXINxAOe6dv',
+      'Peinados Para Eventos 2PM a 4PM': '3ASSXgw602WiVe4HpldAP',
+      'Peinados Para Eventos 6PM a 8PM': '4rfA37M4cMXl6iO6bSwW4',
 
-      'ModuloHair3': '5H9prBtuAlbvJtuNAYq5G',
-      'ModuloHair32': '6fUBeqqDaulVrEcTVKHWt',
+      'Maestrías en Novias y Tendencias 2PM a 4PM': '5rHw64GkL6be0GIqiVM17',
+      'Maestrías en Novias y Tendencias 6PM a 8PM': '6gh7uXaEGwKGk5Ut2xUOR',
 
-      'ModuloHair4': '7qLvR1MucGA6logdGDHyj',
-      'ModuloHair42': '8vfcvvqcb2YEqe2CI7rbx',
+      'Curso Completo Peinado 2PM a 4PM': '7PgoPXqtemmdd1EpAhUMq',
+      'Curso Completo Peinado 6PM a 8PM': '8o9SHzxxK9yJVOVds7idf',
 
-      'ModuloMkup1': '967tegwAK5lwMpwU9rtFj',
-      'ModuloMkup12': '990XEge5VwLUT1zUbedxS6P',
+      'Pieles Perfectas 2PM a 4PM': '92D9cfiMeVtav2HYhUA9Z',
+      'Pieles Perfectas 6PM a 8PM': '931hGzkK3hqpEvLB4C4iSm',
 
-      'ModuloMkup2': '991HqChTzDLihkTsdx2o04u',
-      'ModuloMkup22': '992eF5bxq0bXkRLAQmZ6D75',
+      'Maquillaje Social 2PM a 4PM': '93hiNbQKXTUAUAYdRFeeN3',
+      'Maquillaje Social 6PM a 8PM': '94wZBdWsajdmn30YInrflP',
 
-      'ModuloMkup3': '993lWsaMQ5pQ3HZq2n3Mdog',
-      'ModuloMkup32': '994cmDnuUQBxtLzEzstm14C',
+      'Maestría en Novias y Tendencias 2PM a 4PM': '95eyWlva5vbnxaXDuVLmK4',
+      'Maestría en Novias y Tendencias 6PM a 8PM': '96xtPAxBtiDBNK01FJbwMl',
 
-      'ModuloMkup4': '995O9tIKvDiXZlUPjbbYqVT',
-      'ModuloMkup42': '996Ci2BZVreorvwzZP0Utr5',
+      'Curso Completo Maquillaje 2PM a 4PM': '98aq0pkxn574RJGFiIB4CQ',
+      'Curso Completo Maquillaje 6PM a 8PM': '99eBJ9cKc7WPtFGBIXFfrB',
     };
   
     try {
@@ -40,17 +40,23 @@ const CartPage = () => {
         const moduleId = moduleIds[item.name];
         if (moduleId) {
           const moduleRef = doc(db, "Modulos", moduleId);
-          await updateDoc(moduleRef, {
-            [item.name]: increment(-1)
+          const docSnap = await getDoc(moduleRef);
+
+          if (docSnap.exists() && docSnap.data()[item.name] > 0) {
+            await updateDoc(moduleRef, {
+              [item.name]: increment(-1)
           });
-        } 
+        } else {
+          throw new Error (`No hay más asientos disponibles para ${item.name}.`);
+        }
       }
-        clearCart(); //Clear the cart after successfully!
-        setNotification("Purchase completed successfully!");
-      } catch (error) {
+    }
+      clearCart(); //Clear the cart after successfully!
+      setNotification("Purchase completed successfully!");
+    } catch (error) {
       console.error("Error updating seats: ", error);
-      setNotification("There was an error processing your purchase.");
-      }
+      setNotification("There was an error processing your purchase." + error.message);
+    }
   };
 
   return (
@@ -63,7 +69,7 @@ const CartPage = () => {
         <ul>
           {cartItems.map((item, index) => (
             <li key={index}>
-              {item.name} - Q{item.price}
+              {item.name}  Q{item.price}
               <button onClick={() => removeFromCart(item)}>Remove</button>
             </li>
           ))}

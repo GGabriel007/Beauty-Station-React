@@ -55,7 +55,7 @@ const Classes2 = () => {
                     </Link>
                 <div className="text-class">
                     <Link to = "/classes/classes-2/Module_4Mkup">
-                        <p className = "class_links-class">Curso Completo</p>
+                        <p className = "class_links-class">Curso Completo Maquillaje</p>
                     </Link>
                     <p>Incluye: 3 módulos, Book "The Makeup Guide" y certificado enmarcado</p>
                 </div>  

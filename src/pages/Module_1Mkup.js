@@ -5,11 +5,13 @@ import { SeatContext } from '../context/SeatContext'; // Import SeatContext
 import '../styles/modules.css';
 
 const Module_1Mkup = () => {
-    const { addToCart } = useContext(CartContext); // Get addToCart function from context
+    const { cartItems, addToCart } = useContext(CartContext); // Get addToCart function from context
     const seatsAvailable = useContext(SeatContext); // Get seats data from context
 
     const [selectedSchedule, setSelectedSchedule] = useState('Clase 1'); // State for selected schedule
     const [availableSeats, setAvailableSeats] = useState(0); // State for available seats
+    
+    const [error, setError] = useState(''); // State for error messages
   
     useEffect(() => {
       const thumbnails = document.querySelectorAll('.thumbnail-module');
@@ -45,17 +47,26 @@ const Module_1Mkup = () => {
         }
       }, [selectedSchedule, seatsAvailable]);
 
-      const handleAddToCart = () => {
-        let moduleName = 'ModuloMkup1';
-    
-        if (selectedSchedule === 'Clase 2') moduleName = 'ModuloMkup12';
-    
+    const handleAddToCart = () => {
+      // Calculating the total seats in the cart for the selected schedule
+      const seatsInCart = cartItems.reduce((count, item) => {
+        return item.schedule === selectedSchedule ? count + 1: count; 
+      }, 0);
+
+      if (availableSeats - seatsInCart  <= 0){
+        setError('No hay más asientos disponibles para esta clase.');
+        return;
+      }
+
+        let moduleName = 'Pieles Perfectas 2PM a 4PM';
+        if (selectedSchedule === 'Clase 2') moduleName = 'Pieles Perfectas 6PM a 8PM';
         const moduleItem = {
           name: moduleName,
           price: 3000,
           schedule: selectedSchedule
         };
         addToCart(moduleItem);
+        setError('');
       };
 
 
@@ -75,8 +86,8 @@ const Module_1Mkup = () => {
                 </div>
                 <div className="thumbnails-module">
                     <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Mkup/imagen_module_1Mkup.jpeg`} alt="Informacion de Cursos 5"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Mkup/imagen_module_1Mkup.jpeg`} alt="Informacion de Cursos 5"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Mkup/imagen_module_1Mkup.jpeg`} alt="Informacion de Cursos 5"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Mkup/imagen_module_2Mkup.jpeg`} alt="Informacion de Cursos 5"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Mkup/imagen_module_3Mkup.jpeg`} alt="Informacion de Cursos 5"/>
                 </div>
             </div>
             <div className="text-module">
@@ -113,16 +124,17 @@ const Module_1Mkup = () => {
             </ul>
             <button className="add-to-cart-button" onClick={handleAddToCart}>Agendar Clase</button>
             <p><b>Asientos disponibles:</b> {availableSeats}</p>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
           </div>
             <div className="second-image-module">
-            <img src={`${process.env.PUBLIC_URL}/images/CursosInfo2.jpeg`} alt="Informacion de Cursos 5"/> 
+            <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Mkup/imagen_module_2Mkup.jpeg`} alt="Informacion de Cursos 5"/> 
             </div>
             <div className = "text-module">
                 <p><b>TÉRMINOS Y CONDICIONES</b></p>
                 <p>*Los pagos para este curso son necesarios para asegurar su cupo y no son reembolsables bajo ninguna circunstancia. En caso de cancelación o ausencia, incluyendo enfermedad, no se permite el canje por otros cursos, servicios o productos. La reposición de clases tiene un costo adicional y está sujeta a la disponibilidad del equipo. No se permiten acompañantes en clase, a menos que se solicite como modelo en días específicos. Es indispensable estar solvente para participar en las clases.</p>
             </div>
             <div className="second-image-module">
-                <img src={`${process.env.PUBLIC_URL}/images/CursosInfo3.jpeg`} alt="Informacion de Cursos 5"/> 
+                <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Mkup/imagen_module_3Mkup.jpeg`} alt="Informacion de Cursos 5"/> 
             </div>
         </div>
     </div> 

@@ -6,12 +6,14 @@ import '../styles/modules.css';
 
 const Module_4Mkup = () => {
 
-    const { addToCart } = useContext(CartContext); // Get addToCart function from context
+    const { cartItems, addToCart } = useContext(CartContext); // Get addToCart function from context
     const seatsAvailable = useContext(SeatContext); // Get seats data from context
 
     const [selectedSchedule, setSelectedSchedule] = useState('Clase 1'); // State for selected schedule
     const [availableSeats, setAvailableSeats] = useState(0); // State for available seats
   
+    const [error, setError] = useState(''); // State for error messages
+
     useEffect(() => {
       const thumbnails = document.querySelectorAll('.thumbnail-module');
       const selectedImage = document.getElementById('selectedImage-module');
@@ -47,9 +49,20 @@ const Module_4Mkup = () => {
       }, [selectedSchedule, seatsAvailable]);
 
       const handleAddToCart = () => {
-        let moduleName = 'ModuloMkup4';
+        // Calculating the total seats in the cart for the selected schedule
+        const seatsInCart = cartItems.reduce((count, item) => {
+        return item.schedule === selectedSchedule ? count + 1: count; 
+        }, 0);
+  
+        if (availableSeats - seatsInCart  <= 0){
+          setError('No hay más asientos disponibles para esta clase.');
+          return;
+        }
+  
+
+        let moduleName = 'Curso Completo Maquillaje 2PM a 4PM';
     
-        if (selectedSchedule === 'Clase 2') moduleName = 'ModuloMkup42';
+        if (selectedSchedule === 'Clase 2') moduleName = 'Curso Completo Maquillaje 6PM a 8PM';
     
         const moduleItem = {
           name: moduleName,
@@ -57,26 +70,27 @@ const Module_4Mkup = () => {
           schedule: selectedSchedule
         };
         addToCart(moduleItem);
+        setError('');
       };
 
   return (
     <>
         <div className="information-module">
         <div className="top-information-module">
-            <h2 className="header-information-module"><strong>Master Waves</strong></h2>
+            <h2 className="header-information-module"><strong>Curso Completo Maquillaje</strong></h2>
         </div>
         <div className="mid-information-module">
             <div className="gallery-module">
                 <div className="main-image-module">
                     
-                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/CursosInfo1.jpeg`} alt="Informacion de Curso 8"/> 
+                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Mkup/imagen_module_1Mkup.jpeg`} alt="Informacion de Curso 8"/> 
                        
 
                 </div>
                 <div className="thumbnails-module">
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/CursosInfo1.jpeg`} alt="Informacion de Curso 8"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/CursosInfo2.jpeg`} alt="Informacion de Curso 8"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/CursosInfo3.jpeg`} alt="Informacion de Curso 8"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Mkup/imagen_module_1Mkup.jpeg`} alt="Informacion de Curso 8"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Mkup/imagen_module_2Mkup.jpeg`} alt="Informacion de Curso 8"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Mkup/imagen_module_3Mkup.jpeg`} alt="Informacion de Curso 8"/>
                 </div>
             </div>
             <div className="text-module">
@@ -126,16 +140,17 @@ const Module_4Mkup = () => {
                   </ul>
                   <button className="add-to-cart-button" onClick={handleAddToCart}>Agendar Clase</button>
                   <p><b>Asientos disponibles:</b> {availableSeats}</p>
+                  {error && <p style={{ color: 'red' }}>{error}</p>}
                 </div>
             <div className="second-image-module">
-            <img src={`${process.env.PUBLIC_URL}/images/CursosInfo2.jpeg`} alt="Informacion de Curso 8"/> 
+            <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Mkup/imagen_module_2Mkup.jpeg`} alt="Informacion de Curso 8"/> 
             </div>
             <div className = "text-module">
                 <p><b>TÉRMINOS Y CONDICIONES</b></p>
                 <p>*Los pagos para este curso son necesarios para asegurar su cupo y no son reembolsables bajo ninguna circunstancia. En caso de cancelación o ausencia, incluyendo enfermedad, no se permite el canje por otros cursos, servicios o productos. La reposición de clases tiene un costo adicional y está sujeta a la disponibilidad del equipo. No se permiten acompañantes en clase, a menos que se solicite como modelo en días específicos. Es indispensable estar solvente para participar en las clases.</p>
             </div>
             <div className="second-image-module">
-                <img src={`${process.env.PUBLIC_URL}/images/CursosInfo3.jpeg`} alt="Informacion de Curso 8"/> 
+                <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Mkup/imagen_module_3Mkup.jpeg`} alt="Informacion de Curso 8"/> 
             </div>
         </div>
     </div>

@@ -56,7 +56,7 @@ const Classes1 = () => {
                 </Link>
                 <div className="text-class">
                     <Link to = "/classes/classes-1/Module_4Hair">
-                        <p className = "class_links-class">Curso Completo</p>
+                        <p className = "class_links-class">Curso Completo Peinado</p>
                     </Link>
                     <p>Incluye: 3 módulos, Book "The Hairstyle guide" y certificado enmarcado.</p>
                 </div>  
