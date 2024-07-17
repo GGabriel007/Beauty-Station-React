@@ -12,8 +12,11 @@
 }
 
 .header-information {
-    font-size: 36px;
     margin: 50px;
+    font-size: 36px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 .mid-information{
@@ -60,8 +63,8 @@
 .text {
     font-size: 25px;
     line-height: 1.4;
-    font-family: "Montserrat", sans-serif;
-    font-weight: 100;
+    font-family: 'Lato', sans-serif;
+    font-weight: 500; /* Semi-bold */
 }
 
 .content {
@@ -80,6 +83,8 @@
     color: #c66085;
     display: flex;
     justify-content: center;
+    font-family: 'Lato', sans-serif;
+    font-weight: 600; /* Semi-bold */
 
 }
 
@@ -111,6 +116,11 @@
     max-width: 1200px;
     height: 450px;
     border: 0;
+}
+
+.location-text {
+    font-family: 'Lato', sans-serif;
+    font-weight: 600; /* Semi-bold */
 }
 
 

@@ -17,7 +17,7 @@ const Classes1 = () => {
         <>
             <div className="information-class">
         <div className="top-information-class">
-            <h2 className="header-information-class"><strong>Clases de Peinado 2024</strong></h2>
+            <h2 className="header-information-class">Clases de Peinado 2024</h2>
         </div>
 
         <div className="mid-information-class">

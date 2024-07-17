@@ -13,8 +13,8 @@
     align-items: center;
     justify-content: center;
     background-color: #f7f7f7;
-    font-family: "Barlow Condensed", sans-serif;
-    font-weight: 100;
+    font-family: 'Merriweather', serif;
+    font-weight: 400; /* Regular */
 }
 
 .top-information-classes {
@@ -52,9 +52,12 @@
 }
 
 .header-information-classes {
-    font-size: 36px;
-    font-family: "PT Serif", serif;
     margin: 50px;
+    font-size: 36px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    
 }
 
 .text-classes {
@@ -70,7 +73,8 @@
 
 .class_links-classes {
     color: black;
-    text-decoration: underline;
+    font-family: 'Lato', sans-serif;
+    font-weight: 600; /* Semi-bold */
 }
 
 .info1-classes {

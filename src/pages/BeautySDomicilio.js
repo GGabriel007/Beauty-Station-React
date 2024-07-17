@@ -7,7 +7,7 @@ const BeautySDomicilio = () => {
     <>
       <div className="information-form">
         <div className="top-information-form">
-            <h2 className="header-information-form"><strong>Solicitud Servicio a Domicilio</strong></h2>
+            <h2 className="header-information-form">Solicitud Servicio a Domicilio</h2>
         </div>
         <div className="mid-information-form">
             <form action = "https://formspree.io/f/mpwazzwv" method = "post">

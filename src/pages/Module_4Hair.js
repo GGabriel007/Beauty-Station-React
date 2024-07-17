@@ -21,6 +21,8 @@ const Module_4Hair = () => {
   const [availableSeats, setAvailableSeats] = useState(0); // State for available seats
 
   const [error, setError] = useState(''); // State for error messages
+  const [notification, setNotification] = useState('');
+
 
   useEffect(() => {
     const thumbnails = document.querySelectorAll('.thumbnail-module');
@@ -76,7 +78,7 @@ const Module_4Hair = () => {
       );
 
       if (hasCursoPeinado && (moduleName === 'Curso Completo Peinado 2PM a 4PM' || moduleName === 'Curso Completo Peinado 6PM a 8PM')) {
-        setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase en el carrito.');
+        setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase de Curso Completo Peinado en el carrito.');
         return;
       }
 
@@ -86,7 +88,7 @@ const Module_4Hair = () => {
       );
 
       if (hasMasterWaves) {
-        setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase en el carrito.');
+        setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase de Peinado en el carrito.');
         return;
       }
 
@@ -96,7 +98,7 @@ const Module_4Hair = () => {
       );
 
       if (hasPeinados) {
-        setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase en el carrito.');
+        setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase de Peinado en el carrito.');
         return;
       }
 
@@ -106,7 +108,7 @@ const Module_4Hair = () => {
       );
 
       if (hasMaestrias) {
-        setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase en el carrito.');
+        setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase de Peinado en el carrito.');
         return;
       }
 
@@ -119,13 +121,15 @@ const Module_4Hair = () => {
       };
       addToCart(moduleItem);
       setError('');
+      setNotification(`¡${moduleName} ha sido agregado al carrito!`);
+
     };
   return (
     <>
 
         <div class="information-module">
         <div class="top-information-module">
-            <h2 class="header-information-module"><strong>Curso Completo Peinado</strong></h2>
+            <h2 class="header-information-module">Curso Completo Peinado</h2>
         </div>
         <div class="mid-information-module">
             <div class="gallery-module">
@@ -173,8 +177,8 @@ const Module_4Hair = () => {
                 <li>Martes y Jueves 2PM a 4PM</li>
                 <li>Martes y Jueves 6PM a 8PM</li>
                 </ul>
-                <p><b>Precio por persona:</b> Q8,500</p>
-                <p><b>Inscripción:</b> Q500</p>
+                <p className="class_links-module">Precio por persona: Q8,500</p>
+                <p className="class_links-module">Inscripción: Q500</p>
                 <p className="class_links-module">Selecciona una Clase:</p>
                     <ul className='button-schedule'>
                       <li>
@@ -187,14 +191,15 @@ const Module_4Hair = () => {
                       </li>
                     </ul>
                     <button className="add-to-cart-button" onClick={handleAddToCart}>Agendar Clase</button>
-                    <p><b>Asientos disponibles:</b> {availableSeats}</p>
-                    {error && <p style={{ color: 'red' }}>{error}</p>}
+                    <p className="class_links-module">Asientos disponibles: {availableSeats}</p>
+                    {error && <p className="error-notification">{error}</p>}
+                    {notification && <p className="notification">{notification}</p>}
                   </div>
             <div class="second-image-module">
             <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_2Hair.jpeg`} alt="Informacion de Curso 4"/> 
             </div>
             <div class = "text-module">
-                <p><b>TÉRMINOS Y CONDICIONES</b></p>
+                <p className="class_links-module">TÉRMINOS Y CONDICIONES</p>
                 <p>*Los pagos para este curso son necesarios para asegurar su cupo y no son reembolsables bajo ninguna circunstancia. En caso de cancelación o ausencia, incluyendo enfermedad, no se permite el canje por otros cursos, servicios o productos. La reposición de clases tiene un costo adicional y está sujeta a la disponibilidad del equipo. No se permiten acompañantes en clase, a menos que se solicite como modelo en días específicos. Es indispensable estar solvente para participar en las clases.</p>
             </div>
             <div class="second-image-module">

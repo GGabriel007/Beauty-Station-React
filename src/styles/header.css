@@ -3,7 +3,6 @@
 body {
     margin: 0;
     min-height: 100vh;
-    font-family: "PT Serif", serif;
     background-color: rgb(255, 255, 255);
     
 }
@@ -34,8 +33,9 @@ body {
     padding-top: 20px;
     height: 100px;
     font-size: 29px;
-    
-}
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500; /* Bold */
+    }
 
 a {
     text-decoration: none;

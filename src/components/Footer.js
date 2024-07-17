@@ -9,7 +9,7 @@ const Footer = () => {
             <div className="line2"></div>
         <div className="container">
             <div className="action-text">
-            <p className="first-action"><strong>¡Siguenos!</strong></p>
+            <p className="first-action">¡Siguenos!</p>
             <p className="second-action">¡Puedes contactarnos y seguirnos en los siguientes enlaces!</p>
             </div>
             <div className="icons_social">

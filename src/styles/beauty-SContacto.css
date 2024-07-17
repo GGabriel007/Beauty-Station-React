@@ -37,8 +37,9 @@
     position: absolute;
     color: white;
     font-size: 75px;
-    font-weight: bold;
-    font-family: "PT Serif", serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-style: normal;
     text-align: center;
     z-index: 1;
     display: flex;

@@ -16,7 +16,7 @@ const BeautySClasses = () => {
     <>
       <div className="information-classes">
         <div className="top-information-classes">
-            <h2 className="header-information-classes"><strong>Cursos</strong></h2>
+            <h2 className="header-information-classes">Cursos</h2>
         </div>
         <div className="mid-information-classes">
             <div className="center-classes">

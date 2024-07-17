@@ -95,17 +95,17 @@ const CartPage = () => {
             {cartItems.map((item, index) => (
               <li key={index}>
                 <img src={item.image} alt={item.name} />
-                <div className="name-price">{item.name}  
-                <div className="price"> Q{item.price}.00 </div>
+                <div className="name-price"> <div className ="item-name">{item.name} </div>
+                <div className="price"> Q {item.price}.00 </div>
                 </div>
-                <button onClick={() => removeFromCart(item)}>Remover</button>
+                <button className='cart-page-remove' onClick={() => removeFromCart(item)}>Remover</button>
               </li>
             ))}
           </ul>
         </div>
         <div className="line"></div>
         <div className="total-price">
-          <div className='total-text'>TOTAL</div><div className='total-number'>Q{getTotalPrice()}.00</div>
+          <div className='total-text'>TOTAL</div><div className='total-number'>Q {getTotalPrice()}.00</div>
         </div>
         </div>
         <div className="payment">
@@ -118,13 +118,9 @@ const CartPage = () => {
             <input type="text" id="expiryDate" name="expiryDate" />
             <label htmlFor="cvv">CVV:</label>
             <input type="text" id="cvv" name="cvv" />
-            <button type="submit">Pagar</button>
-          </form>
+            <button className="checkout-button" onClick={handleCheckout}>Pagar</button>          </form>
         </div>
       </div>
-    )}
-    {cartItems.length > 0 && (
-      <button className="checkout-button" onClick={handleCheckout}>Checkout</button>
     )}
   </div>
 </div>

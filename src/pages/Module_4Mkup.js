@@ -21,6 +21,8 @@ const Module_4Mkup = () => {
     const [availableSeats, setAvailableSeats] = useState(0); // State for available seats
   
     const [error, setError] = useState(''); // State for error messages
+    const [notification, setNotification] = useState('');
+
 
     useEffect(() => {
       const thumbnails = document.querySelectorAll('.thumbnail-module');
@@ -78,7 +80,7 @@ const Module_4Mkup = () => {
       );
 
       if (hasCursoPeinado && (moduleName === 'Curso Completo Maquillaje 2PM a 4PM' || moduleName === 'Curso Completo Maquillaje 6PM a 8PM')) {
-        setError('No puedes agregar el "Curso Completo Maquillaje" si tienes otra clase en el carrito.');
+        setError('No puedes agregar el "Curso Completo Maquillaje" si tienes otra clase de Maquillaje en el carrito.');
         return;
       }
 
@@ -88,7 +90,7 @@ const Module_4Mkup = () => {
       );
 
       if (hasPieles) {
-        setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase en el carrito.');
+        setError('No puedes agregar el "Curso Completo Maquillaje" si tienes otra clase de Maquillaje en el carrito.');
         return;
       }
 
@@ -98,7 +100,7 @@ const Module_4Mkup = () => {
       );
 
       if (hasMaquillaje) {
-        setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase en el carrito.');
+        setError('No puedes agregar el "Curso Completo Maquillaje" si tienes otra clase de Maquillaje en el carrito.');
         return;
       }
 
@@ -108,7 +110,7 @@ const Module_4Mkup = () => {
       );
 
       if (hasMaestrias) {
-        setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase en el carrito.');
+        setError('No puedes agregar el "Curso Completo Maquillaje" si tienes otra clase de Maquillaje en el carrito.');
         return;
       }
     
@@ -120,13 +122,15 @@ const Module_4Mkup = () => {
         };
         addToCart(moduleItem);
         setError('');
+        setNotification(`¡${moduleName} ha sido agregado al carrito!`);
+
       };
 
   return (
     <>
         <div className="information-module">
         <div className="top-information-module">
-            <h2 className="header-information-module"><strong>Curso Completo Maquillaje</strong></h2>
+            <h2 className="header-information-module">Curso Completo Maquillaje</h2>
         </div>
         <div className="mid-information-module">
             <div className="gallery-module">
@@ -173,9 +177,9 @@ const Module_4Mkup = () => {
                 <li>Miércoles y Jueves 2PM a 4PM</li>
                 <li>Miércoles y Jueves 6PM a 8PM</li>
                 </ul>
-                <p><b>Precio por persona:</b> Q9,000</p>
-                <p><b>Inscripción:</b> Q500</p>
-                <p><b>Precio de Kit de pieles perfectas (Altamente Recomendado):</b> Q5,900</p>
+                <p className="class_links-module">Precio por persona: Q9,000</p>
+                <p className="class_links-module">Inscripción: Q500</p>
+                <p className="class_links-module">Precio de Kit de pieles perfectas (Altamente Recomendado): Q5,900</p>
                 <p className="class_links-module">Selecciona una Clase:</p>
                   <ul className='button-schedule'>
                     <li>
@@ -188,14 +192,15 @@ const Module_4Mkup = () => {
                     </li>
                   </ul>
                   <button className="add-to-cart-button" onClick={handleAddToCart}>Agendar Clase</button>
-                  <p><b>Asientos disponibles:</b> {availableSeats}</p>
-                  {error && <p style={{ color: 'red' }}>{error}</p>}
+                  <p className="class_links-module">Asientos disponibles: {availableSeats}</p>
+                  {error && <p className="error-notification">{error}</p>}
+                  {notification && <p className="notification">{notification}</p>}
                 </div>
             <div className="second-image-module">
             <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Mkup/imagen_module_2Mkup.jpeg`} alt="Informacion de Curso 8"/> 
             </div>
             <div className = "text-module">
-                <p><b>TÉRMINOS Y CONDICIONES</b></p>
+                <p className="class_links-module">TÉRMINOS Y CONDICIONES</p>
                 <p>*Los pagos para este curso son necesarios para asegurar su cupo y no son reembolsables bajo ninguna circunstancia. En caso de cancelación o ausencia, incluyendo enfermedad, no se permite el canje por otros cursos, servicios o productos. La reposición de clases tiene un costo adicional y está sujeta a la disponibilidad del equipo. No se permiten acompañantes en clase, a menos que se solicite como modelo en días específicos. Es indispensable estar solvente para participar en las clases.</p>
             </div>
             <div className="second-image-module">
