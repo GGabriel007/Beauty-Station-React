@@ -120,11 +120,13 @@
 
 .total-text {
     font-size: larger;
-    padding-left: 10px;
     padding-top: 10px;
 }
 
 .total-number{
+    font-size: larger;
+    padding-top: 10px;
+    font-weight: bold;
 }
 
 .name-price{
