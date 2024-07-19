@@ -4,6 +4,8 @@ import { CartContext } from '../context/CartContext'; // Import CartContext
 import { SeatContext } from '../context/SeatContext'; // Import SeatContext
 import '../styles/modules.css';
 import { useLocation } from 'react-router-dom';
+import { db } from '../config/firestore'; // Import Firestore configuration
+import { doc, getDoc } from 'firebase/firestore'; // Import Firestore functions
 
 const Module_1Mkup = () => {
 
@@ -19,10 +21,12 @@ const Module_1Mkup = () => {
 
     const [selectedSchedule, setSelectedSchedule] = useState('Clase 1'); // State for selected schedule
     const [availableSeats, setAvailableSeats] = useState(0); // State for available seats
-    
+
     const [error, setError] = useState(''); // State for error messages
     const [notification, setNotification] = useState('');
     const [kitSelected, setKitSelected] = useState(false); //State for kit selection
+    const [kitAvailability, setKitAvailability] = useState(0); // State for kit availability
+
 
     useEffect(() => {
       const thumbnails = document.querySelectorAll('.thumbnail-module');
@@ -48,15 +52,33 @@ const Module_1Mkup = () => {
         // Updating available seats based on the selected schedule
         switch (selectedSchedule) {
           case 'Clase 1':
-            setAvailableSeats(seatsAvailable[6] || 0); // Adjust index as needed
+            setAvailableSeats(seatsAvailable[8] || 0); // Adjust index as needed
             break;
           case 'Clase 2':
-            setAvailableSeats(seatsAvailable[7] || 0); // Adjust index as needed
+            setAvailableSeats(seatsAvailable[9] || 0); // Adjust index as needed
             break;
           default:
             setAvailableSeats(0);
         }
       }, [selectedSchedule, seatsAvailable]);
+
+      useEffect(() => {
+        const fetchKitAvailability = async () => {
+          try {
+              const kitRef = doc(db, "Modulos", "992U9kQfUcpxR0FpY9l4mDI"); // Document ID for the kit
+              const kitSnap = await getDoc(kitRef);
+              if (kitSnap.exists()) {
+                  setKitAvailability(kitSnap.data()['Kit de pieles perfectas'] || 0);
+              } else {
+                  setKitAvailability(0);
+              }
+          } catch (error) {
+              setKitAvailability(0);
+          }
+      };
+    
+        fetchKitAvailability();
+      }, []);
 
     const handleAddToCart = () => {
       // Calculating the total seats in the cart for the selected schedule
@@ -102,6 +124,16 @@ const Module_1Mkup = () => {
       }
 
 
+        // Check kit availability before adding to cart
+        if (kitSelected && kitAvailability <= 0) {
+          setError('No hay más kits disponibles para agregar al carrito.');
+          setTimeout(() => {
+              setError('');
+          }, 8000);
+          return;
+      }
+
+
         const moduleItem = {
           name: moduleName,
           price: 3000,
@@ -112,7 +144,11 @@ const Module_1Mkup = () => {
 
         addToCart(moduleItem);
         setError('');
+        if (kitSelected) {
+          setNotification(`¡${moduleName} ha sido agregado al carrito con el kit de pieles perfectas!`);
+        } else {
         setNotification(`¡${moduleName} ha sido agregado al carrito!`);
+        }
       };
 
 
@@ -158,13 +194,13 @@ const Module_1Mkup = () => {
                 <p className="class_links-module">Inscripción: Q500</p>
                 <p className="class_links-module">Precio de Kit de pieles perfectas (Altamente Recomendado): Q5,900</p>
                 <label className="checkbox-container">
-                  <input 
-                    type="checkbox" 
-                    checked={kitSelected} 
-                    onChange={() => setKitSelected(!kitSelected)} 
-                  />
-                  Incluir Kit de pieles perfectas (Q5,900)
-                </label>
+                            <input 
+                                type="checkbox" 
+                                checked={kitSelected} 
+                                onChange={() => setKitSelected(!kitSelected)} 
+                            />
+                            Incluir Kit de pieles perfectas (Q5,900) (Kits disponibles: {kitAvailability})
+                        </label>
                 <p className="class_links-module">Selecciona una Clase:</p>
             <ul className='button-schedule'>
               <li>

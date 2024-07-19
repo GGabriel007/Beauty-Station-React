@@ -16,34 +16,43 @@ const CartPage = () => {
   }, [location]);
 
   const { cartItems, removeFromCart, clearCart } = useContext(CartContext);
-  const [ notification, setNotification ] = useState ("");
+  const [notification, setNotification] = useState("");
+  const [purchaseSuccess, setPurchaseSuccess] = useState(false);
+  const [includeKit, setIncludeKit] = useState(cartItems.some(item => item.kitSelected));
 
-  const handleCheckout = async () => {
-    const moduleIds = {
-      'Master Waves 2PM a 4PM': '1Qk3ZTR8Mu9cvxdGGVYER',
-      'Master Waves 6PM a 8PM': '2lAsVcE1N0gZl4Iiki3GP',
 
-      'Peinados Para Eventos 2PM a 4PM': '3ASSXgw602WiVe4HpldAP',
-      'Peinados Para Eventos 6PM a 8PM': '4rfA37M4cMXl6iO6bSwW4',
 
-      'Maestrías en Novias y Tendencias 2PM a 4PM': '5rHw64GkL6be0GIqiVM17',
-      'Maestrías en Novias y Tendencias 6PM a 8PM': '6gh7uXaEGwKGk5Ut2xUOR',
+  const moduleIds = {
+    'Master Waves 2PM a 4PM': '1Qk3ZTR8Mu9cvxdGGVYER',
+    'Master Waves 6PM a 8PM': '2lAsVcE1N0gZl4Iiki3GP',
 
-      'Curso Completo Peinado 2PM a 4PM': '7PgoPXqtemmdd1EpAhUMq',
-      'Curso Completo Peinado 6PM a 8PM': '8o9SHzxxK9yJVOVds7idf',
+    'Peinados Para Eventos 2PM a 4PM': '3ASSXgw602WiVe4HpldAP',
+    'Peinados Para Eventos 6PM a 8PM': '4rfA37M4cMXl6iO6bSwW4',
 
-      'Pieles Perfectas 2PM a 4PM': '92D9cfiMeVtav2HYhUA9Z',
-      'Pieles Perfectas 6PM a 8PM': '931hGzkK3hqpEvLB4C4iSm',
+    'Maestrías en Novias y Tendencias 2PM a 4PM': '5rHw64GkL6be0GIqiVM17',
+    'Maestrías en Novias y Tendencias 6PM a 8PM': '6gh7uXaEGwKGk5Ut2xUOR',
 
-      'Maquillaje Social 2PM a 4PM': '93hiNbQKXTUAUAYdRFeeN3',
-      'Maquillaje Social 6PM a 8PM': '94wZBdWsajdmn30YInrflP',
+    'Curso Completo Peinado 2PM a 4PM': '7PgoPXqtemmdd1EpAhUMq',
+    'Curso Completo Peinado 6PM a 8PM': '8o9SHzxxK9yJVOVds7idf',
 
-      'Maestría en Novias y Tendencias 2PM a 4PM': '95eyWlva5vbnxaXDuVLmK4',
-      'Maestría en Novias y Tendencias 6PM a 8PM': '96xtPAxBtiDBNK01FJbwMl',
+    'Pieles Perfectas 2PM a 4PM': '92D9cfiMeVtav2HYhUA9Z',
+    'Pieles Perfectas 6PM a 8PM': '931hGzkK3hqpEvLB4C4iSm',
 
-      'Curso Completo Maquillaje 2PM a 4PM': '98aq0pkxn574RJGFiIB4CQ',
-      'Curso Completo Maquillaje 6PM a 8PM': '99eBJ9cKc7WPtFGBIXFfrB',
-    };
+    'Maquillaje Social 2PM a 4PM': '93hiNbQKXTUAUAYdRFeeN3',
+    'Maquillaje Social 6PM a 8PM': '94wZBdWsajdmn30YInrflP',
+
+    'Maestría en Novias y Tendencias 2PM a 4PM': '95eyWlva5vbnxaXDuVLmK4',
+    'Maestría en Novias y Tendencias 6PM a 8PM': '96xtPAxBtiDBNK01FJbwMl',
+
+    'Curso Completo Maquillaje 2PM a 4PM': '98aq0pkxn574RJGFiIB4CQ',
+    'Curso Completo Maquillaje 6PM a 8PM': '991XsOABf2lp5CdSMm21YR3',
+
+    'Kit de pieles perfectas' : '992U9kQfUcpxR0FpY9l4mDI',
+
+  };
+
+  const handleCheckout = async (event) => {
+    event.preventDefault();
   
     try {
       // Pre-check for seat availability
@@ -59,38 +68,99 @@ const CartPage = () => {
         }
       }
 
+      // Check availability of "Kit de pieles perfectas"
+      if (includeKit) {
+        const kitRef = doc(db, "Modulos", moduleIds['Kit de pieles perfectas']);
+        const kitSnap = await getDoc(kitRef);
+
+        if (!kitSnap.exists() || kitSnap.data()['Kit de pieles perfectas'] <= 0) {
+          throw new Error(`No hay más kits disponibles.`);
+        }
+      }
+
       // Proceed with the seat update if all items have available seats
       for (const item of cartItems){
         const moduleId = moduleIds[item.name];
         if (moduleId) {
           const moduleRef = doc(db, "Modulos", moduleId);
+          console.log(`Updating seats for module: ${item.name}`);
           await updateDoc(moduleRef, {
             [item.name]: increment(-1)
           });
+          console.log(`Seccessfully updated seats for module: ${item.name}`);
         }
       }
+
+      // Update the stock of the "Kit de pieles perfectas" if selected
+      if (includeKit) {
+        const kitRef = doc(db, "Modulos", moduleIds['Kit de pieles perfectas']);
+        console.log(`Updating stock for Kit de pieles perfectas`);
+        await updateDoc(kitRef, {
+          'Kit de pieles perfectas': increment(-1)
+        });
+        console.log(`Successfully updated stock for Kit de pieles perfectas`);
+      }
+
       clearCart(); //Clear the cart after successfully!
+      setPurchaseSuccess(true); // Set purchase success to true
       setNotification("¡Compra completada exitosamente!");
     } catch (error) {
-      setNotification("Hubo un error al procesar tu compra." + error.message);
+      console.error("Error during checkout:", error);
+      setNotification("Hubo un error al procesar tu compra. " + error.message);
     }
   };
 
   const getTotalPrice = () => {
     const total = cartItems.reduce((total, item) => {
-      return total + item.price + (item.kitSelected ? 5900 : 0);
+      return total + item.price;
     }, 0);
-    return total + 500;
+    return includeKit ? total + 5900 + 500 : total + 500;
+  };
+
+  const handleRemoveKit = () => {
+    setIncludeKit(false);
   };
 
   return (
 <div>
   <p className="header-information-cartpage">Carrito</p>
   <div className="cart-page">
-    {notification && <p className="notification">{notification}</p>}
-    {cartItems.length === 0 ? (
-      <p>Tu carrito esta vacío 🥺</p>
-    ) : (
+        {notification && <p className="notification">{notification}</p>}
+        {purchaseSuccess ? (
+          <div>
+          <p>¡Gracias por su compra!</p>
+          <form>
+            <label htmlFor="name">Nombre:</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+            />
+            <label htmlFor="email">Correo Electrónico:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+            />
+            <label htmlFor="address">Dirección:</label>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              required
+            />
+            <button type="submit">Enviar Información</button>
+          </form>
+        </div>
+          
+        ) : (
+          <>
+            {cartItems.length === 0 ? (
+              <p>Tu carrito esta vacío 🥺</p>
+              
+            ) : (
       <div className="cart-container">
         <div className="cart-total-price">
         <div className="cart-items">
@@ -107,13 +177,16 @@ const CartPage = () => {
             ))}
           </ul>
         </div>
-        <div className="name-price-INS"> 
-        {cartItems.some(item => item.kitSelected) && (
-                <>
-                  <div className="item-name-INST">Kit de pieles perfectas</div>
-                  <div className="price">Q 5,900.00</div>
-                </>
-              )}
+        <div className="name-price-INS">
+                {includeKit && (
+                  <>
+                    <div className="item-name-INST">
+                      <p className='kit-name'>Kit de pieles perfectas</p>
+                      <button className='cart-page-remove-x' onClick={handleRemoveKit}>X</button>
+                    </div>
+                    <div className="price-kit">Q 5 900.00</div>
+                  </>
+                )}
               </div>
         <div className="name-price-INS"> 
                 <div className="item-name-INST">INSCRIPCIÓN</div>
@@ -126,18 +199,21 @@ const CartPage = () => {
         </div>
         <div className="payment">
           <h2>Información del pago</h2>
-          <form>
-            {/* Add your payment form elements here */}
-            <label htmlFor="cardNumber">Número de tarjeta:</label>
-            <input type="text" id="cardNumber" name="cardNumber" />
-            <label htmlFor="expiryDate">Fecha de caducidad:</label>
-            <input type="text" id="expiryDate" name="expiryDate" />
-            <label htmlFor="cvv">CVV:</label>
-            <input type="text" id="cvv" name="cvv" />
-            <button className="checkout-button" onClick={handleCheckout}>Pagar</button>          
-            </form>
+          <form onSubmit={handleCheckout}>
+          <label htmlFor="cardNumber">Número de tarjeta:</label>
+          <input type="text" id="cardNumber" name="cardNumber" required />
+          <label htmlFor="expiryDate">Fecha de caducidad:</label>
+          <input type="text" id="expiryDate" name="expiryDate" required />
+          <label htmlFor="cvv">CVV:</label>
+          <input type="text" id="cvv" name="cvv" required />
+          {cartItems.length > 0 && (
+            <button className="checkout-button" type="submit">Checkout</button>
+          )}
+        </form>
         </div>
       </div>
+      )}
+    </>
     )}
   </div>
 </div>

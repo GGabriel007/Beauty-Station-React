@@ -4,6 +4,8 @@ import { CartContext } from '../context/CartContext'; // Import CartContext
 import { SeatContext } from '../context/SeatContext'; // Import SeatContext
 import '../styles/modules.css';
 import { useLocation } from 'react-router-dom';
+import { db } from '../config/firestore'; // Import Firestore configuration
+import { doc, getDoc } from 'firebase/firestore'; // Import Firestore functions
 
 const Module_4Mkup = () => {
 
@@ -23,6 +25,8 @@ const Module_4Mkup = () => {
     const [error, setError] = useState(''); // State for error messages
     const [notification, setNotification] = useState('');
     const [kitSelected, setKitSelected] = useState(false); //State for kit selection
+    const [kitAvailability, setKitAvailability] = useState(0); // State for kit availability
+
 
 
 
@@ -59,6 +63,24 @@ const Module_4Mkup = () => {
             setAvailableSeats(0);
         }
       }, [selectedSchedule, seatsAvailable]);
+
+      useEffect(() => {
+        const fetchKitAvailability = async () => {
+          try {
+              const kitRef = doc(db, "Modulos", "992U9kQfUcpxR0FpY9l4mDI"); // Document ID for the kit
+              const kitSnap = await getDoc(kitRef);
+              if (kitSnap.exists()) {
+                  setKitAvailability(kitSnap.data()['Kit de pieles perfectas'] || 0);
+              } else {
+                  setKitAvailability(0);
+              }
+          } catch (error) {
+              setKitAvailability(0);
+          }
+      };
+    
+        fetchKitAvailability();
+      }, []);
 
       const handleAddToCart = () => {
         // Calculating the total seats in the cart for the selected schedule
@@ -130,6 +152,16 @@ const Module_4Mkup = () => {
         }, 8000);
         return;
       }
+
+          // Check kit availability before adding to cart
+          if (kitSelected && kitAvailability <= 0) {
+            setError('No hay más kits disponibles para agregar al carrito.');
+            setTimeout(() => {
+                setError('');
+            }, 8000);
+            return;
+        }
+      
     
         const moduleItem = {
           name: moduleName,
@@ -141,8 +173,11 @@ const Module_4Mkup = () => {
         };
         addToCart(moduleItem);
         setError('');
+        if (kitSelected) {
+          setNotification(`¡${moduleName} ha sido agregado al carrito con el kit de pieles perfectas!`);
+        } else {
         setNotification(`¡${moduleName} ha sido agregado al carrito!`);
-
+        }
       };
 
   return (
@@ -200,13 +235,13 @@ const Module_4Mkup = () => {
                 <p className="class_links-module">Inscripción: Q500</p>
                 <p className="class_links-module">Precio de Kit de pieles perfectas (Altamente Recomendado): Q5,900</p>
                 <label className="checkbox-container">
-                  <input 
-                    type="checkbox" 
-                    checked={kitSelected} 
-                    onChange={() => setKitSelected(!kitSelected)} 
-                  />
-                  Incluir Kit de pieles perfectas (Q5,900)
-                </label>
+                            <input 
+                                type="checkbox" 
+                                checked={kitSelected} 
+                                onChange={() => setKitSelected(!kitSelected)} 
+                            />
+                            Incluir Kit de pieles perfectas (Q5,900) (Kits disponibles: {kitAvailability})
+                        </label>
                 <p className="class_links-module">Selecciona una Clase:</p>
                   <ul className='button-schedule'>
                     <li>

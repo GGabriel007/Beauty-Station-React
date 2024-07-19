@@ -142,30 +142,30 @@ const Module_4Hair = () => {
   return (
     <>
 
-        <div class="information-module">
-        <div class="top-information-module">
-            <h2 class="header-information-module">Curso Completo Peinado</h2>
+        <div className="information-module">
+        <div className="top-information-module">
+            <h2 className="header-information-module">Curso Completo Peinado</h2>
         </div>
-        <div class="mid-information-module">
-            <div class="gallery-module">
-                <div class="main-image-module">
+        <div className="mid-information-module">
+            <div className="gallery-module">
+                <div className="main-image-module">
                     
                     <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 7"/> 
                        
 
                 </div>
-                <div class="thumbnails-module">
-                    <img class="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 4"/>
-                    <img class="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos 4"/>
-                    <img class="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_3Hair.jpeg`} alt="Informacion de Cursos 4"/>
+                <div className="thumbnails-module">
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 4"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos 4"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_3Hair.jpeg`} alt="Informacion de Cursos 4"/>
                 </div>
             </div>
-            <div class="text-module">
-                <p class="class_links-module">Informacion del Módulo:</p>
+            <div className="text-module">
+                <p className="class_links-module">Informacion del Módulo:</p>
                 <p>Este es un curso completo de peinado profesional, donde hemos resumido para ti los tips, materiales y técnicas actuales a nivel mundial. No necesitas tener experiencia previa. Tendrás conocimientos y herramientas para poder emprender. Las clases son totalmente prácticas, por lo que el curso es un aprendizaje efectivo. Necesitarás cabezote y otros materiales; se dará asesoría como parte del curso. En algunas clases necesitarás modelo, bajo previo aviso. El curso se divide en 3 módulos.</p>
                 <p>Incluye: 3 módulos, Book "The Hairstyle guide" y certificado enmarcado.</p>
                 <p>Materiales: Plancha, tubo, cepillo, secadora, productos de cabello y Kit completo de peinado</p>
-                <p class="class_links-module">Clases:</p>
+                <p className="class_links-module">Clases:</p>
                 <ul>
                 <li>Clase 1: 23 de julio - Introducción, productos y cómo hacer waves con plancha.</li>
                 <li>Clase 2: 30 de julio - Cómo lograr natural waves.</li>
@@ -187,7 +187,7 @@ const Module_4Hair = () => {
                 <li>Clase 18: jueves 24 de octubre - Evaluación final, novias, entrega de portafolio.</li>
 
                 </ul>
-                <p class="class_links-module">Horario:</p>
+                <p className="class_links-module">Horario:</p>
                 <ul>
                 <li>Martes y Jueves 2PM a 4PM</li>
                 <li>Martes y Jueves 6PM a 8PM</li>
@@ -210,14 +210,14 @@ const Module_4Hair = () => {
                     {error && <p className="error-notification">{error}</p>}
                     {notification && <p className="notification">{notification}</p>}
                   </div>
-            <div class="second-image-module">
+            <div className="second-image-module">
             <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_2Hair.jpeg`} alt="Informacion de Curso 4"/> 
             </div>
-            <div class = "text-module">
+            <div className = "text-module">
                 <p className="class_links-module">TÉRMINOS Y CONDICIONES</p>
                 <p>*Los pagos para este curso son necesarios para asegurar su cupo y no son reembolsables bajo ninguna circunstancia. En caso de cancelación o ausencia, incluyendo enfermedad, no se permite el canje por otros cursos, servicios o productos. La reposición de clases tiene un costo adicional y está sujeta a la disponibilidad del equipo. No se permiten acompañantes en clase, a menos que se solicite como modelo en días específicos. Es indispensable estar solvente para participar en las clases.</p>
             </div>
-            <div class="second-image-module">
+            <div className="second-image-module">
                 <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_3Hair.jpeg`} alt="Informacion de Curso 4"/> 
             </div>
         </div>

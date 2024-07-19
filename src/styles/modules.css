@@ -187,7 +187,7 @@
   .checkbox-container input[type="checkbox"] {
     margin-right: 10px; /* Space between checkbox and text */
     accent-color: #007bff; /* Change the color of the checkbox */
-    transform: scale(1.6); /* Slightly increase the size of the checkbox */
+    transform: scale(1.4); /* Slightly increase the size of the checkbox */
   }
 
   .checkbox-container label {
