@@ -22,6 +22,8 @@ const Module_2Mkup = () => {
 
     const [error, setError] = useState(''); // State for error messages
     const [notification, setNotification] = useState('');
+    const [kitSelected, setKitSelected] = useState(false); //State for kit selection
+
 
   
     useEffect(() => {
@@ -107,7 +109,9 @@ const Module_2Mkup = () => {
           name: moduleName,
           price: 3500,
           image: `${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_Mkup.jpeg`,
-          schedule: selectedSchedule
+          schedule: selectedSchedule,
+          kitSelected: kitSelected
+
         };
         addToCart(moduleItem);
         setError('');
@@ -139,7 +143,7 @@ const Module_2Mkup = () => {
                 <p className="class_links-module">Informacion del Módulo:</p>
                 <p>Realiza la belleza de tus clientes con diferentes técnicas de maquillaje para todo tipo de evento social.</p>
                 <p>Nivel: Intermedio</p>
-                <p>Materiales: Kit de piel y cejas completo</p>
+                <p>Materiales: Kit de maquillaje completo</p>
                 <p className="class_links-module">Clases:</p>
                 <ul>
                 <li>Clase 6: 28 de agosto - Fotografía para redes y delineados.</li>
@@ -157,7 +161,15 @@ const Module_2Mkup = () => {
                 <p className="class_links-module">Precio por persona: Q3,500</p>
                 <p className="class_links-module">Inscripción: Q500</p>
                 <p className="class_links-module">Precio de Kit de pieles perfectas (Altamente Recomendado): Q5,900</p>
-                    <p className="class_links-module">Selecciona una Clase:</p>
+                <label className="checkbox-container">
+                  <input 
+                    type="checkbox" 
+                    checked={kitSelected} 
+                    onChange={() => setKitSelected(!kitSelected)} 
+                  />
+                  Incluir Kit de pieles perfectas (Q5,900)
+                </label>
+                <p className="class_links-module">Selecciona una Clase:</p>
                 <ul className='button-schedule'>
                   <li>
                     <input type="radio" id="clase1" name="schedule" value="Clase 1" checked={selectedSchedule === 'Clase 1'} onChange={() => setSelectedSchedule('Clase 1')} />

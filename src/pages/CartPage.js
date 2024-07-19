@@ -77,12 +77,15 @@ const CartPage = () => {
   };
 
   const getTotalPrice = () => {
-    return cartItems.reduce((total, item) => total + item.price, 0);
+    const total = cartItems.reduce((total, item) => {
+      return total + item.price + (item.kitSelected ? 5900 : 0);
+    }, 0);
+    return total + 500;
   };
 
   return (
 <div>
-  <h1 className="header-information-cartpage">Carro</h1>
+  <p className="header-information-cartpage">Carrito</p>
   <div className="cart-page">
     {notification && <p className="notification">{notification}</p>}
     {cartItems.length === 0 ? (
@@ -97,12 +100,25 @@ const CartPage = () => {
                 <img src={item.image} alt={item.name} />
                 <div className="name-price"> <div className ="item-name">{item.name} </div>
                 <div className="price"> Q {item.price}.00 </div>
+
                 </div>
                 <button className='cart-page-remove' onClick={() => removeFromCart(item)}>Remover</button>
               </li>
             ))}
           </ul>
         </div>
+        <div className="name-price-INS"> 
+        {cartItems.some(item => item.kitSelected) && (
+                <>
+                  <div className="item-name-INST">Kit de pieles perfectas</div>
+                  <div className="price">Q 5,900.00</div>
+                </>
+              )}
+              </div>
+        <div className="name-price-INS"> 
+                <div className="item-name-INST">INSCRIPCIÓN</div>
+                <div className="price">Q 500.00</div>
+              </div>
         <div className="line"></div>
         <div className="total-price">
           <div className='total-text'>TOTAL</div><div className='total-number'>Q {getTotalPrice()}.00</div>
@@ -118,7 +134,8 @@ const CartPage = () => {
             <input type="text" id="expiryDate" name="expiryDate" />
             <label htmlFor="cvv">CVV:</label>
             <input type="text" id="cvv" name="cvv" />
-            <button className="checkout-button" onClick={handleCheckout}>Pagar</button>          </form>
+            <button className="checkout-button" onClick={handleCheckout}>Pagar</button>          
+            </form>
         </div>
       </div>
     )}

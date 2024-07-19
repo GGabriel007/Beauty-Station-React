@@ -22,6 +22,7 @@ const Module_3Mkup = () => {
   
     const [error, setError] = useState(''); // State for error messages
     const [notification, setNotification] = useState('');
+    const [kitSelected, setKitSelected] = useState(false); //State for kit selection
 
 
     useEffect(() => {
@@ -106,7 +107,9 @@ const Module_3Mkup = () => {
           name: moduleName,
           price: 4000,
           image: `${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_Mkup.jpeg`,
-          schedule: selectedSchedule
+          schedule: selectedSchedule,
+          kitSelected: kitSelected
+
         };
         addToCart(moduleItem);
         setError('');
@@ -139,7 +142,7 @@ const Module_3Mkup = () => {
                 <p className="class_links-module">Informacion del Módulo:</p>
                 <p>Ideal para actualizarte en tendencias internacionales, ALEH compartirá los tips y productos utilizados por los maquillistas de celebridades para impactar a tus clientes y resaltar tu perfil en redes sociales.</p>
                 <p>Nivel: Avanzado/Actualización</p>
-                <p>Materiales: Kit de piel y cejas completo</p>
+                <p>Materiales: Kit de maquillaje completo</p>
                 <p className="class_links-module">Clases:</p>
                 <ul>
                 <li>Clase 12: jueves 3 de octubre - Redes e iluminación en linea.</li>
@@ -158,6 +161,14 @@ const Module_3Mkup = () => {
                 <p className="class_links-module">Precio por persona: Q4,000</p>
                 <p className="class_links-module">Inscripción: Q500</p>
                 <p className="class_links-module">Precio de Kit de pieles perfectas (Altamente Recomendado): Q5,900</p>
+                <label className="checkbox-container">
+                  <input 
+                    type="checkbox" 
+                    checked={kitSelected} 
+                    onChange={() => setKitSelected(!kitSelected)} 
+                  />
+                  Incluir Kit de pieles perfectas (Q5,900)
+                </label>
                 <p className="class_links-module">Selecciona una Clase:</p>
             <ul className='button-schedule'>
               <li>

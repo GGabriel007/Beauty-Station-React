@@ -22,6 +22,8 @@ const Module_4Mkup = () => {
   
     const [error, setError] = useState(''); // State for error messages
     const [notification, setNotification] = useState('');
+    const [kitSelected, setKitSelected] = useState(false); //State for kit selection
+
 
 
     useEffect(() => {
@@ -133,7 +135,9 @@ const Module_4Mkup = () => {
           name: moduleName,
           price: 9000,
           image: `${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_Mkup.jpeg`,
-          schedule: selectedSchedule
+          schedule: selectedSchedule,
+          kitSelected: kitSelected
+
         };
         addToCart(moduleItem);
         setError('');
@@ -165,7 +169,7 @@ const Module_4Mkup = () => {
                 <p className="class_links-module">Informacion del Módulo:</p>
                 <p>Nuestro curso de maquillaje profesional consta de 3 módulos especializados en maquillaje social, donde hemos resumido para ti los tips, materiales y técnicas actuales a nivel mundial. No necesitas tener experiencia previa. Con el curso completo tendrás conocimientos y herramientas para poder emprender.</p>
                 <p>Incluye: 3 módulos, Book "The Makeup guide" y certificado enmarcado.</p>
-                <p>Materiales: Kit de piel y cejas completo</p>                
+                <p>Materiales: Kit de Maquillaje completo</p>                
                 <p className="class_links-module">Clases:</p>
                 <ul>
                 <li>Clase 1: 24 de julio - Introducción y teoría.</li>
@@ -195,6 +199,14 @@ const Module_4Mkup = () => {
                 <p className="class_links-module">Precio por persona: Q9,000</p>
                 <p className="class_links-module">Inscripción: Q500</p>
                 <p className="class_links-module">Precio de Kit de pieles perfectas (Altamente Recomendado): Q5,900</p>
+                <label className="checkbox-container">
+                  <input 
+                    type="checkbox" 
+                    checked={kitSelected} 
+                    onChange={() => setKitSelected(!kitSelected)} 
+                  />
+                  Incluir Kit de pieles perfectas (Q5,900)
+                </label>
                 <p className="class_links-module">Selecciona una Clase:</p>
                   <ul className='button-schedule'>
                     <li>

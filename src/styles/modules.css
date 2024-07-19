@@ -176,7 +176,27 @@
     padding: 10px 0;
     border-bottom: 1px solid #eee;
   }
+
+  /* Style for the label wrapping the checkbox and text */
+  .checkbox-container {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+  }
+
+  .checkbox-container input[type="checkbox"] {
+    margin-right: 10px; /* Space between checkbox and text */
+    accent-color: #007bff; /* Change the color of the checkbox */
+    transform: scale(1.6); /* Slightly increase the size of the checkbox */
+  }
+
+  .checkbox-container label {
+  font-size: 16px;
+  color: #333; /* Dark gray text color */
+  cursor: pointer; /* Show pointer cursor on hover */
+}
   
+
 
 @media (max-width: 768px) {
 

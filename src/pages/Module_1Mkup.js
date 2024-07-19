@@ -22,6 +22,7 @@ const Module_1Mkup = () => {
     
     const [error, setError] = useState(''); // State for error messages
     const [notification, setNotification] = useState('');
+    const [kitSelected, setKitSelected] = useState(false); //State for kit selection
 
     useEffect(() => {
       const thumbnails = document.querySelectorAll('.thumbnail-module');
@@ -105,8 +106,10 @@ const Module_1Mkup = () => {
           name: moduleName,
           price: 3000,
           image: `${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_Mkup.jpeg`,          
-          schedule: selectedSchedule
+          schedule: selectedSchedule,
+          kitSelected: kitSelected
         };
+
         addToCart(moduleItem);
         setError('');
         setNotification(`¡${moduleName} ha sido agregado al carrito!`);
@@ -154,6 +157,14 @@ const Module_1Mkup = () => {
                 <p className="class_links-module">Precio por persona: Q3,000</p>
                 <p className="class_links-module">Inscripción: Q500</p>
                 <p className="class_links-module">Precio de Kit de pieles perfectas (Altamente Recomendado): Q5,900</p>
+                <label className="checkbox-container">
+                  <input 
+                    type="checkbox" 
+                    checked={kitSelected} 
+                    onChange={() => setKitSelected(!kitSelected)} 
+                  />
+                  Incluir Kit de pieles perfectas (Q5,900)
+                </label>
                 <p className="class_links-module">Selecciona una Clase:</p>
             <ul className='button-schedule'>
               <li>
