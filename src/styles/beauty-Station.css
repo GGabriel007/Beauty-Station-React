@@ -147,4 +147,9 @@
         font-size: 28px;
     }
 
+    .text{
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
 }
