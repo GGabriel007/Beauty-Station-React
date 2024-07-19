@@ -67,6 +67,9 @@ const Module_2Mkup = () => {
 
         if (availableSeats - seatsInCart  <= 0){
           setError('No hay más asientos disponibles para esta clase.');
+          setTimeout(() => {
+            setError('');
+          }, 8000);
           return;
         }
 
@@ -81,6 +84,9 @@ const Module_2Mkup = () => {
 
         if (hasMaquillaje && (moduleName === 'Maquillaje Social 2PM a 4PM' || moduleName === 'Maquillaje Social 6PM a 8PM')) {
           setError('Solo puedes tener una de las clases "Maquillaje Social" en el carrito.');
+          setTimeout(() => {
+            setError('');
+          }, 8000);
           return;
         }
 
@@ -91,6 +97,9 @@ const Module_2Mkup = () => {
 
       if (hasCursoCompleto) {
         setError('No puedes agregar otras clases de Maquillaje si tienes "Curso Completo Maquillaje" en el carrito.');
+        setTimeout(() => {
+          setError('');
+        }, 8000);
         return;
       }
     

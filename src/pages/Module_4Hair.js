@@ -66,6 +66,9 @@ const Module_4Hair = () => {
   
       if (availableSeats - seatsInCart  <= 0){
         setError('No hay más asientos disponibles para esta clase.');
+        setTimeout(() => {
+          setError('');
+        }, 8000);
         return;
       }
 
@@ -79,6 +82,9 @@ const Module_4Hair = () => {
 
       if (hasCursoPeinado && (moduleName === 'Curso Completo Peinado 2PM a 4PM' || moduleName === 'Curso Completo Peinado 6PM a 8PM')) {
         setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase de Curso Completo Peinado en el carrito.');
+        setTimeout(() => {
+          setError('');
+        }, 8000);
         return;
       }
 
@@ -89,6 +95,9 @@ const Module_4Hair = () => {
 
       if (hasMasterWaves) {
         setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase de Peinado en el carrito.');
+        setTimeout(() => {
+          setError('');
+        }, 8000);
         return;
       }
 
@@ -99,6 +108,9 @@ const Module_4Hair = () => {
 
       if (hasPeinados) {
         setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase de Peinado en el carrito.');
+        setTimeout(() => {
+          setError('');
+        }, 8000);
         return;
       }
 
@@ -109,6 +121,9 @@ const Module_4Hair = () => {
 
       if (hasMaestrias) {
         setError('No puedes agregar el "Curso Completo Peinado" si tienes otra clase de Peinado en el carrito.');
+        setTimeout(() => {
+          setError('');
+        }, 8000);
         return;
       }
 

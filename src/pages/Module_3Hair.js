@@ -67,6 +67,9 @@ const Module_3Hair = () => {
   
         if (availableSeats - seatsInCart  <= 0){
           setError('No hay más asientos disponibles para esta clase.');
+          setTimeout(() => {
+            setError('');
+          }, 8000);
           return;
         }
   
@@ -80,6 +83,9 @@ const Module_3Hair = () => {
   
         if (hasMaestrias && (moduleName === 'Maestrías en Novias y Tendencias 2PM a 4PM' || moduleName === 'Maestrías en Novias y Tendencias 6PM a 8PM')) {
           setError('Solo puedes tener una de las clases "Maestrías en Novias y Tendencias" en el carrito.');
+          setTimeout(() => {
+            setError('');
+          }, 8000);
           return;
         }
 
@@ -90,6 +96,9 @@ const Module_3Hair = () => {
 
         if (hasCursoCompleto) {
           setError('No puedes agregar otras clases de Peinado si tienes "Curso Completo Peinado" en el carrito.');
+          setTimeout(() => {
+            setError('');
+          }, 8000);
           return;
         }
 

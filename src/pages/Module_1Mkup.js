@@ -65,6 +65,9 @@ const Module_1Mkup = () => {
 
       if (availableSeats - seatsInCart  <= 0){
         setError('No hay más asientos disponibles para esta clase.');
+        setTimeout(() => {
+          setError('');
+        }, 8000);
         return;
       }
 
@@ -78,6 +81,9 @@ const Module_1Mkup = () => {
 
         if (hasPieles && (moduleName === 'Pieles Perfectas 2PM a 4PM' || moduleName === 'Pieles Perfectas 6PM a 8PM')) {
           setError('Solo puedes tener una de las clases "Pieles Perfectas" en el carrito.');
+          setTimeout(() => {
+            setError('');
+          }, 8000);
           return;
         }
 
@@ -88,6 +94,9 @@ const Module_1Mkup = () => {
 
       if (hasCursoCompleto) {
         setError('No puedes agregar otras clases de Maquillaje si tienes "Curso Completo Maquillaje" en el carrito.');
+        setTimeout(() => {
+          setError('');
+        }, 8000);
         return;
       }
 

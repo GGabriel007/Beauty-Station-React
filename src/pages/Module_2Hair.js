@@ -65,6 +65,9 @@ const Module_2Hair = () => {
 
       if (availableSeats - seatsInCart  <= 0){
         setError('No hay más asientos disponibles para esta clase.');
+        setTimeout(() => {
+          setError('');
+        }, 8000);
         return;
       }
 
@@ -78,6 +81,9 @@ const Module_2Hair = () => {
 
       if (hasPeinados && (moduleName === 'Peinados Para Eventos 2PM a 4PM' || moduleName === 'Peinados Para Eventos 6PM a 8PM')){
         setError('Solo puedes tener una de las clases "Peinados Para Eventos" en el carrito.');
+        setTimeout(() => {
+          setError('');
+        }, 8000);
         return;
       }
 
@@ -88,6 +94,9 @@ const Module_2Hair = () => {
 
       if (hasCursoCompleto) {
         setError('No puedes agregar otras clases de Peinado si tienes "Curso Completo Peinado" en el carrito.');
+        setTimeout(() => {
+          setError('');
+        }, 8000);
         return;
       }
 
