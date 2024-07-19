@@ -126,13 +126,18 @@ a {
     }
 
     .border-menu{
-        background-color: #ececec;
+        background-color: #f0f0f0;
         border-color: black;
         padding: 10px;
         border-radius: 10px;
     }
 
+    .border-menu.clicked {
+        background-color: #b9b9b9; /* Change to desired color on click */
+    }
+
     .right-header-links.open {
         max-height: 2500px; /* Adjust this value based on the number of menu items */
+
     }
 }

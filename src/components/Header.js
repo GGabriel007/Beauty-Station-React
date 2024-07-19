@@ -18,7 +18,7 @@ const Header = () => {
           <img className="image-header" src={`${process.env.PUBLIC_URL}/images/Beauty_Station_logo.jpeg`} alt="Beauty Station logo" />
         </Link>
         <div className="menu-icon">
-          <div className='border-menu' onClick={toggleMenu}>
+        <div className={`border-menu ${menuOpen ? 'clicked' : ''}`} onClick={toggleMenu}>
             <div className="bar"></div>
             <div className="bar"></div>
             <div className="bar"></div>
