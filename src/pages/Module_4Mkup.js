@@ -190,7 +190,7 @@ const Module_4Mkup = () => {
     <>
         <div className="information-module">
         <div className="top-information-module">
-            <h2 className="header-information-module">Curso Completo Maquillaje</h2>
+            <h2 className="header-information-module">CURSO COMPLETO MAQUILLAJE</h2>
         </div>
         <div className="mid-information-module">
             <div className="gallery-module">

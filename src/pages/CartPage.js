@@ -120,7 +120,7 @@ const CartPage = () => {
 
   return (
 <div>
-  <p className="header-information-cartpage">Carrito</p>
+  <p className="header-information-cartpage">CARRITO</p>
 
   <div className="information">
     <div className="cart-page">

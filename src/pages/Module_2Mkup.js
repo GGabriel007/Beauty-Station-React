@@ -165,7 +165,7 @@ const Module_2Mkup = () => {
     <>
        <div className="information-module">
         <div className="top-information-module">
-            <h2 className="header-information-module">Maquillaje Social</h2>
+            <h2 className="header-information-module">MAQUILLAJE SOCIAL</h2>
         </div>
         <div className="mid-information-module">
             <div className="gallery-module">

@@ -8,7 +8,7 @@ const BeautyStation = () => {
     <>
       <div className="information">
         <div className="top-information">
-          <h2 className="header-information">Cursos</h2>
+          <h2 className="header-information">CURSOS</h2>
         </div>
         <div className="mid-information">
           <div className="center">

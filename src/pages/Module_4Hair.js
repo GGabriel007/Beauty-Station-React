@@ -144,7 +144,7 @@ const Module_4Hair = () => {
 
         <div className="information-module">
         <div className="top-information-module">
-            <h2 className="header-information-module">Curso Completo Peinado</h2>
+            <h2 className="header-information-module">CURSO COMPLETO PEINADO</h2>
         </div>
         <div className="mid-information-module">
             <div className="gallery-module">

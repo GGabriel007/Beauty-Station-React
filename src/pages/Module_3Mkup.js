@@ -162,7 +162,7 @@ const Module_3Mkup = () => {
     <>
         <div className="information-module">
         <div className="top-information-module">
-            <h2 className="header-information-module">Maestria en Novias y Tendencias</h2>
+            <h2 className="header-information-module">MAESTRÍA EN NOVIAS Y TENDENCIAS</h2>
         </div>
         <div className="mid-information-module">
             <div className="gallery-module">

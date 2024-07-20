@@ -160,7 +160,7 @@ const Module_1Mkup = () => {
     <>
        <div className="information-module">
         <div className="top-information-module">
-            <h2 className="header-information-module">Pieles Perfectas</h2>
+            <h2 className="header-information-module">PIELES PERFECTAS</h2>
         </div>
         <div className="mid-information-module">
             <div className="gallery-module">

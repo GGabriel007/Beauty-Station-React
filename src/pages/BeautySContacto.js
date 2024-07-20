@@ -14,7 +14,7 @@ const BeautySContacto = () => {
         
 
                 <div className="centered-text-contact">
-                    <p>Sobre Nosotros</p>
+                    <p>SOBRE NOSOTROS</p>
                 </div>
             </div>
 

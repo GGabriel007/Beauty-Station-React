@@ -115,7 +115,7 @@ const Module_1Hair = () => {
     <>
       <div className="information-module">
         <div className="top-information-module">
-          <h2 className="header-information-module">Master Waves</h2>
+          <h2 className="header-information-module">MASTER WAVES</h2>
         </div>
         <div className="mid-information-module">
           <div className="gallery-module">

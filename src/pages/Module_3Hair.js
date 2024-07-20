@@ -122,7 +122,7 @@ const Module_3Hair = () => {
         <div className = "line1-module">
         </div>
         <div className="top-information-module">
-            <h2 className="header-information-module">Maestrías en Novias y Tendencias</h2>
+            <h2 className="header-information-module">MAESTRÍAS EN NOVIAS Y TENDENCIAS</h2>
         </div>
         <div className="mid-information-module">
             <div className="gallery-module">
