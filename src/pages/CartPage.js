@@ -15,13 +15,10 @@ const CartPage = () => {
       window.scrollTo(0,0);
   }, [location]);
 
-  const { cartItems, removeFromCart, clearCart } = useContext(CartContext);
+  const { cartItems, removeFromCart, clearCart, includeKit, setIncludeKit } = useContext(CartContext);
   const [notification, setNotification] = useState("");
   const [purchaseSuccess, setPurchaseSuccess] = useState(false);
-  const [includeKit, setIncludeKit] = useState(cartItems.some(item => item.kitSelected));
-
-
-
+  
   const moduleIds = {
     'Master Waves 2PM a 4PM': '1Qk3ZTR8Mu9cvxdGGVYER',
     'Master Waves 6PM a 8PM': '2lAsVcE1N0gZl4Iiki3GP',
@@ -87,7 +84,7 @@ const CartPage = () => {
           await updateDoc(moduleRef, {
             [item.name]: increment(-1)
           });
-          console.log(`Seccessfully updated seats for module: ${item.name}`);
+          console.log(`Successfully updated seats for module: ${item.name}`);
         }
       }
 

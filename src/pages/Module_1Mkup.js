@@ -15,8 +15,7 @@ const Module_1Mkup = () => {
 
         window.scrollTo(0,0);
     }, [location]);
-
-    const { cartItems, addToCart } = useContext(CartContext); // Get addToCart function from context
+    const { cartItems, addToCart, setIncludeKit } = useContext(CartContext); // Get addToCart and setIncludeKit functions from context
     const seatsAvailable = useContext(SeatContext); // Get seats data from context
 
     const [selectedSchedule, setSelectedSchedule] = useState('Clase 1'); // State for selected schedule
@@ -143,6 +142,11 @@ const Module_1Mkup = () => {
         };
 
         addToCart(moduleItem);
+
+        // If kit is selected, update the includeKit state in CartContext
+        if (kitSelected) {
+          setIncludeKit(true);
+        }
         setError('');
         if (kitSelected) {
           setNotification(`¡${moduleName} ha sido agregado al carrito con el kit de pieles perfectas!`);
