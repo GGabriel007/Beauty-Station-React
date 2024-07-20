@@ -121,99 +121,97 @@ const CartPage = () => {
   return (
 <div>
   <p className="header-information-cartpage">Carrito</p>
-  <div className="cart-page">
-        {notification && <p className="notification">{notification}</p>}
-        {purchaseSuccess ? (
-          <div>
-          <p>¡Gracias por su compra!</p>
-          <form>
-            <label htmlFor="name">Nombre:</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              required
-            />
-            <label htmlFor="email">Correo Electrónico:</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              required
-            />
-            <label htmlFor="address">Dirección:</label>
-            <input
-              type="text"
-              id="address"
-              name="address"
-              required
-            />
-            <button type="submit">Enviar Información</button>
-          </form>
-        </div>
-          
-        ) : (
-          <>
-            {cartItems.length === 0 ? (
-              <p>Tu carrito esta vacío 🥺</p>
-              
-            ) : (
-      <div className="cart-container">
-        <div className="cart-total-price">
-        <div className="cart-items">
-          <ul>
-            {cartItems.map((item, index) => (
-              <li key={index}>
-                <img src={item.image} alt={item.name} />
-                <div className="name-price"> <div className ="item-name">{item.name} </div>
-                <div className="price"> Q {item.price}.00 </div>
 
+  <div className="information">
+    <div className="cart-page">
+      {notification && <p className="notification">{notification}</p>}
+      {purchaseSuccess ? (
+        <div>
+          <p>¡Gracias por su compra!</p>
+        </div>
+      ) : (
+        <>
+          {cartItems.length === 0 ? (
+            <p>Tu carrito esta vacío 🥺</p>
+          ) : (
+            <div className="cart-container">
+              <div className="cart-total-price">
+                <div className="cart-items">
+                  <ul>
+                    {cartItems.map((item, index) => (
+                      <li key={index}>
+                        <img src={item.image} alt={item.name} />
+                        <div className="name-price">
+                          <div className="item-name">{item.name}</div>
+                          <div className="price">Q {item.price}.00</div>
+                        </div>
+                        <button className="cart-page-remove" onClick={() => removeFromCart(item)}>Remover</button>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <button className='cart-page-remove' onClick={() => removeFromCart(item)}>Remover</button>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="name-price-INS">
-                {includeKit && (
-                  <>
-                    <div className="item-name-INST">
-                      <p className='kit-name'>Kit de pieles perfectas</p>
-                      <button className='cart-page-remove-x' onClick={handleRemoveKit}>X</button>
-                    </div>
-                    <div className="price-kit">Q 5 900.00</div>
-                  </>
-                )}
+                <div className="name-price-INS">
+                  {includeKit && (
+                    <>
+                      <div className="item-name-KIT">
+                        <p className="kit-name">Kit de pieles perfectas</p>
+                        <button className="cart-page-remove-x" onClick={handleRemoveKit}>X</button>
+                      </div>
+                      <div className="price-kit">Q 5 900.00</div>
+                    </>
+                  )}
+                </div>
+                <div className="name-price-INS">
+                  <div className="item-name-INST">INSCRIPCIÓN</div>
+                  <div className="price">Q 500.00</div>
+                </div>
+                <div className="line"></div>
+                <div className="total-price">
+                  <div className="total-text">TOTAL</div>
+                  <div className="total-number">Q {getTotalPrice()}.00</div>
+                </div>
               </div>
-        <div className="name-price-INS"> 
-                <div className="item-name-INST">INSCRIPCIÓN</div>
-                <div className="price">Q 500.00</div>
-              </div>
-        <div className="line"></div>
-        <div className="total-price">
-          <div className='total-text'>TOTAL</div><div className='total-number'>Q {getTotalPrice()}.00</div>
-        </div>
-        </div>
-        <div className="payment">
-          <h2>Información del pago</h2>
-          <form onSubmit={handleCheckout}>
-          <label htmlFor="cardNumber">Número de tarjeta:</label>
-          <input type="text" id="cardNumber" name="cardNumber" required />
-          <label htmlFor="expiryDate">Fecha de caducidad:</label>
-          <input type="text" id="expiryDate" name="expiryDate" required />
-          <label htmlFor="cvv">CVV:</label>
-          <input type="text" id="cvv" name="cvv" required />
-          {cartItems.length > 0 && (
-            <button className="checkout-button" type="submit">Checkout</button>
+              <form className = 'form-from-user' onSubmit={handleCheckout}>
+                <div className="information-User">
+                  <p className="title-form">Formulario de inscripción 2024</p>
+                  <div className="form-user">
+                    <label htmlFor="email">Email:*</label>
+                    <input type="email" id="email" name="email" required />
+                    <label htmlFor="name">Nombre Completo:*</label>
+                    <input type="text" id="name" name="name" required />
+                    <label htmlFor="instagram">Usuario de Instagram:*</label>
+                    <input type="text" id="instagram" name="instagram" required />
+                    <label htmlFor="identification">Número de Identificación:* <div className="second-text-form">( DPI o número de Pasaporte)</div></label>
+                    <input type="number" id="identification" name="identification" required />
+                    <label htmlFor="whatsapp">Número de Whatsapp:*</label>
+                    <input type="number" id="whatsapp" name="whatsapp" required />
+                    <label htmlFor="nit">Datos de facturación NIT:*</label>
+                    <input type="number" id="nit" name="nit" required />
+                  </div>
+                </div>
+                <div className="payment">
+                  <p className="title-form">Información del pago</p>
+                  <div>
+                    <label htmlFor="cardNumber">Número de tarjeta:</label>
+                    <input type="number" id="cardNumber" name="cardNumber" required />
+                    <label htmlFor="expiryDate">Fecha de caducidad:</label>
+                    <input type="number" id="expiryDate" name="expiryDate" required />
+                    <label htmlFor="cvv">CVV:</label>
+                    <input type="number" id="cvv" name="cvv" required />
+                    {cartItems.length > 0 && (
+                      <button className="checkout-button" type="submit">Checkout</button>
+                    )}
+                  </div>
+                </div>
+              </form>
+            </div>
           )}
-        </form>
-        </div>
-      </div>
+        </>
       )}
-    </>
-    )}
+    </div>
   </div>
 </div>
+
   );
 };
 

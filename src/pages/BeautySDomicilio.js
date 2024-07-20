@@ -18,7 +18,7 @@ const BeautySDomicilio = () => {
                 <input type ="text" id ="name" name ="name" required/><br/>
 
                 <label for = "whatsapp">NUMERO DE WHATSAPP:*</label>
-                <input type = "number" id ="whatsapp" name ="whatsapp" required/><br/>
+                <input type = "tel" id ="whatsapp" name ="whatsapp" required/><br/>
 
                 <label for="date">FECHA DEL EVENTO:*</label>
                 <input type = "date" id="date" name="date" required/><br/>

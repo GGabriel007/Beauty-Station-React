@@ -1,28 +1,32 @@
 /* src/styles/CartPage.css */
 
-.cart-page {
-    padding: 30px;
-    background-color: #f7f7f7;
+.information{
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    background-color: #f7f7f7;
+    padding-bottom: 25px;
+}
+
+.cart-page {
+    padding: 20px;
+    background-color: #f7f7f7;
+    width: 80%;
+    max-width: 1200px;
+    border-radius: 10px;
 
 }
 
 .cart-container{
     display: flex;
-    justify-content: center;
-    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-between;
     margin-bottom: 25px;
 }
 
 .cart-items{
     text-align: left;
-}
-
-.payment{
-    width: 35%;
-    padding-left: 90px;
 }
 
 .cart-items ul {
@@ -69,7 +73,7 @@
     list-style-type: none;
     display: flex;
     flex-direction: column;
-    
+    gap: 15px;
 }
 
 .cart-page li {
@@ -112,6 +116,7 @@
 .cart-page .notification {
     margin-bottom: 20px;
     color: rgb(255, 255, 255);
+
 }
 
 .price {
@@ -125,6 +130,7 @@
     width: 98%;
     height: 1px;
     background-color: #000000;
+    margin-top: 15px;
 }
 
 .total-price {
@@ -132,7 +138,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    width: 95%;
+    width: 77.7%;
 }
 
 .total-text {
@@ -147,16 +153,29 @@
 }
 
 .name-price{
-    padding-right: 20px;
-    
+    padding-right: 14px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 66.8%;
 }
 
 .item-name {
     font-family: 'Roboto', sans-serif;
     font-weight: 600; /* Bold */
+    width: 60%;
 }
 
 .item-name-INST{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.item-name-KIT{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -195,14 +214,52 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 95%;
-    padding-bottom: 10px;
+    width: 77.7%;
+    align-items: center;
 }
 
-.price-kit {
-    padding-top: 16px;
-}
-
+.information-User, .payment {
+    width: 100%;
+  }
+  
+  .title-form {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 1px;
+    margin-top: 5px;
+  }
+  
+  .form-user, .payment div {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    margin-bottom: 1px;
+    font-weight: bold;
+  }
+  
+  input {
+    padding: 10px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+  }
+  
+  .checkout-button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2em;
+  }
+  
+  .checkout-button:hover {
+    background-color: #45a049;
+  }
 /* Check out notification */ 
 .checkoutNotification {
     color: gray;
@@ -227,5 +284,43 @@
 
     .payment {
         padding-top: 20px;
+    }
+
+    .name-price-INS{
+        width: 83.2%;
+    }
+
+    .name-price{
+        width: 61%;
+    }
+
+    .item-name{
+        width: 120px;
+    }
+
+    .item-name-KIT{
+        width: 48%;
+    }
+
+    .cart-page li{
+        width: 108%;
+    }
+
+    .cart-page ul{
+    margin-bottom:0px ; 
+   }
+
+    .cart-page-remove {
+        height: 28px;
+        width: 57px;
+        font-size: 8px;
+    }
+
+    .total-price {
+        width: 87.1%;
+    }
+
+    .form-from-user {
+        margin-top: 45px;
     }
 }
