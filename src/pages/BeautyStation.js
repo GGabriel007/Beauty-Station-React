@@ -15,13 +15,17 @@ const BeautyStation = () => {
           <Link to = "/classes/classes-1">
               <img className="icon" src={`${process.env.PUBLIC_URL}images/Class_1/imagen_Module_Hair.jpeg`} alt="Informacion de Cursos" />
           </Link>
+          <Link to = "/classes/classes-1" className='no-underline'>
             <p className="text">Cursos Profesionales de Peinado</p>
+          </Link>
           </div>
           <div className="center">
-          <Link to = "/classes/classes-2">
+          <Link to = "/classes/classes-2" >
               <img className="icon" src={`${process.env.PUBLIC_URL}images/Class_1/imagen_Module_Mkup.jpeg`} alt="Informacion de Cursos" />
           </Link>
+          <Link to = "/classes/classes-2" className='no-underline'>
             <p className="text">Cursos Profesionales de Maquillaje</p>
+          </Link>
           </div>
         </div>
       </div>

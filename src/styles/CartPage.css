@@ -287,7 +287,7 @@
     }
 
     .name-price-INS{
-        width: 83.2%;
+        width: 80.9%;
     }
 
     .name-price{
@@ -295,8 +295,26 @@
     }
 
     .item-name{
-        width: 120px;
+        width: 80px;
+        font-size: 12px;
     }
+
+    .price{
+        font-size: 13px;
+    }
+
+    .price-kit{
+        font-size: 13px;
+    }
+
+    .kit-name{
+        font-size: 12.5px;
+    }
+
+    .item-name-INST{
+        font-size: 12.5px;
+    }
+
 
     .item-name-KIT{
         width: 48%;

@@ -6,7 +6,7 @@ body {
     background-color: rgb(255, 255, 255);
 }
 
-.top-header{
+.top-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -17,6 +17,11 @@ body {
     align-items: center;
     justify-content: space-between;
     background-color: rgb(255, 255, 255);
+}
+
+.header-button {
+    color: #ed93b4;
+    text-decoration: none;
 }
 
 .line1 {
@@ -39,11 +44,6 @@ body {
     padding-right: 15px;
 }
 
-a {
-    text-decoration: none;
-    color: #ed93b4;
-}
-
 .image-header {
     width: 170px;
     height: 90px;
@@ -63,38 +63,37 @@ a {
     width: 35px;
     height: 3px;
     background-color: #000;
-    margin: 5px ;
+    margin: 5px;
     transition: 0.4s;
 }
 
-@media (max-width: 768px) {
-    /*Header*/
+a{
+    text-decoration: none;
+}
 
-    .top-header{
+@media (max-width: 768px) {
+    .top-header {
         display: flex;
         flex-direction: column;
-        
     }
-
 
     .right-header-links {
         flex-direction: column;
         gap: 20px;
-        padding-top: 1px;
-        padding-bottom: 1px;
         font-size: 23px;
         position: static; /* Changed from absolute to static */
         width: 100%;
-        background-color: #fff;
         height: auto; /* Let height expand naturally */
         overflow: hidden;
-        transition: max-height 0.3s ease-in-out; /* Smooth height transition */
+        transition: max-height 0.3s ease-in-out, visibility 0.3s ease-in-out; /* Smooth height and visibility transition */
         max-height: 0; /* Start with menu collapsed */
-        margin-top: 5px;
-        margin-bottom: 10px;
-        padding-left: 10px;
-        padding-right: 1px;
+        visibility: hidden; /* Hide menu */
+        padding: 0 10px; /* Adjust padding for better spacing */
         align-items: flex-start;
+        background-color: #eeeeee;
+        margin: 0; /* Reset margin */
+        padding-top: 10px;
+        padding-bottom: 10px;
     }
 
     .header {
@@ -104,30 +103,25 @@ a {
     }
 
     .image-header {
-        padding-right: 15px;
         width: 150px;
         height: 75px;
-        padding-bottom: 5px;
-        padding-top: 15px;
+        padding: 15px 15px 5px 0; /* Adjust padding for better spacing */
     }
 
     .header-button {
-        background-color: white;
-        padding-left: 15px;
         color: #ed93b4;
+        font-size: 19px;
     }
 
     .menu-icon {
         display: flex;
-        padding-right: 20px;
-        padding-top: 30px;
+        padding: 30px 20px 0 0; /* Adjust padding for better spacing */
         background-color: white;
-        
     }
 
-    .border-menu{
+    .border-menu {
         background-color: #f0f0f0;
-        border-color: black;
+        border: 1px solid black; /* Ensure there is a border */
         padding: 10px;
         border-radius: 10px;
     }
@@ -137,7 +131,11 @@ a {
     }
 
     .right-header-links.open {
-        max-height: 2500px; /* Adjust this value based on the number of menu items */
-
+        max-height: 300px; /* Adjust this value based on the number of menu items */
+        visibility: visible; /* Show menu */
+        background-color: #f5f5f5;
+        margin: 0; /* Reset margin */
+        padding-top: 10px;
+        padding-bottom: 10px;
     }
 }

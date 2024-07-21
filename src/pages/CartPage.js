@@ -162,7 +162,7 @@ const CartPage = () => {
                   )}
                 </div>
                 <div className="name-price-INS">
-                  <div className="item-name-INST">INSCRIPCIÓN</div>
+                  <div className="item-name-INST">Incripción</div>
                   <div className="price">Q 500.00</div>
                 </div>
                 <div className="line"></div>
