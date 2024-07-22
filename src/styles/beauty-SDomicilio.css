@@ -20,15 +20,14 @@
 }
 
 .mid-information-form {
-    width: 60%;
+    width: 53%;
+    height: 1200px;
     margin: 0 auto;
     padding: 20px;
     border-radius: 8px;
     background-color: #e6e0e2;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     font-family: "Barlow Condensed", sans-serif;
-    font-size: 16px;
-    text-align: left;
 }
 
 form {
@@ -76,5 +75,8 @@ textarea {
 @media (max-width: 1019px) {
 
     /*Content*/
+    .mid-information-form {
+        width: 80%;
+    }
 
 }
