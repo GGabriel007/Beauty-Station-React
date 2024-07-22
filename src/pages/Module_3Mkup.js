@@ -197,13 +197,13 @@ const Module_3Mkup = () => {
                 <p>Materiales: Kit de maquillaje completo</p>
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                <li>Clase 12: jueves 3 de octubre - Redes e iluminación en linea.</li>
-                <li>Clase 13: miercoles 9 de octubre - Técnica Dafine hilos tensores.</li>
-                <li>Clase 14: jueves 10 de octubre - Práctica Dafine.</li>
-                <li>Clase 15: miercoles 16 de octubre - Técnica Pepe piel de Hada.</li>
-                <li>Clase 16: jueves 17 de octubre - Práctica Pepe.</li>
-                <li>Clase 17: miercoles 23 de octubre - Masterclass Técnica Airbrush.</li>
-                <li>Clase 18: jueves 24 de octubre - Evaluación final novias, sesión de fotos y entrega de portafolio.</li>
+                <li> <strong>Clase 12:</strong> <em> jueves 3 de octubre </em>- Redes e iluminación en linea.</li>
+                <li> <strong>Clase 13:</strong> <em> miercoles 9 de octubre </em>- Técnica Dafine hilos tensores.</li>
+                <li> <strong>Clase 14:</strong> <em> jueves 10 de octubre </em>- Práctica Dafine.</li>
+                <li> <strong>Clase 15:</strong> <em> miercoles 16 de octubre </em>- Técnica Pepe piel de Hada.</li>
+                <li> <strong>Clase 16:</strong> <em> jueves 17 de octubre </em>- Práctica Pepe.</li>
+                <li> <strong>Clase 17:</strong> <em> miercoles 23 de octubre </em>- Masterclass Técnica Airbrush.</li>
+                <li> <strong>Clase 18:</strong> <em> jueves 24 de octubre </em>- Evaluación final novias, sesión de fotos y entrega de portafolio.</li>
                 </ul>
                 <p className="class_links-module">Elige un Horario:</p>
                 <ul>

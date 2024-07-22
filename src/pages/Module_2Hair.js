@@ -149,13 +149,13 @@ const Module_2Hair = () => {
                     <p>Materiales: Kit completo de peinado.</p>
                     <p className="class_links-module">Clases:</p>
                     <ul>
-                    <li>Clase 5: 20 de agosto - Trenzas en tendencias.</li>
-                    <li>Clase 6: 27 de agosto - Semirecogido con extenciones.</li>
-                    <li>Clase 7: 3 de septiembre - Cola baja.</li>
-                    <li>Clase 8: 10 de septiembre - Sleek Bun</li>
-                    <li>Clase 9: 17 de septiembre - Recogido clasico</li>
-                    <li>Clase 10: 24 de septiembre - Recogido con volumen.</li>
-                    <li>Clase 11: 1 de octubre - Evaluacion.</li>
+                    <li> <strong>Clase 5: </strong> <em>20 de agosto </em>- Trenzas en tendencias.</li>
+                    <li> <strong>Clase 6: </strong> <em>27 de agosto </em>- Semirecogido con extenciones.</li>
+                    <li> <strong>Clase 7: </strong> <em>3 de septiembre </em>- Cola baja.</li>
+                    <li> <strong>Clase 8: </strong> <em>10 de septiembre </em>- Sleek Bun</li>
+                    <li> <strong>Clase 9: </strong> <em>17 de septiembre </em>- Recogido clasico</li>
+                    <li> <strong>Clase 10:</strong> <em> 24 de septiembre </em>- Recogido con volumen.</li>
+                    <li> <strong>Clase 11:</strong> <em> 1 de octubre </em>- Evaluacion.</li>
                     </ul>
                     <p className="class_links-module">Horario:</p>
                     <ul>

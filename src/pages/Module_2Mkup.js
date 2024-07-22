@@ -199,12 +199,12 @@ const Module_2Mkup = () => {
                 <p>Materiales: Kit de maquillaje completo</p>
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                <li>Clase 6: 28 de agosto - Fotografía para redes y delineados.</li>
-                <li>Clase 7: 4 de septiembre - Maquillaje de día express.</li>
-                <li>Clase 8: 11 de septiembre - Glam con pigmentos quinceañera.</li>
-                <li>Clase 9: 18 de septiembre - Técnica semi cut crease.</li>
-                <li>Clase 10: 25 de septiembre - Técnica smokey latte makeup.</li>
-                <li>Clase 11: 2 de octubre - Evaluacion.</li>
+                <li> <strong>Clase 6: </strong><em>28 de agosto</em>- Fotografía para redes y delineados.</li>
+                <li> <strong>Clase 7: </strong><em>4 de septiembre</em> - Maquillaje de día express.</li>
+                <li> <strong>Clase 8: </strong><em>11 de septiembre</em> - Glam con pigmentos quinceañera.</li>
+                <li> <strong>Clase 9: </strong><em>18 de septiembre</em> - Técnica semi cut crease.</li>
+                <li> <strong>Clase 10:</strong><em> 25 de septiembre</em> - Técnica smokey latte makeup.</li>
+                <li> <strong>Clase 11:</strong><em> 2 de octubre</em> - Evaluacion.</li>
                 </ul>
                 <p className="class_links-module">Horario:</p>
                 <ul>

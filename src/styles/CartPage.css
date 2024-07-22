@@ -1,6 +1,6 @@
 /* src/styles/CartPage.css */
 
-.information{
+.information-cart{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -49,6 +49,11 @@
     display: flex; 
     align-items: center;
     margin-bottom: 10px;
+}
+
+.name-price-INS img{
+    width: 50px;
+    margin-right: 10px;
 }
 
 .cart-items img { 
@@ -201,6 +206,12 @@
     align-items: center;
 }
 
+.form-from-user {
+    margin-top: 25px;
+    padding-left: 30%;
+    padding-right: 30%;
+}
+
 .information-User, .payment {
     width: 100%;
   }
@@ -226,7 +237,7 @@
     padding: 10px;
     margin-bottom: 5px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 20px;
     font-size: 1em;
   }
   
@@ -246,7 +257,7 @@
 /* Check out notification */ 
 
 /* Media query for mobile devices */
-@media (max-width: 768px) {
+@media (max-width: 1019px) {
     .cart-container{
         flex-direction: column;
     }
@@ -299,6 +310,8 @@
 
     .form-from-user {
         margin-top: 45px;
+        padding-left: 0px;
+        padding-right: 0px;
     }
 
     .block-remove{
@@ -306,4 +319,5 @@
         width: 57px;
         
     }
+
 }

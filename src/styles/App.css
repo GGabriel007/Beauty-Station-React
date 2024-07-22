@@ -8,6 +8,12 @@
   pointer-events: none;
 }
 
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -60,7 +66,7 @@
   padding: 3px 3px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1019px) {
   /*Cart*/
   .cart-button {
     bottom: 20px;

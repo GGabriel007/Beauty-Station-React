@@ -156,13 +156,13 @@ const Module_3Hair = () => {
                 <p>Materiales: Kit de peinado completo</p>
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                <li>Clase 12: jueves 3 de octubre - Redes e ilumicaión en linea.</li>
-                <li>Clase 13: martes 8 de octubre - Brindal Hair + List de cejas.</li>
-                <li>Clase 14: jueves 10 de octubre - Practica en modelo.</li>
-                <li>Clase 15: martes 15 de octubre - Peinado alto Kim Kardashian.</li>
-                <li>Clase 16: jueves 17 de octubre - Practica Kim Kardashian.</li>
-                <li>Clase 17: martes 22 de octubre - Peinado novia + colocación de velo.</li>
-                <li>Clase 18: jueves 24 de octubre - Evaluación final, novias, entrega de portafolio.</li>
+                <li><strong>Clase 12:</strong> <em> jueves 3 de octubre</em> - Redes e ilumicaión en linea.</li>
+                <li><strong>Clase 13:</strong> <em> martes 8 de octubre</em> - Brindal Hair + List de cejas.</li>
+                <li><strong>Clase 14:</strong> <em> jueves 10 de octubre</em> - Practica en modelo.</li>
+                <li><strong>Clase 15:</strong> <em> martes 15 de octubre</em> - Peinado alto Kim Kardashian.</li>
+                <li><strong>Clase 16:</strong> <em> jueves 17 de octubre</em> - Practica Kim Kardashian.</li>
+                <li><strong>Clase 17:</strong> <em> martes 22 de octubre</em> - Peinado novia + colocación de velo.</li>
+                <li><strong>Clase 18:</strong> <em> jueves 24 de octubre</em> - Evaluación final, novias, entrega de portafolio.</li>
                 </ul>
                 <p className="class_links-module">Horario:</p>
                 <ul>

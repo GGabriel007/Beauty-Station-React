@@ -144,10 +144,10 @@ const Module_1Hair = () => {
             <p>Materiales: Plancha, tubo y cepillo; secadora y productos de cabello</p>
             <p className="class_links-module">Clases:</p>
             <ul>
-              <li>Clase 1: 23 de julio - Introducción, productos y cómo hacer waves con plancha.</li>
-              <li>Clase 2: 30 de julio - Cómo lograr natural waves.</li>
-              <li>Clase 3: 6 de agosto - Técnicas para crear glam waves.</li>
-              <li>Clase 4: 13 de agosto - Estilo Old Hollywood waves y uso de velo.</li>
+              <li><strong>Clase 1:</strong> <em>23 de julio</em> - Introducción, productos y cómo hacer waves con plancha.</li>
+              <li><strong>Clase 2:</strong> <em>30 de julio</em> - Cómo lograr natural waves.</li>
+              <li><strong>Clase 3:</strong> <em>6 de agosto</em> - Técnicas para crear glam waves.</li>
+              <li><strong>Clase 4:</strong> <em>13 de agosto </em> - Estilo Old Hollywood waves y uso de velo.</li>
             </ul>
             <p className="class_links-module">Horario:</p>
             <ul>

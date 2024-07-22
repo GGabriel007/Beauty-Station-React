@@ -221,24 +221,24 @@ const Module_4Mkup = () => {
                 <p>Materiales: Kit de Maquillaje completo</p>                
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                <li>Clase 1: 24 de julio - Introducción y teoría.</li>
-                <li>Clase 2: 31 de julio - Skincare, piel HD.</li>
-                <li>Clase 3: 7 de agosto - Correcciones/Piel con acné full cobertura.</li>
-                <li>Clase 4: 14 de agosto - Piel madura.</li>
-                <li>Clase 5: 21 de agosto - Glowy skin, no makeup.</li>
-                <li>Clase 6: 28 de agosto - Fotografía para redes y delineados.</li>
-                <li>Clase 7: 4 de septiembre - Maquillaje de día express.</li>
-                <li>Clase 8: 11 de septiembre - Glam con pigmentos quinceañera.</li>
-                <li>Clase 9: 18 de septiembre - Técnica semi cut crease.</li>
-                <li>Clase 10: 25 de septiembre - Técnica smokey latte makeup.</li>
-                <li>Clase 11: 2 de octubre - Evaluacion.</li>
-                <li>Clase 12: jueves 3 de octubre - Redes e iluminación en linea.</li>
-                <li>Clase 13: miercoles 9 de octubre - Técnica Dafine hilos tensores.</li>
-                <li>Clase 14: jueves 10 de octubre - Práctica Dafine.</li>
-                <li>Clase 15: miercoles 16 de octubre - Técnica Pepe piel de Hada.</li>
-                <li>Clase 16: jueves 17 de octubre - Práctica Pepe.</li>
-                <li>Clase 17: miercoles 23 de octubre - Masterclass Técnica Airbrush.</li>
-                <li>Clase 18: jueves 24 de octubre - Evaluación final novias, sesión de fotos y entrega de portafolio.</li>
+                <li> <strong>Clase 1: </strong> <em>24 de julio </em>- Introducción y teoría.</li>
+                <li> <strong>Clase 2: </strong> <em>31 de julio </em>- Skincare, piel HD.</li>
+                <li> <strong>Clase 3: </strong> <em>7 de agosto </em>- Correcciones/Piel con acné full cobertura.</li>
+                <li> <strong>Clase 4: </strong> <em>14 de agosto </em>- Piel madura.</li>
+                <li> <strong>Clase 5: </strong> <em>21 de agosto </em>- Glowy skin, no makeup.</li>
+                <li> <strong>Clase 6: </strong> <em>28 de agosto </em>- Fotografía para redes y delineados.</li>
+                <li> <strong>Clase 7: </strong> <em>4 de septiembre </em>- Maquillaje de día express.</li>
+                <li> <strong>Clase 8: </strong> <em>11 de septiembre </em>- Glam con pigmentos quinceañera.</li>
+                <li> <strong>Clase 9: </strong> <em>18 de septiembre </em>- Técnica semi cut crease.</li>
+                <li> <strong>Clase 10:</strong> <em> 25 de septiembre </em>- Técnica smokey latte makeup.</li>
+                <li> <strong>Clase 11:</strong> <em> 2 de octubre </em>- Evaluacion.</li>
+                <li> <strong>Clase 12:</strong> <em> jueves 3 de octubre </em>- Redes e iluminación en linea.</li>
+                <li> <strong>Clase 13:</strong> <em> miercoles 9 de octubre </em>- Técnica Dafine hilos tensores.</li>
+                <li> <strong>Clase 14:</strong> <em> jueves 10 de octubre </em>- Práctica Dafine.</li>
+                <li> <strong>Clase 15:</strong> <em> miercoles 16 de octubre </em>- Técnica Pepe piel de Hada.</li>
+                <li> <strong>Clase 16:</strong> <em> jueves 17 de octubre </em>- Práctica Pepe.</li>
+                <li> <strong>Clase 17:</strong> <em> miercoles 23 de octubre </em>- Masterclass Técnica Airbrush.</li>
+                <li> <strong>Clase 18:</strong> <em> jueves 24 de octubre </em>- Evaluación final novias, sesión de fotos y entrega de portafolio.</li>
                 </ul>
                 <p className="class_links-module">Horario:</p>
                 <ul>

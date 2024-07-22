@@ -16,7 +16,7 @@ const BeautyStation = () => {
               <img className="icon" src={`${process.env.PUBLIC_URL}images/Class_1/imagen_Module_Hair.jpeg`} alt="Informacion de Cursos" />
           </Link>
           <Link to = "/classes/classes-1" className='no-underline'>
-            <p className="text">Cursos Profesionales de Peinado</p>
+            <p className="title_links-classes">PEINADO</p>
           </Link>
           </div>
           <div className="center">
@@ -24,7 +24,7 @@ const BeautyStation = () => {
               <img className="icon" src={`${process.env.PUBLIC_URL}images/Class_1/imagen_Module_Mkup.jpeg`} alt="Informacion de Cursos" />
           </Link>
           <Link to = "/classes/classes-2" className='no-underline'>
-            <p className="text">Cursos Profesionales de Maquillaje</p>
+            <p className="title_links-classes">MAQUILLAJE</p>
           </Link>
           </div>
         </div>

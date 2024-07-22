@@ -182,24 +182,24 @@ const Module_4Hair = () => {
                 <p>Materiales: Plancha, tubo, cepillo, secadora, productos de cabello y Kit completo de peinado</p>
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                <li>Clase 1: 23 de julio - Introducción, productos y cómo hacer waves con plancha.</li>
-                <li>Clase 2: 30 de julio - Cómo lograr natural waves.</li>
-                <li>Clase 3: 6 de agosto - Técnicas para crear glam waves.</li>
-                <li>Clase 4: 13 de agosto - Estilo Old Hollywood waves y uso de velo.</li>
-                <li>Clase 5: 20 de agosto - Trenzas en tendencias.</li>
-                <li>Clase 6: 27 de agosto - Semirecogido con extenciones.</li>
-                <li>Clase 7: 3 de septiembre - Cola baja.</li>
-                <li>Clase 8: 10 de septiembre - Sleek Bun</li>
-                <li>Clase 9: 17 de septiembre - Recogido clasico</li>
-                <li>Clase 10: 24 de septiembre - Recogido con volumen.</li>
-                <li>Clase 11: 1 de octubre - Evaluacion.</li>
-                <li>Clase 12: jueves 3 de octubre - Redes e ilumicaión en linea.</li>
-                <li>Clase 13: martes 8 de octubre - Brindal Hair + List de cejas.</li>
-                <li>Clase 14: jueves 10 de octubre - Practica en modelo.</li>
-                <li>Clase 15: martes 15 de octubre - Peinado alto Kim Kardashian.</li>
-                <li>Clase 16: jueves 17 de octubre - Practica Kim Kardashian.</li>
-                <li>Clase 17: martes 22 de octubre - Peinado novia + colocación de velo.</li>
-                <li>Clase 18: jueves 24 de octubre - Evaluación final, novias, entrega de portafolio.</li>
+                <li> <strong>Clase 1: </strong> <em>23 de julio </em>- Introducción, productos y cómo hacer waves con plancha.</li>
+                <li> <strong>Clase 2: </strong> <em>30 de julio </em>- Cómo lograr natural waves.</li>
+                <li> <strong>Clase 3: </strong> <em>6 de agosto </em>- Técnicas para crear glam waves.</li>
+                <li> <strong>Clase 4: </strong> <em>13 de agosto </em>- Estilo Old Hollywood waves y uso de velo.</li>
+                <li> <strong>Clase 5: </strong> <em>20 de agosto </em>- Trenzas en tendencias.</li>
+                <li> <strong>Clase 6: </strong> <em>27 de agosto </em>- Semirecogido con extenciones.</li>
+                <li> <strong>Clase 7: </strong> <em>3 de septiembre </em>- Cola baja.</li>
+                <li> <strong>Clase 8: </strong> <em>10 de septiembre </em>- Sleek Bun</li>
+                <li> <strong>Clase 9: </strong> <em>17 de septiembre </em>- Recogido clasico</li>
+                <li> <strong>Clase 10:</strong> <em> 24 de septiembre </em>- Recogido con volumen.</li>
+                <li> <strong>Clase 11:</strong> <em> 1 de octubre </em>- Evaluacion.</li>
+                <li> <strong>Clase 12:</strong> <em> jueves 3 de octubre </em>- Redes e ilumicaión en linea.</li>
+                <li> <strong>Clase 13:</strong> <em> martes 8 de octubre </em>- Brindal Hair + List de cejas.</li>
+                <li> <strong>Clase 14:</strong> <em> jueves 10 de octubre </em>- Practica en modelo.</li>
+                <li> <strong>Clase 15:</strong> <em> martes 15 de octubre </em>- Peinado alto Kim Kardashian.</li>
+                <li> <strong>Clase 16:</strong> <em> jueves 17 de octubre </em>- Practica Kim Kardashian.</li>
+                <li> <strong>Clase 17:</strong> <em> martes 22 de octubre </em>- Peinado novia + colocación de velo.</li>
+                <li> <strong>Clase 18:</strong> <em> jueves 24 de octubre </em>- Evaluación final, novias, entrega de portafolio.</li>
 
                 </ul>
                 <p className="class_links-module">Horario:</p>

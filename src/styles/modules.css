@@ -12,7 +12,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #f7f7f7;
+    background-color: #ffe4ee73;
     font-family: 'Merriweather', serif;
     font-weight: 400; /* Regular */
 }
@@ -87,6 +87,12 @@
 
 .thumbnails-module img:hover {
     transform: scale(1.1);
+}
+
+ul {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
 
 /*schedule buttons*/
@@ -220,7 +226,7 @@
   
 
 
-@media (max-width: 768px) {
+@media (max-width: 1019px) {
 
     /*Content*/
 
@@ -230,7 +236,7 @@
     }
 
     .second-image-module img {
-        width: 345px;
+        width: 315px;
         height: 570px;
     }
 

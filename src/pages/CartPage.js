@@ -18,6 +18,16 @@ const CartPage = () => {
   const { cartItems, removeFromCart, clearCart, includeKit, setIncludeKit } = useContext(CartContext);
   const [notification, setNotification] = useState("");
   const [purchaseSuccess, setPurchaseSuccess] = useState(false);
+
+  const [formData, setFormDate] = useState({
+    identification: '',
+    whatsapp: '',
+    cardNumber: '',
+    expiryDate: '',
+    cvv: '',
+    name: '',
+    nit: '',
+  });
   
   const moduleIds = {
     'Master Waves 2PM a 4PM': '1Qk3ZTR8Mu9cvxdGGVYER',
@@ -107,6 +117,49 @@ const CartPage = () => {
     }
   };
 
+  const handleNameChange = (e) => {
+    const {value} = e.target;
+    const regex = /^[a-zA-Z\s]*$/; // Allow only letters and spaces
+    if (regex.test(value)) {
+      setFormDate({ ...formData, name: value});
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    // Format the inputs based on the name
+    let formattedValue = value;
+
+    switch (name) {
+      case 'identification':
+        formattedValue = value.replace(/\D/g, ''); // Allow only digits
+        break;
+      case 'whatsapp':
+        formattedValue = value.replace(/\D/g, '').replace(/(\d{4})(?=\d)/, '$1-').slice(0, 9); // Format as XXXX-XXXX and limit to 8 digits
+        break;
+      case 'cardNumber':
+        formattedValue = value.replace(/\D/g, '').replace(/(\d{4})(?=\d)/g, '$1-').slice(0, 19); // Format as XXXX-XXXX-XXXX-XXXX
+        break;
+      case 'expiryDate':
+        formattedValue = value.replace(/\D/g, '').replace(/(\d{2})(?=\d)/, '$1/').slice(0, 5); // Format as XX/XX
+        break;
+      case 'cvv':
+        formattedValue = value.replace(/\D/g, '').slice(0, 3); // Allow only 3 digits
+        break;
+      case 'nit':
+        formattedValue = value.replace(/\D/g, '')
+      break;
+      default:
+        break;
+      }
+
+      setFormDate ({
+        ...FormData,
+        [name]: formattedValue,
+      });
+    };
+
   const getTotalPrice = () => {
     const total = cartItems.reduce((total, item) => {
       return total + item.price;
@@ -122,7 +175,7 @@ const CartPage = () => {
 <div>
   <p className="header-information-cartpage">CARRITO</p>
 
-  <div className="information">
+  <div className="information-cart">
     <div className="cart-page">
       {notification && <p className="notification">{notification}</p>}
       {purchaseSuccess ? (
@@ -153,7 +206,7 @@ const CartPage = () => {
                 <div className="name-price-INS">
                   {includeKit && (
                     <>
-                      <div className='block'></div>
+                      <img src={`${process.env.PUBLIC_URL}/images/Kit-Maquillaje.png`} alt="Icono de maquillaje" />
                       <div className="name-price">
                         <p className="item-name">Kit de pieles perfectas</p>
                         <div className="price">Q 5 900.00</div>
@@ -181,35 +234,98 @@ const CartPage = () => {
                   <p className="title-form">Formulario de inscripción 2024</p>
                   <div className="form-user">
                     <label htmlFor="email">Email:*</label>
-                    <input type="email" id="email" name="email" required />
+                    <input type="email" id="email" name="email" placeholder="email@domain.com" required />
 
                     <label htmlFor="name">Nombre Completo:*</label>
-                    <input type="text" id="name" name="name" required />
+                        <input
+                          pattern="[a-zA-Z]+"
+                          type="text"
+                          id="name"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleNameChange}
+                          title="Solo se permiten letras y espacios."
+                          required
+                        />
 
                     <label htmlFor="instagram">Usuario de Instagram o Facebook:*</label>
                     <input type="text" id="instagram" name="instagram" required />
 
-                    <label htmlFor="identification">Número de Identificación:* <div className="second-text-form">( DPI o número de Pasaporte)</div></label>
-                    <input type="number" id="identification" name="identification" pattern="\d*" title="Solo se permiten números" required />
+                    <label htmlFor="identification">
+                      Número de Identificación:* <div className="second-Text">(DPI o número de Pasaporte)</div>
+                    </label>
+                    <input
+                      type="tel"
+                      id="identification"
+                      name="identification"
+                      value={formData.identification}
+                      onChange={handleChange}
+                      required
+                    />
 
                     <label htmlFor="whatsapp">Número de Whatsapp:*</label>
-                    <input type="number" id="whatsapp" name="whatsapp" pattern="\d{4}-\d{4}" title="El formato debe ser XXXX-XXXX" required />
+                              <input
+                                type="tel"
+                                id="whatsapp"
+                                name="whatsapp"
+                                value={formData.whatsapp}
+                                onChange={handleChange}
+                                maxLength="9"
+                                placeholder="XXXX-XXXX"
+                                required
+                    />
                     
                     <label htmlFor="nit">Datos de facturación NIT:*</label>
-                    <input type="text" id="nit" name="nit" title="Coloque su NIT" required />
+                    <input 
+                    type="tel" 
+                    id="nit" 
+                    name="nit" 
+                    value={formData.nit}
+                    onChange={handleChange}
+                    title="Coloque su NIT" 
+                    pattern="\d+"   
+                    required 
+                    />
                     </div>
                 </div>
                 <div className="payment">
                   <p className="title-form">Información del pago</p>
                   <div>
-                    <label htmlFor="cardNumber">Número de tarjeta:</label>
-                    <input type="number" id="cardNumber" name="cardNumber" pattern="\d{4}-\d{4}-\d{4}-\d{4}" title="Información XXXX-XXXX-XXXX-XXXX" required />
+                  <label htmlFor="cardNumber">Número de tarjeta:</label>
+                  <input
+                    type="tel"
+                    id="cardNumber"
+                    name="cardNumber"
+                    value={formData.cardNumber}
+                    onChange={handleChange}
+                    maxLength="19"
+                    placeholder="XXXX-XXXX-XXXX-XXXX"
+                    required
+                  />
                     
-                    <label htmlFor="expiryDate">Fecha de caducidad:</label>
-                    <input type="number" id="expiryDate" name="expiryDate" pattern="\d{2}/\d{2}" title="El formato debe ser XX/XX" required />
+                  <label htmlFor="expiryDate">Fecha de caducidad:</label>
+                  <input
+                    type="tel"
+                    id="expiryDate"
+                    name="expiryDate"
+                    value={formData.expiryDate}
+                    onChange={handleChange}
+                    maxLength="5"
+                    placeholder="XX/XX"
+                    required
+                  />
 
-                    <label htmlFor="cvv">CVV:</label>
-                    <input type="number" id="cvv" name="cvv" pattern="\d{3}" title="El formato debe ser XXX" required />
+                  <label htmlFor="cvv">CVV:</label>
+                    <input
+                      type="tel"
+                      id="cvv"
+                      name="cvv"
+                      value={formData.cvv}
+                      onChange={handleChange}
+                      maxLength="3"
+                      placeholder="XXX"
+                      required
+                  />
                     {cartItems.length > 0 && (
                       <button className="checkout-button" type="submit">Pagar</button>
                     )}

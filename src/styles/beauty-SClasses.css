@@ -12,7 +12,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #f7f7f7;
+    background-color: #ffe4ee73;
     font-family: 'Merriweather', serif;
     font-weight: 400; /* Regular */
 }
@@ -25,10 +25,9 @@
 .center-classes {
 
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     margin-top: 25px;
-    margin-bottom: 25px;
     max-width: 100%;
 }
 
@@ -62,19 +61,26 @@
 
 .text-classes {
     font-size: 25px;
-    width: 550px;
     text-align: left;
-    line-height: 1.4;
-    padding-left: 25px;
     word-break: break-word; /* Break long words to fit within the container */
     max-width: 100%; /* Ensure it doesn't overflow */
     
 }
 
-.class_links-classes {
-    color: black;
-    font-family: 'Lato', sans-serif;
-    font-weight: 600; /* Semi-bold */
+.title_links-classes {
+    color: white;
+    font-family: "Mukta", sans-serif;
+  font-weight: 1000;
+  font-style: normal;
+    text-align: center;
+    font-size: 45px;
+    margin-top: 5px;
+    text-shadow: 
+        -1.5px -1.5px 0 #999999d5,  
+        1.5px -1.5px 0 #999999d5,
+        -1.5px 1.5px 0 #999999d5,
+        1.5px 1.5px 0 #999999d5;
+
 }
 
 .info1-classes {
@@ -85,7 +91,7 @@
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 1019px) {
 
     /*Content*/
     .mid-information-classes{
@@ -100,5 +106,11 @@
     .text-classes{
         font-size: 19px;
         width: 80%;
+    }
+    
+    .title_links-classes{
+        line-height: 0;
+        font-size: 39px;
+        margin-top: 30px;
     }
 }

@@ -29,8 +29,10 @@ const Classes2 = () => {
                     <Link to = "/classes/classes-2/Module_1Mkup">
                         <p className = "class_links-class">Pieles Perfectas</p>
                     </Link>
+                    <div className='description-class'>
                     <p>Aprende desde cero a realizar pieles con diferentes acabados y coberturas. Skin care, Teoría del color y correcciones. Enseñaremos también diseño de cejas.</p>
                     <p>Nivel: Principiante/Intermedio</p>
+                    </div>
                 </div>
             </div>
             <div className="center-class">
@@ -41,8 +43,10 @@ const Classes2 = () => {
                     <Link to = "/classes/classes-2/Module_2Mkup">
                         <p className = "class_links-class">Maquillaje Social</p>
                     </Link>
+                    <div className='description-class'>
                     <p>Realza la belleza de tus clientes con diferentes técnicas de maquillaje para todo tipo de evento social.</p>
                     <p>Nivel: Intermedio</p>
+                    </div>
                 </div>  
             </div>
             <div className="center-class">
@@ -53,8 +57,10 @@ const Classes2 = () => {
                     <Link to = "/classes/classes-2/Module_3Mkup">
                         <p className = "class_links-class">Maestria en Novias y Tendencias</p>
                     </Link>
+                    <div className='description-class'>
                     <p>Ideal para actualizarte en tendencias internacionales, ALEH compartirá los tips y productos utilizados por los maquillistas de celebridades para impactar a tus clientes y resaltar tu perfil en redes sociales.</p>
                     <p>Nivel: Avanzado/Actualización</p>
+                    </div>
                 </div>  
             </div>
             <div className="center-class">
@@ -65,7 +71,9 @@ const Classes2 = () => {
                     <Link to = "/classes/classes-2/Module_4Mkup">
                         <p className = "class_links-class">Curso Completo Maquillaje</p>
                     </Link>
+                    <div className='description-class'>
                     <p>Incluye: 3 módulos, Book "The Makeup Guide" y certificado enmarcado</p>
+                    </div>
                 </div>  
             </div>
         </div>

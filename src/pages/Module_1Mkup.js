@@ -195,11 +195,11 @@ const Module_1Mkup = () => {
                 <p>Materiales: Kit de piel y cejas completo</p>
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                <li>Clase 1: 24 de julio - Introducción y teoría.</li>
-                <li>Clase 2: 31 de julio - Skincare, piel HD.</li>
-                <li>Clase 3: 7 de agosto - Correcciones/Piel con acné full cobertura.</li>
-                <li>Clase 4: 14 de agosto - Piel madura.</li>
-                <li>Clase 5: 21 de agosto - Glowy skin, no makeup.</li>
+                <li><strong>Clase 1:</strong> <em>24 de julio </em>- Introducción y teoría.</li>
+                <li><strong>Clase 2:</strong> <em>31 de julio </em>- Skincare, piel HD.</li>
+                <li><strong>Clase 3:</strong> <em>7 de agosto </em>- Correcciones/Piel con acné full cobertura.</li>
+                <li><strong>Clase 4:</strong> <em>14 de agosto</em> - Piel madura.</li>
+                <li><strong>Clase 5:</strong> <em>21 de agosto</em> - Glowy skin, no makeup.</li>
                 </ul>
                 <p className="class_links-module">Horario:</p>
                 <ul>

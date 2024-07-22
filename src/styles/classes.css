@@ -11,7 +11,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #f7f7f7;
+    background-color: #ffe4ee73;
     font-family: 'Merriweather', serif;
     font-weight: 400; /* Regular */
 }
@@ -72,6 +72,8 @@
     color: black;
     font-family: 'Lato', sans-serif;
     font-weight: 600; /* Semi-bold */
+    padding-right: 15px;
+    padding-left: 15px;
 }
 
 .info1-class {
@@ -79,9 +81,16 @@
     align-items: center;
     justify-content: space-between;
     background-color: rgb(158, 159, 159);
+
 }
 
-@media (max-width: 768px) {
+.description-class {
+    text-align: justify;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+@media (max-width: 1019px) {
 
     /*Content*/
     .mid-information-class {
@@ -97,6 +106,10 @@
         font-size: 19px;
         width: 80%;
         padding-right: 25px;
+    }
+
+    .text-classes {
+        padding-left: 0px;
     }
 
 }

@@ -30,8 +30,10 @@ const Classes1 = () => {
                     <Link to = "/classes/classes-1/Module_1Hair">
                         <p className = "class_links-class">Master en Waves</p>
                     </Link>
+                    <div className='description-class'>
                     <p>El curso más vendido, ya que aprendes desde cero diferentes tipos de waves en tendencia, incluye las famosas retro waves.</p>
                     <p>Nivel: Principiante/Intermedio</p>
+                    </div>
                 </div>
             </div>
             <div className="center-class">
@@ -42,8 +44,10 @@ const Classes1 = () => {
                     <Link to = "/classes/classes-1/Module_2Hair">
                         <p className = "class_links-class">Peinado para Eventos</p>
                         </Link>
+                    <div className='description-class'>
                     <p>Realza la belleza de tus clientes con diferentes técnicas de peinados, aprende diferentes tipos de trenzas, coletas, recogidos y semi recogidos</p>
                     <p>Nivel: Intermedio</p>
+                    </div>
                 </div>  
             </div>
             <div className="center-class">
@@ -54,8 +58,10 @@ const Classes1 = () => {
                     <Link to = "/classes/classes-1/Module_3Hair">
                         <p className = "class_links-class">Maestría en Novias y Tendencias</p>
                     </Link>
+                    <div className='description-class'>
                     <p>Ideal para actualizarte en tendencias internacionales y peinado elaborado. ALEH compartirá los tips y productos para impactar a tus clientes y resaltar tu perfil en redes sociales.</p>
                     <p>Nivel: Avanzado/Actualización</p>
+                    </div>
                 </div>  
             </div>
             <div className="center-class">
@@ -66,7 +72,9 @@ const Classes1 = () => {
                     <Link to = "/classes/classes-1/Module_4Hair">
                         <p className = "class_links-class">Curso Completo Peinado</p>
                     </Link>
+                    <div className='description-class'>
                     <p>Incluye: 3 módulos, Book "The Hairstyle guide" y certificado enmarcado.</p>
+                    </div>
                 </div>  
             </div>
         </div>
