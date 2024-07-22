@@ -153,17 +153,22 @@ const CartPage = () => {
                 <div className="name-price-INS">
                   {includeKit && (
                     <>
-                      <div className="item-name-KIT">
-                        <p className="kit-name">Kit de pieles perfectas</p>
-                        <button className="cart-page-remove-x" onClick={handleRemoveKit}>X</button>
+                      <div className='block'></div>
+                      <div className="name-price">
+                        <p className="item-name">Kit de pieles perfectas</p>
+                        <div className="price">Q 5 900.00</div>
                       </div>
-                      <div className="price-kit">Q 5 900.00</div>
+                      <button className="cart-page-remove" onClick={handleRemoveKit}>Remover</button>
                     </>
                   )}
                 </div>
                 <div className="name-price-INS">
-                  <div className="item-name-INST">Incripción</div>
+                <div className='block'></div>
+                <div className="name-price">
+                  <p className="item-name">Incripción</p>
                   <div className="price">Q 500.00</div>
+                </div>
+                <div className='block-remove'></div>
                 </div>
                 <div className="line"></div>
                 <div className="total-price">
@@ -177,29 +182,36 @@ const CartPage = () => {
                   <div className="form-user">
                     <label htmlFor="email">Email:*</label>
                     <input type="email" id="email" name="email" required />
+
                     <label htmlFor="name">Nombre Completo:*</label>
                     <input type="text" id="name" name="name" required />
-                    <label htmlFor="instagram">Usuario de Instagram:*</label>
+
+                    <label htmlFor="instagram">Usuario de Instagram o Facebook:*</label>
                     <input type="text" id="instagram" name="instagram" required />
+
                     <label htmlFor="identification">Número de Identificación:* <div className="second-text-form">( DPI o número de Pasaporte)</div></label>
-                    <input type="number" id="identification" name="identification" required />
+                    <input type="number" id="identification" name="identification" pattern="\d*" title="Solo se permiten números" required />
+
                     <label htmlFor="whatsapp">Número de Whatsapp:*</label>
-                    <input type="number" id="whatsapp" name="whatsapp" required />
+                    <input type="number" id="whatsapp" name="whatsapp" pattern="\d{4}-\d{4}" title="El formato debe ser XXXX-XXXX" required />
+                    
                     <label htmlFor="nit">Datos de facturación NIT:*</label>
-                    <input type="number" id="nit" name="nit" required />
-                  </div>
+                    <input type="text" id="nit" name="nit" title="Coloque su NIT" required />
+                    </div>
                 </div>
                 <div className="payment">
                   <p className="title-form">Información del pago</p>
                   <div>
                     <label htmlFor="cardNumber">Número de tarjeta:</label>
-                    <input type="number" id="cardNumber" name="cardNumber" required />
+                    <input type="number" id="cardNumber" name="cardNumber" pattern="\d{4}-\d{4}-\d{4}-\d{4}" title="Información XXXX-XXXX-XXXX-XXXX" required />
+                    
                     <label htmlFor="expiryDate">Fecha de caducidad:</label>
-                    <input type="number" id="expiryDate" name="expiryDate" required />
+                    <input type="number" id="expiryDate" name="expiryDate" pattern="\d{2}/\d{2}" title="El formato debe ser XX/XX" required />
+
                     <label htmlFor="cvv">CVV:</label>
-                    <input type="number" id="cvv" name="cvv" required />
+                    <input type="number" id="cvv" name="cvv" pattern="\d{3}" title="El formato debe ser XXX" required />
                     {cartItems.length > 0 && (
-                      <button className="checkout-button" type="submit">Checkout</button>
+                      <button className="checkout-button" type="submit">Pagar</button>
                     )}
                   </div>
                 </div>

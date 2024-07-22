@@ -20,13 +20,25 @@
 
 .cart-container{
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: space-between;
     margin-bottom: 25px;
 }
 
-.cart-items{
+.cart-total-price{
+    padding-left: 25%;
+    padding-right: 25%;
+    padding-bottom: 55px;
     text-align: left;
+
+}
+
+.block {
+    height: 2px;
+    width: 50px;
+    min-width: 50px;
+    max-width: 50px;
+    margin-right: 10px;
 }
 
 .cart-items ul {
@@ -94,23 +106,19 @@
     gap: 10px
 }
 
+
 .cart-page-remove:hover {
     background-color: #ed93b4;
 }
 
-.cart-page-remove-x{
-    padding: 2px 6px;
-    background-color: #929292;
-    color: white;
-    border: none;
-    border-radius:15px;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.315);
-    text-align: center;
-}
+.block-remove{
+    width: 54px;
+    height: 14px;
+    padding: 8px 12px;
+    margin-left: auto;
+    min-width: 32.45px;
+    max-width: 32.45px;
 
-.cart-page-remove-x:hover {
-    background-color: #ed93b4;
 }
 
 .cart-page .notification {
@@ -167,24 +175,6 @@
     width: 60%;
 }
 
-.item-name-INST{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.item-name-KIT{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-}
-
-.kit-name{
-    padding-right: 15px;
-}
 
 .checkout-button {
     background-color: #4CAF50;
@@ -205,16 +195,9 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 } 
 
-.INS {
-    display: flex;
-    flex-direction: row;
-}
-
 .name-price-INS {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    width: 77.7%;
     align-items: center;
 }
 
@@ -261,14 +244,6 @@
     background-color: #45a049;
   }
 /* Check out notification */ 
-.checkoutNotification {
-    color: gray;
-    font-weight: bold;
-    padding: 15px 32px; /* Some padding */
-    text-align: center; /* Centered text */
-    border-radius: 12px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.315);
-}
 
 /* Media query for mobile devices */
 @media (max-width: 768px) {
@@ -287,7 +262,7 @@
     }
 
     .name-price-INS{
-        width: 80.9%;
+        width: 108%;
     }
 
     .name-price{
@@ -303,22 +278,6 @@
         font-size: 13px;
     }
 
-    .price-kit{
-        font-size: 13px;
-    }
-
-    .kit-name{
-        font-size: 12.5px;
-    }
-
-    .item-name-INST{
-        font-size: 12.5px;
-    }
-
-
-    .item-name-KIT{
-        width: 48%;
-    }
 
     .cart-page li{
         width: 108%;
@@ -340,5 +299,11 @@
 
     .form-from-user {
         margin-top: 45px;
+    }
+
+    .block-remove{
+        height: 28px;
+        width: 57px;
+        
     }
 }

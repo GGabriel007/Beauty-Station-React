@@ -6,6 +6,8 @@ import '../styles/modules.css';
 import { useLocation } from 'react-router-dom';
 import { db } from '../config/firestore'; // Import Firestore configuration
 import { doc, getDoc } from 'firebase/firestore'; // Import Firestore functions
+import { Link } from 'react-router-dom';
+
 
 const Module_2Mkup = () => {
 
@@ -26,6 +28,7 @@ const Module_2Mkup = () => {
     const [notification, setNotification] = useState('');
     const [kitSelected, setKitSelected] = useState(false); //State for kit selection
     const [kitAvailability, setKitAvailability] = useState(0); // State for kit availability
+    const [cartnotification, setcartNotification] = useState('');
 
 
 
@@ -109,6 +112,8 @@ const Module_2Mkup = () => {
 
         if (hasMaquillaje && (moduleName === 'Maquillaje Social 2PM a 4PM' || moduleName === 'Maquillaje Social 6PM a 8PM')) {
           setError('Solo puedes tener una de las clases "Maquillaje Social" en el carrito.');
+          setcartNotification('¡Haz click aquí para dirigirte al carrito!');
+
           setTimeout(() => {
             setError('');
           }, 8000);
@@ -122,6 +127,8 @@ const Module_2Mkup = () => {
 
       if (hasCursoCompleto) {
         setError('No puedes agregar otras clases de Maquillaje si tienes "Curso Completo Maquillaje" en el carrito.');
+        setcartNotification('¡Haz click aquí para dirigirte al carrito!');
+
         setTimeout(() => {
           setError('');
         }, 8000);
@@ -155,8 +162,12 @@ const Module_2Mkup = () => {
         setError('');
         if (kitSelected) {
           setNotification(`¡${moduleName} ha sido agregado al carrito con el kit de pieles perfectas!`);
+          setcartNotification('¡Haz click aquí para dirigirte al carrito!');
+
         } else {
         setNotification(`¡${moduleName} ha sido agregado al carrito!`);
+        setcartNotification('¡Haz click aquí para dirigirte al carrito!');
+
         }
 
       };
@@ -226,6 +237,9 @@ const Module_2Mkup = () => {
                 <p className="class_links-module">Asientos disponibles: {availableSeats}</p>
                 {error && <p className="error-notification">{error}</p>}
                 {notification && <p className="notification">{notification}</p>}
+                <Link to = "/cart">
+            {cartnotification && <p className="cart-notification">{cartnotification}</p>}
+            </Link>
               </div>
             <div className="second-image-module">
             <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/Mkup/imagen_module_2Mkup.jpeg`} alt="Informacion de Cursos 6"/> 

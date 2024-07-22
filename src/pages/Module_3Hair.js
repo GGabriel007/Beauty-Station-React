@@ -4,6 +4,8 @@ import { CartContext } from '../context/CartContext'; // Import CartContext
 import { SeatContext } from '../context/SeatContext'; // Import SeatContext
 import '../styles/modules.css';
 import { useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
 
 const Module_3Hair = () => {
 
@@ -22,6 +24,8 @@ const Module_3Hair = () => {
   
     const [error, setError] = useState(''); // State for error messages
     const [notification, setNotification] = useState('');
+    const [cartnotification, setcartNotification] = useState('');
+
 
 
     useEffect(() => {
@@ -82,7 +86,10 @@ const Module_3Hair = () => {
         );
   
         if (hasMaestrias && (moduleName === 'Maestrías en Novias y Tendencias 2PM a 4PM' || moduleName === 'Maestrías en Novias y Tendencias 6PM a 8PM')) {
+          
           setError('Solo puedes tener una de las clases "Maestrías en Novias y Tendencias" en el carrito.');
+          setcartNotification('¡Haz click aquí para dirigirte al carrito!');
+
           setTimeout(() => {
             setError('');
           }, 8000);
@@ -96,6 +103,8 @@ const Module_3Hair = () => {
 
         if (hasCursoCompleto) {
           setError('No puedes agregar otras clases de Peinado si tienes "Curso Completo Peinado" en el carrito.');
+          setcartNotification('¡Haz click aquí para dirigirte al carrito!');
+
           setTimeout(() => {
             setError('');
           }, 8000);
@@ -111,6 +120,8 @@ const Module_3Hair = () => {
         addToCart(moduleItem);
         setError('');
         setNotification(`¡${moduleName} ha sido agregado al carrito!`);
+        setcartNotification('¡Haz click aquí para dirigirte al carrito!');
+
 
       };
   
@@ -175,6 +186,9 @@ const Module_3Hair = () => {
                     <p className="class_links-module">Asientos disponibles: {availableSeats}</p>
                     {error && <p className="error-notification">{error}</p>}
                     {notification && <p className="notification">{notification}</p>}
+                    <Link to = "/cart">
+            {cartnotification && <p className="cart-notification">{cartnotification}</p>}
+            </Link>
                   </div>
                   <div className="second-image-module">
             <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/Hair/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos"/> 

@@ -1,14 +1,14 @@
 // src/components/Header.js
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import '../styles/header.css';
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const toggleMenu = () => { setMenuOpen(!menuOpen); };
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
+  const location  = useLocation();
+  const getActiveClass = (path) => location.pathname === path ? 'active' : '';
 
   return (
     <div className="top">
@@ -26,10 +26,10 @@ const Header = () => {
         </div>
       </div>
       <ul className={`right-header-links ${menuOpen ? 'open' : ''}`}>
-        <li><Link className="header-button" to="/classes">Clases</Link></li>
-        <li><Link className="header-button" to="/servicio-a-domicilio">Servicio a Domicilio</Link></li>
-        <li><Link className="header-button" to="/nosotros">Nosotros</Link></li>
-      </ul>
+          <li><Link className={`header-button ${getActiveClass('/classes')}`} to="/classes">Clases</Link></li>
+          <li><Link className={`header-button ${getActiveClass('/servicio-a-domicilio')}`} to="/servicio-a-domicilio">Servicio a Domicilio</Link></li>
+          <li><Link className={`header-button ${getActiveClass('/nosotros')}`} to="/nosotros">Nosotros</Link></li>
+        </ul>
       </div>
       <div className="line1"></div>
     </div>

@@ -81,36 +81,53 @@ a{
         flex-direction: column;
         gap: 20px;
         font-size: 23px;
-        position: static; /* Changed from absolute to static */
+        position: static;
         width: 100%;
-        height: auto; /* Let height expand naturally */
+        height: auto; 
         overflow: hidden;
-        transition: max-height 0.3s ease-in-out, visibility 0.3s ease-in-out; /* Smooth height and visibility transition */
-        max-height: 0; /* Start with menu collapsed */
-        visibility: hidden; /* Hide menu */
-        padding: 0 10px; /* Adjust padding for better spacing */
+        transition: max-height 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        max-height: 0; 
+        visibility: hidden; 
+        padding-left: 27px;
         align-items: flex-start;
-        background-color: #eeeeee;
-        margin: 0; /* Reset margin */
+        margin: 0; 
         padding-top: 10px;
-        padding-bottom: 10px;
+        padding-bottom: 15px;
     }
 
     .header {
         flex-direction: row;
         justify-content: space-between;
-        align-items: flex-start; /* Align items to the start */
+        align-items: flex-start; 
     }
 
     .image-header {
         width: 150px;
         height: 75px;
-        padding: 15px 15px 5px 0; /* Adjust padding for better spacing */
+        padding-top: 15px;
     }
 
     .header-button {
-        color: #ed93b4;
+        color: #f1b2c9;
         font-size: 19px;
+        border-radius: 40px;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        border: 2px solid #f1b2c9;
+        background-color: white;
+    }
+
+    .header-button.active{
+        color: white;
+        font-size: 19px;
+        border-radius: 40px;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        background-color: #f1b2c9;
     }
 
     .menu-icon {
@@ -120,22 +137,24 @@ a{
     }
 
     .border-menu {
-        background-color: #f0f0f0;
-        border: 1px solid black; /* Ensure there is a border */
+        background-color: #f3f3f3;
+        border: 1px solid rgb(219, 219, 219); /* Ensure there is a border */
         padding: 10px;
         border-radius: 10px;
     }
 
     .border-menu.clicked {
-        background-color: #b9b9b9; /* Change to desired color on click */
+        border: 1px solid black;
+        background-color: #c0c0c0; /* Change to desired color on click */
     }
+
 
     .right-header-links.open {
         max-height: 300px; /* Adjust this value based on the number of menu items */
         visibility: visible; /* Show menu */
-        background-color: #f5f5f5;
         margin: 0; /* Reset margin */
         padding-top: 10px;
-        padding-bottom: 10px;
+        padding-bottom: 15px;
+        padding-left: 27px;
     }
 }
