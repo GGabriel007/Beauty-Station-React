@@ -209,7 +209,7 @@ const CartPage = () => {
                       <img src={`${process.env.PUBLIC_URL}/images/Kit-Maquillaje.png`} alt="Icono de maquillaje" />
                       <div className="name-price">
                         <p className="item-name">Kit de pieles perfectas</p>
-                        <div className="price">Q 5 900.00</div>
+                        <div className="price">Q 5900.00</div>
                       </div>
                       <button className="cart-page-remove" onClick={handleRemoveKit}>Remover</button>
                     </>
@@ -233,10 +233,10 @@ const CartPage = () => {
                 <div className="information-User">
                   <p className="title-form">Formulario de inscripción 2024</p>
                   <div className="form-user">
-                    <label htmlFor="email">Email:*</label>
+                    <label htmlFor="email" className='form-label'>Email:*</label>
                     <input type="email" id="email" name="email" placeholder="email@domain.com" required />
 
-                    <label htmlFor="name">Nombre Completo:*</label>
+                    <label htmlFor="name" className='form-label'>Nombre Completo:*</label>
                         <input
                           pattern="[a-zA-Z]+"
                           type="text"
@@ -248,10 +248,10 @@ const CartPage = () => {
                           required
                         />
 
-                    <label htmlFor="instagram">Usuario de Instagram o Facebook:*</label>
+                    <label htmlFor="instagram" className='form-label'>Usuario de Instagram o Facebook:*</label>
                     <input type="text" id="instagram" name="instagram" required />
 
-                    <label htmlFor="identification">
+                    <label htmlFor="identification" className='form-label'>
                       Número de Identificación:* <div className="second-Text">(DPI o número de Pasaporte)</div>
                     </label>
                     <input
@@ -263,7 +263,7 @@ const CartPage = () => {
                       required
                     />
 
-                    <label htmlFor="whatsapp">Número de Whatsapp:*</label>
+                    <label htmlFor="whatsapp" className='form-label'>Número de Whatsapp:*</label>
                               <input
                                 type="tel"
                                 id="whatsapp"
@@ -275,7 +275,7 @@ const CartPage = () => {
                                 required
                     />
                     
-                    <label htmlFor="nit">Datos de facturación NIT:*</label>
+                    <label htmlFor="nit" className='form-label'>Datos de facturación NIT:*</label>
                     <input 
                     type="tel" 
                     id="nit" 
@@ -291,7 +291,7 @@ const CartPage = () => {
                 <div className="payment">
                   <p className="title-form">Información del pago</p>
                   <div>
-                  <label htmlFor="cardNumber">Número de tarjeta:</label>
+                  <label htmlFor="cardNumber" className='form-label'>Número de tarjeta:</label>
                   <input
                     type="tel"
                     id="cardNumber"
@@ -303,7 +303,7 @@ const CartPage = () => {
                     required
                   />
                     
-                  <label htmlFor="expiryDate">Fecha de caducidad:</label>
+                  <label htmlFor="expiryDate" className='form-label'>Fecha de caducidad:</label>
                   <input
                     type="tel"
                     id="expiryDate"
@@ -315,7 +315,7 @@ const CartPage = () => {
                     required
                   />
 
-                  <label htmlFor="cvv">CVV:</label>
+                  <label htmlFor="cvv" className='form-label'>CVV:</label>
                     <input
                       type="tel"
                       id="cvv"

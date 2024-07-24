@@ -21,7 +21,6 @@
 
 .mid-information-form {
     width: 53%;
-    height: 1200px;
     margin: 0 auto;
     padding: 20px;
     border-radius: 8px;
@@ -37,6 +36,7 @@ form {
 
 label {
     margin-top: 6px;
+    text-align: start;
 }
 
 input, textarea {
