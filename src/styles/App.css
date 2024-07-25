@@ -55,6 +55,7 @@ html, body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.315);
   text-decoration: none;
   text-align: center;
+  z-index: 4;
 }
 
 .cart-button:hover {
