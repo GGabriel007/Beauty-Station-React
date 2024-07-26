@@ -19,7 +19,7 @@ const Classes2 = () => {
             <h2 className="header-information-class">CLASES DE MAQUILLAJE 2024</h2>
         </div>
 
-        <div className="mid-information-class">
+        <div className="mid-information-module">
             
             <div className="center-class">
                     <Link to = "/classes/classes-2/Module_1Mkup">

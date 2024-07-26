@@ -20,7 +20,7 @@ const Classes1 = () => {
             <h2 className="header-information-class">CLASES DE PEINADO 2024</h2>
         </div>
 
-        <div className="mid-information-class">
+        <div className="mid-information-module">
             
             <div className="center-class">
                 <Link to = "/classes/classes-1/Module_1Hair">

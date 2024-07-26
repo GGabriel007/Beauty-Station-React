@@ -23,18 +23,17 @@
 .mid-information{
 
     display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
-    padding-bottom: 15px;
-    gap: 40px;
-    padding-top: 80px;
-    text-align: center;
-    z-index: 1;
-    display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: space-evenly;
+    gap: 40px;
+    font-family: 'Merriweather', serif;
+    font-weight: 400; /* Regular */
+    text-align: center;
+    z-index: 1;
     width: 100%;
     height: 100%;
+    padding-top: 60px;
     position: absolute;
 }
 
@@ -54,7 +53,7 @@
 
 .top-imagen-home img {
     object-fit: cover;
-    object-position: top;
+    object-position: 0px 25%;
 }
 
 .overlay-home {
@@ -63,13 +62,13 @@
     left: 0;
     width: 100%;
     height: 400px;
-    background: rgba(0, 0, 0, 0.375)
+    background: rgba(253, 253, 253, 0.199)
 }
 
 
 .icon-Social-media-home {
-    width: 60px;
-    height: 60px;
+    width: 55px;
+    height: 55px;
 }
 
 .center img {
@@ -80,6 +79,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 25px;
     width: 275px;
 
 }
@@ -143,12 +143,6 @@
 
 }
 
-.map-container{
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-
-}
 
 .waze-logo{
     width: 60px;
@@ -156,7 +150,7 @@
 }
 
 .block-home {
-    width: 10px;
+    width: 40px;
 }
 
 .waze{
@@ -167,22 +161,21 @@
 }
 
 
-.map-container iframe {
-    width: 100%;
-    max-width: 1200px;
-    height: 450px;
-    border: 0;
-}
-
-
 
 .location-text {
     font-family: 'Lato', sans-serif;
     font-weight: 600; /* Semi-bold */
-
+    width: 55%;
     line-height: 1.7;
     display: flex;
     align-items: center;
+}
+
+.location-text-contact {
+    font-family: 'Lato', sans-serif;
+    font-weight: 600; /* Semi-bold */
+    line-height: 1.7;
+    display: flex;
     align-items: center;
 }
 
@@ -215,6 +208,7 @@
 
     .center {
         width: 100%;
+        flex-direction: column;
     }
 
     .content {
@@ -245,6 +239,7 @@
     .background-imagen-home {
 
         height: 800px;
+        width: 470px;
     }
 
     .overlay-home {
@@ -262,6 +257,28 @@
     .single-icon-home {
         display: flex;
         flex-direction: row;
+    }
+
+    .top-imagen-home img {
+        object-position: 0% ;
+    }
+
+    .icon {
+        height: 225px;
+        width: 225px;
+    }
+
+    .block-home {
+        width: 20px;
+    }
+
+    .icon-Social-media-home {
+        width: 45px;
+        height: 45px;
+    }
+
+    .location-text {
+        width: 100%;
     }
 
 }

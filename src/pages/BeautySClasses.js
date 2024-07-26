@@ -18,6 +18,14 @@ const BeautySClasses = () => {
         <div className="top-information-classes">
             <h2 className="header-information-classes">CURSOS</h2>
         </div>
+
+        <div className='image-container-classes'>
+        <div className = "top-imagen-classes">
+        <img className = "background-imagen-classes" src ={`${process.env.PUBLIC_URL}/images/background.jpeg`} alt ="imagen of the salon"/>
+        <div className="overlay-classes"></div>
+
+        </div>
+
         <div className="mid-information-classes">
         <div className="center-classes">
                 <Link to = "/classes/classes-2">
@@ -41,7 +49,7 @@ const BeautySClasses = () => {
                     
                 </div>
             </div>
-            
+        </div>
     </div>
     </div>
     </>

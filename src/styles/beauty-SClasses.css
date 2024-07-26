@@ -8,21 +8,20 @@
 }
 
 .mid-information-classes {
+
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-evenly;
-    background-color: #ffe4ee73;
+    gap: 40px;
     font-family: 'Merriweather', serif;
     font-weight: 400; /* Regular */
-    padding-top: 10px;
-
-
-}
-
-.top-information-classes {
-    margin-bottom: 20px;
-    
+    text-align: center;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    padding-top: 60px;
+    position: absolute;
 }
 
 .center-classes {
@@ -37,10 +36,13 @@
 .icon-classes {
     height: 275px;
     width: 275px;
-    border-radius: 15px;
+    border-radius: 15px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: white;
     padding: 3px;
-    max-width: 100%;
+
 }
 
 .center-classes img {
@@ -93,12 +95,42 @@
     background-color: rgb(158, 159, 159);
 }
 
+.image-container-classes{
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+}
+
+.top-imagen-classes img {
+    object-fit: cover;
+    object-position: 0px 25%;
+}
+
+.background-imagen-classes {
+    width: 1897px;
+    height: 400px;
+}
+
+.overlay-classes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 400px;
+    background: rgba(253, 253, 253, 0.199)
+}
+
+
 
 @media (max-width: 1019px) {
 
     /*Content*/
     .mid-information-classes{
         flex-direction: column;
+
     }
     
     .center-classes {
@@ -116,4 +148,37 @@
         font-size: 39px;
         margin-top: 30px;
     }
+
+    .top-imagen-classes {
+        display: flex;
+        flex-direction: column;
+
+    }
+
+    .image-container-classes{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .background-imagen-classes {
+
+        height: 800px;
+        width: 470px;
+    }
+
+    .overlay-classes {
+        height: 800px;
+    }
+
+
+    .top-imagen-classes img {
+        object-position: 0% ;
+    }
+
+    .icon-classes {
+        height: 225px;
+        width: 225px;
+    }
+    
+
 }

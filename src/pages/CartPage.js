@@ -19,7 +19,8 @@ const CartPage = () => {
   const [notification, setNotification] = useState("");
   const [purchaseSuccess, setPurchaseSuccess] = useState(false);
 
-  const [formData, setFormDate] = useState({
+  const [formData, setFormData] = useState({
+
     identification: '',
     whatsapp: '',
     cardNumber: '',
@@ -57,6 +58,30 @@ const CartPage = () => {
     'Kit de pieles perfectas' : '992U9kQfUcpxR0FpY9l4mDI',
 
   };
+
+  useEffect(() => {
+
+    const instagramInput = document.getElementById('instagram');
+
+
+    const validateInstagramInput = (event) => {
+      const regex = /^[a-zA-Z0-9._]*$/;
+      if (!regex.test(event.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight']. includes(event.key)){
+        event.preventDefault();
+      }
+    };
+
+    if (instagramInput) {
+      instagramInput.addEventListener('keypress', validateInstagramInput);
+    }
+
+    return () => {
+      if (instagramInput) {
+        instagramInput.removeEventListener('keypress', validateInstagramInput);
+      }
+    };
+
+  }, []);
 
   const handleCheckout = async (event) => {
     event.preventDefault();
@@ -121,7 +146,7 @@ const CartPage = () => {
     const {value} = e.target;
     const regex = /^[a-zA-Z\s]*$/; // Allow only letters and spaces
     if (regex.test(value)) {
-      setFormDate({ ...formData, name: value});
+      setFormData({ ...formData, name: value});
     }
   };
 
@@ -154,10 +179,20 @@ const CartPage = () => {
         break;
       }
 
-      setFormDate ({
-        ...FormData,
+      setFormData ({
+        ...formData,
         [name]: formattedValue,
       });
+    };
+
+    const handleImageChange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        setFormData({
+          ...formData,
+          identificationImage: file,
+        });
+      }
     };
 
   const getTotalPrice = () => {
@@ -244,22 +279,22 @@ const CartPage = () => {
                           name="name"
                           value={formData.name}
                           onChange={handleNameChange}
-                          title="Solo se permiten letras y espacios."
+                          title="Sólo se permiten letras y espacios."
                           required
                         />
 
                     <label htmlFor="instagram" className='form-label'>Usuario de Instagram o Facebook:*</label>
-                    <input type="text" id="instagram" name="instagram" required />
+                    <input pattern="/^[a-zA-Z0-9._]*$/" type="text" id="instagram" name="instagram" title="Sólo puede tener letras, números, puntos y guiones bajos." required />
 
                     <label htmlFor="identification" className='form-label'>
-                      Número de Identificación:* <div className="second-Text">(DPI o número de Pasaporte)</div>
+                      Número de Identificación:* <div className="second-Text">(DPI o número de Pasaporte) Adjunta foto de tu identificación</div>
                     </label>
                     <input
-                      type="tel"
+                      type="file"
                       id="identification"
-                      name="identification"
-                      value={formData.identification}
-                      onChange={handleChange}
+                      name="identificationImage"
+                      accept = "image/*"
+                      onChange={handleImageChange}
                       required
                     />
 

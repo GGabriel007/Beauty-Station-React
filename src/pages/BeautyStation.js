@@ -10,16 +10,17 @@ const BeautyStation = () => {
         <div className="top-information">
           <h2 className="header-information">HOME</h2>
         </div>
+
         <div className='image-container-home'>
         <div className = "top-imagen-home">
-        <img className = "background-imagen-home" src ={`${process.env.PUBLIC_URL}/images/Beauty_Station_Aleh2.jpeg`} alt ="imagen of the salon"/>
+        <img className = "background-imagen-home" src ={`${process.env.PUBLIC_URL}/images/background.jpeg`} alt ="imagen of the salon"/>
         <div className="overlay-home"></div>
 
         </div>
         <div className="mid-information">
           <div className="center">
           <Link to = "/classes">
-              <img className="icon" src={`${process.env.PUBLIC_URL}images/Class_1/imagen_Module_Hair.jpeg`} alt="Informacion de Cursos" />
+              <img className="icon" src={`${process.env.PUBLIC_URL}images/cursos.png`} alt="Informacion de Cursos" />
           </Link>
           <Link to = "/classes" className='no-underline'>
             <p className="title_links-classes">CURSOS</p>
@@ -27,7 +28,7 @@ const BeautyStation = () => {
           </div>
           <div className="center">
           <Link to = "/servicio-a-domicilio" >
-              <img className="icon" src={`${process.env.PUBLIC_URL}images/Class_1/imagen_Module_Mkup.jpeg`} alt="Informacion de Cursos" />
+              <img className="icon" src={`${process.env.PUBLIC_URL}images/eventos.png`} alt="Informacion de Cursos" />
           </Link>
           <Link to = "/servicio-a-domicilio" className='no-underline'>
             <p className="title_links-classes">EVENTOS</p>
@@ -40,7 +41,7 @@ const BeautyStation = () => {
       <p className="first-text"><b>¡Contáctanos!</b></p>
       
         <div className="waze">
-          <div className="location-text">¡Directamente al Whatsapp! <div className='block-home'></div><a className="single-icon-home" href="https://api.whatsapp.com/send?phone=50250177803&text=Encontr%C3%A9%20sus%20redes%20sociales%20y%20quisiera%20m%C3%A1s%20informaci%C3%B3n%20de%20%3A" target="_blank" rel="noopener noreferrer">
+          <div className="location-text-contact ">¡Directamente al Whatsapp! <div className='block-home'></div><a className="single-icon-home" href="https://api.whatsapp.com/send?phone=50250177803&text=Encontr%C3%A9%20sus%20redes%20sociales%20y%20quisiera%20m%C3%A1s%20informaci%C3%B3n%20de%20%3A" target="_blank" rel="noopener noreferrer">
                 <img className="icon-Social-media-home" src={`${process.env.PUBLIC_URL}/images/social_media/whatsapp.png`} alt="Whatsapp logo icons created by Pixel Perfect - Flaticon" />
             </a></div>
           </div>
