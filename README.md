@@ -1,3 +1,13 @@
+# Beauty-Station
+
+Beauty Station Website. This website will provide comprehensive information about Beauty Station Salon, showcasing services, location, and contact details. Users will book appointments, register for various beauty classes, and make payments directly on the site, ensuring a seamless and convenient experience.
+
+[Visit the Beauty Station Website](https://beauty-station-react.web.app)
+
+![image](https://github.com/user-attachments/assets/94e37f37-4049-41fa-9aae-153d287f576d)
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
