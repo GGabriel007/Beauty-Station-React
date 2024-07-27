@@ -21,12 +21,12 @@ const CartPage = () => {
 
   const [formData, setFormData] = useState({
 
-    whatsapp: '',
+   'entry.1830117511': '',
     cardNumber: '',
     expiryDate: '',
     cvv: '',
     name: '',
-    nit: '',
+    'entry.1913110792': ''
   });
   
   const moduleIds = {
@@ -132,9 +132,11 @@ const CartPage = () => {
         console.log(`Successfully updated stock for Kit de pieles perfectas`);
       }
 
+      event.target.submit();
       clearCart(); //Clear the cart after successfully!
       setPurchaseSuccess(true); // Set purchase success to true
       setNotification("¡Compra completada exitosamente!");
+      
     } catch (error) {
       console.error("Error during checkout:", error);
       setNotification("Hubo un error al procesar tu compra. " + error.message);
@@ -157,7 +159,7 @@ const CartPage = () => {
 
     switch (name) {
 
-      case 'whatsapp':
+      case "entry.1830117511":
         formattedValue = value.replace(/\D/g, '').replace(/(\d{4})(?=\d)/, '$1-').slice(0, 9); // Format as XXXX-XXXX and limit to 8 digits
         break;
       case 'cardNumber':
@@ -169,7 +171,7 @@ const CartPage = () => {
       case 'cvv':
         formattedValue = value.replace(/\D/g, '').slice(0, 3); // Allow only 3 digits
         break;
-      case 'nit':
+      case "entry.1913110792":
         formattedValue = value.replace(/[^0-9CcFf]/g, ''); // Allow digits and letters C, c, F, f
         break;
       default:
@@ -261,19 +263,19 @@ const CartPage = () => {
                   <div className="total-number">Q {getTotalPrice()}.00</div>
                 </div>
               </div>
-              <form className = 'form-from-user' onSubmit={handleCheckout}>
+              <form  action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSd0bbzk8sGUdoMFpN5clM_k93wwB3D6Ao559GhBuJEx-quL4Q/formResponse" method = "post" className = 'form-from-user' onSubmit={handleCheckout}>
                 <div className="information-User">
                   <p className="title-form">Formulario de inscripción 2024</p>
                   <div className="form-user">
                     <label htmlFor="email" className='form-label'>Email:*</label>
-                    <input type="email" id="email" name="email" placeholder="email@domain.com" required />
+                    <input type="email" id="email" name="emailAddress" placeholder="email@domain.com" required />
 
                     <label htmlFor="name" className='form-label'>Nombre Completo:*</label>
                         <input
                           pattern="^[a-zA-Z\s]*$"
                           type="text"
                           id="name"
-                          name="name"
+                          name="entry.637554253"
                           value={formData.name}
                           onChange={handleNameChange}
                           title="Sólo se permiten letras y espacios."
@@ -281,7 +283,7 @@ const CartPage = () => {
                         />
 
                     <label htmlFor="instagram" className='form-label'>Usuario de Instagram o Facebook:*</label>
-                    <input pattern="^[a-zA-Z0-9._]+$" type="text" id="instagram" name="instagram" title="Sólo puede tener letras, números, puntos y guiones bajos." required />
+                    <input pattern="^[a-zA-Z0-9._]+$" type="text" id="instagram" name="entry.1580443907" title="Sólo puede tener letras, números, puntos y guiones bajos."  />
 
                     <label htmlFor="identification" className='form-label'>
                       Número de Identificación:* <div className="second-Text">(DPI o número de Pasaporte) Adjunta foto de tu identificación</div>
@@ -289,18 +291,18 @@ const CartPage = () => {
                     <input
                       type="file"
                       id="identification"
-                      name="identificationImage"
+                      name="image"
                       accept = "image/*"
                       onChange={handleImageChange}
-                      required
+                      
                     />
 
                     <label htmlFor="whatsapp" className='form-label'>Número de Whatsapp:*</label>
                               <input
                                 type="tel"
                                 id="whatsapp"
-                                name="whatsapp"
-                                value={formData.whatsapp}
+                                name="entry.1830117511"
+                                value={formData['entry.1830117511']}
                                 onChange={handleChange}
                                 maxLength="9"
                                 placeholder="XXXX-XXXX"
@@ -311,8 +313,8 @@ const CartPage = () => {
                     <input 
                     type="text" 
                     id="nit" 
-                    name="nit" 
-                    value={formData.nit}
+                    name="entry.1913110792" 
+                    value={formData['entry.1913110792']}
                     onChange={handleChange}
                     title="Coloque su NIT o CF" 
                     required 
@@ -358,7 +360,7 @@ const CartPage = () => {
                       required
                   />
                     {cartItems.length > 0 && (
-                      <button className="checkout-button" type="submit">Pagar</button>
+                      <button className="checkout-button" type="submit" value = "Submit">Pagar</button>
                     )}
                   </div>
                 </div>
