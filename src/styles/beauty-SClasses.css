@@ -158,6 +158,8 @@
     .image-container-classes{
         display: flex;
         flex-direction: column;
+        background-color: rgba(227, 173, 175);
+
     }
 
     .background-imagen-classes {

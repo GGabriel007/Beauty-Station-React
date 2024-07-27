@@ -234,6 +234,7 @@
     .image-container-home{
         display: flex;
         flex-direction: column;
+        background-color: rgba(227, 173, 175);
     }
 
     .background-imagen-home {
@@ -269,7 +270,7 @@
     }
 
     .block-home {
-        width: 20px;
+        width: 10px;
     }
 
     .icon-Social-media-home {

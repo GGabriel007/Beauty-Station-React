@@ -21,7 +21,6 @@ const CartPage = () => {
 
   const [formData, setFormData] = useState({
 
-    identification: '',
     whatsapp: '',
     cardNumber: '',
     expiryDate: '',
@@ -157,9 +156,7 @@ const CartPage = () => {
     let formattedValue = value;
 
     switch (name) {
-      case 'identification':
-        formattedValue = value.replace(/\D/g, ''); // Allow only digits
-        break;
+
       case 'whatsapp':
         formattedValue = value.replace(/\D/g, '').replace(/(\d{4})(?=\d)/, '$1-').slice(0, 9); // Format as XXXX-XXXX and limit to 8 digits
         break;
@@ -173,8 +170,8 @@ const CartPage = () => {
         formattedValue = value.replace(/\D/g, '').slice(0, 3); // Allow only 3 digits
         break;
       case 'nit':
-        formattedValue = value.replace(/\D/g, '')
-      break;
+        formattedValue = value.replace(/[^0-9CcFf]/g, ''); // Allow digits and letters C, c, F, f
+        break;
       default:
         break;
       }
@@ -273,7 +270,7 @@ const CartPage = () => {
 
                     <label htmlFor="name" className='form-label'>Nombre Completo:*</label>
                         <input
-                          pattern="[a-zA-Z]+"
+                          pattern="^[a-zA-Z\s]*$"
                           type="text"
                           id="name"
                           name="name"
@@ -284,7 +281,7 @@ const CartPage = () => {
                         />
 
                     <label htmlFor="instagram" className='form-label'>Usuario de Instagram o Facebook:*</label>
-                    <input pattern="/^[a-zA-Z0-9._]*$/" type="text" id="instagram" name="instagram" title="Sólo puede tener letras, números, puntos y guiones bajos." required />
+                    <input pattern="^[a-zA-Z0-9._]+$" type="text" id="instagram" name="instagram" title="Sólo puede tener letras, números, puntos y guiones bajos." required />
 
                     <label htmlFor="identification" className='form-label'>
                       Número de Identificación:* <div className="second-Text">(DPI o número de Pasaporte) Adjunta foto de tu identificación</div>
@@ -310,15 +307,14 @@ const CartPage = () => {
                                 required
                     />
                     
-                    <label htmlFor="nit" className='form-label'>Datos de facturación NIT:*</label>
+                    <label htmlFor="nit" className='form-label'>Datos de facturación NIT:* <div className="second-Text">Ingresar NIT o CF</div></label>
                     <input 
-                    type="tel" 
+                    type="text" 
                     id="nit" 
                     name="nit" 
                     value={formData.nit}
                     onChange={handleChange}
-                    title="Coloque su NIT" 
-                    pattern="\d+"   
+                    title="Coloque su NIT o CF" 
                     required 
                     />
                     </div>

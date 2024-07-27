@@ -27,7 +27,7 @@ const Header = () => {
       </div>
       <ul className={`right-header-links ${menuOpen ? 'open' : ''}`}>
           <li><Link className={`header-button ${getActiveClass('/classes')}`} to="/classes">Clases</Link></li>
-          <li><Link className={`header-button ${getActiveClass('/servicio-a-domicilio')}`} to="/servicio-a-domicilio">Servicio a Domicilio</Link></li>
+          <li><Link className={`header-button ${getActiveClass('/servicio-a-domicilio')}`} to="/servicio-a-domicilio">Eventos</Link></li>
           <li><Link className={`header-button ${getActiveClass('/nosotros')}`} to="/nosotros">Nosotros</Link></li>
         </ul>
       </div>
