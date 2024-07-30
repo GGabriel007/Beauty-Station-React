@@ -23,7 +23,7 @@ const BeautyStation = () => {
               <img className="icon" src={`${process.env.PUBLIC_URL}images/cursos.png`} alt="Informacion de Cursos" />
           </Link>
           <Link to = "/classes" className='no-underline'>
-            <p className="title_links-classes">CURSOS</p>
+            <p className="title_links-classes">CLASES</p>
           </Link>
           </div>
           <div className="center">

@@ -18,7 +18,6 @@ const CartPage = () => {
   const { cartItems, removeFromCart, clearCart, includeKit, setIncludeKit } = useContext(CartContext);
   const [notification, setNotification] = useState("");
   const [purchaseSuccess, setPurchaseSuccess] = useState(false);
-
   const [formData, setFormData] = useState({
 
    'entry.1830117511': '',
@@ -92,56 +91,87 @@ const CartPage = () => {
         if (moduleId) {
           const moduleRef = doc(db, "Modulos", moduleId);
           const docSnap = await getDoc(moduleRef);
-
+  
           if (!docSnap.exists() || docSnap.data()[item.name] <= 0) {
-            throw new Error (` No hay más asientos disponibles para ${item.name}.`);
+            throw new Error(`No hay más asientos disponibles para ${item.name}.`);
           }
         }
       }
-
+  
       // Check availability of "Kit de pieles perfectas"
       if (includeKit) {
         const kitRef = doc(db, "Modulos", moduleIds['Kit de pieles perfectas']);
         const kitSnap = await getDoc(kitRef);
-
+  
         if (!kitSnap.exists() || kitSnap.data()['Kit de pieles perfectas'] <= 0) {
           throw new Error(`No hay más kits disponibles.`);
         }
       }
-
+  
       // Proceed with the seat update if all items have available seats
-      for (const item of cartItems){
+      for (const item of cartItems) {
         const moduleId = moduleIds[item.name];
         if (moduleId) {
           const moduleRef = doc(db, "Modulos", moduleId);
-          console.log(`Updating seats for module: ${item.name}`);
           await updateDoc(moduleRef, {
             [item.name]: increment(-1)
           });
-          console.log(`Successfully updated seats for module: ${item.name}`);
         }
       }
-
+  
       // Update the stock of the "Kit de pieles perfectas" if selected
       if (includeKit) {
         const kitRef = doc(db, "Modulos", moduleIds['Kit de pieles perfectas']);
-        console.log(`Updating stock for Kit de pieles perfectas`);
         await updateDoc(kitRef, {
           'Kit de pieles perfectas': increment(-1)
         });
-        console.log(`Successfully updated stock for Kit de pieles perfectas`);
       }
 
-      event.target.submit();
-      clearCart(); //Clear the cart after successfully!
-      setPurchaseSuccess(true); // Set purchase success to true
+      // Prepare form data
+      const formData = new URLSearchParams();
+      formData.append('emailAddress', document.querySelector('[name="emailAddress"]').value);
+      formData.append('entry.1830117511', document.querySelector('[name="entry.1830117511"]').value);
+      formData.append('entry.637554253', document.querySelector('[name="entry.637554253"]').value);
+      formData.append('entry.1913110792', document.querySelector('[name="entry.1913110792"]').value);
+
+      cartItems.forEach(item => {
+        formData.append('entry.1855368963', item.name);
+      });
+
+      // Append "Kit de pieles perfectas" if included
+      if (includeKit) {
+        formData.append('entry.1855368963', 'Kit de pieles perfectas');
+      }
+
+      // Submit form data using fetch
+    const response = await fetch(process.env.REACT_APP_GOOGLE_FORM_ACTION_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: formData.toString()
+    });
+
+
+    if (response.ok) {
+      clearCart();
+      setPurchaseSuccess(true);
       setNotification("¡Compra completada exitosamente!");
-      
-    } catch (error) {
-      console.error("Error during checkout:", error);
+    } else {
+      throw new Error("Hubo un error al enviar el formulario.");
+    }
+  } catch (error) {
+    // Check if the error message is "Failed to fetch"
+    if (error.message === 'Failed to fetch') {
+      clearCart();
+      setPurchaseSuccess(true);
+      setNotification("¡Compra completada exitosamente!");
+    } else {
+      // Handle other errors
       setNotification("Hubo un error al procesar tu compra. " + error.message);
     }
-  };
+  }
+};
 
   const handleNameChange = (e) => {
     const {value} = e.target;
@@ -153,7 +183,6 @@ const CartPage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     // Format the inputs based on the name
     let formattedValue = value;
 
@@ -263,7 +292,7 @@ const CartPage = () => {
                   <div className="total-number">Q {getTotalPrice()}.00</div>
                 </div>
               </div>
-              <form  action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSd0bbzk8sGUdoMFpN5clM_k93wwB3D6Ao559GhBuJEx-quL4Q/formResponse" method = "post" className = 'form-from-user' onSubmit={handleCheckout}>
+              <form id="registration-form"  method="post" className='form-from-user' onSubmit={handleCheckout}>
                 <div className="information-User">
                   <p className="title-form">Formulario de inscripción 2024</p>
                   <div className="form-user">
@@ -359,6 +388,24 @@ const CartPage = () => {
                       placeholder="XXX"
                       required
                   />
+
+                  {/* Add hidden inputs for each cart item */}
+                  {cartItems.map((item, index) => (
+                      <input
+                        key={index}
+                        type="hidden"
+                        name="entry.1855368963"
+                        value={item.name}
+                      />
+                    ))}
+                    {/* Add hidden input if "Kit de pieles perfectas" is included */}
+                    {includeKit && (
+                      <input
+                        type="hidden"
+                        name="entry.1855368963"
+                        value="Kit de pieles perfectas"
+                      />
+                    )}
                     {cartItems.length > 0 && (
                       <button className="checkout-button" type="submit" value = "Submit">Pagar</button>
                     )}

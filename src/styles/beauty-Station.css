@@ -164,7 +164,7 @@
 
 .location-text {
     font-family: 'Lato', sans-serif;
-    font-weight: 600; /* Semi-bold */
+    font-weight: 400; /* Semi-bold */
     width: 55%;
     line-height: 1.7;
     display: flex;
@@ -173,7 +173,7 @@
 
 .location-text-contact {
     font-family: 'Lato', sans-serif;
-    font-weight: 600; /* Semi-bold */
+    font-weight: 400; /* Semi-bold */
     line-height: 1.7;
     display: flex;
     align-items: center;

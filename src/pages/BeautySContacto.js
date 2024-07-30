@@ -1,8 +1,18 @@
 // src/pages/BeautySContacto.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../styles/beauty-SContacto.css';
+import { useLocation } from 'react-router-dom';
+
 
 const BeautySContacto = () => {
+
+  const location = useLocation();
+    
+  useEffect(() => {
+
+      window.scrollTo(0,0);
+  }, [location]);
+
   return (
     <>
       <div className="information-contact">

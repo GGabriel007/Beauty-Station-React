@@ -30,7 +30,7 @@
     flex-direction: column;
     align-items: center;
     margin-top: 25px;
-    max-width: 100%;
+    width: 275px;
 }
 
 .icon-classes {

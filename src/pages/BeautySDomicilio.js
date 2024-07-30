@@ -1,8 +1,17 @@
 // src/pages/BeautySDomicilio.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../styles/beauty-SDomicilio.css';
+import { useLocation } from 'react-router-dom';
 
 const BeautySDomicilio = () => {
+
+  const location = useLocation();
+    
+  useEffect(() => {
+
+      window.scrollTo(0,0);
+  }, [location]);
+
   return (
     <>
       <div className="information-form">
