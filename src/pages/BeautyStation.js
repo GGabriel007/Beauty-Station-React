@@ -7,10 +7,6 @@ const BeautyStation = () => {
   return (
     <>
       <div className="information">
-        <div className="top-information">
-          <h2 className="header-information">HOME</h2>
-        </div>
-
         <div className='image-container-home'>
         <div className = "top-imagen-home">
         <img className = "background-imagen-home" src ={`${process.env.PUBLIC_URL}/images/background.jpeg`} alt ="imagen of the salon"/>

@@ -221,15 +221,15 @@ const Module_4Mkup = () => {
                 <p>Materiales: Kit de Maquillaje completo</p>                
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                <li> <strong>Clase 1: </strong> <em>24 de julio </em>- Introducción y teoría.</li>
-                <li> <strong>Clase 2: </strong> <em>31 de julio </em>- Skincare, piel HD.</li>
-                <li> <strong>Clase 3: </strong> <em>7 de agosto </em>- Correcciones/Piel con acné full cobertura.</li>
-                <li> <strong>Clase 4: </strong> <em>14 de agosto </em>- Piel madura.</li>
-                <li> <strong>Clase 5: </strong> <em>21 de agosto </em>- Glowy skin, no makeup.</li>
-                <li> <strong>Clase 6: </strong> <em>28 de agosto </em>- Fotografía para redes y delineados.</li>
-                <li> <strong>Clase 7: </strong> <em>4 de septiembre </em>- Maquillaje de día express.</li>
-                <li> <strong>Clase 8: </strong> <em>11 de septiembre </em>- Glam con pigmentos quinceañera.</li>
-                <li> <strong>Clase 9: </strong> <em>18 de septiembre </em>- Técnica semi cut crease.</li>
+                <li> <strong>Clase 1: </strong> <em> 24 de julio </em>- Introducción y teoría.</li>
+                <li> <strong>Clase 2: </strong> <em> 31 de julio </em>- Skincare, piel HD.</li>
+                <li> <strong>Clase 3: </strong> <em> 7 de agosto </em>- Correcciones/Piel con acné full cobertura.</li>
+                <li> <strong>Clase 4: </strong> <em> 14 de agosto </em>- Piel madura.</li>
+                <li> <strong>Clase 5: </strong> <em> 21 de agosto </em>- Glowy skin, no makeup.</li>
+                <li> <strong>Clase 6: </strong> <em> 28 de agosto </em>- Fotografía para redes y delineados.</li>
+                <li> <strong>Clase 7: </strong> <em> 4 de septiembre </em>- Maquillaje de día express.</li>
+                <li> <strong>Clase 8: </strong> <em> 11 de septiembre </em>- Glam con pigmentos quinceañera.</li>
+                <li> <strong>Clase 9: </strong> <em> 18 de septiembre </em>- Técnica semi cut crease.</li>
                 <li> <strong>Clase 10:</strong> <em> 25 de septiembre </em>- Técnica smokey latte makeup.</li>
                 <li> <strong>Clase 11:</strong> <em> 2 de octubre </em>- Evaluacion.</li>
                 <li> <strong>Clase 12:</strong> <em> jueves 3 de octubre </em>- Redes e iluminación en linea.</li>
