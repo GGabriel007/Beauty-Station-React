@@ -20,6 +20,7 @@ const CartPage = () => {
   const [purchaseSuccess, setPurchaseSuccess] = useState(false);
   const [formData, setFormData] = useState({
 
+   'entry.1295397219' : '',
    'entry.1830117511': '',
     cardNumber: '',
     expiryDate: '',
@@ -130,6 +131,7 @@ const CartPage = () => {
       // Prepare form data
       const formData = new URLSearchParams();
       formData.append('emailAddress', document.querySelector('[name="emailAddress"]').value);
+      formData.append('entry.1295397219', document.querySelector('[name="entry.1295397219"]').value);
       formData.append('entry.1830117511', document.querySelector('[name="entry.1830117511"]').value);
       formData.append('entry.637554253', document.querySelector('[name="entry.637554253"]').value);
       formData.append('entry.1913110792', document.querySelector('[name="entry.1913110792"]').value);
@@ -147,7 +149,7 @@ const CartPage = () => {
     const response = await fetch(process.env.REACT_APP_GOOGLE_FORM_ACTION_URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: formData.toString()
     });
@@ -188,6 +190,9 @@ const CartPage = () => {
 
     switch (name) {
 
+      case 'entry.1295397219':
+        formattedValue = value.replace(/\D/g, ''); // Allow only digits
+        break;
       case "entry.1830117511":
         formattedValue = value.replace(/\D/g, '').replace(/(\d{4})(?=\d)/, '$1-').slice(0, 9); // Format as XXXX-XXXX and limit to 8 digits
         break;
@@ -211,16 +216,6 @@ const CartPage = () => {
         ...formData,
         [name]: formattedValue,
       });
-    };
-
-    const handleImageChange = (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        setFormData({
-          ...formData,
-          identificationImage: file,
-        });
-      }
     };
 
   const getTotalPrice = () => {
@@ -315,15 +310,17 @@ const CartPage = () => {
                     <input pattern="^[a-zA-Z0-9._]+$" type="text" id="instagram" name="entry.1580443907" title="Sólo puede tener letras, números, puntos y guiones bajos."  />
 
                     <label htmlFor="identification" className='form-label'>
-                      Número de Identificación:* <div className="second-Text">(DPI o número de Pasaporte) Adjunta foto de tu identificación</div>
+                      Número de Identificación:* <div className="second-Text">(DPI o número de Pasaporte)</div>
                     </label>
                     <input
-                      type="file"
+                      type="tel"
                       id="identification"
-                      name="image"
-                      accept = "image/*"
-                      onChange={handleImageChange}
-                      
+                      name="entry.1295397219"
+                      value={formData['entry.1295397219']}
+                      onChange={handleChange}
+                      title='Ingresar solamente numeros'
+                      pattern="\d+"
+                      required
                     />
 
                     <label htmlFor="whatsapp" className='form-label'>Número de Whatsapp:*</label>

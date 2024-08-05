@@ -204,14 +204,14 @@ const Module_4Mkup = () => {
             <div className="gallery-module">
                 <div className="main-image-module">
                     
-                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Mkup/imagen_module_1Mkup.jpeg`} alt="Informacion de Curso 8"/> 
+                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Makeup/imagen_module_1Mkup.jpeg`} alt="Informacion de Curso 8"/> 
                        
 
                 </div>
                 <div className="thumbnails-module">
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Mkup/imagen_module_1Mkup.jpeg`} alt="Informacion de Curso 8"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Mkup/imagen_module_2Mkup.jpeg`} alt="Informacion de Curso 8"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Mkup/imagen_module_3Mkup.jpeg`} alt="Informacion de Curso 8"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Makeup/imagen_module_1Mkup.jpeg`} alt="Informacion de Curso 8"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Makeup/imagen_module_2Mkup.jpeg`} alt="Informacion de Curso 8"/>
+                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Makeup/imagen_module_3Mkup.jpeg`} alt="Informacion de Curso 8"/>
                 </div>
             </div>
             <div className="text-module">
@@ -276,14 +276,14 @@ const Module_4Mkup = () => {
             </Link>
                 </div>
             <div className="second-image-module">
-            <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Mkup/imagen_module_2Mkup.jpeg`} alt="Informacion de Curso 8"/> 
+            <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Makeup/imagen_module_2Mkup.jpeg`} alt="Informacion de Curso 8"/> 
             </div>
             <div className = "text-module">
                 <p className="class_links-module">TÉRMINOS Y CONDICIONES</p>
                 <p>*Los pagos para este curso son necesarios para asegurar su cupo y no son reembolsables bajo ninguna circunstancia. En caso de cancelación o ausencia, incluyendo enfermedad, no se permite el canje por otros cursos, servicios o productos. La reposición de clases tiene un costo adicional y está sujeta a la disponibilidad del equipo. No se permiten acompañantes en clase, a menos que se solicite como modelo en días específicos. Es indispensable estar solvente para participar en las clases.</p>
             </div>
             <div className="second-image-module">
-                <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Mkup/imagen_module_3Mkup.jpeg`} alt="Informacion de Curso 8"/> 
+                <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Makeup/imagen_module_3Mkup.jpeg`} alt="Informacion de Curso 8"/> 
             </div>
         </div>
     </div>

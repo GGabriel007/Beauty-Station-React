@@ -14,7 +14,7 @@ const BeautySClasses = () => {
 
   return (
     <>
-      <div className="information-classes">
+      <div className="information-module">
         <div className="top-information-classes">
             <h2 className="header-information-classes">CLASES</h2>
         </div>
