@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 const BeautyStation = () => {
   return (
     <>
+      <div className='all-content'>
       <div className="information">
         <div className='image-container-home'>
         <div className = "top-imagen-home">
@@ -54,6 +55,7 @@ const BeautyStation = () => {
                 <img src ={`${process.env.PUBLIC_URL}/images/Beauty_Station_reception.jpeg`} alt = "Gallery Image Reception"/>
                 <img src ={`${process.env.PUBLIC_URL}/images/Beauty_Station_Aleh.jpeg`} alt = "Gallery Image Aleh"/>
                 <img src ={`${process.env.PUBLIC_URL}/images/Beauty_Station_Sala.jpeg`} alt = "Gallery Image Loby"/>
+            </div>
             </div>
     </>
   );
