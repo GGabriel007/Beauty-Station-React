@@ -16,7 +16,7 @@ const BeautySClasses = () => {
     <>
       <div className="information-module">
         <div className="top-information-classes">
-            <h2 className="header-information-classes">CLASES</h2>
+            <h2 className="header-information-classes">CURSOS</h2>
         </div>
 
         <div className='image-container-classes'>
@@ -33,7 +33,7 @@ const BeautySClasses = () => {
                 </Link>
                 <div className="text-classes">
                         <Link to = "/classes/classes-2">
-                        <p className = "title_links-classes">MAQUILLAJE</p>
+                        <p className = "title_links-cursos">MAQUILLAJE</p>
                         </Link>
                         
             </div>
@@ -44,7 +44,7 @@ const BeautySClasses = () => {
                 </Link>
                 <div className="text-classes">
                     <Link to = "/classes/classes-1">
-                        <p className = "title_links-classes">PEINADO</p>
+                        <p className = "title_links-cursos">PEINADO</p>
                     </Link>
                     
                 </div>

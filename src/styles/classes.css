@@ -6,17 +6,17 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: 25px;
-    margin-bottom: 25px;
-    max-width: 100%;
+    border-radius: 23px;
+    background-color: white;
+    border: 2px solid pink;
+    color: black;
 }
 
 .icon-class {
     height: 250px;
     width: 250px;
-    border-radius: 20px;
-    background-color: white;
-    padding: 5.5px;
+    border-radius: 20px 0px 0px 20px;
+
 }
 
 .center-class img {
@@ -24,10 +24,20 @@
 
 }
 
-.center-class img:hover {
-    transform: scale(1.05);
-    opacity: 0.8;
+.center-class:hover img {
+    transform: scale(1.001);
+    opacity: 0.7;
 }
+
+.center-class:hover .class_links-class {
+    text-decoration: underline;
+}
+
+.description-class {
+    text-decoration: none;
+}
+
+
 
 .header-information-class {
     margin: 50px;
@@ -39,13 +49,17 @@
 
 .text-class {
     font-size: 25px;
-    width: 550px;
+    width: 350px;
     text-align: left;
     line-height: 1.4;
     padding-left: 25px;
     word-break: break-word; /* Break long words to fit within the container */
     max-width: 100%; /* Ensure it doesn't overflow */
     
+}
+
+.space-class{
+    height: 25px;
 }
 
 .class_links-class {
@@ -64,6 +78,10 @@
 
 }
 
+.imagen-link{
+    height: 250px;
+}
+
 .description-class {
     text-align: justify;
     padding-left: 15px;
@@ -75,21 +93,36 @@
     /*Content*/
     .mid-information-class {
         flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
     }
     
     .center-class {
-        width: 100%;
         flex-direction: column;
+        text-align: center;
+        width: 249px;
+
     }
     
     .text-class {
         font-size: 19px;
-        width: 80%;
-        padding-right: 25px;
+        width: 220px;
     }
 
-    .text-classes {
+    .class_links-class{
         padding-left: 0px;
+        padding-right: 0px;
     }
+
+    .description-class{
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .icon-class {
+        border-radius: 20px 20px 0px 0px;
+    }
+
 
 }

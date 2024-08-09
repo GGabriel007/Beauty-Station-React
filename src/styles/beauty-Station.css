@@ -117,12 +117,12 @@
 }
 
 .all-content{
-    background-color: #acacac69;
+    background-color: white;
 }
 
 .first-text{
-    font-size: 36px;
-    color: white;
+    font-size: 33px;
+    color: black;
     display: flex;
     justify-content: center;
     font-family: 'Lato', sans-serif;
@@ -171,7 +171,7 @@
     gap: 13px;
     padding: 10px;
     padding-top: 35px;
-    background-color: #ffffff88;
+    background-color: #f7f7f7;
 }
 
 .scrolling-wrapper-home img {

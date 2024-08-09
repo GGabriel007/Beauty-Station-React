@@ -51,7 +51,7 @@
 }
 
 .center-classes img:hover {
-    transform: scale(1.05);
+    transform: scale(1.02);
     opacity: 0.8;
 }
 
@@ -75,12 +75,23 @@
 .title_links-classes {
     color: white;
     font-family: 'Lato', sans-serif;
-    font-weight: 300; /* Semi-bold */
+    font-weight: 500; /* Semi-bold */
     font-style: normal;
     text-align: center;
-    font-size: 36px;
+    font-size: 50px;
     margin-top: 20px;
 
+
+}
+
+.title_links-cursos{
+    color: white;
+    font-family: 'Lato', sans-serif;
+    font-weight: 500; /* Semi-bold */
+    font-style: normal;
+    text-align: center;
+    font-size: 40px;
+    margin-top: 20px;
 
 }
 
@@ -141,7 +152,7 @@
     
     .title_links-classes{
         line-height: 0;
-        font-size: 39px;
+        font-size: 50px;
         margin-top: 30px;
     }
 
