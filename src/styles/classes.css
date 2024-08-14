@@ -10,6 +10,7 @@
     background-color: white;
     border: 2px solid pink;
     color: black;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.315);
 }
 
 .icon-class {
@@ -87,6 +88,7 @@
     padding-left: 15px;
     padding-right: 15px;
 }
+
 
 @media (max-width: 1019px) {
 

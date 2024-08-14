@@ -71,6 +71,14 @@ a{
     text-decoration: none;
 }
 
+.image-header-cart{
+    height: 60px;
+    width: 70px;
+}
+
+
+
+
 @media (max-width: 1019px) {
     .top-header {
         display: flex;
@@ -156,5 +164,15 @@ a{
         padding-top: 10px;
         padding-bottom: 15px;
         padding-left: 27px;
+    }
+
+    .image-header-cart{
+        height: 50px;
+        width: 65px;
+        padding-left: 12px;
+    }
+    
+    .cart-header{
+        height: 40px;
     }
 }

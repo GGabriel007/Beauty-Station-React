@@ -26,6 +26,9 @@ const Header = () => {
         </div>
       </div>
       <ul className={`right-header-links ${menuOpen ? 'open' : ''}`}>
+          <li className='cart-header'><Link className={`header-button-cart ${getActiveClass('/cart')}`} to="/cart">
+          <img className="image-header-cart" src={`${process.env.PUBLIC_URL}/images/bag-cart2.png`} alt="Beauty Station logo" />
+          </Link></li>
           <li><Link className={`header-button ${getActiveClass('/classes')}`} to="/classes">Cursos</Link></li>
           <li><Link className={`header-button ${getActiveClass('/servicio-a-domicilio')}`} to="/servicio-a-domicilio">Eventos</Link></li>
           <li><Link className={`header-button ${getActiveClass('/nosotros')}`} to="/nosotros">Nosotros</Link></li>

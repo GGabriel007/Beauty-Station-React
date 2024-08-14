@@ -5,6 +5,7 @@ import { db } from '../config/firestore';
 import { doc, updateDoc, increment, getDoc } from 'firebase/firestore'; 
 import { useLocation } from 'react-router-dom';
 import '../styles/CartPage.css';
+import { Link } from 'react-router-dom';
 
 const CartPage = () => {
 
@@ -243,7 +244,12 @@ const CartPage = () => {
       ) : (
         <>
           {cartItems.length === 0 ? (
+            <div>
             <p>Tu carrito esta vacío 🥺</p>
+            <Link to="/classes">
+              <div className="browse-button">Explora la tienda</div>
+            </Link>
+          </div>
           ) : (
             <div className="cart-container">
               <div className="cart-total-price">
