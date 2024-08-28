@@ -50,11 +50,9 @@ const BeautyStation = () => {
         
       </div>
       <div className = "scrolling-wrapper-home">
-                <img src ={`${process.env.PUBLIC_URL}/images/Beauty_Station_Sala2.jpeg`} alt = "Gallery Image Loby"/>
-                <img src ={`${process.env.PUBLIC_URL}/images/Beauty_Station_Aleh2.jpeg`} alt = "Gallery Image Aleh 2"/>
-                <img src ={`${process.env.PUBLIC_URL}/images/Beauty_Station_reception.jpeg`} alt = "Gallery Image Reception"/>
-                <img src ={`${process.env.PUBLIC_URL}/images/Beauty_Station_Aleh.jpeg`} alt = "Gallery Image Aleh"/>
-                <img src ={`${process.env.PUBLIC_URL}/images/Beauty_Station_Sala.jpeg`} alt = "Gallery Image Loby"/>
+                <img src ={`${process.env.PUBLIC_URL}/images/social_media/review3.jpeg`} alt = "Gallery Image for Review 1"/>
+                <img src ={`${process.env.PUBLIC_URL}/images/social_media/review2.jpeg`} alt = "Gallery Image for Review 2"/>
+                <img src ={`${process.env.PUBLIC_URL}/images/social_media/review1.jpeg`} alt = "Gallery Image for Review 3"/>
             </div>
             </div>
     </>
