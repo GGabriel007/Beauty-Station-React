@@ -219,8 +219,9 @@
   .title-form {
     font-size: 1.5em;
     font-weight: bold;
-    margin-bottom: 1px;
+    margin-bottom: 5px;
     margin-top: 5px;
+    text-align: start;
   }
   
   .form-user, .payment div {
@@ -238,10 +239,10 @@
   }
   
   input {
-    padding: 10px;
+    padding: 12px;
     margin-bottom: 5px;
     border: 1px solid #ccc;
-    border-radius: 20px;
+    border-radius: 10px;
     font-size: 1em;
   }
   
@@ -281,6 +282,34 @@
     background-color: #ffffff; 
     color: #ed93b4;
 }
+
+/*neo net image*/
+
+.input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-container input {
+    width: 96%;
+
+}
+
+.input-icon {
+    position: absolute;
+    right: 10px; /* Adjust this value based on your design */
+    bottom: 20px;
+    width: 115px; /* Adjust the size of the icon */
+    height: 25px;
+    opacity: 0.45; 
+    transition: opacity 0.5s ease-in-out; /* Transition for fade effect */
+  }
+
+/* Fade in the image when input is focused */
+.input-container input:focus + .input-icon {
+    opacity: 1; /* Fully show the image */
+  }
 
 /* Media query for mobile devices */
 @media (max-width: 1019px) {
@@ -344,6 +373,11 @@
         height: 28px;
         width: 57px;
         
+    }
+
+    .input-container input {
+        width: 92.5%;
+    
     }
 
 }

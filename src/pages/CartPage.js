@@ -348,25 +348,43 @@ const CartPage = () => {
                     name="entry.1913110792" 
                     value={formData['entry.1913110792']}
                     onChange={handleChange}
+                    placeholder="1234456778941"
                     title="Coloque su NIT o CF" 
                     required 
                     />
                     </div>
                 </div>
                 <div className="payment">
-                  <p className="title-form">Información del pago</p>
+                  <p className="title-form">Datos de la tarjeta</p>
                   <div>
                   <label htmlFor="cardNumber" className='form-label'>Número de tarjeta:</label>
+                  <div className='input-container'>
+                    <input
+                      type="tel"
+                      id="cardNumber"
+                      name="cardNumber"
+                      value={formData.cardNumber}
+                      onChange={handleChange}
+                      maxLength="19"
+                      placeholder="4000-1234-5678-9010"
+                      required
+                    />
+                    <img src={`${process.env.PUBLIC_URL}/images/neopay.png`} alt="NeoNet Logo by NeoNet website" className="input-icon" />
+                  </div>
+
+
+                  <label htmlFor="cardNumber" className='form-label'>Nombre impreso en la tarjeta:</label>
                   <input
-                    type="tel"
-                    id="cardNumber"
-                    name="cardNumber"
-                    value={formData.cardNumber}
-                    onChange={handleChange}
-                    maxLength="19"
-                    placeholder="XXXX-XXXX-XXXX-XXXX"
-                    required
-                  />
+                          pattern="^[a-zA-Z\s]*$"
+                          type="text"
+                          id="name"
+                          name="entry.637554253"
+                          value={formData.name}
+                          onChange={handleNameChange}
+                          placeholder="Juan Perez"
+                          title="Sólo se permiten letras y espacios."
+                          required
+                        />
                     
                   <label htmlFor="expiryDate" className='form-label'>Fecha de caducidad:</label>
                   <input
@@ -376,7 +394,7 @@ const CartPage = () => {
                     value={formData.expiryDate}
                     onChange={handleChange}
                     maxLength="5"
-                    placeholder="XX/XX"
+                    placeholder="mm/aa"
                     required
                   />
 
@@ -388,7 +406,7 @@ const CartPage = () => {
                       value={formData.cvv}
                       onChange={handleChange}
                       maxLength="3"
-                      placeholder="XXX"
+                      placeholder="321"
                       required
                   />
 
