@@ -298,9 +298,11 @@ const CartPage = () => {
                   <p className="title-form">Formulario de inscripción 2024</p>
                   <div className="form-user">
                     <label htmlFor="email" className='form-label'>Email:*</label>
+                    
                     <input type="email" id="email" name="emailAddress" placeholder="email@domain.com" required />
-
+                    
                     <label htmlFor="name" className='form-label'>Nombre Completo:*</label>
+                    
                         <input
                           pattern="^[a-zA-Z\s]*$"
                           type="text"
@@ -311,13 +313,15 @@ const CartPage = () => {
                           title="Sólo se permiten letras y espacios."
                           required
                         />
-
+                    
                     <label htmlFor="instagram" className='form-label'>Usuario de Instagram o Facebook:*</label>
+                    
                     <input pattern="^[a-zA-Z0-9._]+$" type="text" id="instagram" name="entry.1580443907" title="Sólo puede tener letras, números, puntos y guiones bajos."  />
-
+                    
                     <label htmlFor="identification" className='form-label'>
                       Número de Identificación:* <div className="second-Text">(DPI o número de Pasaporte)</div>
                     </label>
+                    
                     <input
                       type="tel"
                       id="identification"
@@ -328,8 +332,9 @@ const CartPage = () => {
                       pattern="\d+"
                       required
                     />
-
+                    
                     <label htmlFor="whatsapp" className='form-label'>Número de Whatsapp:*</label>
+                         
                               <input
                                 type="tel"
                                 id="whatsapp"
@@ -340,8 +345,9 @@ const CartPage = () => {
                                 placeholder="XXXX-XXXX"
                                 required
                     />
-                    
+                      
                     <label htmlFor="nit" className='form-label'>Datos de facturación NIT:* <div className="second-Text">Ingresar NIT o CF</div></label>
+                    
                     <input 
                     type="text" 
                     id="nit" 
@@ -352,6 +358,7 @@ const CartPage = () => {
                     title="Coloque su NIT o CF" 
                     required 
                     />
+                    
                     </div>
                 </div>
                 <div className="payment">
@@ -374,6 +381,7 @@ const CartPage = () => {
 
 
                   <label htmlFor="cardNumber" className='form-label'>Nombre impreso en la tarjeta:</label>
+                  
                   <input
                           pattern="^[a-zA-Z\s]*$"
                           type="text"
@@ -387,6 +395,7 @@ const CartPage = () => {
                         />
                     
                   <label htmlFor="expiryDate" className='form-label'>Fecha de caducidad:</label>
+                  
                   <input
                     type="tel"
                     id="expiryDate"
@@ -397,8 +406,9 @@ const CartPage = () => {
                     placeholder="mm/aa"
                     required
                   />
-
+                  
                   <label htmlFor="cvv" className='form-label'>CVV:</label>
+                  
                     <input
                       type="tel"
                       id="cvv"
@@ -409,7 +419,7 @@ const CartPage = () => {
                       placeholder="321"
                       required
                   />
-
+                    
                   {/* Add hidden inputs for each cart item */}
                   {cartItems.map((item, index) => (
                       <input

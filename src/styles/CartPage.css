@@ -376,8 +376,16 @@
     }
 
     .input-container input {
-        width: 92.5%;
+        width: 91.5%;
     
+    }
+
+
+    .input-icon {
+        width: 80px; 
+        height: 19px;
+        right: 5px;
+        bottom: 23px;
     }
 
 }
