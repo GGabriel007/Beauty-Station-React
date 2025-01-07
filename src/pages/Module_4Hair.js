@@ -9,6 +9,31 @@ import { Link } from 'react-router-dom';
 
 const Module_4Hair = () => {
 
+  const [selectedImage, setSelectedImage] = useState(
+        `${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_1Hair.jpeg`
+      );
+    
+    
+    
+      const [isModalOpen, setIsModalOpen] = useState(false);
+    
+    
+      const thumbnails = [
+        `${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_1Hair.jpeg`,
+        `${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_2Hair.jpeg`,
+        `${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_3Hair.jpeg`,
+      ];
+    
+    
+      const handleThumbnailClick = (src) => {
+        setSelectedImage(src);
+      };
+    
+    
+      const toggleModal = () => {
+        setIsModalOpen(!isModalOpen);
+      };
+
   const location = useLocation();
     
   useEffect(() => {
@@ -162,19 +187,40 @@ const Module_4Hair = () => {
             <h2 className="header-information-module">CURSO COMPLETO</h2>
         </div>
         <div className="mid-information-module">
-            <div className="gallery-module">
-                <div className="main-image-module">
-                    
-                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 7"/> 
-                       
+        <div className="gallery-module">
+      {/* Main Image */}
+      <div className="main-image-module" onClick={toggleModal}>
+        <img
+          id="selectedImage-module"
+          src={selectedImage}
+          alt="Selected Course Information"
+        />
+      </div>
 
-                </div>
-                <div className="thumbnails-module">
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 4"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos 4"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_3Hair.jpeg`} alt="Informacion de Cursos 4"/>
-                </div>
-            </div>
+      {/* Thumbnails */}
+      <div className="thumbnails-module">
+        {thumbnails.map((src, index) => (
+          <img
+            key={index}
+            className={`thumbnail-module ${
+              selectedImage === src ? "active-thumbnail" : ""
+            }`}
+            src={src}
+            alt={`Thumbnail ${index + 1}`}
+            onClick={() => handleThumbnailClick(src)}
+          />
+        ))}
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="modal" onClick={toggleModal}>
+          <div className="modal-content">
+            <img className="modal-image" src={selectedImage} alt="Expanded view" />
+          </div>
+        </div>
+      )}
+    </div>
             <div className="text-module">
                 <p className="class_links-module">Informacion del Módulo:</p>
                 <p>Este es un curso completo de peinado profesional, donde hemos resumido para ti los tips, materiales y técnicas actuales a nivel mundial. No necesitas tener experiencia previa. Tendrás conocimientos y herramientas para poder emprender. Las clases son totalmente prácticas, por lo que el curso es un aprendizaje efectivo. Necesitarás cabezote y otros materiales; se dará asesoría como parte del curso. En algunas clases necesitarás modelo, bajo previo aviso. El curso se divide en 3 módulos.</p>
@@ -187,25 +233,25 @@ const Module_4Hair = () => {
 
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                  <li><strong>Clase 1:</strong> <em>28 de enero</em> - Introducción, productos y cómo hacer waves con plancha</li>
-                  <li><strong>Clase 2:</strong> <em>4 de febrero</em> - Natural waves</li>
-                  <li><strong>Clase 3:</strong> <em>11 de febrero</em> - Glam waves</li>
-                  <li><strong>Clase 4:</strong> <em>18 de febrero </em> - Old Hollywood waves + velo</li>
-                  <li><strong>Clase 5:</strong> <em>25 de febrero </em>- Trenzas en tendencias</li>
-                  <li><strong>Clase 6:</strong> <em>4 de marzo </em>- Semirecogido</li>
-                  <li><strong>Clase 7:</strong> <em>11 de marzo </em>- Recogido clásico</li>
-                  <li><strong>Clase 8:</strong> <em>18 de marzo </em>- Recogido con volumen</li>
-                  <li><strong>Clase 9:</strong> <em>25 de marzo </em>- Cola Baja</li>
-                  <li><strong>Clase 10:</strong> <em>1 de abril </em>- Sleek Bun</li>
-                  <li><strong>Clase 11:</strong> <em> martes 8 de abril</em> - Redes e ilumicaión bridal hair + lift de cejas + velo</li>
-                  <li><strong>Clase 12:</strong> <em> jueves 10 de abril</em> - Práctica en modelo</li>
+                  <li><strong>Clase 1:</strong> <em>Martes 28 de enero</em> - Introducción, productos y cómo hacer waves con plancha</li>
+                  <li><strong>Clase 2:</strong> <em>Martes 4 de febrero</em> - Natural waves</li>
+                  <li><strong>Clase 3:</strong> <em>Martes 11 de febrero</em> - Glam waves</li>
+                  <li><strong>Clase 4:</strong> <em>Martes 18 de febrero </em> - Old Hollywood waves + velo</li>
+                  <li><strong>Clase 5:</strong> <em>Martes 25 de febrero </em>- Trenzas en tendencias</li>
+                  <li><strong>Clase 6:</strong> <em>Martes 4 de marzo </em>- Semirecogido</li>
+                  <li><strong>Clase 7:</strong> <em>Martes 11 de marzo </em>- Recogido clásico</li>
+                  <li><strong>Clase 8:</strong> <em>Martes 18 de marzo </em>- Recogido con volumen</li>
+                  <li><strong>Clase 9:</strong> <em>Martes 25 de marzo </em>- Cola Baja</li>
+                  <li><strong>Clase 10:</strong> <em>Martes 1 de abril </em>- Sleek Bun</li>
+                  <li><strong>Clase 11:</strong> <em>Martes 8 de abril</em> - Redes e ilumicaión bridal hair + lift de cejas + velo</li>
+                  <li><strong>Clase 12:</strong> <em>Jueves 10 de abril</em> - Práctica en modelo</li>
                   <li><strong>SEMANA SANTA</strong> </li>
-                  <li><strong>Clase 13:</strong> <em> martes 22 de abril</em> - Semirecogido con ondas retro</li>
-                  <li><strong>Clase 14:</strong> <em> jueves 24 de abril</em> - Práctica en modelo</li>
-                  <li><strong>Clase 15:</strong> <em> martes 29 de abril</em> - Cola alta con volumen</li>
-                  <li><strong>Clase 16:</strong> <em> martes 6 de mayo</em> - Práctica modelo</li>
-                  <li className="Wed-Class"><strong>Clase 17:</strong> <em> miercoles 7 de mayo 4 PM</em> - Peinado alto Kim Kardashian</li>
-                  <li><strong>Clase 18:</strong> <em> jueves 8 de mayo</em> - Evaluación final, entrega de portafolio</li>
+                  <li><strong>Clase 13:</strong> <em>Martes 22 de abril</em> - Semirecogido con ondas retro</li>
+                  <li><strong>Clase 14:</strong> <em> Jueves 24 de abril</em> - Práctica en modelo</li>
+                  <li><strong>Clase 15:</strong> <em> Martes 29 de abril</em> - Cola alta con volumen</li>
+                  <li><strong>Clase 16:</strong> <em> Martes 6 de mayo</em> - Práctica modelo</li>
+                  <li className="Wed-Class"><strong>Clase 17:</strong> <em> Miercoles 7 de mayo 4 PM</em> - Peinado alto Kim Kardashian</li>
+                  <li><strong>Clase 18:</strong> <em> Jueves 8 de mayo</em> - Evaluación final, entrega de portafolio</li>
                 </ul>
                 <p className="class_links-module">Horario:</p>
                 <ul>

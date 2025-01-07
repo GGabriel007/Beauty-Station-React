@@ -11,6 +11,32 @@ import { Link } from 'react-router-dom';
 
 const Module_2Mkup = () => {
 
+  const [selectedImage, setSelectedImage] = useState(
+      `${process.env.PUBLIC_URL}/images/Class_1/Module_2/Makeup/imagen_module_1Mkup.jpeg`
+    );
+  
+  
+  
+    const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  
+    const thumbnails = [
+      `${process.env.PUBLIC_URL}/images/Class_1/Module_2/Makeup/imagen_module_1Mkup.jpeg`,
+      `${process.env.PUBLIC_URL}/images/Class_1/Module_2/Makeup/imagen_module_2Mkup.jpeg`,
+      `${process.env.PUBLIC_URL}/images/Class_1/Module_2/Makeup/imagen_module_3Mkup.jpeg`,
+    ];
+  
+  
+    const handleThumbnailClick = (src) => {
+      setSelectedImage(src);
+    };
+  
+  
+    const toggleModal = () => {
+      setIsModalOpen(!isModalOpen);
+    };
+
+
     const location = useLocation();
       
     useEffect(() => {
@@ -179,19 +205,40 @@ const Module_2Mkup = () => {
             <h2 className="header-information-module">MAQUILLAJE SOCIAL</h2>
         </div>
         <div className="mid-information-module">
-            <div className="gallery-module">
-                <div className="main-image-module">
-                    
-                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/Makeup/imagen_module_1Mkup.jpeg`} alt="Informacion de Cursos 6"/> 
-                       
+        <div className="gallery-module">
+      {/* Main Image */}
+      <div className="main-image-module" onClick={toggleModal}>
+        <img
+          id="selectedImage-module"
+          src={selectedImage}
+          alt="Selected Course Information"
+        />
+      </div>
 
-                </div>
-                <div className="thumbnails-module">
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/Makeup/imagen_module_1Mkup.jpeg`} alt="Informacion de Cursos 6"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/Makeup/imagen_module_2Mkup.jpeg`} alt="Informacion de Cursos 6"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/Makeup/imagen_module_3Mkup.jpeg`} alt="Informacion de Cursos 6"/>
-                </div>
-            </div>
+      {/* Thumbnails */}
+      <div className="thumbnails-module">
+        {thumbnails.map((src, index) => (
+          <img
+            key={index}
+            className={`thumbnail-module ${
+              selectedImage === src ? "active-thumbnail" : ""
+            }`}
+            src={src}
+            alt={`Thumbnail ${index + 1}`}
+            onClick={() => handleThumbnailClick(src)}
+          />
+        ))}
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="modal" onClick={toggleModal}>
+          <div className="modal-content">
+            <img className="modal-image" src={selectedImage} alt="Expanded view" />
+          </div>
+        </div>
+      )}
+    </div>
             <div className="text-module">
                 <p className="class_links-module">Informacion del Módulo:</p>
                 <p>Realiza la belleza de tus clientes con diferentes técnicas de maquillaje para todo tipo de evento social.</p>
@@ -202,11 +249,11 @@ const Module_2Mkup = () => {
 
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                <li> <strong>Clase 6: </strong><em>5 de marzo</em>- Delineados y pestañas</li>
-                <li> <strong>Clase 7: </strong><em>12 de marzo</em> - Maquillaje de día express</li>
-                <li> <strong>Clase 8: </strong><em>19 de marzo</em> - Glam con pgmentos quinceañera</li>
-                <li> <strong>Clase 9: </strong><em>26 de marzo</em> - Técnica semi cut crease</li>
-                <li> <strong>Clase 10:</strong><em>2 de abril</em> - Técnica smokey latte makeup</li>
+                <li> <strong>Clase 6: </strong><em>Miércoles 5 de marzo</em>- Delineados y pestañas</li>
+                <li> <strong>Clase 7: </strong><em>Miércoles 12 de marzo</em> - Maquillaje de día express</li>
+                <li> <strong>Clase 8: </strong><em>Miércoles 19 de marzo</em> - Glam con pgmentos quinceañera</li>
+                <li> <strong>Clase 9: </strong><em>Miércoles 26 de marzo</em> - Técnica semi cut crease</li>
+                <li> <strong>Clase 10:</strong><em>Miércoles 2 de abril</em> - Técnica smokey latte makeup</li>
                 </ul>
                 <p className="class_links-module">Horario:</p>
                 <ul>

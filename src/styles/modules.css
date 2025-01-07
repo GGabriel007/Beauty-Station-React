@@ -222,6 +222,79 @@ ul {
   cursor: pointer; /* Show pointer cursor on hover */
 }
   
+/*Imagen Modal*/
+
+.gallery-module {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main-image-module {
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.main-image-module img {
+  max-width: 100%;
+  height: auto;
+  transition: transform 0.3s;
+}
+
+.main-image-module img:hover {
+  transform: scale(1.05);
+}
+
+.thumbnails-module {
+  display: flex;
+  gap: 10px;
+}
+
+.thumbnail-module {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.3s, border-color 0.3s;
+}
+
+.thumbnail-module:hover {
+  transform: scale(1.05);
+}
+
+.active-thumbnail {
+  border-color: #007bff;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  cursor: zoom-out;
+}
+
+.modal-content {
+  position: relative;
+}
+
+.modal-image {
+  max-width: 70%;
+  max-height: 90%;
+  cursor: zoom-in;
+}
+
+.modal-image:hover {
+  
+  transition: transform 0.3s;
+}
 
 
 @media (max-width: 1019px) {
@@ -241,6 +314,10 @@ ul {
     .text-module {
         font-size: 19px;
         width: 80%;
+    }
+
+    .modal-image {
+      max-width: 85%;
     }
 
 }

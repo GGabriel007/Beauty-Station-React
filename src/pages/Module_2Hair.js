@@ -9,6 +9,31 @@ import { Link } from 'react-router-dom';
 
 const Module_2Hair = () => {
 
+    const [selectedImage, setSelectedImage] = useState(
+          `${process.env.PUBLIC_URL}/images/Class_1/Module_2/Hair/imagen_module_1Hair.jpeg`
+        );
+      
+      
+      
+        const [isModalOpen, setIsModalOpen] = useState(false);
+      
+      
+        const thumbnails = [
+          `${process.env.PUBLIC_URL}/images/Class_1/Module_2/Hair/imagen_module_1Hair.jpeg`,
+          `${process.env.PUBLIC_URL}/images/Class_1/Module_2/Hair/imagen_module_2Hair.jpeg`,
+          `${process.env.PUBLIC_URL}/images/Class_1/Module_2/Hair/imagen_module_3Hair.jpeg`,
+        ];
+      
+      
+        const handleThumbnailClick = (src) => {
+          setSelectedImage(src);
+        };
+      
+      
+        const toggleModal = () => {
+          setIsModalOpen(!isModalOpen);
+        };
+
     const location = useLocation();
       
     useEffect(() => {
@@ -129,19 +154,40 @@ const Module_2Hair = () => {
             <h2 className="header-information-module">PEINADO PARA EVENTOS</h2>
         </div>
         <div className="mid-information-module">
-            <div className="gallery-module">
-                <div className="main-image-module">
-                    
-                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/Hair/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos"/> 
-                       
+        <div className="gallery-module">
+      {/* Main Image */}
+      <div className="main-image-module" onClick={toggleModal}>
+        <img
+          id="selectedImage-module"
+          src={selectedImage}
+          alt="Selected Course Information"
+        />
+      </div>
 
-                </div>
-                <div className="thumbnails-module">
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/Hair/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 2"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/Hair/imagen_module_3Hair.jpeg`} alt="Informacion de Cursos 2.1"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/Hair/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos 2.2"/>
-                </div>
-            </div>
+      {/* Thumbnails */}
+      <div className="thumbnails-module">
+        {thumbnails.map((src, index) => (
+          <img
+            key={index}
+            className={`thumbnail-module ${
+              selectedImage === src ? "active-thumbnail" : ""
+            }`}
+            src={src}
+            alt={`Thumbnail ${index + 1}`}
+            onClick={() => handleThumbnailClick(src)}
+          />
+        ))}
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="modal" onClick={toggleModal}>
+          <div className="modal-content">
+            <img className="modal-image" src={selectedImage} alt="Expanded view" />
+          </div>
+        </div>
+      )}
+    </div>
                 <div className="text-module">
                     <p className="class_links-module">Informacion del Módulo:</p>
                     <p>Realza la belleza de tus clientes con diferentes técnicas de peinados, aprende diferentes tipos de trenzas, coletas, recogidos y semi recogidos</p>
@@ -150,12 +196,12 @@ const Module_2Hair = () => {
                     <p>Los precios no incluye materiales</p>
                     <p className="class_links-module">Clases:</p>
                     <ul>
-                    <li> <strong>Clase 5: </strong> <em>25 de febrero </em>- Trenzas en tendencias</li>
-                    <li> <strong>Clase 6: </strong> <em>4 de marzo </em>- Semirecogido</li>
-                    <li> <strong>Clase 7: </strong> <em>11 de marzo </em>- Recogido clásico</li>
-                    <li> <strong>Clase 8: </strong> <em>18 de marzo </em>- Recogido con volumen</li>
-                    <li> <strong>Clase 9: </strong> <em>25 de marzo </em>- Cola Baja</li>
-                    <li> <strong>Clase 10:</strong> <em>1 de abril </em>- Sleek Bun</li>
+                    <li> <strong>Clase 5: </strong> <em>Martes 25 de febrero </em>- Trenzas en tendencias</li>
+                    <li> <strong>Clase 6: </strong> <em>Martes 4 de marzo </em>- Semirecogido</li>
+                    <li> <strong>Clase 7: </strong> <em>Martes 11 de marzo </em>- Recogido clásico</li>
+                    <li> <strong>Clase 8: </strong> <em>Martes 18 de marzo </em>- Recogido con volumen</li>
+                    <li> <strong>Clase 9: </strong> <em>Martes 25 de marzo </em>- Cola Baja</li>
+                    <li> <strong>Clase 10:</strong> <em>Martes 1 de abril </em>- Sleek Bun</li>
                     </ul>
                     <p className="class_links-module">Horario:</p>
                     <ul>

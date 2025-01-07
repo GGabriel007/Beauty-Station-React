@@ -11,6 +11,31 @@ import { Link } from 'react-router-dom';
 
 const Module_1Mkup = () => {
 
+    const [selectedImage, setSelectedImage] = useState(
+        `${process.env.PUBLIC_URL}/images/Class_1/Module_1/Makeup/imagen_module_1Mkup.jpeg`
+      );
+    
+    
+    
+      const [isModalOpen, setIsModalOpen] = useState(false);
+    
+    
+      const thumbnails = [
+        `${process.env.PUBLIC_URL}/images/Class_1/Module_1/Makeup/imagen_module_1Mkup.jpeg`,
+        `${process.env.PUBLIC_URL}/images/Class_1/Module_1/Makeup/imagen_module_2Mkup.jpeg`,
+        `${process.env.PUBLIC_URL}/images/Class_1/Module_1/Makeup/imagen_module_3Mkup.jpeg`,
+      ];
+    
+    
+      const handleThumbnailClick = (src) => {
+        setSelectedImage(src);
+      };
+    
+    
+      const toggleModal = () => {
+        setIsModalOpen(!isModalOpen);
+      };
+
     const location = useLocation();
       
     useEffect(() => {
@@ -175,19 +200,40 @@ const Module_1Mkup = () => {
             <h2 className="header-information-module">PIELES PERFECTAS</h2>
         </div>
         <div className="mid-information-module">
-            <div className="gallery-module">
-                <div className="main-image-module">
-                    
-                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Makeup/imagen_module_1Mkup.jpeg`} alt="Informacion de Cursos 5"/> 
-                       
+        <div className="gallery-module">
+      {/* Main Image */}
+      <div className="main-image-module" onClick={toggleModal}>
+        <img
+          id="selectedImage-module"
+          src={selectedImage}
+          alt="Selected Course Information"
+        />
+      </div>
 
-                </div>
-                <div className="thumbnails-module">
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Makeup/imagen_module_1Mkup.jpeg`} alt="Informacion de Cursos 5"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Makeup/imagen_module_2Mkup.jpeg`} alt="Informacion de Cursos 5"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Makeup/imagen_module_3Mkup.jpeg`} alt="Informacion de Cursos 5"/>
-                </div>
-            </div>
+      {/* Thumbnails */}
+      <div className="thumbnails-module">
+        {thumbnails.map((src, index) => (
+          <img
+            key={index}
+            className={`thumbnail-module ${
+              selectedImage === src ? "active-thumbnail" : ""
+            }`}
+            src={src}
+            alt={`Thumbnail ${index + 1}`}
+            onClick={() => handleThumbnailClick(src)}
+          />
+        ))}
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="modal" onClick={toggleModal}>
+          <div className="modal-content">
+            <img className="modal-image" src={selectedImage} alt="Expanded view" />
+          </div>
+        </div>
+      )}
+    </div>
             <div className="text-module">
                 <p className="class_links-module">Informacion del Módulo:</p>
                 <p>Aprende desde cero a realizar pieles con diferentes acabados y coberturas. Skin care, Teoría del color y correcciones. Enseñaremos también diseño de cejas.</p>
@@ -199,11 +245,11 @@ const Module_1Mkup = () => {
 
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                <li><strong>Clase 1:</strong> <em>29 de enero </em>- Introducción y teoría</li>
-                <li><strong>Clase 2:</strong> <em>5 de febrero </em>- Skincare, piel HD</li>
-                <li><strong>Clase 3:</strong> <em>12 de febrero </em>- Correcciones/Piel con acné full cobertura</li>
-                <li><strong>Clase 4:</strong> <em>19 de febrero </em> - Piel madura</li>
-                <li><strong>Clase 5:</strong> <em>26 de febrero </em> - Glowy skin, no makeup</li>
+                <li><strong>Clase 1:</strong> <em>Miércoles 29 de enero </em>- Introducción y teoría</li>
+                <li><strong>Clase 2:</strong> <em>Miércoles 5 de febrero </em>- Skincare, piel HD</li>
+                <li><strong>Clase 3:</strong> <em>Miércoles 12 de febrero </em>- Correcciones/Piel con acné full cobertura</li>
+                <li><strong>Clase 4:</strong> <em>Miércoles 19 de febrero </em> - Piel madura</li>
+                <li><strong>Clase 5:</strong> <em>Miércoles 26 de febrero </em> - Glowy skin, no makeup</li>
                 </ul>
                 <p className="class_links-module">Horario:</p>
                 <ul>

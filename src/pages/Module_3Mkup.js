@@ -11,6 +11,32 @@ import { Link } from 'react-router-dom';
 
 const Module_3Mkup = () => {
 
+  const [selectedImage, setSelectedImage] = useState(
+      `${process.env.PUBLIC_URL}/images/Class_1/Module_3/Makeup/imagen_module_1Mkup.jpeg`
+    );
+  
+  
+  
+    const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  
+    const thumbnails = [
+      `${process.env.PUBLIC_URL}/images/Class_1/Module_3/Makeup/imagen_module_1Mkup.jpeg`,
+      `${process.env.PUBLIC_URL}/images/Class_1/Module_3/Makeup/imagen_module_2Mkup.jpeg`,
+      `${process.env.PUBLIC_URL}/images/Class_1/Module_3/Makeup/imagen_module_3Mkup.jpeg`,
+    ];
+  
+  
+    const handleThumbnailClick = (src) => {
+      setSelectedImage(src);
+    };
+  
+  
+    const toggleModal = () => {
+      setIsModalOpen(!isModalOpen);
+    };
+
+
     const location = useLocation();
     
     useEffect(() => {
@@ -177,19 +203,40 @@ const Module_3Mkup = () => {
             <h2 className="header-information-module">MAESTRÍA EN NOVIAS Y TENDENCIAS</h2>
         </div>
         <div className="mid-information-module">
-            <div className="gallery-module">
-                <div className="main-image-module">
-                    
-                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/Makeup/imagen_module_1Mkup.jpeg`} alt="Informacion de Cursos 7"/> 
-                       
+        <div className="gallery-module">
+      {/* Main Image */}
+      <div className="main-image-module" onClick={toggleModal}>
+        <img
+          id="selectedImage-module"
+          src={selectedImage}
+          alt="Selected Course Information"
+        />
+      </div>
 
-                </div>
-                <div className="thumbnails-module">
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/Makeup/imagen_module_1Mkup.jpeg`} alt="Informacion de Cursos 7"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/Makeup/imagen_module_2Mkup.jpeg`} alt="Informacion de Cursos 7"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/Makeup/imagen_module_3Mkup.jpeg`} alt="Informacion de Cursos 7"/>
-                </div>
-            </div>
+      {/* Thumbnails */}
+      <div className="thumbnails-module">
+        {thumbnails.map((src, index) => (
+          <img
+            key={index}
+            className={`thumbnail-module ${
+              selectedImage === src ? "active-thumbnail" : ""
+            }`}
+            src={src}
+            alt={`Thumbnail ${index + 1}`}
+            onClick={() => handleThumbnailClick(src)}
+          />
+        ))}
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="modal" onClick={toggleModal}>
+          <div className="modal-content">
+            <img className="modal-image" src={selectedImage} alt="Expanded view" />
+          </div>
+        </div>
+      )}
+    </div>
             <div className="text-module">
                 <p className="class_links-module">Informacion del Módulo:</p>
                 <p>Ideal para actualizarte en tendencias internacionales, ALEH compartirá los tips y productos utilizados por los maquillistas de celebridades para impactar a tus clientes y resaltar tu perfil en redes sociales.</p>

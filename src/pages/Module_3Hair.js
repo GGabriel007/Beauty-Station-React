@@ -9,6 +9,32 @@ import { Link } from 'react-router-dom';
 
 const Module_3Hair = () => {
 
+  const [selectedImage, setSelectedImage] = useState(
+        `${process.env.PUBLIC_URL}/images/Class_1/Module_3/Hair/imagen_module_1Hair.jpeg`
+      );
+    
+    
+    
+      const [isModalOpen, setIsModalOpen] = useState(false);
+    
+    
+      const thumbnails = [
+        `${process.env.PUBLIC_URL}/images/Class_1/Module_3/Hair/imagen_module_1Hair.jpeg`,
+        `${process.env.PUBLIC_URL}/images/Class_1/Module_3/Hair/imagen_module_2Hair.jpeg`,
+        `${process.env.PUBLIC_URL}/images/Class_1/Module_3/Hair/imagen_module_3Hair.jpeg`,
+      ];
+    
+    
+      const handleThumbnailClick = (src) => {
+        setSelectedImage(src);
+      };
+    
+    
+      const toggleModal = () => {
+        setIsModalOpen(!isModalOpen);
+      };
+
+
   const location = useLocation();
     
     useEffect(() => {
@@ -136,19 +162,40 @@ const Module_3Hair = () => {
             <h2 className="header-information-module">MAESTRÍAS EN NOVIAS Y TENDENCIAS</h2>
         </div>
         <div className="mid-information-module">
-            <div className="gallery-module">
-                <div className="main-image-module">
-                    
-                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/Hair/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 3"/> 
-                       
+        <div className="gallery-module">
+      {/* Main Image */}
+      <div className="main-image-module" onClick={toggleModal}>
+        <img
+          id="selectedImage-module"
+          src={selectedImage}
+          alt="Selected Course Information"
+        />
+      </div>
 
-                </div>
-                <div className="thumbnails-module">
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/Hair/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 3"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/Hair/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos 3"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/Hair/imagen_module_3Hair.jpeg`} alt="Informacion de Cursos 3"/>
-                </div>
-            </div>
+      {/* Thumbnails */}
+      <div className="thumbnails-module">
+        {thumbnails.map((src, index) => (
+          <img
+            key={index}
+            className={`thumbnail-module ${
+              selectedImage === src ? "active-thumbnail" : ""
+            }`}
+            src={src}
+            alt={`Thumbnail ${index + 1}`}
+            onClick={() => handleThumbnailClick(src)}
+          />
+        ))}
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="modal" onClick={toggleModal}>
+          <div className="modal-content">
+            <img className="modal-image" src={selectedImage} alt="Expanded view" />
+          </div>
+        </div>
+      )}
+    </div>
             <div className="text-module">
                 <p className="class_links-module">Informacion del Módulo:</p>
                 <p>Ideal para actualizarte en tendencias internacionales y peinado elaborado. ALEH compartirá los tips y productos para impactar a tus clientes y resaltar tu perfil en redes sociales.</p>
@@ -160,15 +207,15 @@ const Module_3Hair = () => {
 
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                <li><strong>Clase 11:</strong> <em> martes 8 de abril</em> - Redes e ilumicaión bridal hair + lift de cejas + velo</li>
-                <li><strong>Clase 12:</strong> <em> jueves 10 de abril</em> - Práctica en modelo</li>
+                <li><strong>Clase 11:</strong> <em> Martes 8 de abril</em> - Redes e ilumicaión bridal hair + lift de cejas + velo</li>
+                <li><strong>Clase 12:</strong> <em> Jueves 10 de abril</em> - Práctica en modelo</li>
                 <li><strong>SEMANA SANTA</strong> </li>
-                <li><strong>Clase 13:</strong> <em> martes 22 de abril</em> - Semirecogido con ondas retro</li>
-                <li><strong>Clase 14:</strong> <em> jueves 24 de abril</em> - Práctica en modelo</li>
-                <li><strong>Clase 15:</strong> <em> martes 29 de abril</em> - Cola alta con volumen</li>
-                <li><strong>Clase 16:</strong> <em> martes 6 de mayo</em> - Práctica modelo</li>
-                <li className="Wed-Class"><strong>Clase 17:</strong> <em> miercoles 7 de mayo 4 PM</em> - Peinado alto Kim Kardashian</li>
-                <li><strong>Clase 18:</strong> <em> jueves 8 de mayo</em> - Evaluación final, entrega de portafolio</li>
+                <li><strong>Clase 13:</strong> <em> Martes 22 de abril</em> - Semirecogido con ondas retro</li>
+                <li><strong>Clase 14:</strong> <em> Jueves 24 de abril</em> - Práctica en modelo</li>
+                <li><strong>Clase 15:</strong> <em> Martes 29 de abril</em> - Cola alta con volumen</li>
+                <li><strong>Clase 16:</strong> <em> Martes 6 de mayo</em> - Práctica modelo</li>
+                <li className="Wed-Class"><strong>Clase 17:</strong> <em> Miercoles 7 de mayo 4 PM</em> - Peinado alto Kim Kardashian</li>
+                <li><strong>Clase 18:</strong> <em> Jueves 8 de mayo</em> - Evaluación final, entrega de portafolio</li>
                 </ul>
                 <p className="class_links-module">Horario:</p>
                 <ul>

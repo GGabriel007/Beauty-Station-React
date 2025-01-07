@@ -1,9 +1,31 @@
 // src/pages/BeautyStation.js
-import React from 'react';
+import React, {useState} from 'react';
 import '../styles/beauty-Station.css';
 import { Link } from 'react-router-dom';
 
 const BeautyStation = () => {
+
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const images = [
+    `${process.env.PUBLIC_URL}/images/social_media/review3.jpeg`,
+    `${process.env.PUBLIC_URL}/images/social_media/review2.jpeg`,
+    `${process.env.PUBLIC_URL}/images/social_media/review1.jpeg`,
+  ];
+
+
+  const openModal = (src) => {
+    setSelectedImage(src);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedImage(null);
+  };
+
+
   return (
     <>
       <div className='all-content'>
@@ -49,11 +71,27 @@ const BeautyStation = () => {
         </div>
         
       </div>
-      <div className = "scrolling-wrapper-home">
-                <img src ={`${process.env.PUBLIC_URL}/images/social_media/review3.jpeg`} alt = "Gallery Image for Review 1"/>
-                <img src ={`${process.env.PUBLIC_URL}/images/social_media/review2.jpeg`} alt = "Gallery Image for Review 2"/>
-                <img src ={`${process.env.PUBLIC_URL}/images/social_media/review1.jpeg`} alt = "Gallery Image for Review 3"/>
-            </div>
+      {/* Scrolling Gallery */}
+      <div className="scrolling-wrapper-home">
+        {images.map((src, index) => (
+          <img
+            key={index}
+            src={src}
+            alt={`Gallery Image ${index + 1}`}
+            className="scrolling-image"
+            onClick={() => openModal(src)}
+          />
+        ))}
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="modal" onClick={closeModal}>
+          <div className="modal-content">
+            <img className="modal-image" src={selectedImage} alt="Expanded view" />
+          </div>
+        </div>
+      )}
             </div>
     </>
   );

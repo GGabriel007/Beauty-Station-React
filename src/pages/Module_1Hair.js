@@ -8,6 +8,33 @@ import { Link } from 'react-router-dom';
 
 
 const Module_1Hair = () => {
+
+
+  const [selectedImage, setSelectedImage] = useState(
+      `${process.env.PUBLIC_URL}/images/Class_1/Module_1/Hair/imagen_module_1Hair.jpeg`
+    );
+  
+  
+  
+    const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  
+    const thumbnails = [
+      `${process.env.PUBLIC_URL}/images/Class_1/Module_1/Hair/imagen_module_1Hair.jpeg`,
+      `${process.env.PUBLIC_URL}/images/Class_1/Module_1/Hair/imagen_module_2Hair.jpeg`,
+      `${process.env.PUBLIC_URL}/images/Class_1/Module_1/Hair/imagen_module_3Hair.jpeg`,
+    ];
+  
+  
+    const handleThumbnailClick = (src) => {
+      setSelectedImage(src);
+    };
+  
+  
+    const toggleModal = () => {
+      setIsModalOpen(!isModalOpen);
+    };
+
   const location = useLocation();
     
     useEffect(() => {
@@ -127,16 +154,40 @@ const Module_1Hair = () => {
           <h2 className="header-information-module">MASTER EN WAVES</h2>
         </div>
         <div className="mid-information-module">
-          <div className="gallery-module">
-            <div className="main-image-module">
-              <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Hair/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos" />
-            </div>
-            <div className="thumbnails-module">
-              <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Hair/imagen_module_1Hair.jpeg`} alt="Informacion de Cursos 1" />
-              <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Hair/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos 1" />
-              <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Hair/imagen_module_3Hair.jpeg`} alt="Informacion de Cursos 1" />
-            </div>
+        <div className="gallery-module">
+      {/* Main Image */}
+      <div className="main-image-module" onClick={toggleModal}>
+        <img
+          id="selectedImage-module"
+          src={selectedImage}
+          alt="Selected Course Information"
+        />
+      </div>
+
+      {/* Thumbnails */}
+      <div className="thumbnails-module">
+        {thumbnails.map((src, index) => (
+          <img
+            key={index}
+            className={`thumbnail-module ${
+              selectedImage === src ? "active-thumbnail" : ""
+            }`}
+            src={src}
+            alt={`Thumbnail ${index + 1}`}
+            onClick={() => handleThumbnailClick(src)}
+          />
+        ))}
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="modal" onClick={toggleModal}>
+          <div className="modal-content">
+            <img className="modal-image" src={selectedImage} alt="Expanded view" />
           </div>
+        </div>
+      )}
+    </div>
           <div className="text-module">
             <p className="class_links-module">Informacion del Módulo:</p>
             <p>El curso más vendido, ya que aprendes desde cero diferentes tipos de waves en tendencia, incluye las famosas retro waves.</p>
@@ -145,10 +196,10 @@ const Module_1Hair = () => {
             <p>Los precios no incluye materiales</p>
             <p className="class_links-module">Clases:</p>
             <ul>
-              <li><strong>Clase 1:</strong> <em>28 de enero</em> - Introducción, productos y cómo hacer waves con plancha</li>
-              <li><strong>Clase 2:</strong> <em>4 de febrero</em> - Natural waves</li>
-              <li><strong>Clase 3:</strong> <em>11 de febrero</em> - Glam waves</li>
-              <li><strong>Clase 4:</strong> <em>18 de febrero </em> - Old Hollywood waves + velo</li>
+              <li><strong>Clase 1:</strong> <em>Martes 28 de enero</em> - Introducción, productos y cómo hacer waves con plancha</li>
+              <li><strong>Clase 2:</strong> <em>Martes 4 de febrero</em> - Natural waves</li>
+              <li><strong>Clase 3:</strong> <em>Martes 11 de febrero</em> - Glam waves</li>
+              <li><strong>Clase 4:</strong> <em>Martes 18 de febrero </em> - Old Hollywood waves + velo</li>
             </ul>
             <p className="class_links-module">Horario:</p>
             <ul>

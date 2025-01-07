@@ -9,7 +9,36 @@ import { doc, getDoc } from 'firebase/firestore'; // Import Firestore functions
 import { Link } from 'react-router-dom';
 
 
+
+
 const Module_4Mkup = () => {
+
+
+  const [selectedImage, setSelectedImage] = useState(
+    `${process.env.PUBLIC_URL}/images/Class_1/Module_4/Makeup/imagen_module_1Mkup.jpeg`
+  );
+
+
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+  const thumbnails = [
+    `${process.env.PUBLIC_URL}/images/Class_1/Module_4/Makeup/imagen_module_1Mkup.jpeg`,
+    `${process.env.PUBLIC_URL}/images/Class_1/Module_4/Makeup/imagen_module_2Mkup.jpeg`,
+    `${process.env.PUBLIC_URL}/images/Class_1/Module_4/Makeup/imagen_module_3Mkup.jpeg`,
+  ];
+
+
+  const handleThumbnailClick = (src) => {
+    setSelectedImage(src);
+  };
+
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
 
     const location = useLocation();
       
@@ -200,37 +229,62 @@ const Module_4Mkup = () => {
         <div className="top-information-module">
             <h2 className="header-information-module">CURSO COMPLETO</h2>
         </div>
-        <div className="mid-information-module">
-            <div className="gallery-module">
-                <div className="main-image-module">
-                    
-                    <img id="selectedImage-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Makeup/imagen_module_1Mkup.jpeg`} alt="Informacion de Curso 8"/> 
-                       
+          <div className="mid-information-module">
+          <div className="gallery-module">
+      {/* Main Image */}
+      <div className="main-image-module" onClick={toggleModal}>
+        <img
+          id="selectedImage-module"
+          src={selectedImage}
+          alt="Selected Course Information"
+        />
+      </div>
 
-                </div>
-                <div className="thumbnails-module">
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Makeup/imagen_module_1Mkup.jpeg`} alt="Informacion de Curso 8"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Makeup/imagen_module_2Mkup.jpeg`} alt="Informacion de Curso 8"/>
-                    <img className="thumbnail-module" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Makeup/imagen_module_3Mkup.jpeg`} alt="Informacion de Curso 8"/>
-                </div>
-            </div>
+      {/* Thumbnails */}
+      <div className="thumbnails-module">
+        {thumbnails.map((src, index) => (
+          <img
+            key={index}
+            className={`thumbnail-module ${
+              selectedImage === src ? "active-thumbnail" : ""
+            }`}
+            src={src}
+            alt={`Thumbnail ${index + 1}`}
+            onClick={() => handleThumbnailClick(src)}
+          />
+        ))}
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="modal" onClick={toggleModal}>
+          <div className="modal-content">
+            <img className="modal-image" src={selectedImage} alt="Expanded view" />
+          </div>
+        </div>
+      )}
+    </div>
             <div className="text-module">
                 <p className="class_links-module">Informacion del Módulo:</p>
                 <p>Nuestro curso de maquillaje profesional consta de 3 módulos especializados en maquillaje social, donde hemos resumido para ti los tips, materiales y técnicas actuales a nivel mundial. No necesitas tener experiencia previa. Con el curso completo tendrás conocimientos y herramientas para poder emprender.</p>
                 <p>Incluye: 3 módulos, Book "The Makeup guide" y certificado enmarcado.</p>
-                <p>Materiales: Kit de Maquillaje completo</p>                
+                <p>Materiales: Kit completo de maquillaje, modelo para prácticas</p>   
+
+                <p>Los precios no incluye materiales</p>
+
+                <p className="Demo-text"><strong>*DEMO PEINADO GRATIS</strong></p>            
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                <li><strong>Clase 1:</strong> <em>29 de enero </em>- Introducción y teoría</li>
-                <li><strong>Clase 2:</strong> <em>5 de febrero </em>- Skincare, piel HD</li>
-                <li><strong>Clase 3:</strong> <em>12 de febrero </em>- Correcciones/Piel con acné full cobertura</li>
-                <li><strong>Clase 4:</strong> <em>19 de febrero </em> - Piel madura</li>
-                <li><strong>Clase 5:</strong> <em>26 de febrero </em> - Glowy skin, no makeup</li>
-                <li> <strong>Clase 6: </strong><em>5 de marzo</em>- Delineados y pestañas</li>
-                <li> <strong>Clase 7: </strong><em>12 de marzo</em> - Maquillaje de día express</li>
-                <li> <strong>Clase 8: </strong><em>19 de marzo</em> - Glam con pgmentos quinceañera</li>
-                <li> <strong>Clase 9: </strong><em>26 de marzo</em> - Técnica semi cut crease</li>
-                <li> <strong>Clase 10:</strong><em>2 de abril</em> - Técnica smokey latte makeup</li>
+                <li><strong>Clase 1:</strong> <em>Miércoles 29 de enero </em>- Introducción y teoría</li>
+                <li><strong>Clase 2:</strong> <em>Miércoles 5 de febrero </em>- Skincare, piel HD</li>
+                <li><strong>Clase 3:</strong> <em>Miércoles 12 de febrero </em>- Correcciones/Piel con acné full cobertura</li>
+                <li><strong>Clase 4:</strong> <em>Miércoles 19 de febrero </em> - Piel madura</li>
+                <li><strong>Clase 5:</strong> <em>Miércoles 26 de febrero </em> - Glowy skin, no makeup</li>
+                <li> <strong>Clase 6: </strong><em>Miércoles 5 de marzo</em>- Delineados y pestañas</li>
+                <li> <strong>Clase 7: </strong><em>Miércoles 12 de marzo</em> - Maquillaje de día express</li>
+                <li> <strong>Clase 8: </strong><em>Miércoles 19 de marzo</em> - Glam con pgmentos quinceañera</li>
+                <li> <strong>Clase 9: </strong><em>Miércoles 26 de marzo</em> - Técnica semi cut crease</li>
+                <li> <strong>Clase 10:</strong><em>Miércoles 2 de abril</em> - Técnica smokey latte makeup</li>
                 <li> <strong>Foxy eyes, redes e iluminación</strong><p> Masterclass:<em> Miércoles 9 de abril </em></p> Práctica:<em> Jueves de 10 abril </em></li>
                 <li> <strong>SEMANA SANTA</strong> </li>
                 <li> <strong>Celebrity Makeup, hilos tensores</strong><p> Masterclass:<em> Miércoles 23 de abril </em></p> Práctica:<em> Jueves de 24 abril </em></li>
@@ -257,11 +311,11 @@ const Module_4Mkup = () => {
                   <ul className='button-schedule'>
                     <li>
                       <input type="radio" id="clase1" name="schedule" value="Clase 1" checked={selectedSchedule === 'Clase 1'} onChange={() => setSelectedSchedule('Clase 1')} />
-                      <label htmlFor="clase1">Miercoles 2PM a 4PM</label>
+                      <label htmlFor="clase1">Miércoles y Jueves 2PM a 4PM</label>
                     </li>
                     <li>
                       <input type="radio" id="clase2" name="schedule" value="Clase 2" checked={selectedSchedule === 'Clase 2'} onChange={() => setSelectedSchedule('Clase 2')} />
-                      <label htmlFor="clase2">Miercoles 6PM a 8PM</label>
+                      <label htmlFor="clase2">Miércoles y Jueves 6PM a 8PM</label>
                     </li>
                   </ul>
                   <button className="add-to-cart-button" onClick={handleAddToCart}>Agendar Clase</button>
