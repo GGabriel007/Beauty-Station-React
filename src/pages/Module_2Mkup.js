@@ -282,7 +282,7 @@ const Module_2Mkup = () => {
                     <label htmlFor="clase2">Miercoles 6PM a 8PM</label>
                   </li>
                 </ul>
-                <button className="add-to-cart-button" onClick={handleAddToCart}>Agendar Clase</button>
+                <button className="add-to-cart-button" onClick={handleAddToCart}>Comprar Curso</button>
                 <p className="class_links-module">Asientos disponibles: {availableSeats}</p>
                 {error && <p className="error-notification">{error}</p>}
                 {notification && <p className="notification">{notification}</p>}
