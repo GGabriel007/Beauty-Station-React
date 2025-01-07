@@ -184,15 +184,12 @@
 /* Scrolling wrapper */
 .scrolling-wrapper-home {
     display: flex;
-    overflow-x: auto;
-    gap: 10px;
+    overflow-x: scroll;
+    
     padding: 10px;
     scroll-behavior: smooth;
   }
   
-  .scrolling-wrapper-home::-webkit-scrollbar {
-    display: none;
-  }
   
   .scrolling-image {
     width: 150px;
@@ -218,7 +215,7 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    cursor: zoom-out;
+    
   }
   
   .modal-content {
@@ -228,7 +225,7 @@
   .modal-image {
     max-width: 70%;
     max-height: 90%;
-    cursor: zoom-in;
+    
   }
   
   .modal-image:hover {

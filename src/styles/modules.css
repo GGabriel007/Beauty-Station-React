@@ -278,7 +278,7 @@ ul {
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  cursor: zoom-out;
+  
 }
 
 .modal-content {
@@ -288,7 +288,7 @@ ul {
 .modal-image {
   max-width: 70%;
   max-height: 90%;
-  cursor: zoom-in;
+  
 }
 
 .modal-image:hover {

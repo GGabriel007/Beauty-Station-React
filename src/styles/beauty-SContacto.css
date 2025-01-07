@@ -81,6 +81,58 @@
     border-radius: 12px; 
 }
 
+/* Scrolling wrapper */
+.scrolling-wrapper-home {
+    display: flex;
+    overflow-x: scroll;
+    
+    padding: 10px;
+    scroll-behavior: smooth;
+  }
+ 
+  
+  .scrolling-image {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+  
+  .scrolling-image:hover {
+    transform: scale(1.005);
+  }
+  
+  /* Modal */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    
+  }
+  
+  .modal-content {
+    position: relative;
+  }
+  
+  .modal-image {
+    max-width: 70%;
+    max-height: 90%;
+    
+  }
+  
+  .modal-image:hover {
+    
+    transition: transform 0.3s;
+  }
+
 
 
 @media (max-width: 1019px) {
@@ -116,6 +168,10 @@
 
     .scrolling-wrapper-contact {
         scroll-padding-left: 10%;
+    }
+
+    .modal-image {
+        max-width: 85%;
     }
 
 }
