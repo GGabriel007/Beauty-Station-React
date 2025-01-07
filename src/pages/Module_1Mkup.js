@@ -192,22 +192,26 @@ const Module_1Mkup = () => {
                 <p className="class_links-module">Informacion del Módulo:</p>
                 <p>Aprende desde cero a realizar pieles con diferentes acabados y coberturas. Skin care, Teoría del color y correcciones. Enseñaremos también diseño de cejas.</p>
                 <p>Nivel: Principiante/Intermedio</p>
-                <p>Materiales: Kit de piel y cejas completo</p>
+                <p>Materiales necesarios: Kit de piel y cejas completo</p>
+
+                <p>Los precios no incluye materiales</p>
+
+
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                <li><strong>Clase 1:</strong> <em>24 de julio </em>- Introducción y teoría.</li>
-                <li><strong>Clase 2:</strong> <em>31 de julio </em>- Skincare, piel HD.</li>
-                <li><strong>Clase 3:</strong> <em>7 de agosto </em>- Correcciones/Piel con acné full cobertura.</li>
-                <li><strong>Clase 4:</strong> <em>14 de agosto</em> - Piel madura.</li>
-                <li><strong>Clase 5:</strong> <em>21 de agosto</em> - Glowy skin, no makeup.</li>
+                <li><strong>Clase 1:</strong> <em>29 de enero </em>- Introducción y teoría</li>
+                <li><strong>Clase 2:</strong> <em>5 de febrero </em>- Skincare, piel HD</li>
+                <li><strong>Clase 3:</strong> <em>12 de febrero </em>- Correcciones/Piel con acné full cobertura</li>
+                <li><strong>Clase 4:</strong> <em>19 de febrero </em> - Piel madura</li>
+                <li><strong>Clase 5:</strong> <em>26 de febrero </em> - Glowy skin, no makeup</li>
                 </ul>
                 <p className="class_links-module">Horario:</p>
                 <ul>
-                  <li>Miercoles 2PM a 4PM</li>
-                  <li>Miercoles 6PM a 8PM</li>
+                  <li>Miércoles 2PM a 4PM</li>
+                  <li>Miércoles 6PM a 8PM</li>
                 </ul>
                 <p className="class_links-module">Precio por persona: Q3,000</p>
-                <p className="class_links-module">Inscripción: Q500</p>
+                <p className="class_links-module">Inscripción: Q200</p>
                 <p className="class_links-module">Precio de Kit de pieles perfectas (Altamente Recomendado): Q5,900</p>
                 <label className="checkbox-container">
                             <input 

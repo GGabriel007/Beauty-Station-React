@@ -194,24 +194,27 @@ const Module_3Mkup = () => {
                 <p className="class_links-module">Informacion del Módulo:</p>
                 <p>Ideal para actualizarte en tendencias internacionales, ALEH compartirá los tips y productos utilizados por los maquillistas de celebridades para impactar a tus clientes y resaltar tu perfil en redes sociales.</p>
                 <p>Nivel: Avanzado/Actualización</p>
-                <p>Materiales: Kit de maquillaje completo</p>
+                <p>Materiales: Kit completo de maquillaje, modelo para prácticas</p>
+
+                <p>Los precios no incluye materiales</p>
+
+                <p className="Demo-text"><strong>*DEMO PEINADO GRATIS</strong></p>
+
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                <li> <strong>Clase 12:</strong> <em> jueves 3 de octubre </em>- Redes e iluminación en linea.</li>
-                <li> <strong>Clase 13:</strong> <em> miercoles 9 de octubre </em>- Técnica Dafine hilos tensores.</li>
-                <li> <strong>Clase 14:</strong> <em> jueves 10 de octubre </em>- Práctica Dafine.</li>
-                <li> <strong>Clase 15:</strong> <em> miercoles 16 de octubre </em>- Técnica Pepe piel de Hada.</li>
-                <li> <strong>Clase 16:</strong> <em> jueves 17 de octubre </em>- Práctica Pepe.</li>
-                <li> <strong>Clase 17:</strong> <em> miercoles 23 de octubre </em>- Masterclass Técnica Airbrush.</li>
-                <li> <strong>Clase 18:</strong> <em> jueves 24 de octubre </em>- Evaluación final novias, sesión de fotos y entrega de portafolio.</li>
+                <li> <strong>Foxy eyes, redes e iluminación</strong><p> Masterclass:<em> Miércoles 9 de abril </em></p> Práctica:<em> Jueves de 10 abril </em></li>
+                <li> <strong>SEMANA SANTA</strong> </li>
+                <li> <strong>Celebrity Makeup, hilos tensores</strong><p> Masterclass:<em> Miércoles 23 de abril </em></p> Práctica:<em> Jueves de 24 abril </em></li>
+                <li> <strong>Técnica airbrush</strong> <p> Masterclass:<em> Jueves 30 de abril </em></p> Práctica:<em> Martes 6 de mayo </em></li>
+                <li> <strong>Brindal glam + demo peinado</strong> <p className='Wed-Class'>Masterclass:<em> Miércoles 7 de mayo 4 PM</em> </p> Evaluacion final:<em> Jueves 8 de mayo, entrega portafolio</em></li>
                 </ul>
                 <p className="class_links-module">Elige un Horario:</p>
                 <ul>
-                <li>Miércoles y Jueves 2PM a 4PM</li>
+                <li>Miércoles y Jueves 3PM a 5PM</li>
                 <li>Miércoles y Jueves 6PM a 8PM</li>
                 </ul>
                 <p className="class_links-module">Precio por persona: Q4,000</p>
-                <p className="class_links-module">Inscripción: Q500</p>
+                <p className="class_links-module">Inscripción: Q200</p>
                 <p className="class_links-module">Precio de Kit de pieles perfectas (Altamente Recomendado): Q5,900</p>
                 <label className="checkbox-container">
                             <input 

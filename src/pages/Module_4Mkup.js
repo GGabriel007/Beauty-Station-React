@@ -169,7 +169,7 @@ const Module_4Mkup = () => {
     
         const moduleItem = {
           name: moduleName,
-          price: 9000,
+          price: 9100,
           image: `${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_Mkup.jpeg`,
           schedule: selectedSchedule,
           kitSelected: kitSelected
@@ -198,7 +198,7 @@ const Module_4Mkup = () => {
     <>
         <div className="information-module">
         <div className="top-information-module">
-            <h2 className="header-information-module">CURSO COMPLETO MAQUILLAJE</h2>
+            <h2 className="header-information-module">CURSO COMPLETO</h2>
         </div>
         <div className="mid-information-module">
             <div className="gallery-module">
@@ -221,32 +221,29 @@ const Module_4Mkup = () => {
                 <p>Materiales: Kit de Maquillaje completo</p>                
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                <li> <strong>Clase 1: </strong> <em> 24 de julio </em>- Introducción y teoría.</li>
-                <li> <strong>Clase 2: </strong> <em> 31 de julio </em>- Skincare, piel HD.</li>
-                <li> <strong>Clase 3: </strong> <em> 7 de agosto </em>- Correcciones/Piel con acné full cobertura.</li>
-                <li> <strong>Clase 4: </strong> <em> 14 de agosto </em>- Piel madura.</li>
-                <li> <strong>Clase 5: </strong> <em> 21 de agosto </em>- Glowy skin, no makeup.</li>
-                <li> <strong>Clase 6: </strong> <em> 28 de agosto </em>- Fotografía para redes y delineados.</li>
-                <li> <strong>Clase 7: </strong> <em> 4 de septiembre </em>- Maquillaje de día express.</li>
-                <li> <strong>Clase 8: </strong> <em> 11 de septiembre </em>- Glam con pigmentos quinceañera.</li>
-                <li> <strong>Clase 9: </strong> <em> 18 de septiembre </em>- Técnica semi cut crease.</li>
-                <li> <strong>Clase 10:</strong> <em> 25 de septiembre </em>- Técnica smokey latte makeup.</li>
-                <li> <strong>Clase 11:</strong> <em> 2 de octubre </em>- Evaluacion.</li>
-                <li> <strong>Clase 12:</strong> <em> jueves 3 de octubre </em>- Redes e iluminación en linea.</li>
-                <li> <strong>Clase 13:</strong> <em> miercoles 9 de octubre </em>- Técnica Dafine hilos tensores.</li>
-                <li> <strong>Clase 14:</strong> <em> jueves 10 de octubre </em>- Práctica Dafine.</li>
-                <li> <strong>Clase 15:</strong> <em> miercoles 16 de octubre </em>- Técnica Pepe piel de Hada.</li>
-                <li> <strong>Clase 16:</strong> <em> jueves 17 de octubre </em>- Práctica Pepe.</li>
-                <li> <strong>Clase 17:</strong> <em> miercoles 23 de octubre </em>- Masterclass Técnica Airbrush.</li>
-                <li> <strong>Clase 18:</strong> <em> jueves 24 de octubre </em>- Evaluación final novias, sesión de fotos y entrega de portafolio.</li>
+                <li><strong>Clase 1:</strong> <em>29 de enero </em>- Introducción y teoría</li>
+                <li><strong>Clase 2:</strong> <em>5 de febrero </em>- Skincare, piel HD</li>
+                <li><strong>Clase 3:</strong> <em>12 de febrero </em>- Correcciones/Piel con acné full cobertura</li>
+                <li><strong>Clase 4:</strong> <em>19 de febrero </em> - Piel madura</li>
+                <li><strong>Clase 5:</strong> <em>26 de febrero </em> - Glowy skin, no makeup</li>
+                <li> <strong>Clase 6: </strong><em>5 de marzo</em>- Delineados y pestañas</li>
+                <li> <strong>Clase 7: </strong><em>12 de marzo</em> - Maquillaje de día express</li>
+                <li> <strong>Clase 8: </strong><em>19 de marzo</em> - Glam con pgmentos quinceañera</li>
+                <li> <strong>Clase 9: </strong><em>26 de marzo</em> - Técnica semi cut crease</li>
+                <li> <strong>Clase 10:</strong><em>2 de abril</em> - Técnica smokey latte makeup</li>
+                <li> <strong>Foxy eyes, redes e iluminación</strong><p> Masterclass:<em> Miércoles 9 de abril </em></p> Práctica:<em> Jueves de 10 abril </em></li>
+                <li> <strong>SEMANA SANTA</strong> </li>
+                <li> <strong>Celebrity Makeup, hilos tensores</strong><p> Masterclass:<em> Miércoles 23 de abril </em></p> Práctica:<em> Jueves de 24 abril </em></li>
+                <li> <strong>Técnica airbrush</strong> <p> Masterclass:<em> Jueves 30 de abril </em></p> Práctica:<em> Martes 6 de mayo </em></li>
+                <li> <strong>Brindal glam + demo peinado</strong> <p className='Wed-Class'>Masterclass:<em> Miércoles 7 de mayo 4 PM</em> </p> Evaluacion final:<em> Jueves 8 de mayo, entrega portafolio</em></li>
                 </ul>
                 <p className="class_links-module">Horario:</p>
                 <ul>
                 <li>Miércoles y Jueves 2PM a 4PM</li>
                 <li>Miércoles y Jueves 6PM a 8PM</li>
                 </ul>
-                <p className="class_links-module">Precio por persona: Q9,000</p>
-                <p className="class_links-module">Inscripción: Q500</p>
+                <p className="class_links-module">Precio por persona: Q9,100</p>
+                <p className="class_links-module">Inscripción: Q200</p>
                 <p className="class_links-module">Precio de Kit de pieles perfectas (Altamente Recomendado): Q5,900</p>
                 <label className="checkbox-container">
                             <input 

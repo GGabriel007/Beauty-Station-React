@@ -17,7 +17,7 @@ const Classes1 = () => {
         <>
             <div className="information-class">
         <div className="top-information-class">
-            <h2 className="header-information-class">CURSOS DE PEINADO 2024</h2>
+            <h2 className="header-information-class">CURSOS DE PEINADO 2025</h2>
         </div>
 
         <div className="mid-information-module">
@@ -34,6 +34,7 @@ const Classes1 = () => {
                     
                     <div className='description-class'>
                     <p>Nivel: Principiante/Intermedio</p>
+                    <p>Incluye certificado</p>
                     </div>
                 </div>
             </div>
@@ -51,6 +52,7 @@ const Classes1 = () => {
                         
                     <div className='description-class'>
                     <p>Nivel: Intermedio</p>
+                    <p>Incluye certificado</p>
                     </div>
                 </div>  
             </div>
@@ -68,6 +70,7 @@ const Classes1 = () => {
                     
                     <div className='description-class'>
                     <p>Nivel: Avanzado/Actualización</p>
+                    <p>Incluye certificado</p>
                     </div>
                 </div>  
             </div>
@@ -81,9 +84,14 @@ const Classes1 = () => {
                 </Link>
                 <div className="text-class">
                     
-                        <p className = "class_links-class">Curso Completo Peinado</p>
-                    <div className='description-class'>
-                    <p>Incluye: 3 módulos</p>
+                        <p className = "class_links-class">Curso Completo</p>
+                        <div className='description-class-complete'>
+                    <p className='Complete-text'>Incluye:</p>
+                    <ul className='Complete-text'>
+                        <li>3 módulos</li>
+                        <li>Book “The hairstyle guide”</li>
+                        <li>Certificado enmarcado</li>
+                    </ul>
                     </div>
                 </div>  
             </div>

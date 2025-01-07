@@ -108,7 +108,7 @@ const Module_1Hair = () => {
 
       const moduleItem = {
         name: moduleName,
-        price: 2000,
+        price: 2200,
         image: `${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_Hair.jpeg`,
         schedule: selectedSchedule
       };
@@ -124,7 +124,7 @@ const Module_1Hair = () => {
     <>
       <div className="information-module">
         <div className="top-information-module">
-          <h2 className="header-information-module">MASTER WAVES</h2>
+          <h2 className="header-information-module">MASTER EN WAVES</h2>
         </div>
         <div className="mid-information-module">
           <div className="gallery-module">
@@ -141,21 +141,22 @@ const Module_1Hair = () => {
             <p className="class_links-module">Informacion del Módulo:</p>
             <p>El curso más vendido, ya que aprendes desde cero diferentes tipos de waves en tendencia, incluye las famosas retro waves.</p>
             <p>Nivel: Principiante/Intermedio</p>
-            <p>Materiales: Plancha, tubo y cepillo; secadora y productos de cabello</p>
+            <p>Materiales Requeridos: Plancha, tubo y cepillo; secadora y productos de cabello</p>
+            <p>Los precios no incluye materiales</p>
             <p className="class_links-module">Clases:</p>
             <ul>
-              <li><strong>Clase 1:</strong> <em>23 de julio</em> - Introducción, productos y cómo hacer waves con plancha.</li>
-              <li><strong>Clase 2:</strong> <em>30 de julio</em> - Cómo lograr natural waves.</li>
-              <li><strong>Clase 3:</strong> <em>6 de agosto</em> - Técnicas para crear glam waves.</li>
-              <li><strong>Clase 4:</strong> <em>13 de agosto </em> - Estilo Old Hollywood waves y uso de velo.</li>
+              <li><strong>Clase 1:</strong> <em>28 de enero</em> - Introducción, productos y cómo hacer waves con plancha</li>
+              <li><strong>Clase 2:</strong> <em>4 de febrero</em> - Natural waves</li>
+              <li><strong>Clase 3:</strong> <em>11 de febrero</em> - Glam waves</li>
+              <li><strong>Clase 4:</strong> <em>18 de febrero </em> - Old Hollywood waves + velo</li>
             </ul>
             <p className="class_links-module">Horario:</p>
             <ul>
               <li>Martes 2PM a 4PM</li>
               <li>Martes 6PM a 8PM</li>
             </ul>
-            <p className="class_links-module">Precio por persona: Q2,000</p>
-            <p className="class_links-module">Inscripción: Q500</p>
+            <p className="class_links-module">Precio por persona: Q2,200</p>
+            <p className="class_links-module">Inscripción: Q200</p>
             <p className="class_links-module">Selecciona una Clase:</p>
             <ul className='button-schedule'>
               <li>

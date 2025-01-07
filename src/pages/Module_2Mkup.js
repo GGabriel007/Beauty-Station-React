@@ -196,15 +196,17 @@ const Module_2Mkup = () => {
                 <p className="class_links-module">Informacion del Módulo:</p>
                 <p>Realiza la belleza de tus clientes con diferentes técnicas de maquillaje para todo tipo de evento social.</p>
                 <p>Nivel: Intermedio</p>
-                <p>Materiales: Kit de maquillaje completo</p>
+                <p>Materiales necesarios: Kit completo de maquillaje, modelo para prácticas</p>
+
+                <p>Los precios no incluye materiales</p>
+
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                <li> <strong>Clase 6: </strong><em>28 de agosto</em>- Fotografía para redes y delineados.</li>
-                <li> <strong>Clase 7: </strong><em>4 de septiembre</em> - Maquillaje de día express.</li>
-                <li> <strong>Clase 8: </strong><em>11 de septiembre</em> - Glam con pigmentos quinceañera.</li>
-                <li> <strong>Clase 9: </strong><em>18 de septiembre</em> - Técnica semi cut crease.</li>
-                <li> <strong>Clase 10:</strong><em> 25 de septiembre</em> - Técnica smokey latte makeup.</li>
-                <li> <strong>Clase 11:</strong><em> 2 de octubre</em> - Evaluacion.</li>
+                <li> <strong>Clase 6: </strong><em>5 de marzo</em>- Delineados y pestañas</li>
+                <li> <strong>Clase 7: </strong><em>12 de marzo</em> - Maquillaje de día express</li>
+                <li> <strong>Clase 8: </strong><em>19 de marzo</em> - Glam con pgmentos quinceañera</li>
+                <li> <strong>Clase 9: </strong><em>26 de marzo</em> - Técnica semi cut crease</li>
+                <li> <strong>Clase 10:</strong><em>2 de abril</em> - Técnica smokey latte makeup</li>
                 </ul>
                 <p className="class_links-module">Horario:</p>
                 <ul>
@@ -212,7 +214,7 @@ const Module_2Mkup = () => {
                 <li>Miércoles 6PM a 8PM</li>
                 </ul>
                 <p className="class_links-module">Precio por persona: Q3,500</p>
-                <p className="class_links-module">Inscripción: Q500</p>
+                <p className="class_links-module">Inscripción: Q200</p>
                 <p className="class_links-module">Precio de Kit de pieles perfectas (Altamente Recomendado): Q5,900</p>
                 <label className="checkbox-container">
                             <input 

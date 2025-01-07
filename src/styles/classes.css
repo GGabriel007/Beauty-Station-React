@@ -89,6 +89,18 @@
     padding-right: 15px;
 }
 
+.Wed-Class{
+    color: red;
+}
+
+.Demo-text{
+    color: rgb(235, 89, 235);
+}
+
+.Complete-text{
+    gap: 0px;
+    margin: 0px;
+}
 
 @media (max-width: 1019px) {
 
@@ -120,6 +132,10 @@
     .description-class{
         padding-left: 0px;
         padding-right: 0px;
+    }
+
+    .description-class-complete{
+        padding-right: 25px;
     }
 
     .icon-class {

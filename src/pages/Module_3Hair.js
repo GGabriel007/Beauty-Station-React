@@ -152,17 +152,23 @@ const Module_3Hair = () => {
             <div className="text-module">
                 <p className="class_links-module">Informacion del Módulo:</p>
                 <p>Ideal para actualizarte en tendencias internacionales y peinado elaborado. ALEH compartirá los tips y productos para impactar a tus clientes y resaltar tu perfil en redes sociales.</p>
-                <p>Nivel: Avanzado/Actualización</p>
-                <p>Materiales: Kit de peinado completo</p>
+                <p>Nivel: Avanzado, Actualización</p>
+                <p>Materiales Requeridos: Kit de peinado completo</p>
+                <p>Los precios no incluye materiales</p>
+
+                <p className="Demo-text"><strong>*DEMO MAKEUP GRATIS</strong></p>
+
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                <li><strong>Clase 12:</strong> <em> jueves 3 de octubre</em> - Redes e ilumicaión en linea.</li>
-                <li><strong>Clase 13:</strong> <em> martes 8 de octubre</em> - Brindal Hair + List de cejas.</li>
-                <li><strong>Clase 14:</strong> <em> jueves 10 de octubre</em> - Practica en modelo.</li>
-                <li><strong>Clase 15:</strong> <em> martes 15 de octubre</em> - Peinado alto Kim Kardashian.</li>
-                <li><strong>Clase 16:</strong> <em> jueves 17 de octubre</em> - Practica Kim Kardashian.</li>
-                <li><strong>Clase 17:</strong> <em> martes 22 de octubre</em> - Peinado novia + colocación de velo.</li>
-                <li><strong>Clase 18:</strong> <em> jueves 24 de octubre</em> - Evaluación final, novias, entrega de portafolio.</li>
+                <li><strong>Clase 11:</strong> <em> martes 8 de abril</em> - Redes e ilumicaión bridal hair + lift de cejas + velo</li>
+                <li><strong>Clase 12:</strong> <em> jueves 10 de abril</em> - Práctica en modelo</li>
+                <li><strong>SEMANA SANTA</strong> </li>
+                <li><strong>Clase 13:</strong> <em> martes 22 de abril</em> - Semirecogido con ondas retro</li>
+                <li><strong>Clase 14:</strong> <em> jueves 24 de abril</em> - Práctica en modelo</li>
+                <li><strong>Clase 15:</strong> <em> martes 29 de abril</em> - Cola alta con volumen</li>
+                <li><strong>Clase 16:</strong> <em> martes 6 de mayo</em> - Práctica modelo</li>
+                <li className="Wed-Class"><strong>Clase 17:</strong> <em> miercoles 7 de mayo 4 PM</em> - Peinado alto Kim Kardashian</li>
+                <li><strong>Clase 18:</strong> <em> jueves 8 de mayo</em> - Evaluación final, entrega de portafolio</li>
                 </ul>
                 <p className="class_links-module">Horario:</p>
                 <ul>
@@ -170,7 +176,7 @@ const Module_3Hair = () => {
                 <li>Martes y Jueves 6PM a 8PM</li>
                 </ul>
                 <p className="class_links-module">Precio por persona: Q4,000</p>
-                <p className="class_links-module">Inscripción: Q500</p>
+                <p className="class_links-module">Inscripción: Q200</p>
                 <p className="class_links-module">Selecciona una Clase:</p>
                     <ul className='button-schedule'>
                       <li>

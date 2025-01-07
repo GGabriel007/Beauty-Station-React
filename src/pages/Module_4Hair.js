@@ -159,7 +159,7 @@ const Module_4Hair = () => {
 
         <div className="information-module">
         <div className="top-information-module">
-            <h2 className="header-information-module">CURSO COMPLETO PEINADO</h2>
+            <h2 className="header-information-module">CURSO COMPLETO</h2>
         </div>
         <div className="mid-information-module">
             <div className="gallery-module">
@@ -179,28 +179,33 @@ const Module_4Hair = () => {
                 <p className="class_links-module">Informacion del Módulo:</p>
                 <p>Este es un curso completo de peinado profesional, donde hemos resumido para ti los tips, materiales y técnicas actuales a nivel mundial. No necesitas tener experiencia previa. Tendrás conocimientos y herramientas para poder emprender. Las clases son totalmente prácticas, por lo que el curso es un aprendizaje efectivo. Necesitarás cabezote y otros materiales; se dará asesoría como parte del curso. En algunas clases necesitarás modelo, bajo previo aviso. El curso se divide en 3 módulos.</p>
                 <p>Incluye: 3 módulos, Book "The Hairstyle guide" y certificado enmarcado.</p>
-                <p>Materiales: Plancha, tubo, cepillo, secadora, productos de cabello y Kit completo de peinado</p>
+                <p>Materiales Requeridos: Plancha, tubo, cepillo, secadora, productos de cabello y Kit completo de peinado</p>
+                <p>Los precios no incluye materiales</p>
+
+                <p className="Demo-text"><strong>*DEMO MAKEUP GRATIS</strong></p>
+
+
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                <li> <strong>Clase 1: </strong> <em>23 de julio </em>- Introducción, productos y cómo hacer waves con plancha.</li>
-                <li> <strong>Clase 2: </strong> <em>30 de julio </em>- Cómo lograr natural waves.</li>
-                <li> <strong>Clase 3: </strong> <em>6 de agosto </em>- Técnicas para crear glam waves.</li>
-                <li> <strong>Clase 4: </strong> <em>13 de agosto </em>- Estilo Old Hollywood waves y uso de velo.</li>
-                <li> <strong>Clase 5: </strong> <em>20 de agosto </em>- Trenzas en tendencias.</li>
-                <li> <strong>Clase 6: </strong> <em>27 de agosto </em>- Semirecogido con extenciones.</li>
-                <li> <strong>Clase 7: </strong> <em>3 de septiembre </em>- Cola baja.</li>
-                <li> <strong>Clase 8: </strong> <em>10 de septiembre </em>- Sleek Bun</li>
-                <li> <strong>Clase 9: </strong> <em>17 de septiembre </em>- Recogido clasico</li>
-                <li> <strong>Clase 10:</strong> <em> 24 de septiembre </em>- Recogido con volumen.</li>
-                <li> <strong>Clase 11:</strong> <em> 1 de octubre </em>- Evaluacion.</li>
-                <li> <strong>Clase 12:</strong> <em> jueves 3 de octubre </em>- Redes e ilumicaión en linea.</li>
-                <li> <strong>Clase 13:</strong> <em> martes 8 de octubre </em>- Brindal Hair + List de cejas.</li>
-                <li> <strong>Clase 14:</strong> <em> jueves 10 de octubre </em>- Practica en modelo.</li>
-                <li> <strong>Clase 15:</strong> <em> martes 15 de octubre </em>- Peinado alto Kim Kardashian.</li>
-                <li> <strong>Clase 16:</strong> <em> jueves 17 de octubre </em>- Practica Kim Kardashian.</li>
-                <li> <strong>Clase 17:</strong> <em> martes 22 de octubre </em>- Peinado novia + colocación de velo.</li>
-                <li> <strong>Clase 18:</strong> <em> jueves 24 de octubre </em>- Evaluación final, novias, entrega de portafolio.</li>
-
+                  <li><strong>Clase 1:</strong> <em>28 de enero</em> - Introducción, productos y cómo hacer waves con plancha</li>
+                  <li><strong>Clase 2:</strong> <em>4 de febrero</em> - Natural waves</li>
+                  <li><strong>Clase 3:</strong> <em>11 de febrero</em> - Glam waves</li>
+                  <li><strong>Clase 4:</strong> <em>18 de febrero </em> - Old Hollywood waves + velo</li>
+                  <li><strong>Clase 5:</strong> <em>25 de febrero </em>- Trenzas en tendencias</li>
+                  <li><strong>Clase 6:</strong> <em>4 de marzo </em>- Semirecogido</li>
+                  <li><strong>Clase 7:</strong> <em>11 de marzo </em>- Recogido clásico</li>
+                  <li><strong>Clase 8:</strong> <em>18 de marzo </em>- Recogido con volumen</li>
+                  <li><strong>Clase 9:</strong> <em>25 de marzo </em>- Cola Baja</li>
+                  <li><strong>Clase 10:</strong> <em>1 de abril </em>- Sleek Bun</li>
+                  <li><strong>Clase 11:</strong> <em> martes 8 de abril</em> - Redes e ilumicaión bridal hair + lift de cejas + velo</li>
+                  <li><strong>Clase 12:</strong> <em> jueves 10 de abril</em> - Práctica en modelo</li>
+                  <li><strong>SEMANA SANTA</strong> </li>
+                  <li><strong>Clase 13:</strong> <em> martes 22 de abril</em> - Semirecogido con ondas retro</li>
+                  <li><strong>Clase 14:</strong> <em> jueves 24 de abril</em> - Práctica en modelo</li>
+                  <li><strong>Clase 15:</strong> <em> martes 29 de abril</em> - Cola alta con volumen</li>
+                  <li><strong>Clase 16:</strong> <em> martes 6 de mayo</em> - Práctica modelo</li>
+                  <li className="Wed-Class"><strong>Clase 17:</strong> <em> miercoles 7 de mayo 4 PM</em> - Peinado alto Kim Kardashian</li>
+                  <li><strong>Clase 18:</strong> <em> jueves 8 de mayo</em> - Evaluación final, entrega de portafolio</li>
                 </ul>
                 <p className="class_links-module">Horario:</p>
                 <ul>
@@ -208,7 +213,7 @@ const Module_4Hair = () => {
                 <li>Martes y Jueves 6PM a 8PM</li>
                 </ul>
                 <p className="class_links-module">Precio por persona: Q8,500</p>
-                <p className="class_links-module">Inscripción: Q500</p>
+                <p className="class_links-module">Inscripción: Q200</p>
                 <p className="class_links-module">Selecciona una Clase:</p>
                     <ul className='button-schedule'>
                       <li>
@@ -246,3 +251,4 @@ const Module_4Hair = () => {
 };
 
 export default Module_4Hair;
+                            

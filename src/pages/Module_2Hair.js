@@ -126,7 +126,7 @@ const Module_2Hair = () => {
     <>
         <div className="information-module">
         <div className="top-information-module">
-            <h2 className="header-information-module">PEINADOS PARA EVENTOS</h2>
+            <h2 className="header-information-module">PEINADO PARA EVENTOS</h2>
         </div>
         <div className="mid-information-module">
             <div className="gallery-module">
@@ -146,16 +146,16 @@ const Module_2Hair = () => {
                     <p className="class_links-module">Informacion del Módulo:</p>
                     <p>Realza la belleza de tus clientes con diferentes técnicas de peinados, aprende diferentes tipos de trenzas, coletas, recogidos y semi recogidos</p>
                     <p>Nivel: Intermedio</p>
-                    <p>Materiales: Kit completo de peinado.</p>
+                    <p>Materiales Requeridos: Kit completo de peinado</p>
+                    <p>Los precios no incluye materiales</p>
                     <p className="class_links-module">Clases:</p>
                     <ul>
-                    <li> <strong>Clase 5: </strong> <em>20 de agosto </em>- Trenzas en tendencias.</li>
-                    <li> <strong>Clase 6: </strong> <em>27 de agosto </em>- Semirecogido con extenciones.</li>
-                    <li> <strong>Clase 7: </strong> <em>3 de septiembre </em>- Cola baja.</li>
-                    <li> <strong>Clase 8: </strong> <em>10 de septiembre </em>- Sleek Bun</li>
-                    <li> <strong>Clase 9: </strong> <em>17 de septiembre </em>- Recogido clasico</li>
-                    <li> <strong>Clase 10:</strong> <em> 24 de septiembre </em>- Recogido con volumen.</li>
-                    <li> <strong>Clase 11:</strong> <em> 1 de octubre </em>- Evaluacion.</li>
+                    <li> <strong>Clase 5: </strong> <em>25 de febrero </em>- Trenzas en tendencias</li>
+                    <li> <strong>Clase 6: </strong> <em>4 de marzo </em>- Semirecogido</li>
+                    <li> <strong>Clase 7: </strong> <em>11 de marzo </em>- Recogido clásico</li>
+                    <li> <strong>Clase 8: </strong> <em>18 de marzo </em>- Recogido con volumen</li>
+                    <li> <strong>Clase 9: </strong> <em>25 de marzo </em>- Cola Baja</li>
+                    <li> <strong>Clase 10:</strong> <em>1 de abril </em>- Sleek Bun</li>
                     </ul>
                     <p className="class_links-module">Horario:</p>
                     <ul>
@@ -163,7 +163,7 @@ const Module_2Hair = () => {
                       <li>Martes 6PM a 8PM</li>
                     </ul>
                     <p className="class_links-module">Precio por persona: Q3,500</p>
-                    <p className="class_links-module">Inscripción: Q500</p>
+                    <p className="class_links-module">Inscripción: Q200</p>
                     <p className="class_links-module">Selecciona una Clase:</p>
                     <ul className='button-schedule'>
                       <li>
