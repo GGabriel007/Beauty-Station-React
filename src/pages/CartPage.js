@@ -223,7 +223,7 @@ const CartPage = () => {
     const total = cartItems.reduce((total, item) => {
       return total + item.price;
     }, 0);
-    return includeKit ? total + 5900 + 500 : total + 500;
+    return includeKit ? total + 5900 + 200 : total + 200;
   };
 
   const handleRemoveKit = () => {
@@ -283,7 +283,7 @@ const CartPage = () => {
                 <div className='block'></div>
                 <div className="name-price">
                   <p className="item-name">Incripción</p>
-                  <div className="price">Q 500.00</div>
+                  <div className="price">Q 200.00</div>
                 </div>
                 <div className='block-remove'></div>
                 </div>
@@ -442,6 +442,10 @@ const CartPage = () => {
                     )}
                   </div>
                 </div>
+                <div className = "text-module-cart">
+                <p className="class_links-module">TÉRMINOS Y CONDICIONES</p>
+                <p>*Los pagos para este curso son necesarios para asegurar su cupo y no son reembolsables bajo ninguna circunstancia. En caso de cancelación o ausencia, incluyendo enfermedad, no se permite el canje por otros cursos, servicios o productos. La reposición de clases tiene un costo adicional y está sujeta a la disponibilidad del equipo. No se permiten acompañantes en clase, a menos que se solicite como modelo en días específicos. Es indispensable estar solvente para participar en las clases.</p>
+            </div>
               </form>
             </div>
           )}

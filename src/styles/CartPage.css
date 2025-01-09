@@ -195,7 +195,7 @@
 }
 
 .checkout-button:hover {
-    background-color: #45a049; /* Darker shade for hover */
+    background-color: #45a049; 
     color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 } 
@@ -259,6 +259,7 @@
   .checkout-button:hover {
     background-color: #45a049;
   }
+
 /* Check out notification */ 
 
 .browse-button{
@@ -298,18 +299,27 @@
 
 .input-icon {
     position: absolute;
-    right: 10px; /* Adjust this value based on your design */
+    right: 10px; 
     bottom: 20px;
-    width: 115px; /* Adjust the size of the icon */
+    width: 115px; 
     height: 25px;
     opacity: 0.45; 
-    transition: opacity 0.5s ease-in-out; /* Transition for fade effect */
+    transition: opacity 0.5s ease-in-out; 
   }
 
+
 /* Fade in the image when input is focused */
+
 .input-container input:focus + .input-icon {
-    opacity: 1; /* Fully show the image */
+    opacity: 1; 
   }
+
+.text-module-cart {
+    font-size: 20px;
+    text-align: left;
+    line-height: 1.4;
+
+}
 
 /* Media query for mobile devices */
 @media (max-width: 1019px) {

@@ -29,14 +29,14 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 400px;
+    height: 250px;
     background: rgba(0, 0, 0, 0.375); /* Adjust opacity as needed */
 }
 
 .centered-text-contact {
     position: absolute;
     color: white;
-    font-size: 46px;
+    font-size: 80px;
     font-family: "Raleway", sans-serif;
     font-weight: 700;
     font-style: normal;
@@ -133,7 +133,49 @@
     transition: transform 0.3s;
   }
 
+/* Second Centered Image */
 
+.second-center-image {
+    position: relative;
+    width: 100%; /* Adjust as needed */
+    max-width: 500px; /* Example max width */
+    margin: 0 auto; /* Center the container horizontally */
+}
+  
+.second-background-imagen-contact {
+    width: 100%;
+    height: auto;
+    display: block; /* Removes default inline spacing */
+}
+  
+.second-center-button {
+    position: absolute;
+    bottom: 22%; /* Distance from the bottom of the image */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #00000034; /* Button background color */
+    color: #ffffff; /* Text color */
+    padding: 10px 150px;
+    font-size: 16px;
+    text-align: center;
+    text-transform: uppercase;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+    font-family: Arial, sans-serif; /* Example font */
+    border-color: white;
+    border: solid;
+    font-size: 25px;
+}
+  
+.second-center-button:hover {
+    background-color: #ed93b4; /* Darker shade on hover */
+    transform: translateX(-50%) scale(1.05);
+}
+  
+.button-link {
+    text-decoration: none; /* Removes underline from the link */
+}
 
 @media (max-width: 1019px) {
     /*Content*/
