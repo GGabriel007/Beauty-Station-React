@@ -210,6 +210,7 @@ const Module_2Hair = () => {
                     </ul>
                     <p className="class_links-module">Precio por persona: Q3,500</p>
                     <p className="class_links-module">Inscripción: Q200</p>
+                    <p className="Wed-Class"> HASTA 3 CUOTAS SIN RECARGO</p>
                     <p className="class_links-module">Selecciona una Clase:</p>
                     <ul className='button-schedule'>
                       <li>
@@ -232,10 +233,15 @@ const Module_2Hair = () => {
             <div className="second-image-module">
             <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/Hair/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos"/> 
             </div>
+
+
+            { /*
             <div className = "text-module">
                 <p className="class_links-module">TÉRMINOS Y CONDICIONES</p>
                 <p>*Los pagos para este curso son necesarios para asegurar su cupo y no son reembolsables bajo ninguna circunstancia. En caso de cancelación o ausencia, incluyendo enfermedad, no se permite el canje por otros cursos, servicios o productos. La reposición de clases tiene un costo adicional y está sujeta a la disponibilidad del equipo. No se permiten acompañantes en clase, a menos que se solicite como modelo en días específicos. Es indispensable estar solvente para participar en las clases.</p>
             </div>
+
+            */}
             <div className="second-image-module">
                 <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/Hair/imagen_module_3Hair.jpeg`} alt="Informacion de Cursos"/> 
             </div>
