@@ -7,12 +7,116 @@ import { useLocation } from 'react-router-dom';
 import '../styles/CartPage.css';
 import { Link } from 'react-router-dom';
 import MyComponent from '../context/MyComponent';
-import { showRecaptcha } from '../context/recaptchaHandler';
+
 
 
 const CartPage = () => {
 
+  const [isCaptchaValid, setIsCaptchaValid] = useState(false);
 
+  
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isCaptchaValid) {
+      console.log("Formulario enviado exitosamente");
+  
+    try {
+      // Pre-check for seat availability
+      for (const item of cartItems) {
+        const moduleId = moduleIds[item.name];
+        if (moduleId) {
+          const moduleRef = doc(db, "Modulos", moduleId);
+          const docSnap = await getDoc(moduleRef);
+  
+          if (!docSnap.exists() || docSnap.data()[item.name] <= 0) {
+            throw new Error(`No hay más asientos disponibles para ${item.name}.`);
+          }
+        }
+      }
+  
+      // Check availability of "Kit de pieles perfectas"
+      if (includeKit) {
+        const kitRef = doc(db, "Modulos", moduleIds['Kit de pieles perfectas']);
+        const kitSnap = await getDoc(kitRef);
+  
+        if (!kitSnap.exists() || kitSnap.data()['Kit de pieles perfectas'] <= 0) {
+          throw new Error(`No hay más kits disponibles.`);
+        }
+      }
+  
+      // Proceed with the seat update if all items have available seats
+      for (const item of cartItems) {
+        const moduleId = moduleIds[item.name];
+        if (moduleId) {
+          const moduleRef = doc(db, "Modulos", moduleId);
+          await updateDoc(moduleRef, {
+            [item.name]: increment(-1),
+          });
+        }
+      }
+  
+      // Update the stock of the "Kit de pieles perfectas" if selected
+      if (includeKit) {
+        const kitRef = doc(db, "Modulos", moduleIds['Kit de pieles perfectas']);
+        await updateDoc(kitRef, {
+          'Kit de pieles perfectas': increment(-1),
+        });
+      }
+  
+      // Prepare form data
+      const formData = new URLSearchParams();
+      formData.append('emailAddress', document.querySelector('[name="emailAddress"]').value);
+      formData.append('entry.1295397219', document.querySelector('[name="entry.1295397219"]').value);
+      formData.append('entry.1830117511', document.querySelector('[name="entry.1830117511"]').value);
+      formData.append('entry.637554253', document.querySelector('[name="entry.637554253"]').value);
+      formData.append('entry.1913110792', document.querySelector('[name="entry.1913110792"]').value);
+  
+      cartItems.forEach((item) => {
+        formData.append('entry.1855368963', item.name);
+      });
+  
+      // Append "Kit de pieles perfectas" if included
+      if (includeKit) {
+        formData.append('entry.1855368963', 'Kit de pieles perfectas');
+      }
+  
+      // Submit form data using fetch
+      const response = await fetch(process.env.REACT_APP_GOOGLE_FORM_ACTION_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formData.toString(),
+      });
+  
+      if (response.ok) {
+        clearCart();
+        setPurchaseSuccess(true);
+        setNotification("¡Compra completada exitosamente!");
+      } else {
+        throw new Error("Hubo un error al enviar el formulario.");
+      }
+    } catch (error) {
+      // Handle fetch-specific and other errors
+      if (error.message === 'Failed to fetch') {
+        clearCart();
+        setPurchaseSuccess(true);
+        setNotification("¡Compra completada exitosamente!");
+      } else {
+        setNotification("Hubo un error al procesar tu compra. " + error.message);
+      }
+    }
+  }   else {
+    alert("Por favor, valida el reCAPTCHA antes de enviar el formulario.");
+  }
+  };
+
+  const handleCaptchaSuccess = () => {
+    setIsCaptchaValid(true);
+
+  };
 
   const location = useLocation();
     
@@ -88,98 +192,7 @@ const CartPage = () => {
 
   }, []);
 
-  const handleCheckout = async (event) => {
-    event.preventDefault();
   
-    try {
-      // Pre-check for seat availability
-      for (const item of cartItems) {
-        const moduleId = moduleIds[item.name];
-        if (moduleId) {
-          const moduleRef = doc(db, "Modulos", moduleId);
-          const docSnap = await getDoc(moduleRef);
-  
-          if (!docSnap.exists() || docSnap.data()[item.name] <= 0) {
-            throw new Error(`No hay más asientos disponibles para ${item.name}.`);
-          }
-        }
-      }
-  
-      // Check availability of "Kit de pieles perfectas"
-      if (includeKit) {
-        const kitRef = doc(db, "Modulos", moduleIds['Kit de pieles perfectas']);
-        const kitSnap = await getDoc(kitRef);
-  
-        if (!kitSnap.exists() || kitSnap.data()['Kit de pieles perfectas'] <= 0) {
-          throw new Error(`No hay más kits disponibles.`);
-        }
-      }
-  
-      // Proceed with the seat update if all items have available seats
-      for (const item of cartItems) {
-        const moduleId = moduleIds[item.name];
-        if (moduleId) {
-          const moduleRef = doc(db, "Modulos", moduleId);
-          await updateDoc(moduleRef, {
-            [item.name]: increment(-1)
-          });
-        }
-      }
-  
-      // Update the stock of the "Kit de pieles perfectas" if selected
-      if (includeKit) {
-        const kitRef = doc(db, "Modulos", moduleIds['Kit de pieles perfectas']);
-        await updateDoc(kitRef, {
-          'Kit de pieles perfectas': increment(-1)
-        });
-      }
-
-      // Prepare form data
-      const formData = new URLSearchParams();
-      formData.append('emailAddress', document.querySelector('[name="emailAddress"]').value);
-      formData.append('entry.1295397219', document.querySelector('[name="entry.1295397219"]').value);
-      formData.append('entry.1830117511', document.querySelector('[name="entry.1830117511"]').value);
-      formData.append('entry.637554253', document.querySelector('[name="entry.637554253"]').value);
-      formData.append('entry.1913110792', document.querySelector('[name="entry.1913110792"]').value);
-
-      cartItems.forEach(item => {
-        formData.append('entry.1855368963', item.name);
-      });
-
-      // Append "Kit de pieles perfectas" if included
-      if (includeKit) {
-        formData.append('entry.1855368963', 'Kit de pieles perfectas');
-      }
-
-      // Submit form data using fetch
-    const response = await fetch(process.env.REACT_APP_GOOGLE_FORM_ACTION_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: formData.toString()
-    });
-
-
-    if (response.ok) {
-      clearCart();
-      setPurchaseSuccess(true);
-      setNotification("¡Compra completada exitosamente!");
-    } else {
-      throw new Error("Hubo un error al enviar el formulario.");
-    }
-  } catch (error) {
-    // Check if the error message is "Failed to fetch"
-    if (error.message === 'Failed to fetch') {
-      clearCart();
-      setPurchaseSuccess(true);
-      setNotification("¡Compra completada exitosamente!");
-    } else {
-      // Handle other errors
-      setNotification("Hubo un error al procesar tu compra. " + error.message);
-    }
-  }
-};
 
   const handleNameChange = (e) => {
     const {value} = e.target;
@@ -298,7 +311,7 @@ const CartPage = () => {
                   <div className="total-number">Q {getTotalPrice()}.00</div>
                 </div>
               </div>
-              <form id="registration-form"  method="post" className='form-from-user' onSubmit={handleCheckout}>
+              <form id="registration-form"  method="post" className='form-from-user' onSubmit={handleSubmit}>
                 <div className="information-User">
                   <p className="title-form">Formulario de inscripción 2024</p>
                   <div className="form-user">
@@ -444,11 +457,18 @@ const CartPage = () => {
                     )}
                     {cartItems.length > 0 && (
                       <div>
-                        <h1>Mi aplicación con reCAPTCHA</h1>
-                        <MyComponent />
-                        <button className="checkout-button" type="submit" value="Submit">
-                          Pagar
-                        </button>
+                        
+                        <MyComponent onCaptchaSuccess={handleCaptchaSuccess} />
+                        
+                          <button
+                            className="checkout-button"
+                            type="submit"
+                            value="Submit"
+                            disabled={!isCaptchaValid}
+                          >
+                            Pagar
+                          </button>
+                        
                       </div>
                     )}
                   </div>
