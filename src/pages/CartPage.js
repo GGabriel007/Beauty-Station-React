@@ -6,8 +6,13 @@ import { doc, updateDoc, increment, getDoc } from 'firebase/firestore';
 import { useLocation } from 'react-router-dom';
 import '../styles/CartPage.css';
 import { Link } from 'react-router-dom';
+import MyComponent from '../context/MyComponent';
+import { showRecaptcha } from '../context/recaptchaHandler';
+
 
 const CartPage = () => {
+
+
 
   const location = useLocation();
     
@@ -438,7 +443,13 @@ const CartPage = () => {
                       />
                     )}
                     {cartItems.length > 0 && (
-                      <button className="checkout-button" type="submit" value = "Submit">Pagar</button>
+                      <div>
+                        <h1>Mi aplicación con reCAPTCHA</h1>
+                        <MyComponent />
+                        <button className="checkout-button" type="submit" value="Submit">
+                          Pagar
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>
