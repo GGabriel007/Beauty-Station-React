@@ -10,12 +10,12 @@ const MyComponent = ({ onCaptchaSuccess }) => {
     if (!document.getElementById(scriptId)) {
       const script = document.createElement("script");
       script.id = scriptId;
-      script.src = "https://www.google.com/recaptcha/api.js?render=6Lc0H74qAAAAAME8A4eQuydp-8ObZWE3mSviLq2c";
+      script.src = process.env.REACT_APP_GOOGLE_RECAPTCHA_URL;
       script.async = true;
       script.defer = true;
 
       script.onload = () => {
-        console.log("reCAPTCHA script loaded.");
+        //console.log("reCAPTCHA script loaded.");
         initializeRecaptcha();
       };
 
@@ -37,11 +37,11 @@ const MyComponent = ({ onCaptchaSuccess }) => {
   const initializeRecaptcha = () => {
     if (window.grecaptcha) {
       window.grecaptcha.ready(() => {
-        console.log("reCAPTCHA is ready.");
+        //console.log("reCAPTCHA is ready.");
         executeRecaptcha();
       });
     } else {
-      console.error("reCAPTCHA not loaded. Check your script.");
+      //console.error("reCAPTCHA not loaded. Check your script.");
     }
   };
 
@@ -49,7 +49,7 @@ const MyComponent = ({ onCaptchaSuccess }) => {
     window.grecaptcha
       .execute("6Lc0H74qAAAAAME8A4eQuydp-8ObZWE3mSviLq2c", { action: "homepage" })
       .then((token) => {
-        console.log("Generated token:", token);
+        //console.log("Generated token:", token);
         setRecaptchaToken(token); // Store the token in state
         // Optionally, send the token to your backend for verification
         if (onCaptchaSuccess) {
@@ -57,7 +57,7 @@ const MyComponent = ({ onCaptchaSuccess }) => {
         }
       })
       .catch((error) => {
-        console.error("Error executing reCAPTCHA:", error);
+        //console.error("Error executing reCAPTCHA:", error);
       });
   };
 

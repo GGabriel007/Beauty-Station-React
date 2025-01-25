@@ -5,6 +5,18 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#ffffff" />
+    <meta http-equiv="Content-Security-Policy" content="
+    frame-src 'self' https://www.google.com https://www.gstatic.com;
+    script-src 'self' https://www.google.com https://www.gstatic.com https://www.googleapis.com https://firestore.googleapis.com; 
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+    font-src 'self' https://fonts.gstatic.com; 
+    img-src 'self' https://www.google.com; 
+    object-src 'none';
+    connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://www.google.com https://www.gstatic.com https://docs.google.com https://docs.google.com/forms/u/0/d/e/;
+    default-src 'self';
+">
+    
+    
     <meta
       name="description"
       content="Beauty Station Website"

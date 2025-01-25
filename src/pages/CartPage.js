@@ -7,6 +7,9 @@ import { useLocation } from 'react-router-dom';
 import '../styles/CartPage.css';
 import { Link } from 'react-router-dom';
 import MyComponent from '../context/MyComponent';
+import DOMPurify from 'dompurify';
+import CryptoJS from 'crypto-js';
+
 
 
 
@@ -14,15 +17,57 @@ const CartPage = () => {
 
   const [isCaptchaValid, setIsCaptchaValid] = useState(false);
 
-  
+  const handleCaptchaSuccess = () => {
+    setIsCaptchaValid(true);
 
+  };
+
+  const renderItemName = (name) => {
+    return DOMPurify.sanitize(name);  // Sanitize before rendering
+  };
+
+  const [formData, setFormData] = useState({
+
+    'entry.1295397219' : '',
+    'entry.1830117511': '',
+     cardNumber: '',
+     expiryDate: '',
+     cvv: '',
+     name: '',
+     'entry.1913110792': ''
+   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isCaptchaValid) {
-      console.log("Formulario enviado exitosamente");
-  
     try {
+
+      // Encrypt sensitive information
+      const secretKey = process.env.REACT_APP_SECRET_KEY; 
+      const encryptedCardNumber = CryptoJS.AES.encrypt(formData.cardNumber, secretKey).toString();
+      const encryptedExpiryDate = CryptoJS.AES.encrypt(formData.expiryDate, secretKey).toString();
+      const encryptedCvv = CryptoJS.AES.encrypt(formData.cvv, secretKey).toString();
+      const encryptedDPI = CryptoJS.AES.encrypt(formData['entry.1295397219'], secretKey).toString();
+
+      // Prepare form data
+      const urlEncodedformData = new URLSearchParams();
+      urlEncodedformData.append('emailAddress', document.querySelector('[name="emailAddress"]').value);
+      urlEncodedformData.append('entry.1295397219', document.querySelector('[name="entry.1295397219"]').value);
+      urlEncodedformData.append('entry.1830117511', document.querySelector('[name="entry.1830117511"]').value);
+      urlEncodedformData.append('entry.637554253', document.querySelector('[name="entry.637554253"]').value);
+      urlEncodedformData.append('entry.1913110792', document.querySelector('[name="entry.1913110792"]').value);
+
+
+      cartItems.forEach((item) => {
+        urlEncodedformData.append('entry.1855368963', item.name);
+      });
+
+      // Append "Kit de pieles perfectas" if included
+      if (includeKit) {
+        urlEncodedformData.append('entry.1855368963', 'Kit de pieles perfectas');
+      }
+
+
       // Pre-check for seat availability
       for (const item of cartItems) {
         const moduleId = moduleIds[item.name];
@@ -36,6 +81,8 @@ const CartPage = () => {
         }
       }
   
+      
+
       // Check availability of "Kit de pieles perfectas"
       if (includeKit) {
         const kitRef = doc(db, "Modulos", moduleIds['Kit de pieles perfectas']);
@@ -49,6 +96,13 @@ const CartPage = () => {
       // Proceed with the seat update if all items have available seats
       for (const item of cartItems) {
         const moduleId = moduleIds[item.name];
+        // Validate the moduleId before proceeding
+      if (!Object.values(moduleIds).includes(moduleId)) {
+        throw new Error("Invalid module ID");
+      }
+
+
+
         if (moduleId) {
           const moduleRef = doc(db, "Modulos", moduleId);
           await updateDoc(moduleRef, {
@@ -65,22 +119,9 @@ const CartPage = () => {
         });
       }
   
-      // Prepare form data
-      const formData = new URLSearchParams();
-      formData.append('emailAddress', document.querySelector('[name="emailAddress"]').value);
-      formData.append('entry.1295397219', document.querySelector('[name="entry.1295397219"]').value);
-      formData.append('entry.1830117511', document.querySelector('[name="entry.1830117511"]').value);
-      formData.append('entry.637554253', document.querySelector('[name="entry.637554253"]').value);
-      formData.append('entry.1913110792', document.querySelector('[name="entry.1913110792"]').value);
+      
   
-      cartItems.forEach((item) => {
-        formData.append('entry.1855368963', item.name);
-      });
-  
-      // Append "Kit de pieles perfectas" if included
-      if (includeKit) {
-        formData.append('entry.1855368963', 'Kit de pieles perfectas');
-      }
+      
   
       // Submit form data using fetch
       const response = await fetch(process.env.REACT_APP_GOOGLE_FORM_ACTION_URL, {
@@ -88,24 +129,17 @@ const CartPage = () => {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: formData.toString(),
+        body: urlEncodedformData.toString(),
       });
   
-      if (response.ok) {
-        clearCart();
-        setPurchaseSuccess(true);
-        setNotification("¡Compra completada exitosamente!");
-      } else {
-        throw new Error("Hubo un error al enviar el formulario.");
-      }
     } catch (error) {
       // Handle fetch-specific and other errors
       if (error.message === 'Failed to fetch') {
         clearCart();
         setPurchaseSuccess(true);
-        setNotification("¡Compra completada exitosamente!");
+        setNotification(DOMPurify.sanitize("¡Compra completada exitosamente!"));
       } else {
-        setNotification("Hubo un error al procesar tu compra. " + error.message);
+        setNotification(DOMPurify.sanitize("Hubo un error al procesar tu compra. " + error.message));
       }
     }
   }   else {
@@ -113,10 +147,7 @@ const CartPage = () => {
   }
   };
 
-  const handleCaptchaSuccess = () => {
-    setIsCaptchaValid(true);
-
-  };
+  
 
   const location = useLocation();
     
@@ -128,16 +159,7 @@ const CartPage = () => {
   const { cartItems, removeFromCart, clearCart, includeKit, setIncludeKit } = useContext(CartContext);
   const [notification, setNotification] = useState("");
   const [purchaseSuccess, setPurchaseSuccess] = useState(false);
-  const [formData, setFormData] = useState({
 
-   'entry.1295397219' : '',
-   'entry.1830117511': '',
-    cardNumber: '',
-    expiryDate: '',
-    cvv: '',
-    name: '',
-    'entry.1913110792': ''
-  });
   
   const moduleIds = {
     'Master Waves 2PM a 4PM': '1Qk3ZTR8Mu9cvxdGGVYER',
@@ -204,8 +226,10 @@ const CartPage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // Format the inputs based on the name
-    let formattedValue = value;
+    let sanitizedValue = DOMPurify.sanitize(value); // Sanitize input value
+    let formattedValue = sanitizedValue; 
+
+
 
     switch (name) {
 
@@ -440,13 +464,14 @@ const CartPage = () => {
                     
                   {/* Add hidden inputs for each cart item */}
                   {cartItems.map((item, index) => (
+                    <div key={index}>
                       <input
-                        key={index}
                         type="hidden"
                         name="entry.1855368963"
                         value={item.name}
-                      />
-                    ))}
+                      /> {renderItemName(item.name) && null}
+                    </div>
+                  ))}
                     {/* Add hidden input if "Kit de pieles perfectas" is included */}
                     {includeKit && (
                       <input

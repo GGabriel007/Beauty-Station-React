@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 
 const BeautySDomicilio = () => {
   const location = useLocation();
-    
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
@@ -27,22 +27,15 @@ const BeautySDomicilio = () => {
     }
   };
 
-  const handleAddressChange = (e) => {
-    const { value } = e.target;
-    const cleanedValue = value.replace(/[^a-zA-Z0-9,.\- ]/g, ''); // Allow only letters, numbers, commas, periods, and spaces
-    setFormData({ ...formData, 'entry.1332809338': cleanedValue });
-  };
+  const ALLOWED_CHARACTERS = /^[a-zA-Z0-9\s,.\-]*$/; // Letters, numbers, commas, periods, spaces, hyphens
 
-  const handleServicesChange = (e) => {
+  const handleGenericChange = (e, fieldName) => {
     const { value } = e.target;
-    const cleanedValue = value.replace(/[^a-zA-Z0-9,.\- ]/g, ''); // Allow only letters, numbers, commas, periods, and spaces
-    setFormData({ ...formData, 'entry.1887509461': cleanedValue });
-  };
-
-  const handleNotesChange = (e) => {
-    const { value } = e.target;
-    const cleanedValue = value.replace(/[^a-zA-Z0-9,.\- ]/g, ''); // Allow only letters, numbers, commas, periods, and spaces
-    setFormData({ ...formData, 'entry.1489137981': cleanedValue });
+    if (!ALLOWED_CHARACTERS.test(value)) {
+      alert("Por favor solamente utilice, letras, números, comas, puntos y guiones.");
+    } else {
+      setFormData({ ...formData, [fieldName]: value });
+    }
   };
 
   const handleChange = (e) => {
@@ -114,7 +107,7 @@ const BeautySDomicilio = () => {
               id="address"
               name="entry.1332809338"
               value={formData['entry.1332809338']}
-              onChange={handleAddressChange}
+              onChange={(e) => handleGenericChange(e, 'entry.1332809338')}
               required
             ></textarea><br />
 
@@ -127,7 +120,7 @@ const BeautySDomicilio = () => {
              id="services" 
              name="entry.1887509461" 
              value={formData['entry.1887509461']}
-             onChange={handleServicesChange}
+             onChange={(e) => handleGenericChange(e, 'entry.1887509461')}
              required 
              /><br />
 
@@ -143,7 +136,7 @@ const BeautySDomicilio = () => {
             id="text" 
             name="entry.1489137981" 
             value={formData['entry.1489137981']}
-            onChange={handleNotesChange}
+            onChange={(e) => handleGenericChange(e, 'entry.1489137981')}
             required
             ></textarea>
 
