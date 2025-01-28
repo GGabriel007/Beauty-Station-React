@@ -2,13 +2,17 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { CartContext } from '../context/CartContext';
 import { db } from '../config/firestore';
-import { doc, updateDoc, increment, getDoc } from 'firebase/firestore'; 
+import { doc, updateDoc, increment, getDoc, addDoc, collection } from 'firebase/firestore'; 
 import { useLocation } from 'react-router-dom';
 import '../styles/CartPage.css';
 import { Link } from 'react-router-dom';
 import MyComponent from '../context/MyComponent';
 import DOMPurify from 'dompurify';
 import CryptoJS from 'crypto-js';
+import { validateCardNumber, validateExpiryDate, validateCVV } from '../utils/validation';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Firebase Storage imports
+import { storage } from '../config/firestore' // Firebase Storage Configuration
+
 
 
 
@@ -28,8 +32,9 @@ const CartPage = () => {
 
   const [formData, setFormData] = useState({
 
+    'emailAddress' : '',
     'entry.1295397219' : '',
-    'entry.1830117511': '',
+    'entry.1830117511' : '',
      cardNumber: '',
      expiryDate: '',
      cvv: '',
@@ -37,10 +42,48 @@ const CartPage = () => {
      'entry.1913110792': ''
    });
 
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+
+    // Validate form fields
+    if (!validateCardNumber(formData.cardNumber)) {
+      setNotificationError(DOMPurify.sanitize("¡Tarjeta inválida!"));
+      return;
+    }
+
+
+    // Validate expiration date
+  const expiryDateError = validateExpiryDate(formData.expiryDate);
+  if (expiryDateError) {
+    setNotificationError(DOMPurify.sanitize(expiryDateError));
+    return;
+  }
+
+
     if (isCaptchaValid) {
     try {
+
+
+      // 2. Prepare data to save in Firestore
+      const paymentData = {
+        email: DOMPurify.sanitize(formData['emailAddress']),
+        DPI: DOMPurify.sanitize(formData['entry.1295397219']),
+        phoneNumber: DOMPurify.sanitize(formData['entry.1830117511']),
+        cardLast4Digits: DOMPurify.sanitize(formData.cardNumber.slice(-4)),
+        Name: DOMPurify.sanitize(formData.name),
+        Items: DOMPurify.sanitize(cartItems.map((item) => item.name)),
+        IncludeKit: DOMPurify.sanitize(includeKit),
+        TotalPrice: DOMPurify.sanitize(getTotalPrice()),
+        Timestamp: DOMPurify.sanitize(new Date()),
+      };
+
+      // 3. Save the data to Firestore
+      const docRef = await addDoc(collection(db, 'Payments'), paymentData);
+      console.log('Payment Record created with ID:', docRef.id);
+
 
       // Encrypt sensitive information
       const secretKey = process.env.REACT_APP_SECRET_KEY; 
@@ -74,7 +117,7 @@ const CartPage = () => {
         if (moduleId) {
           const moduleRef = doc(db, "Modulos", moduleId);
           const docSnap = await getDoc(moduleRef);
-  
+      
           if (!docSnap.exists() || docSnap.data()[item.name] <= 0) {
             throw new Error(`No hay más asientos disponibles para ${item.name}.`);
           }
@@ -139,7 +182,7 @@ const CartPage = () => {
         setPurchaseSuccess(true);
         setNotification(DOMPurify.sanitize("¡Compra completada exitosamente!"));
       } else {
-        setNotification(DOMPurify.sanitize("Hubo un error al procesar tu compra. " + error.message));
+        setNotificationError(DOMPurify.sanitize("Hubo un error al procesar tu compra. " + error.message));
       }
     }
   }   else {
@@ -158,6 +201,7 @@ const CartPage = () => {
 
   const { cartItems, removeFromCart, clearCart, includeKit, setIncludeKit } = useContext(CartContext);
   const [notification, setNotification] = useState("");
+  const [notificationError, setNotificationError] = useState("");
   const [purchaseSuccess, setPurchaseSuccess] = useState(false);
 
   
@@ -233,27 +277,40 @@ const CartPage = () => {
 
     switch (name) {
 
+      case 'emailAddress': 
+          // Allow only valid email characters (letters, numbers, dots, hyphens, underscores, and @)
+          formattedValue = value.replace(/[^a-zA-Z0-9.@_-]/g, '');
+          break;
       case 'entry.1295397219':
-        formattedValue = value.replace(/\D/g, ''); // Allow only digits
-        break;
-      case "entry.1830117511":
-        formattedValue = value.replace(/\D/g, '').replace(/(\d{4})(?=\d)/, '$1-').slice(0, 9); // Format as XXXX-XXXX and limit to 8 digits
-        break;
+          formattedValue = value.replace(/\D/g, ''); // Allow only digits
+          break;
+      case 'entry.1830117511':
+          formattedValue = value.replace(/\D/g, '').replace(/(\d{4})(?=\d)/, '$1-').slice(0, 9); // Format as XXXX-XXXX and limit to 8 digits
+          break;
       case 'cardNumber':
-        formattedValue = value.replace(/\D/g, '').replace(/(\d{4})(?=\d)/g, '$1-').slice(0, 19); // Format as XXXX-XXXX-XXXX-XXXX
-        break;
+          formattedValue = value.replace(/\D/g, '').replace(/(\d{4})(?=\d)/g, '$1-').slice(0, 19); // Format as XXXX-XXXX-XXXX-XXXX
+          break;
       case 'expiryDate':
-        formattedValue = value.replace(/\D/g, '').replace(/(\d{2})(?=\d)/, '$1/').slice(0, 5); // Format as XX/XX
-        break;
-      case 'cvv':
-        formattedValue = value.replace(/\D/g, '').slice(0, 3); // Allow only 3 digits
-        break;
-      case "entry.1913110792":
-        formattedValue = value.replace(/[^0-9CcFf]/g, ''); // Allow digits and letters C, c, F, f
-        break;
+          formattedValue = value.replace(/\D/g, '').replace(/(\d{2})(?=\d)/, '$1/').slice(0, 5); // Format as XX/XX
+          break;
+          case 'cvv':
+            formattedValue = value.replace(/\D/g, ''); // Allow only digits
+            if (formattedValue.length > 4) {
+              formattedValue = formattedValue.slice(0, 4); // Limit to 4 digits
+            }
+            // Show a warning if CVV length is invalid
+            if (formattedValue.length > 0 && (formattedValue.length < 3 || formattedValue.length > 4)) {
+              setNotificationError(DOMPurify.sanitize("El CVV debe tener entre 3 y 4 dígitos."));
+            } else {
+              setNotificationError(''); // Clear error if CVV length is valid
+            }
+            break;
+      case 'entry.1913110792':
+          formattedValue = value.replace(/[^0-9CcFf]/g, ''); // Allow digits and letters C, c, F, f
+          break;
       default:
-        break;
-      }
+          break;
+  }
 
       setFormData ({
         ...formData,
@@ -278,7 +335,7 @@ const CartPage = () => {
 
   <div className="information-cart">
     <div className="cart-page">
-      {notification && <p className="notification">{notification}</p>}
+    {notification && <p className="notification">{notification}</p>}
       {purchaseSuccess ? (
         <div>
           <p>¡Gracias por su compra!</p>
@@ -339,9 +396,17 @@ const CartPage = () => {
                 <div className="information-User">
                   <p className="title-form">Formulario de inscripción 2024</p>
                   <div className="form-user">
-                    <label htmlFor="email" className='form-label'>Email:*</label>
-                    
-                    <input type="email" id="email" name="emailAddress" placeholder="email@domain.com" required />
+                  <label htmlFor="email" className="form-label">Email:*</label>
+                    <input 
+                        pattern="^a-zA-Z0-9.@_-" 
+                        type="email" 
+                        id="email" 
+                        name="emailAddress" 
+                        placeholder="email@domain.com"
+                        value={formData['emailAddress']}
+                        onChange={handleChange} 
+                        required 
+                    />
                     
                     <label htmlFor="name" className='form-label'>Nombre Completo:*</label>
                     
@@ -358,7 +423,13 @@ const CartPage = () => {
                     
                     <label htmlFor="instagram" className='form-label'>Usuario de Instagram o Facebook:*</label>
                     
-                    <input pattern="^[a-zA-Z0-9._]+$" type="text" id="instagram" name="entry.1580443907" title="Sólo puede tener letras, números, puntos y guiones bajos."  />
+                    <input 
+                    pattern="^[a-zA-Z0-9._]+$" 
+                    type="text" 
+                    id="instagram" 
+                    name="entry.1580443907" 
+                    title="Sólo puede tener letras, números, puntos y guiones bajos."  
+                    />
                     
                     <label htmlFor="identification" className='form-label'>
                       Número de Identificación:* <div className="second-Text">(DPI o número de Pasaporte)</div>
@@ -457,11 +528,13 @@ const CartPage = () => {
                       name="cvv"
                       value={formData.cvv}
                       onChange={handleChange}
-                      maxLength="3"
+                      maxLength="4"
                       placeholder="321"
                       required
                   />
                     
+                    {notificationError && <p className="error-notification">{notificationError}</p>}
+
                   {/* Add hidden inputs for each cart item */}
                   {cartItems.map((item, index) => (
                     <div key={index}>
