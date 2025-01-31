@@ -11,6 +11,7 @@ const BeautySDomicilio = () => {
   }, [location]);
 
   const [formData, setFormData] = useState({
+    'emailAddress' : '',
     'entry.289998864': '',
     'entry.1968968654': '',
     'entry.1332809338': '',
@@ -43,8 +44,12 @@ const BeautySDomicilio = () => {
     let formattedValue = value;
 
     switch (name) {
+      case 'emailAddress': 
+        // Allow only valid email characters (letters, numbers, dots, hyphens, underscores, and @)
+        formattedValue = value.replace(/[^a-zA-Z0-9.@_-]/g, '');
+        break;
       case 'entry.1968968654':
-        formattedValue = value.replace(/\D/g, '').replace(/(\d{4})(?=\d)/g, '$1-').slice(0, 9); // Format as XXXX-XXXX and limit to 8 digits
+        formattedValue = value.replace(/\D/g, ''); // Allow only digits
         break;
       default:
         break;
@@ -67,8 +72,16 @@ const BeautySDomicilio = () => {
             action="https://docs.google.com/forms/u/0/d/e/1FAIpQLScEDYWXQs7zn4kFG1GDCVsP9Xnq7dSpoKEP1fN1ikhiW2H5IQ/formResponse"
             method="post"
           >
-            <label htmlFor="email">Email:*</label>
-            <input type="email" id="email" name="emailAddress" placeholder="email@domain.com" required /> <br />
+            <label htmlFor="email" className="form-label">Email:*</label>
+              <input  
+                  type="email" 
+                  id="email" 
+                  name="emailAddress" 
+                  placeholder="email@domain.com"
+                  value={formData['emailAddress']}
+                  onChange={handleChange}  
+                  required 
+              />
 
             <label htmlFor="name">Nombre Completo:*</label>
             <input
@@ -89,7 +102,6 @@ const BeautySDomicilio = () => {
               name="entry.1968968654"
               value={formData['entry.1968968654']}
               onChange={handleChange}
-              maxLength="9"
               placeholder="XXXX-XXXX"
               required
             /><br />

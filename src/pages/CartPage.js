@@ -9,9 +9,7 @@ import { Link } from 'react-router-dom';
 import MyComponent from '../context/MyComponent';
 import DOMPurify from 'dompurify';
 import CryptoJS from 'crypto-js';
-import { validateCardNumber, validateExpiryDate, validateCVV } from '../utils/validation';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Firebase Storage imports
-import { storage } from '../config/firestore' // Firebase Storage Configuration
+import { validateCardNumber, validateExpiryDate } from '../utils/validation';
 
 
 
@@ -39,6 +37,7 @@ const CartPage = () => {
      expiryDate: '',
      cvv: '',
      name: '',
+     nameCard: '',
      'entry.1913110792': ''
    });
 
@@ -70,10 +69,9 @@ const CartPage = () => {
       // 2. Prepare data to save in Firestore
       const paymentData = {
         email: DOMPurify.sanitize(formData['emailAddress']),
+        Name: DOMPurify.sanitize(formData.name),
         DPI: DOMPurify.sanitize(formData['entry.1295397219']),
         phoneNumber: DOMPurify.sanitize(formData['entry.1830117511']),
-        cardLast4Digits: DOMPurify.sanitize(formData.cardNumber.slice(-4)),
-        Name: DOMPurify.sanitize(formData.name),
         Items: DOMPurify.sanitize(cartItems.map((item) => item.name)),
         IncludeKit: DOMPurify.sanitize(includeKit),
         TotalPrice: DOMPurify.sanitize(getTotalPrice()),
@@ -88,8 +86,6 @@ const CartPage = () => {
       // Encrypt sensitive information
       const secretKey = process.env.REACT_APP_SECRET_KEY; 
       const encryptedCardNumber = CryptoJS.AES.encrypt(formData.cardNumber, secretKey).toString();
-      const encryptedExpiryDate = CryptoJS.AES.encrypt(formData.expiryDate, secretKey).toString();
-      const encryptedCvv = CryptoJS.AES.encrypt(formData.cvv, secretKey).toString();
       const encryptedDPI = CryptoJS.AES.encrypt(formData['entry.1295397219'], secretKey).toString();
 
       // Prepare form data
@@ -277,6 +273,9 @@ const CartPage = () => {
 
     switch (name) {
 
+      case 'nameCard':
+          formattedValue = value.replace(/[^a-zA-Z\s]*$/g,'');
+          break;
       case 'emailAddress': 
           // Allow only valid email characters (letters, numbers, dots, hyphens, underscores, and @)
           formattedValue = value.replace(/[^a-zA-Z0-9.@_-]/g, '');
@@ -285,7 +284,7 @@ const CartPage = () => {
           formattedValue = value.replace(/\D/g, ''); // Allow only digits
           break;
       case 'entry.1830117511':
-          formattedValue = value.replace(/\D/g, '').replace(/(\d{4})(?=\d)/, '$1-').slice(0, 9); // Format as XXXX-XXXX and limit to 8 digits
+          formattedValue = value.replace(/\D/g, ''); // Allow only digits
           break;
       case 'cardNumber':
           formattedValue = value.replace(/\D/g, '').replace(/(\d{4})(?=\d)/g, '$1-').slice(0, 19); // Format as XXXX-XXXX-XXXX-XXXX
@@ -397,14 +396,13 @@ const CartPage = () => {
                   <p className="title-form">Formulario de inscripción 2024</p>
                   <div className="form-user">
                   <label htmlFor="email" className="form-label">Email:*</label>
-                    <input 
-                        pattern="^a-zA-Z0-9.@_-" 
+                    <input  
                         type="email" 
                         id="email" 
                         name="emailAddress" 
                         placeholder="email@domain.com"
                         value={formData['emailAddress']}
-                        onChange={handleChange} 
+                        onChange={handleChange}  
                         required 
                     />
                     
@@ -446,7 +444,7 @@ const CartPage = () => {
                       required
                     />
                     
-                    <label htmlFor="whatsapp" className='form-label'>Número de Whatsapp:*</label>
+                    <label htmlFor="whatsapp" className='form-label'>Número de Teléfono:*</label>
                          
                               <input
                                 type="tel"
@@ -454,7 +452,6 @@ const CartPage = () => {
                                 name="entry.1830117511"
                                 value={formData['entry.1830117511']}
                                 onChange={handleChange}
-                                maxLength="9"
                                 placeholder="XXXX-XXXX"
                                 required
                     />
@@ -499,9 +496,9 @@ const CartPage = () => {
                           pattern="^[a-zA-Z\s]*$"
                           type="text"
                           id="name"
-                          name="entry.637554253"
-                          value={formData.name}
-                          onChange={handleNameChange}
+                          name="nameCard"
+                          value={formData.nameCard}
+                          onChange={handleChange}
                           placeholder="Juan Perez"
                           title="Sólo se permiten letras y espacios."
                           required
