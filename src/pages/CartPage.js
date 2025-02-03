@@ -173,7 +173,7 @@ const CartPage = () => {
   
     } catch (error) {
       // Handle fetch-specific and other errors
-      if (error.message === 'Failed to fetch') {
+      if (error.message === 'Failed to fetch' || error.message === 'Load failed') {
         clearCart();
         setPurchaseSuccess(true);
         setNotification(DOMPurify.sanitize("¡Compra completada exitosamente!"));
