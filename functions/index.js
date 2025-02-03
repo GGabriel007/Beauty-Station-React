@@ -1,21 +1,20 @@
 const { onDocumentCreated } = require("firebase-functions/v2/firestore");
 const { defineSecret } = require("firebase-functions/params");
-const { onRequest } = require("firebase-functions/v2/https");
 const admin = require("firebase-admin");
-const nodemailer = require("nodemailer");
+const sgMail = require("@sendgrid/mail");
 const logger = require("firebase-functions/logger");
-const functions = require("firebase-functions");
 
 // Initialize Firebase Admin SDK
 admin.initializeApp();
 
-const EMAIL_USER = defineSecret("EMAIL_USER");
-const EMAIL_PASS = defineSecret("EMAIL_PASS");
+// Define SendGrid API Key as a secret
+const SENDGRID_API_KEY = defineSecret("SENDGRID_API_KEY");
 
-
+// Set the API key inside the function 
+sgMail.setApiKey(SENDGRID_API_KEY.value());
 
 exports.sendPurchaseEmail = onDocumentCreated(
-    { document: "Payments/{paymentId}", secrets: [EMAIL_USER, EMAIL_PASS] },
+    { document: "Payments/{paymentId}", secrets: [SENDGRID_API_KEY] },
     async (event) => {
       console.log("Function triggered!");
   
@@ -33,25 +32,16 @@ exports.sendPurchaseEmail = onDocumentCreated(
         return null;
       }
   
-      // Create transporter inside the function (after retrieving secrets)
-      const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: EMAIL_USER,
-          pass: EMAIL_PASS,
-        },
-      });
-  
-      const mailOptions = {
-        from: EMAIL_USER.value(),
+      const msg = {
         to: paymentData.email,
+        from: "g.a.gramirez007@gmail.com",
         subject: "Compra confirmada",
         text: `Hola ${paymentData.Name}, tu compra ha sido confirmada. Total: $${paymentData.TotalPrice}. ¡Gracias por tu compra!`,
       };
   
       try {
         console.log("Sending email to:", paymentData.email);
-        await transporter.sendMail(mailOptions);
+        await sgMail.send(msg);
         console.log("Email sent successfully!");
       } catch (error) {
         console.error("Error sending email:", error);

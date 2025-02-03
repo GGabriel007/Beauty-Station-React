@@ -7,27 +7,7 @@ import { Link } from 'react-router-dom';
 
 const BeautySContacto = () => {
 
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   
-    const images = [
-      `${process.env.PUBLIC_URL}/images/Beauty_Station_Sala2.jpeg`,
-      `${process.env.PUBLIC_URL}/images/Beauty_Station_Aleh2.jpeg`,
-      `${process.env.PUBLIC_URL}/images/Beauty_Station_reception.jpeg`,
-      `${process.env.PUBLIC_URL}/images/Beauty_Station_Aleh.jpeg`,
-      `${process.env.PUBLIC_URL}/images/Beauty_Station_Sala.jpeg`,
-    ];
-  
-  
-    const openModal = (src) => {
-      setSelectedImage(src);
-      setIsModalOpen(true);
-    };
-  
-    const closeModal = () => {
-      setIsModalOpen(false);
-      setSelectedImage(null);
-    };
 
   const location = useLocation();
     
