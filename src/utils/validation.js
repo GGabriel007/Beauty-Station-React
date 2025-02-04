@@ -51,6 +51,9 @@ export const validateExpiryDate = (expiryDate) => {
 };
 
 export const validateCVV = (cvv) => { 
-
+    if (!/^\d{3,4}$/.test(cvv)) {
+        return "El CVV debe tener entre 3 y 4 dígitos.";
+    }
+    return "";
     
 };

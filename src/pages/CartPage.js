@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import MyComponent from '../context/MyComponent';
 import DOMPurify from 'dompurify';
 import CryptoJS from 'crypto-js';
-import { validateCardNumber, validateExpiryDate } from '../utils/validation';
+import { validateCardNumber, validateCVV, validateExpiryDate } from '../utils/validation';
 
 
 
@@ -60,6 +60,15 @@ const CartPage = () => {
     setNotificationError(DOMPurify.sanitize(expiryDateError));
     return;
   }
+
+  // Validate CVV
+  const cvvError = validateCVV(formData.cvv);
+  if (cvvError) {
+    setNotificationError(DOMPurify.sanitize(cvvError));
+    return;
+  }
+
+
 
 
     if (isCaptchaValid) {
@@ -293,16 +302,8 @@ const CartPage = () => {
           formattedValue = value.replace(/\D/g, '').replace(/(\d{2})(?=\d)/, '$1/').slice(0, 5); // Format as XX/XX
           break;
           case 'cvv':
-            formattedValue = value.replace(/\D/g, ''); // Allow only digits
-            if (formattedValue.length > 4) {
-              formattedValue = formattedValue.slice(0, 4); // Limit to 4 digits
-            }
-            // Show a warning if CVV length is invalid
-            if (formattedValue.length > 0 && (formattedValue.length < 3 || formattedValue.length > 4)) {
-              setNotificationError(DOMPurify.sanitize("El CVV debe tener entre 3 y 4 dígitos."));
-            } else {
-              setNotificationError(''); // Clear error if CVV length is valid
-            }
+            formattedValue = value.replace(/\D/g,''); // Allow only digits
+            formattedValue = formattedValue.slice(0, 4); // Limit to 4 digits
             break;
       case 'entry.1913110792':
           formattedValue = value.replace(/[^0-9CcFf]/g, ''); // Allow digits and letters C, c, F, f
