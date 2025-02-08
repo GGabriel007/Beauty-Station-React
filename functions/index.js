@@ -25,7 +25,7 @@ sgMail.setApiKey(SENDGRID_APIKEY);
 exports.sendPurchaseEmail = onDocumentCreated(
   { document: "Payments/{paymentId}" },
   async (event) => {
-    console.log("Function triggered!!! Arroz?");
+    console.log("Function triggered!!!");
 
     const snap = event.data;
     if (!snap) {
@@ -47,7 +47,7 @@ exports.sendPurchaseEmail = onDocumentCreated(
 
 
 
-    const msg = {
+    const customerEmail = {
       to: paymentData.email,
       from: "g.a.gramirez007@gmail.com",
       subject: "Compra confirmada",
@@ -90,15 +90,40 @@ exports.sendPurchaseEmail = onDocumentCreated(
       `,
     };
     
+    // Owner Notification Email
+    const ownerEmail = {
+      to: "grgonzalez345@gmail.com", 
+      from: "g.a.gramirez007@gmail.com",
+      subject: "Nueva compra confirmada",
+      html: `
+      <div style="font-family: Arial, sans-serif; color: #333; padding: 20px; max-width: 500px; border: 1px solid #ddd; border-radius: 10px;">
+        <h1 style="text-align: center; color: #007bff;">Nueva Compra Recibida</h1>
+        <p style="font-size: 19px;"><strong>Orden ID:</strong> ${paymentId}</p>
+        <p style="font-size: 17px;"><strong>Cliente:</strong> ${paymentData.Name} (${paymentData.email})</p>
+        <p style="font-size: 17px;"><strong>Registración:</strong></p>
+        <ul style="font-size: 17px; padding-left: 20px;">
+          ${itemsArray.map(item => `<li style="list-style-type: disc;">${item.trim()}</li>`).join('')}
+        </ul>
+        ${paymentData.IncludeKit ? `<p style="color: green;"><strong>Incluye Kit de Pieles Perfectas</strong></p>` : ""}
+        <p style="font-size: 18px; margin-top: 10px;"><strong>Total:</strong> $${paymentData.TotalPrice}</p>
+        <p style="font-size: 17px;">Revisar el registro en el sistema.</p>
+      </div>
+      `,
+    };
 
     
 
     try {
       console.log("Sending email to:", paymentData.email);
-      await sgMail.send(msg);
-      console.log("Email sent successfully!");
+      await sgMail.send(customerEmail);
+      console.log("Customer email sent successfully!");
+
+      console.log("Sending confirmation email to owner...");
+      await sgMail.send(ownerEmail);
+      console.log("Owner confirmation email sent successfully!");
+
     } catch (error) {
-      console.error("Error sending email:", error);
+      console.error("Error sending emails:", error);
     }
   }
 );

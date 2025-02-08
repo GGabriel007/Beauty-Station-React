@@ -31,6 +31,7 @@ const CartPage = () => {
   const [formData, setFormData] = useState({
 
     'emailAddress' : '',
+    'entry.1580443907' : '',
     'entry.1295397219' : '',
     'entry.1830117511' : '',
      cardNumber: '',
@@ -68,9 +69,6 @@ const CartPage = () => {
     return;
   }
 
-
-
-
     if (isCaptchaValid) {
     try {
 
@@ -79,6 +77,7 @@ const CartPage = () => {
       const paymentData = {
         email: DOMPurify.sanitize(formData['emailAddress']),
         Name: DOMPurify.sanitize(formData.name),
+        userName: DOMPurify.sanitize(formData['entry.1580443907']),
         DPI: DOMPurify.sanitize(formData['entry.1295397219']),
         phoneNumber: DOMPurify.sanitize(formData['entry.1830117511']),
         Items: DOMPurify.sanitize(cartItems.map((item) => item.name)),
@@ -89,17 +88,20 @@ const CartPage = () => {
 
       // 3. Save the data to Firestore
       const docRef = await addDoc(collection(db, 'Payments'), paymentData);
-      console.log('Payment Record created with ID:', docRef.id);
 
+      const instagramInput = document.querySelector('[name="entry.637554253"]');
+      console.log('Payment Record created with ID:', docRef.id);
 
       // Encrypt sensitive information
       const secretKey = process.env.REACT_APP_SECRET_KEY; 
       const encryptedCardNumber = CryptoJS.AES.encrypt(formData.cardNumber, secretKey).toString();
+      const encryptedUserName = CryptoJS.AES.encrypt(formData['entry.1580443907'], secretKey).toString();
       const encryptedDPI = CryptoJS.AES.encrypt(formData['entry.1295397219'], secretKey).toString();
 
       // Prepare form data
       const urlEncodedformData = new URLSearchParams();
       urlEncodedformData.append('emailAddress', document.querySelector('[name="emailAddress"]').value);
+      urlEncodedformData.append('entry.1580443907', document.querySelector('[name="entry.1580443907"]').value);
       urlEncodedformData.append('entry.1295397219', document.querySelector('[name="entry.1295397219"]').value);
       urlEncodedformData.append('entry.1830117511', document.querySelector('[name="entry.1830117511"]').value);
       urlEncodedformData.append('entry.637554253', document.querySelector('[name="entry.637554253"]').value);
@@ -239,32 +241,6 @@ const CartPage = () => {
 
   };
 
-  useEffect(() => {
-
-    const instagramInput = document.getElementById('instagram');
-
-
-    const validateInstagramInput = (event) => {
-      const regex = /^[a-zA-Z0-9._]*$/;
-      if (!regex.test(event.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight']. includes(event.key)){
-        event.preventDefault();
-      }
-    };
-
-    if (instagramInput) {
-      instagramInput.addEventListener('keypress', validateInstagramInput);
-    }
-
-    return () => {
-      if (instagramInput) {
-        instagramInput.removeEventListener('keypress', validateInstagramInput);
-      }
-    };
-
-  }, []);
-
-  
-
   const handleNameChange = (e) => {
     const {value} = e.target;
     const regex = /^[a-zA-Z\s]*$/; // Allow only letters and spaces
@@ -274,6 +250,8 @@ const CartPage = () => {
   };
 
   const handleChange = (e) => {
+
+
     const { name, value } = e.target;
     let sanitizedValue = DOMPurify.sanitize(value); // Sanitize input value
     let formattedValue = sanitizedValue; 
@@ -301,12 +279,15 @@ const CartPage = () => {
       case 'expiryDate':
           formattedValue = value.replace(/\D/g, '').replace(/(\d{2})(?=\d)/, '$1/').slice(0, 5); // Format as XX/XX
           break;
-          case 'cvv':
-            formattedValue = value.replace(/\D/g,''); // Allow only digits
-            formattedValue = formattedValue.slice(0, 4); // Limit to 4 digits
-            break;
+      case 'cvv':
+        formattedValue = value.replace(/\D/g,''); // Allow only digits
+        formattedValue = formattedValue.slice(0, 4); // Limit to 4 digits
+        break;
       case 'entry.1913110792':
           formattedValue = value.replace(/[^0-9CcFf]/g, ''); // Allow digits and letters C, c, F, f
+          break;
+      case 'entry.1580443907':
+          formattedValue = value.replace(/[^a-zA-Z0-9._]/g, ''); // Allow only letters, numbers, dots, and underscores
           break;
       default:
           break;
@@ -420,15 +401,19 @@ const CartPage = () => {
                           required
                         />
                     
-                    <label htmlFor="instagram" className='form-label'>Usuario de Instagram o Facebook:*</label>
-                    
-                    <input 
-                    pattern="^[a-zA-Z0-9._]+$" 
-                    type="text" 
-                    id="instagram" 
-                    name="entry.1580443907" 
-                    title="Sólo puede tener letras, números, puntos y guiones bajos."  
-                    />
+                    <label htmlFor="instagram" className='form-label'>
+                      Usuario de Instagram o Facebook:*
+                      </label>
+
+                      <input 
+                          type="text" 
+                          id="instagram" 
+                          name="entry.1580443907" 
+                          value={formData['entry.1580443907']}
+                          onChange={handleChange}
+                          title="Sólo puede tener letras, números, puntos y guiones bajos."  
+                          required
+                      />
                     
                     <label htmlFor="identification" className='form-label'>
                       Número de Identificación:* <div className="second-Text">(DPI o número de Pasaporte)</div>
