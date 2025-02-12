@@ -67,7 +67,7 @@ exports.sendPurchaseEmail = onDocumentCreated(
             </ul>
     
             ${paymentData.IncludeKit 
-              ? `<p style="color: green;"><strong>Incluye Kit de Pieles Perfectas</strong></p>` 
+              ? `<p style="color: green;"><strong>Incluye Kit de Pieles Perfectas</strong></p>`
               : ""}
     
             <p style="font-size: 18px; margin-top: 10px;"><strong>Total:</strong> $${paymentData.TotalPrice}</p>
@@ -79,7 +79,7 @@ exports.sendPurchaseEmail = onDocumentCreated(
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
             <tr>
               <td align="center">
-                <img src="https://scontent-iad3-2.xx.fbcdn.net/v/t39.30808-6/326227690_913634052987919_4833733110769923167_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=Yxm_bz3p5FMQ7kNvgFOKMRq&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&_nc_gid=A4joNgsBnPC6QRIHIz2hfh4&oh=00_AYBykMsojrFHdsk5MkjNFPM37uhHGDd2pRqsXii3Yn1yTQ&oe=67A76467"
+                <img src="https://scontent-iad3-2.xx.fbcdn.net/v/t39.30808-6/326227690_913634052987919_4833733110769923167_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=pJKdaHHyv0EQ7kNvgH1nOcI&_nc_oc=AdgZOU2hLZCrF1ndswoR4xBQ9RRtpXBdaozt9Iky7Ntf1yGg5hI_R_Q9irFZCgPNp6tcIpcInMOvpzAUYuhBiHbk&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&_nc_gid=AaEeRVs62qYAOGLtACILJJo&oh=00_AYBp0kK49QxEmDZjKr_YRfZZaujUov4Pc_nyMAz3EbtKFA&oe=67B09EE7"
                     alt="Logo Beaut Station Imagen"
                     style="width: 160px; height: 140px; margin-top: 20px; display: block;" />
               </td>
