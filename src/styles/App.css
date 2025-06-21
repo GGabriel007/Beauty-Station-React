@@ -40,7 +40,7 @@ html, body {
 .cart-button {
   position: fixed;
   bottom: 85px;
-  right: 5px;
+  right: 20px;
   background-color: #ffffff;
   color: #ed93b4;
   border: none;
@@ -71,7 +71,7 @@ html, body {
   /*Cart*/
   .cart-button {
     bottom: 85px;
-    right: 5px;
+    right: 20px;
   }
   
 
