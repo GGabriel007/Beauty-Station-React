@@ -72,7 +72,7 @@ exports.sendPurchaseEmail = onDocumentCreated(
     
             <p style="font-size: 18px; margin-top: 10px;"><strong>Total:</strong> $${paymentData.TotalPrice}</p>
     
-            <p style="font-size: 17px;">¡Gracias por tu compra!</p>
+            <p style="font-size: 17px;">¡Gracias por tu compra! o No?</p>
         </div>
     
         <div style="max-width: 500px;">
@@ -107,7 +107,7 @@ exports.sendPurchaseEmail = onDocumentCreated(
         </ul>
         ${paymentData.IncludeKit ? `<p style="color: green;"><strong>Incluye Kit de Pieles Perfectas</strong></p>` : ""}
         <p style="font-size: 18px; margin-top: 10px;"><strong>Total:</strong> $${paymentData.TotalPrice}</p>
-        <p style="font-size: 17px;">Revisar el registro en el sistema.</p>
+        <p style="font-size: 17px;">Revisar el registro en el sistema. o no?</p>
       </div>
       `,
     };
