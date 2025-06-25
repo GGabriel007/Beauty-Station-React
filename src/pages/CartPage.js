@@ -320,6 +320,7 @@ const CartPage = () => {
       {purchaseSuccess ? (
         <div>
           <p>¡Gracias por su compra!</p>
+          <p>La informacion de tu registro llegara a tu correo electronico. Si no encuentras el correo revisa la seccion de SPAM.</p>
         </div>
       ) : (
         <>

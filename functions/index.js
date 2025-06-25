@@ -53,13 +53,14 @@ exports.sendPurchaseEmail = onDocumentCreated(
       subject: "Compra confirmada",
       html: `
       <div>
-        <div style="font-family: Arial, sans-serif; color: #333; padding: 20px; max-width: 500px; border: 1px solid #ddd; border-radius: 10px;">
+      <h1 style="font-family: Georgia, serif;  color:rgb(198, 121, 149); margin-left: 5px;"><strong>Beauty Station</strong></h1>
+        <div style="font-family: Arial, sans-serif; color: #333; padding: 20px; max-width: 500px; border: 1px solid #757575; border-radius: 10px;">
             <h1 style="text-align: center; color: #007bff;">Recibo de Compra</h1>
     
-            <p style="font-size: 19px;"><strong>Hola ${paymentData.Name},</strong></p>
+            <p style="font-size: 19px;">Hola <strong>${paymentData.Name},</strong></p>
             <p style="font-size: 17px;">Tu compra ha sido confirmada. Detalles de tu registro:</p>
             
-            <p style="font-size: 17px;"><strong>Orden ID:</strong> ${paymentId}</p>
+            <p style="font-size: 17px;">Orden ID:<strong> ${paymentId}</strong></p>
     
             <p style="font-size: 17px;"><strong>Registración:</strong></p>
             <ul style="font-size: 17px; padding-left: 20px;">
@@ -70,23 +71,22 @@ exports.sendPurchaseEmail = onDocumentCreated(
               ? `<p style="color: green;"><strong>Incluye Kit de Pieles Perfectas</strong></p>`
               : ""}
     
-            <p style="font-size: 18px; margin-top: 10px;"><strong>Total:</strong> $${paymentData.TotalPrice}</p>
+            <p style="font-size: 18px; margin-top: 10px;"><strong>Total: $${paymentData.TotalPrice}</strong></p>
     
-            <p style="font-size: 17px;">¡Gracias por tu compra! o No?</p>
+            <p style="font-size: 17px;">¡Gracias por tu compra!</p>
+
         </div>
     
-        <div style="max-width: 500px;">
+        <!-- <div style="max-width: 500px;">
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
             <tr>
               <td align="center">
-                <img src="https://raw.githubusercontent.com/GGabriel007/Beauty-Station-React/refs/heads/master/public/images/LogoReceive.png 
-                alt = "Curso Imagen" 
-                style ="width: 100px; height: auto;"
-                />
+                <img src="http://cdn.mcauto-images-production.sendgrid.net/1f79072616b1d08c/ca34e4cd-15da-4800-adfc-1fe09de7a6cb/634x440.png" alt="Curso Imagen" style="width: 100px; height: auto;"/>
               </td>
             </tr>
           </table>
         </div>
+          -->
       </div>
       `,
     };
@@ -107,7 +107,7 @@ exports.sendPurchaseEmail = onDocumentCreated(
         </ul>
         ${paymentData.IncludeKit ? `<p style="color: green;"><strong>Incluye Kit de Pieles Perfectas</strong></p>` : ""}
         <p style="font-size: 18px; margin-top: 10px;"><strong>Total:</strong> $${paymentData.TotalPrice}</p>
-        <p style="font-size: 17px;">Revisar el registro en el sistema. o no?</p>
+        <p style="font-size: 17px;">Revisar el registro en el sistema.</p>
       </div>
       `,
     };
