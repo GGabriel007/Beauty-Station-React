@@ -22,8 +22,27 @@ const Classes1 = () => {
 
         <div className="mid-information-module">
             
-        <div className='space-class'></div>
-        <Link  to = "/classes/classes-1/Module_1Hair">
+            <div className='space-class'></div>
+            <Link  to = "/classes/classes-1/Module_1Hair">
+            <div className="center-class">
+                <Link className = 'imagen-link' to = "/classes/classes-1/Module_1Hair">
+                    <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_Hair.jpeg`} alt="Informacion de Cursos"/>
+                </Link>
+                <div className="text-class">
+                    
+                        <p className = "class_links-class">Master en Waves Intensivo</p>
+                    
+                    <div className='description-class'>
+                    <p>1 DÍA</p>
+                    <p>Incluye certificado</p>
+                    </div>
+                </div>
+            </div>
+            </Link>
+            <div className='space-class'></div>
+            <div className='space-class'></div>
+
+            <Link  to = "/classes/classes-1/Module_1Hair">
             <div className="center-class">
                 <Link className = 'imagen-link' to = "/classes/classes-1/Module_1Hair">
                     <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_Hair.jpeg`} alt="Informacion de Cursos"/>
