@@ -14,6 +14,7 @@ import Module_1Hair from './pages/Module_1Hair';
 import Module_2Hair from './pages/Module_2Hair';
 import Module_3Hair from './pages/Module_3Hair';
 import Module_4Hair from './pages/Module_4Hair';
+import Module_DayHair from './pages/Module_DayHair';
 import Module_1Mkup from './pages/Module_1Mkup';
 import Module_2Mkup from './pages/Module_2Mkup';
 import Module_3Mkup from './pages/Module_3Mkup';
@@ -40,6 +41,7 @@ function App() {
             <Route path ="/classes/classes-1/Module_2Hair" element = {<Module_2Hair />} />
             <Route path ="/classes/classes-1/Module_3Hair" element = {<Module_3Hair />} />
             <Route path ="/classes/classes-1/Module_4Hair" element = {<Module_4Hair />} />
+            <Route path ="/classes/classes-1/Module_DayHair" element = {<Module_DayHair />} />
             <Route path ="/classes/classes-2/Module_1Mkup" element = {<Module_1Mkup />} />
             <Route path ="/classes/classes-2/Module_2Mkup" element = {<Module_2Mkup />} />
             <Route path ="/classes/classes-2/Module_3Mkup" element = {<Module_3Mkup />} />

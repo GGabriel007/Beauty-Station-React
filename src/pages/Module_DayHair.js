@@ -151,7 +151,7 @@ const Module_DayHair = () => {
     <>
       <div className="information-module">
         <div className="top-information-module">
-          <h2 className="header-information-module">MASTER EN WAVES <br></br>
+          <h2 className="header-information-module">MASTER EN WAVES
           INTENSIVO <div className='header-information-date'>1 DÍA</div></h2>
         </div>
         <div className="mid-information-module">
@@ -191,34 +191,34 @@ const Module_DayHair = () => {
     </div>
           <div className="text-module">
             <p className="class_links-module">Informacion del Módulo:</p>
-            <p>El curso más vendido, ya que aprendes desde cero diferentes tipos de waves en tendencia, incluye las famosas retro waves.</p>
-            <p>Nivel: Principiante/Intermedio</p>
+            <p>Aprenderás nuestras 4 técnicas de ondas en tendencia en 1 día, necesitarás modelo de cabello largo o cabezote para las prácticas.</p>
+            <p>INTENSIVO DE <p className='header-information-date'>1 DÍA</p></p>
             <p>Materiales Requeridos: Plancha, tubo y cepillo; secadora y productos de cabello</p>
-            <p>Los precios no incluye materiales</p>
             <p className="class_links-module">Clases:</p>
             <ul>
-              <li><strong>Clase 1:</strong> <em>Martes 28 de enero</em> - Introducción, productos y cómo hacer waves con plancha</li>
-              <li><strong>Clase 2:</strong> <em>Martes 4 de febrero</em> - Natural waves</li>
-              <li><strong>Clase 3:</strong> <em>Martes 11 de febrero</em> - Glam waves</li>
-              <li><strong>Clase 4:</strong> <em>Martes 18 de febrero </em> - Old Hollywood waves + velo</li>
+              <li><strong>9 AM : </strong> - Introducción, Demo 1</li>
+              <li><strong>10 AM : </strong> - Práctica supervisada</li>
+              <li><strong>11 AM : </strong> - Demo 2 y 3</li>
+              <li><strong>12 PM : </strong> - Práctica supervisada</li>
+              <li><strong>1 PM : </strong> - Almuerzo</li>
+              <li><strong>2 PM : </strong> - Demo 4</li>
+              <li><strong>3 PM : </strong> - Práctica supervisada</li>
+              <li><strong>4 PM : </strong> - Diplomas y fotos</li>
             </ul>
-            <p className="class_links-module">Horario:</p>
+            <p className="class_links-module">Fecha y Horario:</p>
             <ul>
-              <li>Martes 2PM a 4PM</li>
-              <li>Martes 6PM a 8PM</li>
+              <li>Miércoles 2 de Julio 9AM a 4PM</li>
             </ul>
-            <p className="class_links-module">Precio por persona: Q2,200</p>
+            <p className="class_links-module">Precio por persona: Q2,100</p>
             <p className="class_links-module">Inscripción: Q200</p>
+            <p className="class_links-module"><div className='header-information-date'>Segundo alumno mitad de precio</div></p>
+            <p className="class_links-module">Incluye materiales para la práctica en clase</p>
             <p className="Wed-Class"> HASTA 3 CUOTAS SIN RECARGO</p>
-            <p className="class_links-module">Selecciona una Clase:</p>
+            <p className="class_links-module">Reserva tu asiento:</p>
             <ul className='button-schedule'>
               <li>
                 <input type="radio" id="clase1" name="schedule" value="Clase 1" checked={selectedSchedule === 'Clase 1'} onChange={() => setSelectedSchedule('Clase 1')} />
-                <label htmlFor="clase1">Martes 2PM a 4PM</label>
-              </li>
-              <li>
-                <input type="radio" id="clase2" name="schedule" value="Clase 2" checked={selectedSchedule === 'Clase 2'} onChange={() => setSelectedSchedule('Clase 2')} />
-                <label htmlFor="clase2">Martes 6PM a 8PM</label>
+                <label htmlFor="clase1">Miércoles 2 de Julio 9AM a 4PM</label>
               </li>
             </ul>
             <button className="add-to-cart-button" onClick={handleAddToCart}>Comprar Curso</button>
