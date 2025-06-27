@@ -39,6 +39,14 @@
 }
 
 
+.class_dates_button{
+    text-align: center;
+    background-color: gray;
+    color: white;
+    border-radius: 15%;
+    border: 5px 20px;
+}
+
 
 .header-information-class {
     margin: 50px;

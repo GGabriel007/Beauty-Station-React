@@ -25,7 +25,7 @@ const Classes1 = () => {
             <div className='space-class'></div>
             <Link  to = "/classes/classes-1/Module_1Hair">
             <div className="center-class">
-                <Link className = 'imagen-link' to = "/classes/classes-1/Module_1Hair">
+                <Link className = 'imagen-link' to = "/classes/classes-1/Module_DayHair">
                     <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_Hair.jpeg`} alt="Informacion de Cursos"/>
                 </Link>
                 <div className="text-class">
@@ -33,8 +33,10 @@ const Classes1 = () => {
                         <p className = "class_links-class">Master en Waves Intensivo</p>
                     
                     <div className='description-class'>
-                    <p>1 DÍA</p>
-                    <p>Incluye certificado</p>
+                        <div>1 DÍA </div>
+                    <div className='class_dates_button'>
+                        <div>2 DE JULIO</div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -52,8 +54,9 @@ const Classes1 = () => {
                         <p className = "class_links-class">Master en Waves</p>
                     
                     <div className='description-class'>
-                    <p>Nivel: Principiante/Intermedio</p>
-                    <p>Incluye certificado</p>
+                    <div className='class_dates_button'><p>29 DE JULIO AL <br></br>
+                        19 DE AGOSTO
+                        </p></div>
                     </div>
                 </div>
             </div>
@@ -70,8 +73,9 @@ const Classes1 = () => {
                         <p className = "class_links-class">Peinado para Eventos</p>
                         
                     <div className='description-class'>
-                    <p>Nivel: Intermedio</p>
-                    <p>Incluye certificado</p>
+                    <div className='class_dates_button'><p>26 DE AGOSTO AL <br></br>
+                        30 DE SEPTIEMBRE
+                        </p></div>
                     </div>
                 </div>  
             </div>
@@ -88,8 +92,9 @@ const Classes1 = () => {
                         <p className = "class_links-class">Maestría en Novias y Tendencias</p>
                     
                     <div className='description-class'>
-                    <p>Nivel: Avanzado/Actualización</p>
-                    <p>Incluye certificado</p>
+                    <div className='class_dates_button'><p>7 DE OCTUBRE AL <br></br>
+                        30 DE OCTUBRE
+                        </p></div>
                     </div>
                 </div>  
             </div>
@@ -105,12 +110,9 @@ const Classes1 = () => {
                     
                         <p className = "class_links-class">Curso Completo</p>
                         <div className='description-class-complete'>
-                    <p className='Complete-text'>Incluye:</p>
-                    <ul className='Complete-text'>
-                        <li>3 módulos</li>
-                        <li>Book “The hairstyle guide”</li>
-                        <li>Certificado enmarcado</li>
-                    </ul>
+                    <div className='class_dates_button'><p>29 DE JULIO AL <br></br>
+                        30 DE OCTUBRE
+                        </p></div>
                     </div>
                 </div>  
             </div>
