@@ -26,7 +26,7 @@ const Classes1 = () => {
             <Link  to = "/classes/classes-1/Module_1Hair">
             <div className="center-class">
                 <Link className = 'imagen-link' to = "/classes/classes-1/Module_DayHair">
-                    <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_Day/imagen_module_Hair.jpeg`} alt="Informacion de Cursos"/>
+                    <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_Day/imagen_module_H.jpeg`} alt="Informacion de Cursos"/>
                 </Link>
                 <div className="text-class">
                     
