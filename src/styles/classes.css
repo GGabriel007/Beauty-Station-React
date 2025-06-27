@@ -96,6 +96,11 @@
     font-style: normal;
 }
 
+.header-information-date {
+    color: red;
+    font-weight: 600;
+}
+
 .text-class {
     font-size: 25px;
     width: 350px;
