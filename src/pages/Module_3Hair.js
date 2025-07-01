@@ -205,18 +205,19 @@ const Module_3Hair = () => {
 
                 <p className="Demo-text"><strong>*DEMO MAKEUP GRATIS</strong></p>
 
+                <p>MARTES 7 DE OCTUBRE - JUEVES 30 DE OCTUBRE</p>
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                <li><strong>Clase 11:</strong> <em> Martes 8 de abril</em> - Redes e ilumicaión bridal hair + lift de cejas + velo</li>
-                <li><strong>Clase 12:</strong> <em> Jueves 10 de abril</em> - Práctica en modelo</li>
-                <li><strong>SEMANA SANTA</strong> </li>
-                <li><strong>Clase 13:</strong> <em> Martes 22 de abril</em> - Semirecogido con ondas retro</li>
-                <li><strong>Clase 14:</strong> <em> Jueves 24 de abril</em> - Práctica en modelo</li>
-                <li><strong>Clase 15:</strong> <em> Martes 29 de abril</em> - Cola alta con volumen</li>
-                <li><strong>Clase 16:</strong> <em> Martes 6 de mayo</em> - Práctica modelo</li>
-                <li className="Wed-Class"><strong>Clase 17:</strong> <em> Miercoles 7 de mayo 4 PM</em> - Peinado alto Kim Kardashian</li>
-                <li><strong>Clase 18:</strong> <em> Jueves 8 de mayo</em> - Evaluación final, entrega de portafolio</li>
+                <li><strong>Clase 11:</strong> <em> Martes 7 de Octubre</em> - Redes e ilumicaión bridal hair + lift de cejas + velo</li>
+                <li><strong>Clase 12:</strong> <em> Jueves 9 de Octubre</em> - Práctica en modelo</li>
+                <li><strong>Clase 13:</strong> <em> Martes 14 de Octubre</em> - Semirecogido con ondas retro</li>
+                <li><strong>Clase 14:</strong> <em> Jueves 16 de Octubre</em> - Práctica en modelo</li>
+                <li><strong>Clase 15:</strong> <em> Martes 21 de Octubre</em> - Cola alta con volumen</li>
+                <li><strong>Clase 16:</strong> <em> Jueves 23 de Octubre</em> - Práctica modelo</li>
+                <li className="Wed-Class"><strong>Clase 17:</strong> <em> Miercoles 29 de Octubre 6 PM</em> - Peinado alto Kim Kardashian</li>
+                <li><strong>Clase 18:</strong> <em> Jueves 30 de Octubre</em> - Evaluación final, entrega de portafolio</li>
                 </ul>
+                <p>IMPARTIDO POR ALEH</p>
                 <p className="class_links-module">Horario:</p>
                 <ul>
                 <li>Martes y Jueves 2PM a 4PM</li>

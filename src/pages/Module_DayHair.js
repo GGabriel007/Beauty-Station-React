@@ -9,6 +9,52 @@ import { Link } from 'react-router-dom';
 
 const Module_DayHair = () => {
 
+  //Adding State at the Top of my components
+  const [whatsappForm, setWhatsAppForm] = useState({
+    name: '',
+    email:'',
+    instagram:'',
+    dpi:'',
+    phone:''
+
+  });
+
+  //Adding this function inside my components
+  const handleWhatsAppChange = (field, value) => {
+    setWhatsAppForm({
+      ...whatsappForm,
+      [field]: value
+    });
+  };
+
+  const handleWhatsAppSubmit = () => {
+    const { name, email, instagram, dpi, phone} = whatsappForm;
+
+    if (!name.trim() || !phone.trim()) {
+    alert("Por favor completa al menos tu nombre y número.");
+    return;
+    }
+
+     // Format message
+      const businessWhatsAppNumber = "50251966818"; // Replace with your WhatsApp number including country code
+      const message = `
+      Hola, quiero reservar mi asiento.
+
+      Nombre: ${encodeURIComponent(name)}
+      Email: ${encodeURIComponent(email)}
+      Instagram/Facebook: ${encodeURIComponent(instagram)}
+      ID (DPI/Pasaporte): ${encodeURIComponent(dpi)}
+      Teléfono: ${encodeURIComponent(phone)}
+      `;
+
+      // Create WhatsApp URL
+      const whatsappURL = `https://wa.me/${businessWhatsAppNumber}?text=${encodeURIComponent(message.trim())}`;
+
+      // Open WhatsApp in new tab with correct decoding
+      window.open(decodeURIComponent(whatsappURL), '_blank');
+    };
+
+
 
   const [selectedImage, setSelectedImage] = useState(
       `${process.env.PUBLIC_URL}/images/Class_1/Module_1/Hair/imagen_module_1Hair.jpeg`
@@ -192,7 +238,7 @@ const Module_DayHair = () => {
           <div className="text-module">
             <p className="class_links-module">Informacion del Módulo:</p>
             <p>Aprenderás nuestras 4 técnicas de ondas en tendencia en 1 día, necesitarás modelo de cabello largo o cabezote para las prácticas.</p>
-            <p>INTENSIVO DE <p className='header-information-date'>1 DÍA</p></p>
+            <p>INTENSIVO DE <span className='header-information-date'>1 DÍA</span></p>
             <p>Materiales Requeridos: Plancha, tubo y cepillo; secadora y productos de cabello</p>
             <p className="class_links-module">Clases:</p>
             <ul>
@@ -200,7 +246,7 @@ const Module_DayHair = () => {
               <li><strong>10 AM : </strong> - Práctica supervisada</li>
               <li><strong>11 AM : </strong> - Demo 2 y 3</li>
               <li><strong>12 PM : </strong> - Práctica supervisada</li>
-              <li><strong>1 PM : </strong> - Almuerzo</li>
+              <li><strong>1 PM : </strong> - Horario de descanso (No incluye almuerzo)</li>
               <li><strong>2 PM : </strong> - Demo 4</li>
               <li><strong>3 PM : </strong> - Práctica supervisada</li>
               <li><strong>4 PM : </strong> - Diplomas y fotos</li>
@@ -209,12 +255,62 @@ const Module_DayHair = () => {
             <ul>
               <li>Miércoles 2 de Julio 9AM a 4PM</li>
             </ul>
+            <p>IMPARTIDO POR NUESTRO TEAM DE PROFESIONALES</p>
             <p className="class_links-module">Precio por persona: Q2,100</p>
             <p className="class_links-module">Inscripción: Q200</p>
             <p className="class_links-module"><div className='header-information-date'>Segundo alumno mitad de precio</div></p>
             <p className="class_links-module">Incluye materiales para la práctica en clase</p>
             <p className="Wed-Class"> HASTA 3 CUOTAS SIN RECARGO</p>
             <p className="class_links-module">Reserva tu asiento:</p>
+
+
+            {/* WhatsApp Quick Form */}
+            <div className="whatsapp-form">
+              <input
+                type="text"
+                placeholder="Nombre completo"
+                value={whatsappForm.name}
+                onChange={(e) => handleWhatsAppChange('name', e.target.value)}
+                required
+              />
+              <input
+                type="email"
+                placeholder="Correo electrónico"
+                value={whatsappForm.email}
+                onChange={(e) => handleWhatsAppChange('email', e.target.value)}
+                required
+              />
+              <input
+                type="text"
+                placeholder="Usuario de Instagram o Facebook"
+                value={whatsappForm.instagram}
+                onChange={(e) => handleWhatsAppChange('instagram', e.target.value)}
+                required
+              />
+              <input
+                type="text"
+                placeholder="Número de identificación (DPI o pasaporte)"
+                value={whatsappForm.dpi}
+                onChange={(e) => handleWhatsAppChange('dpi', e.target.value)}
+                required
+              />
+              <input
+                type="tel"
+                placeholder="Número de teléfono"
+                value={whatsappForm.phone}
+                onChange={(e) => handleWhatsAppChange('phone', e.target.value)}
+                required
+              />
+              <button type="button" onClick={handleWhatsAppSubmit}>
+                Enviar a WhatsApp
+              </button>
+            </div>
+
+            <button className="add-to-cart-button">Mas informacion del curso</button>
+
+            {/*
+
+            button para agregar al carrito
             <ul className='button-schedule'>
               <li>
                 <input type="radio" id="clase1" name="schedule" value="Clase 1" checked={selectedSchedule === 'Clase 1'} onChange={() => setSelectedSchedule('Clase 1')} />
@@ -228,11 +324,13 @@ const Module_DayHair = () => {
             <Link to = "/cart">
             {cartnotification && <p className="cart-notification">{cartnotification}</p>}
             </Link>
-
+              */}
           </div>
           <div className="second-image-module">
             <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Hair/imagen_module_2Hair.jpeg`} alt="Informacion de Cursos" />
           </div>
+            
+
 
           { /* 
           <div className="text-module">

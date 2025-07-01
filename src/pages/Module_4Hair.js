@@ -229,30 +229,30 @@ const Module_4Hair = () => {
                 <p>Los precios no incluye materiales</p>
 
                 <p className="Demo-text"><strong>*DEMO MAKEUP GRATIS</strong></p>
-
+                <p>MARTES 29 DE JULIO - JULIO 30 DE OCTUBRE</p>
 
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                  <li><strong>Clase 1:</strong> <em>Martes 28 de enero</em> - Introducción, productos y cómo hacer waves con plancha</li>
-                  <li><strong>Clase 2:</strong> <em>Martes 4 de febrero</em> - Natural waves</li>
-                  <li><strong>Clase 3:</strong> <em>Martes 11 de febrero</em> - Glam waves</li>
-                  <li><strong>Clase 4:</strong> <em>Martes 18 de febrero </em> - Old Hollywood waves + velo</li>
-                  <li><strong>Clase 5:</strong> <em>Martes 25 de febrero </em>- Trenzas en tendencias</li>
-                  <li><strong>Clase 6:</strong> <em>Martes 4 de marzo </em>- Semirecogido</li>
-                  <li><strong>Clase 7:</strong> <em>Martes 11 de marzo </em>- Recogido clásico</li>
-                  <li><strong>Clase 8:</strong> <em>Martes 18 de marzo </em>- Recogido con volumen</li>
-                  <li><strong>Clase 9:</strong> <em>Martes 25 de marzo </em>- Cola Baja</li>
-                  <li><strong>Clase 10:</strong> <em>Martes 1 de abril </em>- Sleek Bun</li>
-                  <li><strong>Clase 11:</strong> <em>Martes 8 de abril</em> - Redes e ilumicaión bridal hair + lift de cejas + velo</li>
-                  <li><strong>Clase 12:</strong> <em>Jueves 10 de abril</em> - Práctica en modelo</li>
-                  <li><strong>SEMANA SANTA</strong> </li>
-                  <li><strong>Clase 13:</strong> <em>Martes 22 de abril</em> - Semirecogido con ondas retro</li>
-                  <li><strong>Clase 14:</strong> <em> Jueves 24 de abril</em> - Práctica en modelo</li>
-                  <li><strong>Clase 15:</strong> <em> Martes 29 de abril</em> - Cola alta con volumen</li>
-                  <li><strong>Clase 16:</strong> <em> Martes 6 de mayo</em> - Práctica modelo</li>
-                  <li className="Wed-Class"><strong>Clase 17:</strong> <em> Miercoles 7 de mayo 4 PM</em> - Peinado alto Kim Kardashian</li>
-                  <li><strong>Clase 18:</strong> <em> Jueves 8 de mayo</em> - Evaluación final, entrega de portafolio</li>
+                  <li><strong>Clase 1:</strong> <em>Martes 29 de Julio</em> - Introduccíon, productos waves con placha</li>
+                  <li><strong>Clase 2:</strong> <em>Martes 5 de Agosto</em> - Natural waves</li>
+                  <li><strong>Clase 3:</strong> <em>Martes 12 de Agosto</em> - Glam waves</li>
+                  <li><strong>Clase 4:</strong> <em>Martes 19 de Agosto</em> - Old Hollywood waves + velo</li>
+                  <li><strong>Clase 5: </strong> <em>Martes 26 de Agosto </em>- Trenzas en tendencias</li>
+                  <li><strong>Clase 6: </strong> <em>Martes 2 de Septiembre </em>- Semirecogido</li>
+                  <li><strong>Clase 7: </strong> <em>Martes 9 de Septiembre </em>- Recogido clásico</li>
+                  <li><strong>Clase 8: </strong> <em>Martes 16 de Septiembre </em>- Recogido con volumen</li>
+                  <li><strong>Clase 9: </strong> <em>Martes 23 de Septiembre </em>- Cola Baja</li>
+                  <li><strong>Clase 10:</strong> <em>Martes 30 de Septiembre </em>- Sleek Bun</li>
+                  <li><strong>Clase 11:</strong> <em> Martes 7 de Octubre</em> - Redes e ilumicaión bridal hair + lift de cejas + velo</li>
+                  <li><strong>Clase 12:</strong> <em> Jueves 9 de Octubre</em> - Práctica en modelo</li>
+                  <li><strong>Clase 13:</strong> <em> Martes 14 de Octubre</em> - Semirecogido con ondas retro</li>
+                  <li><strong>Clase 14:</strong> <em> Jueves 16 de Octubre</em> - Práctica en modelo</li>
+                  <li><strong>Clase 15:</strong> <em> Martes 21 de Octubre</em> - Cola alta con volumen</li>
+                  <li><strong>Clase 16:</strong> <em> Jueves 23 de Octubre</em> - Práctica modelo</li>
+                  <li className="Wed-Class"><strong>Clase 17:</strong> <em> Miercoles 29 de Octubre 6 PM</em> - Peinado alto Kim Kardashian</li>
+                  <li><strong>Clase 18:</strong> <em> Jueves 30 de Octubre</em> - Evaluación final, entrega de portafolio</li>
                 </ul>
+                <p>IMPARTIDO POR ALEH Y NUESTRO TEAM DE PROFESIONALES</p>
                 <p className="class_links-module">Horario:</p>
                 <ul>
                 <li>Martes y Jueves 2PM a 4PM</li>

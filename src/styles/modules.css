@@ -110,6 +110,37 @@ ul {
     margin-left: 5px;
   }
 
+  /*Whatsapp Form*/
+
+  .whatsapp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.whatsapp-form input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.whatsapp-form button {
+  padding: 10px;
+  background-color: #25D366;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.whatsapp-form button:hover {
+  background-color: #128C7E;
+}
+
 /* Cart button */
 
 .add-to-cart-button {
