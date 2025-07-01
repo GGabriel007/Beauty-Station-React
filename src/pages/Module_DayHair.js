@@ -261,52 +261,62 @@ const Module_DayHair = () => {
             <p className="class_links-module"><div className='header-information-date'>Segundo alumno mitad de precio</div></p>
             <p className="class_links-module">Incluye materiales para la práctica en clase</p>
             <p className="Wed-Class"> HASTA 3 CUOTAS SIN RECARGO</p>
-            <p className="class_links-module">Reserva tu asiento:</p>
+            <p className="title-form">Reserva tu asiento</p>
 
 
             {/* WhatsApp Quick Form */}
             <div className="whatsapp-form">
+
+            <label className='form-label'>Nombre Completo:*</label>
               <input
+                pattern="^[a-zA-Z\s]*$"
                 type="text"
-                placeholder="Nombre completo"
                 value={whatsappForm.name}
                 onChange={(e) => handleWhatsAppChange('name', e.target.value)}
+                title="Sólo se permiten letras y espacios."
                 required
               />
+              <label className="form-label">Email:*</label>
               <input
                 type="email"
-                placeholder="Correo electrónico"
+                placeholder="email@domain.com"
                 value={whatsappForm.email}
                 onChange={(e) => handleWhatsAppChange('email', e.target.value)}
                 required
               />
+              <label className='form-label'>Usuario de Instagram o Facebook:</label>
               <input
                 type="text"
-                placeholder="Usuario de Instagram o Facebook"
                 value={whatsappForm.instagram}
                 onChange={(e) => handleWhatsAppChange('instagram', e.target.value)}
+                title="Sólo puede tener letras, números, puntos y guiones bajos."
                 required
               />
-              <input
-                type="text"
-                placeholder="Número de identificación (DPI o pasaporte)"
-                value={whatsappForm.dpi}
-                onChange={(e) => handleWhatsAppChange('dpi', e.target.value)}
-                required
-              />
+
+              <label className='form-label'>Número de Identificación:<div className="second-Text">(DPI o número de Pasaporte)</div></label>
               <input
                 type="tel"
-                placeholder="Número de teléfono"
+                value={whatsappForm.dpi}
+                onChange={(e) => handleWhatsAppChange('dpi', e.target.value)}
+                title="Ingresar solamente numeros"
+                pattern="\d+"
+                required
+              />
+
+              <label className='form-label'>Número de Teléfono:*</label>
+              <input
+                type="tel"
+                placeholder="XXXX-XXXX"
                 value={whatsappForm.phone}
                 onChange={(e) => handleWhatsAppChange('phone', e.target.value)}
                 required
               />
-              <button type="button" onClick={handleWhatsAppSubmit}>
-                Enviar a WhatsApp
+              <button className='contact-button' type="button" onClick={handleWhatsAppSubmit}>
+                Regístrate por WhatsApp
               </button>
             </div>
 
-            <button className="add-to-cart-button">Mas informacion del curso</button>
+  
 
             {/*
 

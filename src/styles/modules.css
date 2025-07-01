@@ -115,8 +115,7 @@ ul {
   .whatsapp-form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin: 20px 0;
+  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
 }
 
 .whatsapp-form input {
@@ -126,19 +125,23 @@ ul {
   font-size: 16px;
 }
 
-.whatsapp-form button {
-  padding: 10px;
-  background-color: #25D366;
+.contact-button {
+  padding: 10px 20px;
+  background-color: #4caf50;
   color: white;
   border: none;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: 1.2em;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-top: 10px;
+  font-weight: 400;
 }
 
-.whatsapp-form button:hover {
-  background-color: #128C7E;
+.contact-button:hover {
+  background-color: #45a049; 
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Cart button */
