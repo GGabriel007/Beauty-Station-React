@@ -110,6 +110,40 @@ ul {
     margin-left: 5px;
   }
 
+  /*Whatsapp Form*/
+
+  .whatsapp-form {
+  display: flex;
+  flex-direction: column;
+  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
+}
+
+.whatsapp-form input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.contact-button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+  font-weight: 400;
+}
+
+.contact-button:hover {
+  background-color: #45a049; 
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 /* Cart button */
 
 .add-to-cart-button {

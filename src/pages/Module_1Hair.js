@@ -194,13 +194,15 @@ const Module_1Hair = () => {
             <p>Nivel: Principiante/Intermedio</p>
             <p>Materiales Requeridos: Plancha, tubo y cepillo; secadora y productos de cabello</p>
             <p>Los precios no incluye materiales</p>
+            <p>MARTES 29 DE JULIO - MARTES 19 DE AGOSTO</p>
             <p className="class_links-module">Clases:</p>
             <ul>
-              <li><strong>Clase 1:</strong> <em>Martes 28 de enero</em> - Introducción, productos y cómo hacer waves con plancha</li>
-              <li><strong>Clase 2:</strong> <em>Martes 4 de febrero</em> - Natural waves</li>
-              <li><strong>Clase 3:</strong> <em>Martes 11 de febrero</em> - Glam waves</li>
-              <li><strong>Clase 4:</strong> <em>Martes 18 de febrero </em> - Old Hollywood waves + velo</li>
+              <li><strong>Clase 1:</strong> <em>Martes 29 de Julio</em> - Introduccíon, productos waves con placha</li>
+              <li><strong>Clase 2:</strong> <em>Martes 5 de Agosto</em> - Natural waves</li>
+              <li><strong>Clase 3:</strong> <em>Martes 12 de Agosto</em> - Glam waves</li>
+              <li><strong>Clase 4:</strong> <em>Martes 19 de Agosto</em> - Old Hollywood waves + velo</li>
             </ul>
+            <p>IMPARTIDO POR NUESTRO TEAM DE PROFESIONALES</p>
             <p className="class_links-module">Horario:</p>
             <ul>
               <li>Martes 2PM a 4PM</li>
