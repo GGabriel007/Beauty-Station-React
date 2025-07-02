@@ -3,11 +3,20 @@ import { CartContext } from '../context/CartContext'; // Import CartContext
 import { SeatContext } from '../context/SeatContext'; // Import SeatContext
 import '../styles/modules.css';
 import { useLocation } from 'react-router-dom';
+import DOMPurify from 'dompurify';
 import { Link } from 'react-router-dom';
 
 
 
 const Module_DayHair = () => {
+
+  const [notificationError, setNotificationError] = useState("");
+
+  // Validate form fields
+    if (!setWhatsAppForm(whatsappForm.name)) {
+      setNotificationError(DOMPurify.sanitize("¡Al menos necesitamos !"));
+      return;
+    }
 
   //Adding State at the Top of my components
   const [whatsappForm, setWhatsAppForm] = useState({
@@ -21,9 +30,43 @@ const Module_DayHair = () => {
 
   //Adding this function inside my components
   const handleWhatsAppChange = (field, value) => {
+    let formattedValue = value;
+
+    switch(field) {
+      case 'name':
+        // Allow only letters and spaces
+        formattedValue = value.replace(/[^a-zA-Z\s]/g, '');
+        break;
+
+      case 'email':
+        // Allow valid email characters only
+        formattedValue = value.replace(/[^a-zA-Z0-9.@_-]/g, '');
+        break;
+
+      case 'instagram':
+        // Allow letters, numbers, dots, underscores
+        formattedValue = value.replace(/[^a-zA-Z0-9._]/g, '');
+        break;
+
+      case 'dpi':
+        // Allow only digits 
+        formattedValue = value.replace(/\D/g, '');
+        break;
+
+      case 'phone':
+        // Allow only digits 
+        formattedValue = value.replace(/\D/g, ''); 
+        break;
+
+      default:
+        break;
+
+    }
+
+
     setWhatsAppForm({
       ...whatsappForm,
-      [field]: value
+      [field]: DOMPurify.sanitize(formattedValue)
     });
   };
 
@@ -37,8 +80,7 @@ const Module_DayHair = () => {
 
      // Format message
       const businessWhatsAppNumber = "50251966818"; // Replace with your WhatsApp number including country code
-      const message = `
-      Hola, quiero reservar mi asiento.
+      const message = `Hola, quiero reservar mi asiento.
 
       Nombre: ${encodeURIComponent(name)}
       Email: ${encodeURIComponent(email)}
@@ -276,12 +318,13 @@ const Module_DayHair = () => {
                 title="Sólo se permiten letras y espacios."
                 required
               />
-              <label className="form-label">Email:*</label>
+              <label className="form-label">Email:</label>
               <input
                 type="email"
                 placeholder="email@domain.com"
                 value={whatsappForm.email}
                 onChange={(e) => handleWhatsAppChange('email', e.target.value)}
+                title='Ingrese un correo electrónico válido.'
                 required
               />
               <label className='form-label'>Usuario de Instagram o Facebook:</label>
@@ -309,9 +352,16 @@ const Module_DayHair = () => {
                 placeholder="XXXX-XXXX"
                 value={whatsappForm.phone}
                 onChange={(e) => handleWhatsAppChange('phone', e.target.value)}
+                title='Ingrese solo números'
                 required
               />
-              <button className='contact-button' type="button" onClick={handleWhatsAppSubmit}>
+
+              {notificationError && <p className="error-notification">{notificationError}</p>}
+
+
+              <button className='contact-button' 
+              type="button" 
+              onClick={handleWhatsAppSubmit}>
                 Regístrate por WhatsApp
               </button>
             </div>
