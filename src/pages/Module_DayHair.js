@@ -10,14 +10,6 @@ import { Link } from 'react-router-dom';
 
 const Module_DayHair = () => {
 
-  const [notificationError, setNotificationError] = useState("");
-
-  // Validate form fields
-    if (!setWhatsAppForm(whatsappForm.name)) {
-      setNotificationError(DOMPurify.sanitize("¡Al menos necesitamos !"));
-      return;
-    }
-
   //Adding State at the Top of my components
   const [whatsappForm, setWhatsAppForm] = useState({
     name: '',
@@ -27,6 +19,24 @@ const Module_DayHair = () => {
     phone:''
 
   });
+
+  // State Variables Define
+  const [notificationError, setNotificationError] = useState("");
+
+  const [selectedImage, setSelectedImage] = useState(
+      `${process.env.PUBLIC_URL}/images/Class_1/Module_1/Hair/imagen_module_1Hair.jpeg`
+    );
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedSchedule, setSelectedSchedule] = useState('Clase 1'); // State for selected schedule
+  const [availableSeats, setAvailableSeats] = useState(0); // State for available seats
+  const [error, setError] = useState(''); // State for error messages
+  const [notification, setNotification] = useState('');
+  const [cartnotification, setcartNotification] = useState('');
+
+  const location = useLocation();
+  const { cartItems, addToCart } = useContext(CartContext); // Get addToCart function from context
+  const seatsAvailable = useContext(SeatContext); // Get seats data from context
 
   //Adding this function inside my components
   const handleWhatsAppChange = (field, value) => {
@@ -73,12 +83,21 @@ const Module_DayHair = () => {
   const handleWhatsAppSubmit = () => {
     const { name, email, instagram, dpi, phone} = whatsappForm;
 
-    if (!name.trim() || !phone.trim()) {
-    alert("Por favor completa al menos tu nombre y número.");
-    return;
+    // Reset any previous error
+    setNotificationError("");
+
+    // Validate required fields 
+    if(!name.trim()) {
+      setNotificationError(DOMPurify.sanitize("!Al menos necesitamos un nombre!"));
+      return;
     }
 
-     // Format message
+    if(!phone.trim()) {
+      setNotificationError(DOMPurify.sanitize("!Al menos necesitamos un número de teléfono!"));
+      return;
+    }
+
+    // If passed validation, proceed
       const businessWhatsAppNumber = "50251966818"; // Replace with your WhatsApp number including country code
       const message = `Hola, quiero reservar mi asiento.
 
@@ -96,16 +115,6 @@ const Module_DayHair = () => {
       window.open(decodeURIComponent(whatsappURL), '_blank');
     };
 
-
-
-  const [selectedImage, setSelectedImage] = useState(
-      `${process.env.PUBLIC_URL}/images/Class_1/Module_1/Hair/imagen_module_1Hair.jpeg`
-    );
-  
-  
-  
-    const [isModalOpen, setIsModalOpen] = useState(false);
-  
   
     const thumbnails = [
       `${process.env.PUBLIC_URL}/images/Class_1/Module_1/Hair/imagen_module_1Hair.jpeg`,
@@ -123,22 +132,17 @@ const Module_DayHair = () => {
       setIsModalOpen(!isModalOpen);
     };
 
-  const location = useLocation();
+  
     
     useEffect(() => {
 
         window.scrollTo(0,0);
     }, [location]);
 
-  const { cartItems, addToCart } = useContext(CartContext); // Get addToCart function from context
-  const seatsAvailable = useContext(SeatContext); // Get seats data from context
   
-  const [selectedSchedule, setSelectedSchedule] = useState('Clase 1'); // State for selected schedule
-  const [availableSeats, setAvailableSeats] = useState(0); // State for available seats
-
-  const [error, setError] = useState(''); // State for error messages
-  const [notification, setNotification] = useState('');
-  const [cartnotification, setcartNotification] = useState('');
+  
+  
+  
 
   useEffect(() => {
     const thumbnails = document.querySelectorAll('.thumbnail-module');
@@ -356,7 +360,9 @@ const Module_DayHair = () => {
                 required
               />
 
-              {notificationError && <p className="error-notification">{notificationError}</p>}
+              {notificationError && 
+              <p className="error-notification">{notificationError}</p>
+              }
 
 
               <button className='contact-button' 
