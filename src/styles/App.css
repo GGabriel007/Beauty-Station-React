@@ -56,11 +56,13 @@ html, body {
   text-decoration: none;
   text-align: center;
   z-index: 4;
+  visibility: hidden;
 }
 
 .cart-button:hover {
   background-color: #ed93b4;
   color: white;
+  visibility: hidden;
 }
 
 .cart-button span {

@@ -4,10 +4,15 @@ import { SeatContext } from '../context/SeatContext'; // Import SeatContext
 import '../styles/modules.css';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import useWhatsAppForm from '../hook/useWhatsAppForm';
 
 
 
 const Module_1Hair = () => {
+
+  // Using the hook with correct course name
+  const courseName = "Master Waves";
+   const { whatsappForm, notificationError, handleWhatsAppChange, handleWhatsAppSubmit } = useWhatsAppForm(courseName);
 
 
   const [selectedImage, setSelectedImage] = useState(
@@ -211,6 +216,74 @@ const Module_1Hair = () => {
             <p className="class_links-module">Precio por persona: Q2,200</p>
             <p className="class_links-module">Inscripción: Q200</p>
             <p className="Wed-Class"> HASTA 3 CUOTAS SIN RECARGO</p>
+
+            {/* WhatsApp Quick Form */}
+            <div className="whatsapp-form">
+              <p className="title-form">Reserva tu asiento</p>
+
+              {notificationError && (
+                <p className="error-notification">{notificationError}</p>
+              )}
+
+              <label className='form-label'>Nombre Completo:*</label>
+              <input
+                pattern="^[a-zA-Z\s]*$"
+                type="text"
+                value={whatsappForm.name}
+                onChange={(e) => handleWhatsAppChange('name', e.target.value)}
+                title="Sólo se permiten letras y espacios."
+                required
+              />
+
+              <label className="form-label">Email:</label>
+              <input
+                type="email"
+                placeholder="email@domain.com"
+                value={whatsappForm.email}
+                onChange={(e) => handleWhatsAppChange('email', e.target.value)}
+                title="Ingrese un correo electrónico válido."
+                required
+              />
+
+              <label className='form-label'>Usuario de Instagram o Facebook:</label>
+              <input
+                type="text"
+                value={whatsappForm.instagram}
+                onChange={(e) => handleWhatsAppChange('instagram', e.target.value)}
+                title="Sólo puede tener letras, números, puntos y guiones bajos."
+                required
+              />
+
+              <label className='form-label'>Número de Identificación:<div className="second-Text">(DPI o número de Pasaporte)</div></label>
+              <input
+                type="tel"
+                value={whatsappForm.dpi}
+                onChange={(e) => handleWhatsAppChange('dpi', e.target.value)}
+                title="Ingresar solamente números"
+                pattern="\d+"
+                required
+              />
+
+              <label className='form-label'>Número de Teléfono:*</label>
+              <input
+                type="tel"
+                placeholder="XXXX-XXXX"
+                value={whatsappForm.phone}
+                onChange={(e) => handleWhatsAppChange('phone', e.target.value)}
+                title='Ingrese solo números'
+                required
+              />
+
+              <button className='contact-button' type="button" onClick={handleWhatsAppSubmit}>
+                Regístrate por WhatsApp
+              </button>
+            </div>
+
+
+            { /*
+
+            button para agregar al carrito
+            
             <p className="class_links-module">Selecciona una Clase:</p>
             <ul className='button-schedule'>
               <li>
@@ -229,6 +302,8 @@ const Module_1Hair = () => {
             <Link to = "/cart">
             {cartnotification && <p className="cart-notification">{cartnotification}</p>}
             </Link>
+
+            */}
 
           </div>
           <div className="second-image-module">

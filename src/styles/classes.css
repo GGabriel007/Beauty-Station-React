@@ -52,6 +52,7 @@
   cursor: pointer;
   overflow: hidden;
   transition: background-color 0.3s ease;
+  margin-bottom: 10px;
 }
 
 .class_dates_button .hover-text {
@@ -85,6 +86,7 @@
     font-family: Lato, sans-serif;
     margin-top: -20px;
     margin-bottom: 15px;
+    text-align: center;
 }
 
 
@@ -106,7 +108,7 @@
     width: 350px;
     text-align: left;
     line-height: 1.4;
-    padding-left: 25px;
+    
     word-break: break-word; 
     max-width: 100%;
     

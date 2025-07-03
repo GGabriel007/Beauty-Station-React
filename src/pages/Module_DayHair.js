@@ -5,23 +5,15 @@ import '../styles/modules.css';
 import { useLocation } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import { Link } from 'react-router-dom';
-
+import useWhatsAppForm from '../hook/useWhatsAppForm';
 
 
 const Module_DayHair = () => {
 
-  //Adding State at the Top of my components
-  const [whatsappForm, setWhatsAppForm] = useState({
-    name: '',
-    email:'',
-    instagram:'',
-    dpi:'',
-    phone:''
+  // Inside your component function
+  const courseName = "Master Waves Intensivo 1 Día";
+  const { whatsappForm, notificationError, handleWhatsAppChange, handleWhatsAppSubmit } = useWhatsAppForm(courseName);
 
-  });
-
-  // State Variables Define
-  const [notificationError, setNotificationError] = useState("");
 
   const [selectedImage, setSelectedImage] = useState(
       `${process.env.PUBLIC_URL}/images/Class_1/Module_1/Hair/imagen_module_1Hair.jpeg`
@@ -37,83 +29,6 @@ const Module_DayHair = () => {
   const location = useLocation();
   const { cartItems, addToCart } = useContext(CartContext); // Get addToCart function from context
   const seatsAvailable = useContext(SeatContext); // Get seats data from context
-
-  //Adding this function inside my components
-  const handleWhatsAppChange = (field, value) => {
-    let formattedValue = value;
-
-    switch(field) {
-      case 'name':
-        // Allow only letters and spaces
-        formattedValue = value.replace(/[^a-zA-Z\s]/g, '');
-        break;
-
-      case 'email':
-        // Allow valid email characters only
-        formattedValue = value.replace(/[^a-zA-Z0-9.@_-]/g, '');
-        break;
-
-      case 'instagram':
-        // Allow letters, numbers, dots, underscores
-        formattedValue = value.replace(/[^a-zA-Z0-9._]/g, '');
-        break;
-
-      case 'dpi':
-        // Allow only digits 
-        formattedValue = value.replace(/\D/g, '');
-        break;
-
-      case 'phone':
-        // Allow only digits 
-        formattedValue = value.replace(/\D/g, ''); 
-        break;
-
-      default:
-        break;
-
-    }
-
-
-    setWhatsAppForm({
-      ...whatsappForm,
-      [field]: DOMPurify.sanitize(formattedValue)
-    });
-  };
-
-  const handleWhatsAppSubmit = () => {
-    const { name, email, instagram, dpi, phone} = whatsappForm;
-
-    // Reset any previous error
-    setNotificationError("");
-
-    // Validate required fields 
-    if(!name.trim()) {
-      setNotificationError(DOMPurify.sanitize("!Al menos necesitamos un nombre!"));
-      return;
-    }
-
-    if(!phone.trim()) {
-      setNotificationError(DOMPurify.sanitize("!Al menos necesitamos un número de teléfono!"));
-      return;
-    }
-
-    // If passed validation, proceed
-      const businessWhatsAppNumber = "50251966818"; // Replace with your WhatsApp number including country code
-      const message = `Hola, quiero reservar mi asiento.
-
-      Nombre: ${encodeURIComponent(name)}
-      Email: ${encodeURIComponent(email)}
-      Instagram/Facebook: ${encodeURIComponent(instagram)}
-      ID (DPI/Pasaporte): ${encodeURIComponent(dpi)}
-      Teléfono: ${encodeURIComponent(phone)}
-      `;
-
-      // Create WhatsApp URL
-      const whatsappURL = `https://wa.me/${businessWhatsAppNumber}?text=${encodeURIComponent(message.trim())}`;
-
-      // Open WhatsApp in new tab with correct decoding
-      window.open(decodeURIComponent(whatsappURL), '_blank');
-    };
 
   
     const thumbnails = [
@@ -192,8 +107,9 @@ const Module_DayHair = () => {
       return;
     }
 
-      let moduleName = 'Master Waves 2PM a 4PM';
+      let moduleName = 'MASTER EN WAVES INTENSIVO 1 DÍA';
       if (selectedSchedule === 'Clase 2') moduleName = 'Master Waves 6PM a 8PM';
+
 
       // Validation for Master Waves classes
       const hasMasterWaves = cartItems.some(item =>
