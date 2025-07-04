@@ -61,9 +61,9 @@ const useWhatsAppForm = (courseName = "este curso") => {
       return;
     }
 
-    const businessWhatsAppNumber = "50251966818"; // Replace with your number
+    const businessWhatsAppNumber = "50250177803"; // Replace with your number
     const message = `
-    Hola, quiero reservar mi asiento para el curso:
+    Hola, quiero reservar mi asiento para el curso. \n
 
     Curso: ${courseName}
     Nombre: ${name}

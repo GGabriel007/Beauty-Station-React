@@ -7,9 +7,16 @@ import { useLocation } from 'react-router-dom';
 import { db } from '../config/firestore'; // Import Firestore configuration
 import { doc, getDoc } from 'firebase/firestore'; // Import Firestore functions
 import { Link } from 'react-router-dom';
+import useWhatsAppForm from '../hook/useWhatsAppForm';
 
 
 const Module_1Mkup = () => {
+
+    // Using the hook with correct course name
+    const courseName = "Pieles Perfectas";
+    const { whatsappForm, notificationError, handleWhatsAppChange, handleWhatsAppSubmit } = useWhatsAppForm(courseName);
+
+
 
     const [selectedImage, setSelectedImage] = useState(
         `${process.env.PUBLIC_URL}/images/Class_1/Module_1/Makeup/imagen_module_1Mkup.jpeg`
@@ -50,9 +57,11 @@ const Module_1Mkup = () => {
 
     const [error, setError] = useState(''); // State for error messages
     const [notification, setNotification] = useState('');
+    const [cartnotification, setcartNotification] = useState('');
+    
     const [kitSelected, setKitSelected] = useState(false); //State for kit selection
     const [kitAvailability, setKitAvailability] = useState(0); // State for kit availability
-    const [cartnotification, setcartNotification] = useState('');
+    
 
 
 
@@ -245,11 +254,11 @@ const Module_1Mkup = () => {
 
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                <li><strong>Clase 1:</strong> <em>Miércoles 29 de enero </em>- Introducción y teoría</li>
-                <li><strong>Clase 2:</strong> <em>Miércoles 5 de febrero </em>- Skincare, piel HD</li>
-                <li><strong>Clase 3:</strong> <em>Miércoles 12 de febrero </em>- Correcciones/Piel con acné full cobertura</li>
-                <li><strong>Clase 4:</strong> <em>Miércoles 19 de febrero </em> - Piel madura</li>
-                <li><strong>Clase 5:</strong> <em>Miércoles 26 de febrero </em> - Glowy skin, no makeup</li>
+                <li><strong>Clase 1:</strong> <em>Miércoles 30 de Julio </em>- Introducción y teoría</li>
+                <li><strong>Clase 2:</strong> <em>Miércoles 6 de Agosto </em>- Skincare, piel HD</li>
+                <li><strong>Clase 3:</strong> <em>Miércoles 13 de Agosto </em>- Correcciones/Piel con acné full cobertura</li>
+                <li><strong>Clase 4:</strong> <em>Miércoles 20 de Agosto </em> - Piel madura</li>
+                <li><strong>Clase 5:</strong> <em>Miércoles 27 de Agosto </em> - Glowy skin, no makeup</li>
                 </ul>
                 <p className="class_links-module">Horario:</p>
                 <ul>
@@ -259,6 +268,73 @@ const Module_1Mkup = () => {
                 <p className="class_links-module">Precio por persona: Q3,000</p>
                 <p className="class_links-module">Inscripción: Q200</p>
                 <p className="Wed-Class"> HASTA 3 CUOTAS SIN RECARGO</p>
+
+                {/* WhatsApp Quick Form */}
+            <div className="whatsapp-form">
+              <p className="title-form">Reserva tu asiento</p>
+
+              {notificationError && (
+                <p className="error-notification">{notificationError}</p>
+              )}
+
+              <label className='form-label'>Nombre Completo:*</label>
+              <input
+                pattern="^[a-zA-Z\s]*$"
+                type="text"
+                value={whatsappForm.name}
+                onChange={(e) => handleWhatsAppChange('name', e.target.value)}
+                title="Sólo se permiten letras y espacios."
+                required
+              />
+
+              <label className="form-label">Email:</label>
+              <input
+                type="email"
+                placeholder="email@domain.com"
+                value={whatsappForm.email}
+                onChange={(e) => handleWhatsAppChange('email', e.target.value)}
+                title="Ingrese un correo electrónico válido."
+                required
+              />
+
+              <label className='form-label'>Usuario de Instagram o Facebook:</label>
+              <input
+                type="text"
+                value={whatsappForm.instagram}
+                onChange={(e) => handleWhatsAppChange('instagram', e.target.value)}
+                title="Sólo puede tener letras, números, puntos y guiones bajos."
+                required
+              />
+
+              <label className='form-label'>Número de Identificación:<div className="second-Text">(DPI o número de Pasaporte)</div></label>
+              <input
+                type="tel"
+                value={whatsappForm.dpi}
+                onChange={(e) => handleWhatsAppChange('dpi', e.target.value)}
+                title="Ingresar solamente números"
+                pattern="\d+"
+                required
+              />
+
+              <label className='form-label'>Número de Teléfono:*</label>
+              <input
+                type="tel"
+                placeholder="XXXX-XXXX"
+                value={whatsappForm.phone}
+                onChange={(e) => handleWhatsAppChange('phone', e.target.value)}
+                title='Ingrese solo números'
+                required
+              />
+
+              <button className='contact-button' type="button" onClick={handleWhatsAppSubmit}>
+                Regístrate por WhatsApp
+              </button>
+            </div>
+
+                { /*
+
+            button para agregar al carrito
+
                 <p className="class_links-module">Precio de Kit de pieles perfectas (Altamente Recomendado): Q5,900</p>
                 <label className="checkbox-container">
                             <input 
@@ -286,6 +362,9 @@ const Module_1Mkup = () => {
             <Link to = "/cart">
             {cartnotification && <p className="cart-notification">{cartnotification}</p>}
             </Link>
+            */}
+
+
           </div>
             <div className="second-image-module">
             <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Makeup/imagen_module_2Mkup.jpeg`} alt="Informacion de Cursos 5"/> 

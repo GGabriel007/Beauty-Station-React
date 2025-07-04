@@ -25,18 +25,27 @@ const Classes2 = () => {
         <Link  to = "/classes/classes-2/Module_1Mkup">
 
             <div className="center-class">
+
                     <Link className = 'imagen-link' to = "/classes/classes-2/Module_1Mkup">
                     <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_Mkup.jpeg`} alt="Informacion de Cursos"/>
                     </Link>
+
                 <div className="text-class">
+                    
                         <p className = "class_links-class">Pieles Perfectas</p>
                     
                     <div className='description-class'>
-                    <p>Nivel: Principiante/Intermedio</p>
-                    <p>Incluye certificado</p>
+                    <div className='class_dates_button'>
+                        <span className='default-text'>30 DE JULIO AL <br></br>
+                        27 DE AGOSTO</span>
+                        <span className='hover-text'>MÁS INFORMACIÓN</span>
+                        </div>
                     </div>
                 </div>
-            </div>
+                
+
+                
+                </div>
             </Link>
             <div className='space-class'></div>
             <div className='space-class'></div>
@@ -45,15 +54,22 @@ const Classes2 = () => {
                     <Link className = 'imagen-link' to = "/classes/classes-2/Module_2Mkup">
                     <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_Mkup.jpeg`} alt="Informacion de Cursos"/>
                     </Link>
+
                 <div className="text-class">
                     
                         <p className = "class_links-class">Maquillaje Social</p>
                     
                     <div className='description-class'>
-                    <p>Nivel: Intermedio</p>
-                    <p>Incluye certificado</p>
+                    <div className='class_dates_button'>
+                        <span className='default-text'>3 DE SEPTIEMBRE AL <br></br>
+                        1 DE OCTUBRE</span>
+                        <span className='hover-text'>MÁS INFORMACIÓN</span>
+                        </div>
                     </div>
-                </div>  
+                </div>
+
+
+
             </div>
             </Link>
             <div className='space-class'></div>
@@ -63,15 +79,22 @@ const Classes2 = () => {
                     <Link className = 'imagen-link' to = "/classes/classes-2/Module_3Mkup">
                     <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_Mkup.jpeg`} alt="Informacion de Cursos"/>
                     </Link>
-                <div className="text-class">
-                    
-                        <p className = "class_links-class">Maestría en Novias y Tendencias</p>
-                    
-                    <div className='description-class'>
-                    <p>Nivel: Avanzado/Actualización</p>
-                    <p>Incluye certificado</p>
+
+            <div className="text-class">
+                
+                    <p className = "class_links-class">Maestría en Novias y Tendencias</p>
+                
+                <div className='description-class'>
+                <div className='class_dates_button'>
+                    <span className='default-text'>8 DE OCTUBRE AL <br></br>
+                    30 DE OCTUBRE</span>
+                    <span className='hover-text'>MÁS INFORMACIÓN</span>
                     </div>
-                </div>  
+                </div>
+            </div>
+                
+
+
             </div>
             </Link>
             <div className='space-class'></div>
@@ -81,19 +104,20 @@ const Classes2 = () => {
                     <Link className = 'imagen-link'to = "/classes/classes-2/Module_4Mkup">
                     <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_Mkup.jpeg`} alt="Informacion de Cursos"/>
                     </Link>
+
                 <div className="text-class">
                     
-                        <p className = "class_links-class">Curso Completo</p>
+                        <p className = "class_links-class">Curso Completo Maquillaje</p>
                     
-                        <div className='description-class-complete'>
-                    <p className='Complete-text'>Incluye:</p>
-                    <ul className='Complete-text'>
-                        <li>3 módulos</li>
-                        <li>Book “The makeup guide”</li>
-                        <li>Certificado enmarcado</li>
-                    </ul>
+                    <div className='description-class'>
+                    <div className='class_dates_button'>
+                        <span className='default-text'>30 DE JULIO AL <br></br>
+                        30 DE OCTUBRE</span>
+                        <span className='hover-text'>MÁS INFORMACIÓN</span>
+                        </div>
                     </div>
-                </div>  
+                </div>
+                 
             </div>
             </Link>
             <div className='space-class'></div>

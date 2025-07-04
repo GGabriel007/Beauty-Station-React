@@ -12,7 +12,7 @@ const Module_4Hair = () => {
 
 
   // Using the hook with correct course name
-  const courseName = "Curso Completo";
+  const courseName = "Curso Completo Peinado";
   const { whatsappForm, notificationError, handleWhatsAppChange, handleWhatsAppSubmit } = useWhatsAppForm(courseName);
 
 

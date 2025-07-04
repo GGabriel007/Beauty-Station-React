@@ -7,11 +7,17 @@ import { useLocation } from 'react-router-dom';
 import { db } from '../config/firestore'; // Import Firestore configuration
 import { doc, getDoc } from 'firebase/firestore'; // Import Firestore functions
 import { Link } from 'react-router-dom';
+import useWhatsAppForm from '../hook/useWhatsAppForm';
 
 
 
 
 const Module_4Mkup = () => {
+
+  // Using the hook with correct course name
+  const courseName = "Curso Completo Maquillaje";
+  const { whatsappForm, notificationError, handleWhatsAppChange, handleWhatsAppSubmit } = useWhatsAppForm(courseName);
+
 
 
   const [selectedImage, setSelectedImage] = useState(
@@ -55,9 +61,11 @@ const Module_4Mkup = () => {
   
     const [error, setError] = useState(''); // State for error messages
     const [notification, setNotification] = useState('');
+    const [cartnotification, setcartNotification] = useState('');
+
     const [kitSelected, setKitSelected] = useState(false); //State for kit selection
     const [kitAvailability, setKitAvailability] = useState(0); // State for kit availability
-    const [cartnotification, setcartNotification] = useState('');
+    
 
     useEffect(() => {
       const thumbnails = document.querySelectorAll('.thumbnail-module');
@@ -275,21 +283,22 @@ const Module_4Mkup = () => {
                 <p className="Demo-text"><strong>*DEMO PEINADO GRATIS</strong></p>            
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                <li><strong>Clase 1:</strong> <em>Miércoles 29 de enero </em>- Introducción y teoría</li>
-                <li><strong>Clase 2:</strong> <em>Miércoles 5 de febrero </em>- Skincare, piel HD</li>
-                <li><strong>Clase 3:</strong> <em>Miércoles 12 de febrero </em>- Correcciones/Piel con acné full cobertura</li>
-                <li><strong>Clase 4:</strong> <em>Miércoles 19 de febrero </em> - Piel madura</li>
-                <li><strong>Clase 5:</strong> <em>Miércoles 26 de febrero </em> - Glowy skin, no makeup</li>
-                <li> <strong>Clase 6: </strong><em>Miércoles 5 de marzo</em>- Delineados y pestañas</li>
-                <li> <strong>Clase 7: </strong><em>Miércoles 12 de marzo</em> - Maquillaje de día express</li>
-                <li> <strong>Clase 8: </strong><em>Miércoles 19 de marzo</em> - Glam con pgmentos quinceañera</li>
-                <li> <strong>Clase 9: </strong><em>Miércoles 26 de marzo</em> - Técnica semi cut crease</li>
-                <li> <strong>Clase 10:</strong><em>Miércoles 2 de abril</em> - Técnica smokey latte makeup</li>
-                <li> <strong>Foxy eyes, redes e iluminación</strong><p> Masterclass:<em> Miércoles 9 de abril </em></p> Práctica:<em> Jueves de 10 abril </em></li>
-                <li> <strong>SEMANA SANTA</strong> </li>
-                <li> <strong>Celebrity Makeup, hilos tensores</strong><p> Masterclass:<em> Miércoles 23 de abril </em></p> Práctica:<em> Jueves de 24 abril </em></li>
-                <li> <strong>Técnica airbrush</strong> <p> Masterclass:<em> Jueves 30 de abril </em></p> Práctica:<em> Martes 6 de mayo </em></li>
-                <li> <strong>Brindal glam + demo peinado</strong> <p className='Wed-Class'>Masterclass:<em> Miércoles 7 de mayo 4 PM</em> </p> Evaluacion final:<em> Jueves 8 de mayo, entrega portafolio</em></li>
+                <li><strong>Clase 1:</strong> <em>Miércoles 30 de Julio </em>- Introducción y teoría</li>
+                <li><strong>Clase 2:</strong> <em>Miércoles 6 de Agosto </em>- Skincare, piel HD</li>
+                <li><strong>Clase 3:</strong> <em>Miércoles 13 de Agosto </em>- Correcciones/Piel con acné full cobertura</li>
+                <li><strong>Clase 4:</strong> <em>Miércoles 20 de Agosto </em> - Piel madura</li>
+                <li><strong>Clase 5:</strong> <em>Miércoles 27 de Agosto </em> - Glowy skin, no makeup</li>
+                <li> <strong>Clase 6: </strong><em>Miércoles 3 de Septiembre</em> - Delineados y pestañas</li>
+                <li> <strong>Clase 7: </strong><em>Miércoles 10 de Septiembre</em> - Maquillaje de día express</li>
+                <li> <strong>Clase 8: </strong><em>Miércoles 17 de Septiembre</em> - Glam con pgmentos quinceañera</li>
+                <li> <strong>Clase 9: </strong><em>Miércoles 24 de Septiembre</em> - Técnica semi cut crease</li>
+                <li> <strong>Clase 10:</strong><em>Miércoles 1 de Octubre</em> - Técnica smokey latte makeup</li>
+                <li> <strong>Foxy eyes, redes e iluminación</strong><p> Masterclass:<em> Miércoles 8 de Octubre </em></p> Práctica:<em> Jueves de 9 Octubre </em></li>
+                <li> <strong>Celebrity Makeup, hilos tensores</strong><p> Masterclass:<em> Miércoles 15 de Octubre </em></p> Práctica:<em> Jueves de 16 Octubre </em></li>
+                <li> <strong>Técnica airbrush</strong> <p> Masterclass:<em> Miércoles 22 de Octubre </em></p> Práctica:<em> Jueves 23 de Octubre</em></li>
+                <li> <strong>Brindal glam + demo peinado</strong> <p className='Wed-Class'>Masterclass:<em> Miércoles 29 de Octubre 6 PM</em> </p> Evaluacion final:<em> Jueves 30 de Octubre, entrega portafolio</em></li>
+                
+                
                 </ul>
                 <p className="class_links-module">Horario:</p>
                 <ul>
@@ -299,6 +308,73 @@ const Module_4Mkup = () => {
                 <p className="class_links-module">Precio por persona: Q9,100</p>
                 <p className="class_links-module">Inscripción: Q200</p>
                 <p className="Wed-Class"> HASTA 6 CUOTAS SIN RECARGO</p>
+
+                {/* WhatsApp Quick Form */}
+            <div className="whatsapp-form">
+              <p className="title-form">Reserva tu asiento</p>
+
+              {notificationError && (
+                <p className="error-notification">{notificationError}</p>
+              )}
+
+              <label className='form-label'>Nombre Completo:*</label>
+              <input
+                pattern="^[a-zA-Z\s]*$"
+                type="text"
+                value={whatsappForm.name}
+                onChange={(e) => handleWhatsAppChange('name', e.target.value)}
+                title="Sólo se permiten letras y espacios."
+                required
+              />
+
+              <label className="form-label">Email:</label>
+              <input
+                type="email"
+                placeholder="email@domain.com"
+                value={whatsappForm.email}
+                onChange={(e) => handleWhatsAppChange('email', e.target.value)}
+                title="Ingrese un correo electrónico válido."
+                required
+              />
+
+              <label className='form-label'>Usuario de Instagram o Facebook:</label>
+              <input
+                type="text"
+                value={whatsappForm.instagram}
+                onChange={(e) => handleWhatsAppChange('instagram', e.target.value)}
+                title="Sólo puede tener letras, números, puntos y guiones bajos."
+                required
+              />
+
+              <label className='form-label'>Número de Identificación:<div className="second-Text">(DPI o número de Pasaporte)</div></label>
+              <input
+                type="tel"
+                value={whatsappForm.dpi}
+                onChange={(e) => handleWhatsAppChange('dpi', e.target.value)}
+                title="Ingresar solamente números"
+                pattern="\d+"
+                required
+              />
+
+              <label className='form-label'>Número de Teléfono:*</label>
+              <input
+                type="tel"
+                placeholder="XXXX-XXXX"
+                value={whatsappForm.phone}
+                onChange={(e) => handleWhatsAppChange('phone', e.target.value)}
+                title='Ingrese solo números'
+                required
+              />
+
+              <button className='contact-button' type="button" onClick={handleWhatsAppSubmit}>
+                Regístrate por WhatsApp
+              </button>
+            </div>
+
+                { /*
+
+
+
                 <p className="class_links-module">Precio de Kit de pieles perfectas (Altamente Recomendado): Q5,900</p>
                 <label className="checkbox-container">
                             <input 
@@ -326,6 +402,9 @@ const Module_4Mkup = () => {
                   <Link to = "/cart">
             {cartnotification && <p className="cart-notification">{cartnotification}</p>}
             </Link>
+
+            */}
+            
                 </div>
             <div className="second-image-module">
             <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Makeup/imagen_module_2Mkup.jpeg`} alt="Informacion de Curso 8"/> 
