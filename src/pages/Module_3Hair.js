@@ -236,9 +236,7 @@ const Module_3Hair = () => {
             <div className="whatsapp-form">
               <p className="title-form">Reserva tu asiento</p>
 
-              {notificationError && (
-                <p className="error-notification">{notificationError}</p>
-              )}
+             
 
               <label className='form-label'>Nombre Completo:*</label>
               <input
@@ -288,6 +286,10 @@ const Module_3Hair = () => {
                 title='Ingrese solo números'
                 required
               />
+
+               {notificationError && (
+                <p className="error-notification">{notificationError}</p>
+              )}
 
               <button className='contact-button' type="button" onClick={handleWhatsAppSubmit}>
                 Regístrate por WhatsApp
