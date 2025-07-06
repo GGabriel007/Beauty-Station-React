@@ -251,6 +251,8 @@ const Module_1Mkup = () => {
 
                 <p>Los precios no incluye materiales</p>
 
+                <p>30 DE JULIO - 27 DE AGOSTO</p>
+
 
                 <p className="class_links-module">Clases:</p>
                 <ul>

@@ -281,6 +281,9 @@ const Module_4Mkup = () => {
                 <p>Los precios no incluye materiales</p>
 
                 <p className="Demo-text"><strong>*DEMO PEINADO GRATIS</strong></p>            
+                
+                <p>30 DE JULIO - 30 DE OCTUBRE</p>
+                
                 <p className="class_links-module">Clases:</p>
                 <ul>
                 <li><strong>Clase 1:</strong> <em>Miércoles 30 de Julio </em>- Introducción y teoría</li>

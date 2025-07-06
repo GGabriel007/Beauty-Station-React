@@ -202,6 +202,9 @@ const Module_DayHair = () => {
             <p>Aprenderás nuestras 4 técnicas de ondas en tendencia en 1 día, necesitarás modelo de cabello largo o cabezote para las prácticas.</p>
             <p>INTENSIVO DE <span className='header-information-date'>1 DÍA</span></p>
             <p>Materiales Requeridos: Plancha, tubo y cepillo; secadora y productos de cabello</p>
+            
+            <p>2 DE JULIO</p>
+            
             <p className="class_links-module">Clases:</p>
             <ul>
               <li><strong>9 AM : </strong> - Introducción, Demo 1</li>

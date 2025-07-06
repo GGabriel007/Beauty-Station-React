@@ -200,7 +200,7 @@ const Module_2Hair = () => {
                     <p>Nivel: Intermedio</p>
                     <p>Materiales Requeridos: Kit completo de peinado</p>
                     <p>Los precios no incluye materiales</p>
-                    <p>MARTES 26 DE AGOSTO - MARTES 30 DE SEPTIEMBRE</p>
+                    <p>26 DE AGOSTO - 30 DE SEPTIEMBRE</p>
                     <p className="class_links-module">Clases:</p>
                     <ul>
                     <li> <strong>Clase 5: </strong> <em>Martes 26 de Agosto </em>- Trenzas en tendencias</li>

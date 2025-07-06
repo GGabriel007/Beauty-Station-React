@@ -255,6 +255,8 @@ const Module_2Mkup = () => {
 
                 <p>Los precios no incluye materiales</p>
 
+                <p>3 DE SEPTIEMBRE - 1 DE OCTUBRE</p>
+
                 <p className="class_links-module">Clases:</p>
                 <ul>
                 <li> <strong>Clase 6: </strong><em>Miércoles 3 de Septiembre</em> - Delineados y pestañas</li>

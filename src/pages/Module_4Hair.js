@@ -236,11 +236,11 @@ const Module_4Hair = () => {
                 <p>Los precios no incluye materiales</p>
 
                 <p className="Demo-text"><strong>*DEMO MAKEUP GRATIS</strong></p>
-                <p>MARTES 29 DE JULIO - JULIO 30 DE OCTUBRE</p>
+                <p>29 DE JULIO - 30 DE OCTUBRE</p>
 
                 <p className="class_links-module">Clases:</p>
                 <ul>
-                  <li><strong>Clase 1:</strong> <em>Martes 29 de Julio</em> - Introduccíon, productos waves con placha</li>
+                  <li><strong>Clase 1:</strong> <em>Martes 29 de Julio</em> - Introduccíon, productos waves con plancha</li>
                   <li><strong>Clase 2:</strong> <em>Martes 5 de Agosto</em> - Natural waves</li>
                   <li><strong>Clase 3:</strong> <em>Martes 12 de Agosto</em> - Glam waves</li>
                   <li><strong>Clase 4:</strong> <em>Martes 19 de Agosto</em> - Old Hollywood waves + velo</li>

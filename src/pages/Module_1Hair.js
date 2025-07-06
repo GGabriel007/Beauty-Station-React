@@ -199,10 +199,10 @@ const Module_1Hair = () => {
             <p>Nivel: Principiante/Intermedio</p>
             <p>Materiales Requeridos: Plancha, tubo y cepillo; secadora y productos de cabello</p>
             <p>Los precios no incluye materiales</p>
-            <p>MARTES 29 DE JULIO - MARTES 19 DE AGOSTO</p>
+            <p>29 DE JULIO - 19 DE AGOSTO</p>
             <p className="class_links-module">Clases:</p>
             <ul>
-              <li><strong>Clase 1:</strong> <em>Martes 29 de Julio</em> - Introduccíon, productos waves con placha</li>
+              <li><strong>Clase 1:</strong> <em>Martes 29 de Julio</em> - Introduccíon, productos waves con plancha</li>
               <li><strong>Clase 2:</strong> <em>Martes 5 de Agosto</em> - Natural waves</li>
               <li><strong>Clase 3:</strong> <em>Martes 12 de Agosto</em> - Glam waves</li>
               <li><strong>Clase 4:</strong> <em>Martes 19 de Agosto</em> - Old Hollywood waves + velo</li>

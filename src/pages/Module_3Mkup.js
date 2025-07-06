@@ -256,6 +256,10 @@ const Module_3Mkup = () => {
                 <p className="Demo-text"><strong>*DEMO PEINADO GRATIS</strong></p>
 
                 <p className="class_links-module">Clases:</p>
+
+               <p>8 DE OCTUBRE - 30 DE OCTUBRE</p>
+
+
                 <ul>
                 <li> <strong>Foxy eyes, redes e iluminación</strong><p> Masterclass:<em> Miércoles 8 de Octubre </em></p> Práctica:<em> Jueves de 9 Octubre </em></li>
                 <li> <strong>Celebrity Makeup, hilos tensores</strong><p> Masterclass:<em> Miércoles 15 de Octubre </em></p> Práctica:<em> Jueves de 16 Octubre </em></li>

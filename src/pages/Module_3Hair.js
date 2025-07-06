@@ -211,7 +211,7 @@ const Module_3Hair = () => {
 
                 <p className="Demo-text"><strong>*DEMO MAKEUP GRATIS</strong></p>
 
-                <p>MARTES 7 DE OCTUBRE - JUEVES 30 DE OCTUBRE</p>
+                <p>7 DE OCTUBRE - 30 DE OCTUBRE</p>
                 <p className="class_links-module">Clases:</p>
                 <ul>
                 <li><strong>Clase 11:</strong> <em> Martes 7 de Octubre</em> - Redes e ilumicaión bridal hair + lift de cejas + velo</li>
@@ -226,7 +226,6 @@ const Module_3Hair = () => {
                 <p>IMPARTIDO POR ALEH</p>
                 <p className="class_links-module">Horario:</p>
                 <ul>
-                <li>Martes y Jueves 2PM a 4PM</li>
                 <li>Martes y Jueves 6PM a 8PM</li>
                 </ul>
                 <p className="class_links-module">Precio por persona: Q4,000</p>
