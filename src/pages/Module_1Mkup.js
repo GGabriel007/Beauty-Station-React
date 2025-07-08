@@ -262,10 +262,11 @@ const Module_1Mkup = () => {
                 <li><strong>Clase 4:</strong> <em>Miércoles 20 de Agosto </em> - Piel madura</li>
                 <li><strong>Clase 5:</strong> <em>Miércoles 27 de Agosto </em> - Glowy skin, no makeup</li>
                 </ul>
-                <p className="class_links-module">Horario:</p>
+                <p>IMPARTIDO POR NUESTRO TEAM DE PROFESIONALES</p>
+                <p className="class_links-module">Elige entre 2 horarios:</p>
                 <ul>
-                  <li>Miércoles 2PM a 4PM</li>
-                  <li>Miércoles 6PM a 8PM</li>
+                  <li>Opción 1: 2PM </li>
+                  <li>Opción 2: 6PM</li>
                 </ul>
                 <p className="class_links-module">Precio por persona: Q3,000</p>
                 <p className="class_links-module">Inscripción: Q200</p>

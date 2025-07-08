@@ -303,9 +303,10 @@ const Module_4Mkup = () => {
                 
                 
                 </ul>
-                <p className="class_links-module">Horario:</p>
+                <p>IMPARTIDO POR ALEH Y NUESTRO TEAM DE PROFESIONALES</p>
+                <p className="class_links-module">Elige entre 2 horarios:</p>
                 <ul>
-                <li>Miércoles y Jueves 2PM a 4PM</li>
+                <li>Miércoles y Jueves 2PM a 4PM <div className="Wed-Class">*a excepción módulo Maestría 6 PM</div></li>
                 <li>Miércoles y Jueves 6PM a 8PM</li>
                 </ul>
                 <p className="class_links-module">Precio por persona: Q9,100</p>

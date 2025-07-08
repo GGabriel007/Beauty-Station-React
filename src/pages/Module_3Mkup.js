@@ -266,7 +266,8 @@ const Module_3Mkup = () => {
                 <li> <strong>Técnica airbrush</strong> <p> Masterclass:<em> Miércoles 22 de Octubre </em></p> Práctica:<em> Jueves 23 de Octubre</em></li>
                 <li> <strong>Brindal glam + demo peinado</strong> <p className='Wed-Class'>Masterclass:<em> Miércoles 29 de Octubre 6 PM</em> </p> Evaluacion final:<em> Jueves 30 de Octubre, entrega portafolio</em></li>
                 </ul>
-                <p className="class_links-module">Elige un Horario:</p>
+                <p>IMPARTIDO POR ALEH</p>
+                <p className="class_links-module">Horario:</p>
                 <ul>
                 <li>Miércoles y Jueves 6PM a 8PM</li>
                 </ul>

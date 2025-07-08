@@ -201,7 +201,7 @@ const Module_2Hair = () => {
                     <p>Materiales Requeridos: Kit completo de peinado</p>
                     <p>Los precios no incluye materiales</p>
                     <p>26 DE AGOSTO - 30 DE SEPTIEMBRE</p>
-                    <p className="class_links-module">Clases:</p>
+                    <p className="class_links-module">Elige entre 2 horarios:</p>
                     <ul>
                     <li> <strong>Clase 5: </strong> <em>Martes 26 de Agosto </em>- Trenzas en tendencias</li>
                     <li> <strong>Clase 6: </strong> <em>Martes 2 de Septiembre </em>- Semirecogido</li>
@@ -211,10 +211,10 @@ const Module_2Hair = () => {
                     <li> <strong>Clase 10:</strong> <em>Martes 30 de Septiembre </em>- Sleek Bun</li>
                     </ul>
                     <p>IMPARTIDO POR NUESTRO TEAM DE PROFESIONALES</p>
-                    <p className="class_links-module">Horario:</p>
+                    <p className="class_links-module">Elige entre 2 horarios:</p>
                     <ul>
-                      <li>Martes 2PM a 4PM</li>
-                      <li>Martes 6PM a 8PM</li>
+                      <li>Opción 1: 2PM </li>
+                      <li>Opción 2: 6PM </li>
                     </ul>
                     <p className="class_links-module">Precio por persona: Q3,500</p>
                     <p className="class_links-module">Inscripción: Q200</p>

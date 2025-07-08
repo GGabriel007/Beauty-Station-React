@@ -260,9 +260,9 @@ const Module_4Hair = () => {
                   <li><strong>Clase 18:</strong> <em> Jueves 30 de Octubre</em> - Evaluación final, entrega de portafolio</li>
                 </ul>
                 <p>IMPARTIDO POR ALEH Y NUESTRO TEAM DE PROFESIONALES</p>
-                <p className="class_links-module">Horario:</p>
+                <p className="class_links-module">Elige entre 2 horarios:</p>
                 <ul>
-                <li>Martes y Jueves 2PM a 4PM</li>
+                <li>Martes y Jueves 2PM a 4PM<div className="Wed-Class">*a excepción módulo Maestría 6 PM</div></li>
                 <li>Martes y Jueves 6PM a 8PM</li>
                 </ul>
                 <p className="class_links-module">Precio por persona: Q8,500</p>

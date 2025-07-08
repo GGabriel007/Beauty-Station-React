@@ -208,13 +208,14 @@ const Module_1Hair = () => {
               <li><strong>Clase 4:</strong> <em>Martes 19 de Agosto</em> - Old Hollywood waves + velo</li>
             </ul>
             <p>IMPARTIDO POR NUESTRO TEAM DE PROFESIONALES</p>
-            <p className="class_links-module">Horario:</p>
+            <p className="class_links-module">Elige entre 2 horarios:</p>
             <ul>
-              <li>Martes 2PM a 4PM</li>
-              <li>Martes 6PM a 8PM</li>
+              <li>Opción 1: 2PM </li>
+              <li>Opción 2: 6PM </li>
             </ul>
             <p className="class_links-module">Precio por persona: Q2,200</p>
             <p className="class_links-module">Inscripción: Q200</p>
+            <p className="class_links-module">*gratis hasta el 15 de Julio</p>
             <p className="Wed-Class"> HASTA 3 CUOTAS SIN RECARGO</p>
 
             {/* WhatsApp Quick Form */}

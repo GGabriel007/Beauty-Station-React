@@ -265,10 +265,11 @@ const Module_2Mkup = () => {
                 <li> <strong>Clase 9: </strong><em>Miércoles 24 de Septiembre</em> - Técnica semi cut crease</li>
                 <li> <strong>Clase 10:</strong><em>Miércoles 1 de Octubre</em> - Técnica smokey latte makeup</li>
                 </ul>
-                <p className="class_links-module">Horario:</p>
+                <p>IMPARTIDO POR NUESTRO TEAM DE PROFESIONALES</p>
+                <p className="class_links-module">Elige entre 2 horarios:</p>
                 <ul>
-                <li>Miércoles 2PM a 4PM</li>
-                <li>Miércoles 6PM a 8PM</li>
+                <li>Opción 1: 2PM</li>
+                <li>Opción 2: 6PM</li>
                 </ul>
                 <p className="class_links-module">Precio por persona: Q3,500</p>
                 <p className="class_links-module">Inscripción: Q200</p>
