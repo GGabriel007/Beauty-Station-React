@@ -12,11 +12,11 @@ const BeautySDomicilio = () => {
 
   const [formData, setFormData] = useState({
     'emailAddress' : '',
-    'entry.289998864': '',
-    'entry.1968968654': '',
-    'entry.1332809338': '',
-    'entry.1887509461': '',
-    'entry.1489137981': '',
+    'entry.1602240111': '',
+    'entry.1691432624': '',
+    'entry.188611796': '',
+    'entry.1681329108': '',
+    'entry.1787041902': '',
 
   });
 
@@ -24,7 +24,7 @@ const BeautySDomicilio = () => {
     const { value } = e.target;
     const regex = /^[a-zA-Z\s]*$/; // Allow only letters and spaces
     if (regex.test(value)) {
-      setFormData({ ...formData, 'entry.289998864': value });
+      setFormData({ ...formData, 'entry.1602240111': value });
     }
   };
 
@@ -48,7 +48,7 @@ const BeautySDomicilio = () => {
         // Allow only valid email characters (letters, numbers, dots, hyphens, underscores, and @)
         formattedValue = value.replace(/[^a-zA-Z0-9.@_-]/g, '');
         break;
-      case 'entry.1968968654':
+      case 'entry.1691432624':
         formattedValue = value.replace(/\D/g, ''); // Allow only digits
         break;
       default:
@@ -69,7 +69,7 @@ const BeautySDomicilio = () => {
         </div>
         <div className="mid-information-form">
           <form
-            action="https://docs.google.com/forms/u/0/d/e/1FAIpQLScEDYWXQs7zn4kFG1GDCVsP9Xnq7dSpoKEP1fN1ikhiW2H5IQ/formResponse"
+            action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfDpQjDORdbRwIzsQuBYMWpBLVcd-xo_Y8ouWpCPcD4Q1PW-g/formResponse"
             method="post"
           >
             <label htmlFor="email" className="form-label">Email:*</label>
@@ -88,8 +88,8 @@ const BeautySDomicilio = () => {
               pattern="^[a-zA-Z\s]*$"
               type="text"
               id="name"
-              name="entry.289998864"
-              value={formData['entry.289998864']}
+              name="entry.1602240111"
+              value={formData['entry.1602240111']}
               onChange={handleNameChange}
               title="Sólo se permiten letras y espacios."
               required
@@ -99,15 +99,15 @@ const BeautySDomicilio = () => {
             <input
               type="tel"
               id="whatsapp"
-              name="entry.1968968654"
-              value={formData['entry.1968968654']}
+              name="entry.1691432624"
+              value={formData['entry.1691432624']}
               onChange={handleChange}
               placeholder="XXXX-XXXX"
               required
             /><br />
 
             <label htmlFor="date">Fecha del Evento:*</label>
-            <input type="date" id="date" name="entry.1338661665" required /><br />
+            <input type="date" id="date" name="entry.1686684049" required /><br />
 
             <label htmlFor="address">
               Dirección o Nombre de Hotel donde Desean Arreglarse*:
@@ -117,9 +117,9 @@ const BeautySDomicilio = () => {
             </label>
             <textarea
               id="address"
-              name="entry.1332809338"
-              value={formData['entry.1332809338']}
-              onChange={(e) => handleGenericChange(e, 'entry.1332809338')}
+              name="entry.188611796"
+              value={formData['entry.188611796']}
+              onChange={(e) => handleGenericChange(e, 'entry.188611796')}
               required
             ></textarea><br />
 
@@ -130,9 +130,9 @@ const BeautySDomicilio = () => {
             <input 
              type="text"
              id="services" 
-             name="entry.1887509461" 
-             value={formData['entry.1887509461']}
-             onChange={(e) => handleGenericChange(e, 'entry.1887509461')}
+             name="entry.1681329108" 
+             value={formData['entry.1681329108']}
+             onChange={(e) => handleGenericChange(e, 'entry.1681329108')}
              required 
              /><br />
 
@@ -140,15 +140,15 @@ const BeautySDomicilio = () => {
             ¿A qué Hora Necesitan Estar Listas?*
               <div className="second-Text">(Toma en Consideración si su Fotógrafo les Hará Fotos)</div>
             </label>
-            <input type="time" id="time" name="entry.1411026003" required /><br />
+            <input type="time" id="time" name="entry.574987156" required /><br />
 
             <label htmlFor="notes">Algo más que Considera Importante Compartir con Nosotros:*</label>
             <textarea 
             
             id="text" 
-            name="entry.1489137981" 
-            value={formData['entry.1489137981']}
-            onChange={(e) => handleGenericChange(e, 'entry.1489137981')}
+            name="entry.1787041902" 
+            value={formData['entry.1787041902']}
+            onChange={(e) => handleGenericChange(e, 'entry.1787041902')}
             required
             ></textarea>
 
