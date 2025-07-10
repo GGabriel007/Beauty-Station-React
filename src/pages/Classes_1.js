@@ -35,7 +35,7 @@ const Classes1 = () => {
                     <div className='description-class'>
                         <div className='one-day'>1 DÍA </div>
                     <div className='class_dates_button'>
-                        <span className='default-text'>2 DE JULIO</span>
+                        <span className='default-text'>BAJO CITA</span>
                         <span className='hover-text'>MÁS INFORMACIÓN</span>
                     </div>
                     </div>

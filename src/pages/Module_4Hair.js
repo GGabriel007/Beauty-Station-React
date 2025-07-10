@@ -239,27 +239,44 @@ const Module_4Hair = () => {
                 <p>29 DE JULIO - 30 DE OCTUBRE</p>
 
                 <p className="class_links-module">Clases:</p>
+                <h3>IMPARTIDO POR NUESTRO TEAM DE PROFESIONALES</h3>
                 <ul>
-                  <li><strong>Clase 1:</strong> <em>Martes 29 de Julio</em> - Introduccíon, productos waves con plancha</li>
+                  <li><strong>Clase 1:</strong> <em>Martes 29 de Julio</em> - Introducción, productos waves con plancha</li>
                   <li><strong>Clase 2:</strong> <em>Martes 5 de Agosto</em> - Natural waves</li>
                   <li><strong>Clase 3:</strong> <em>Martes 12 de Agosto</em> - Glam waves</li>
                   <li><strong>Clase 4:</strong> <em>Martes 19 de Agosto</em> - Old Hollywood waves + velo</li>
-                  <li><strong>Clase 5: </strong> <em>Martes 26 de Agosto </em>- Trenzas en tendencias</li>
-                  <li><strong>Clase 6: </strong> <em>Martes 2 de Septiembre </em>- Semirecogido</li>
-                  <li><strong>Clase 7: </strong> <em>Martes 9 de Septiembre </em>- Recogido clásico</li>
-                  <li><strong>Clase 8: </strong> <em>Martes 16 de Septiembre </em>- Recogido con volumen</li>
-                  <li><strong>Clase 9: </strong> <em>Martes 23 de Septiembre </em>- Cola Baja</li>
-                  <li><strong>Clase 10:</strong> <em>Martes 30 de Septiembre </em>- Sleek Bun</li>
-                  <li><strong>Clase 11:</strong> <em> Martes 7 de Octubre</em> - Redes e ilumicaión bridal hair + lift de cejas + velo</li>
-                  <li><strong>Clase 12:</strong> <em> Jueves 9 de Octubre</em> - Práctica en modelo</li>
-                  <li><strong>Clase 13:</strong> <em> Martes 14 de Octubre</em> - Semirecogido con ondas retro</li>
-                  <li><strong>Clase 14:</strong> <em> Jueves 16 de Octubre</em> - Práctica en modelo</li>
-                  <li><strong>Clase 15:</strong> <em> Martes 21 de Octubre</em> - Cola alta con volumen</li>
-                  <li><strong>Clase 16:</strong> <em> Jueves 23 de Octubre</em> - Práctica modelo</li>
-                  <li className="Wed-Class"><strong>Clase 17:</strong> <em> Miercoles 29 de Octubre 6 PM</em> - Peinado alto Kim Kardashian</li>
-                  <li><strong>Clase 18:</strong> <em> Jueves 30 de Octubre</em> - Evaluación final, entrega de portafolio</li>
+                  <li><strong>Clase 5:</strong> <em>Martes 26 de Agosto</em> - Trenzas en tendencias</li>
+                  <li><strong>Clase 6:</strong> <em>Martes 2 de Septiembre</em> - Semirecogido</li>
+                  <li><strong>Clase 7:</strong> <em>Martes 9 de Septiembre</em> - Recogido clásico</li>
+                  <li><strong>Clase 8:</strong> <em>Martes 16 de Septiembre</em> - Recogido con volumen</li>
+                  <li><strong>Clase 9:</strong> <em>Martes 23 de Septiembre</em> - Cola Baja</li>
+                  <li><strong>Clase 10:</strong> <em>Martes 30 de Septiembre</em> - Sleek Bun</li>
                 </ul>
-                <p>IMPARTIDO POR ALEH Y NUESTRO TEAM DE PROFESIONALES</p>
+
+                <h3>IMPARTIDO POR ALEH</h3>
+                <ul>
+                  <li> 
+                    <strong>Redes e iluminación bridal hair + lift de cejas + velo</strong>
+                    <p>Masterclass:<em> Martes 7 de Octubre</em></p>
+                    Práctica:<em> Jueves 9 de Octubre</em>
+                  </li>
+                  <li> 
+                    <strong>Semirecogido con ondas retro</strong>
+                    <p>Masterclass:<em> Martes 14 de Octubre</em></p>
+                    Práctica:<em> Jueves 16 de Octubre</em>
+                  </li>
+                  <li> 
+                    <strong>Cola alta con volumen</strong>
+                    <p>Masterclass:<em> Martes 21 de Octubre</em></p>
+                    Práctica:<em> Jueves 23 de Octubre</em>
+                  </li>
+                  <li> 
+                    <strong>Peinado alto Kim Kardashian</strong>
+                    <p class="Wed-Class">Masterclass:<em> Miércoles 29 de Octubre 6 PM</em></p>
+                    Evaluación final:<em> Jueves 30 de Octubre, entrega de portafolio</em>
+                  </li>
+                </ul>
+            
                 <p className="class_links-module">Elige entre 2 horarios:</p>
                 <ul>
                 <li>Martes y Jueves 2PM a 4PM<div className="Wed-Class">*a excepción módulo Maestría 6 PM</div></li>

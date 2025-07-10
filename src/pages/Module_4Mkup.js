@@ -285,25 +285,44 @@ const Module_4Mkup = () => {
                 <p>30 DE JULIO - 30 DE OCTUBRE</p>
                 
                 <p className="class_links-module">Clases:</p>
+                <h3>IMPARTIDO POR NUESTRO TEAM DE PROFESIONALES</h3>
                 <ul>
-                <li><strong>Clase 1:</strong> <em>Miércoles 30 de Julio </em>- Introducción y teoría</li>
-                <li><strong>Clase 2:</strong> <em>Miércoles 6 de Agosto </em>- Skincare, piel HD</li>
-                <li><strong>Clase 3:</strong> <em>Miércoles 13 de Agosto </em>- Correcciones/Piel con acné full cobertura</li>
-                <li><strong>Clase 4:</strong> <em>Miércoles 20 de Agosto </em> - Piel madura</li>
-                <li><strong>Clase 5:</strong> <em>Miércoles 27 de Agosto </em> - Glowy skin, no makeup</li>
-                <li> <strong>Clase 6: </strong><em>Miércoles 3 de Septiembre</em> - Delineados y pestañas</li>
-                <li> <strong>Clase 7: </strong><em>Miércoles 10 de Septiembre</em> - Maquillaje de día express</li>
-                <li> <strong>Clase 8: </strong><em>Miércoles 17 de Septiembre</em> - Glam con pgmentos quinceañera</li>
-                <li> <strong>Clase 9: </strong><em>Miércoles 24 de Septiembre</em> - Técnica semi cut crease</li>
-                <li> <strong>Clase 10:</strong><em>Miércoles 1 de Octubre</em> - Técnica smokey latte makeup</li>
-                <li> <strong>Foxy eyes, redes e iluminación</strong><p> Masterclass:<em> Miércoles 8 de Octubre </em></p> Práctica:<em> Jueves de 9 Octubre </em></li>
-                <li> <strong>Celebrity Makeup, hilos tensores</strong><p> Masterclass:<em> Miércoles 15 de Octubre </em></p> Práctica:<em> Jueves de 16 Octubre </em></li>
-                <li> <strong>Técnica airbrush</strong> <p> Masterclass:<em> Miércoles 22 de Octubre </em></p> Práctica:<em> Jueves 23 de Octubre</em></li>
-                <li> <strong>Brindal glam + demo peinado</strong> <p className='Wed-Class'>Masterclass:<em> Miércoles 29 de Octubre 6 PM</em> </p> Evaluacion final:<em> Jueves 30 de Octubre, entrega portafolio</em></li>
-                
-                
+                  <li><strong>Clase 1:</strong> <em>Miércoles 30 de Julio</em> - Introducción y teoría</li>
+                  <li><strong>Clase 2:</strong> <em>Miércoles 6 de Agosto</em> - Skincare, piel HD</li>
+                  <li><strong>Clase 3:</strong> <em>Miércoles 13 de Agosto</em> - Correcciones / Piel con acné full cobertura</li>
+                  <li><strong>Clase 4:</strong> <em>Miércoles 20 de Agosto</em> - Piel madura</li>
+                  <li><strong>Clase 5:</strong> <em>Miércoles 27 de Agosto</em> - Glowy skin, no makeup</li>
+                  <li><strong>Clase 6:</strong> <em>Miércoles 3 de Septiembre</em> - Delineados y pestañas</li>
+                  <li><strong>Clase 7:</strong> <em>Miércoles 10 de Septiembre</em> - Maquillaje de día express</li>
+                  <li><strong>Clase 8:</strong> <em>Miércoles 17 de Septiembre</em> - Glam con pigmentos quinceañera</li>
+                  <li><strong>Clase 9:</strong> <em>Miércoles 24 de Septiembre</em> - Técnica semi cut crease</li>
+                  <li><strong>Clase 10:</strong> <em>Miércoles 1 de Octubre</em> - Técnica smokey latte makeup</li>
                 </ul>
-                <p>IMPARTIDO POR ALEH Y NUESTRO TEAM DE PROFESIONALES</p>
+
+                <h3>IMPARTIDO POR ALEH</h3>
+                <ul>
+                  <li> 
+                    <strong>Foxy eyes, redes e iluminación</strong>
+                    <p>Masterclass:<em> Miércoles 8 de Octubre </em></p> 
+                    Práctica:<em> Jueves 9 de Octubre</em>
+                  </li>
+                  <li> 
+                    <strong>Celebrity Makeup, hilos tensores</strong>
+                    <p>Masterclass:<em> Miércoles 15 de Octubre </em></p> 
+                    Práctica:<em> Jueves 16 de Octubre</em>
+                  </li>
+                  <li> 
+                    <strong>Técnica airbrush</strong>
+                    <p>Masterclass:<em> Miércoles 22 de Octubre </em></p> 
+                    Práctica:<em> Jueves 23 de Octubre</em>
+                  </li>
+                  <li> 
+                    <strong>Brindal glam + demo peinado</strong>
+                    <p className="Wed-Class">Masterclass:<em> Miércoles 29 de Octubre 6 PM</em></p> 
+                    Evaluación final:<em> Jueves 30 de Octubre, entrega portafolio</em>
+                  </li>
+                </ul>
+                
                 <p className="class_links-module">Elige entre 2 horarios:</p>
                 <ul>
                 <li>Miércoles y Jueves 2PM a 4PM <div className="Wed-Class">*a excepción módulo Maestría 6 PM</div></li>

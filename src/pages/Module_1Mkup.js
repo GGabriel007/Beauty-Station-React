@@ -255,6 +255,7 @@ const Module_1Mkup = () => {
 
 
                 <p className="class_links-module">Clases:</p>
+                <h3>IMPARTIDO POR NUESTRO TEAM DE PROFESIONALES</h3>
                 <ul>
                 <li><strong>Clase 1:</strong> <em>Miércoles 30 de Julio </em>- Introducción y teoría</li>
                 <li><strong>Clase 2:</strong> <em>Miércoles 6 de Agosto </em>- Skincare, piel HD</li>
@@ -262,7 +263,7 @@ const Module_1Mkup = () => {
                 <li><strong>Clase 4:</strong> <em>Miércoles 20 de Agosto </em> - Piel madura</li>
                 <li><strong>Clase 5:</strong> <em>Miércoles 27 de Agosto </em> - Glowy skin, no makeup</li>
                 </ul>
-                <p>IMPARTIDO POR NUESTRO TEAM DE PROFESIONALES</p>
+               
                 <p className="class_links-module">Elige entre 2 horarios:</p>
                 <ul>
                   <li>Opción 1: 2PM </li>

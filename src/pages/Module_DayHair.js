@@ -201,11 +201,12 @@ const Module_DayHair = () => {
             <p className="class_links-module">Informacion del Módulo:</p>
             <p>Aprenderás nuestras 4 técnicas de ondas en tendencia en 1 día, necesitarás modelo de cabello largo o cabezote para las prácticas.</p>
             <p>INTENSIVO DE <span className='header-information-date'>1 DÍA</span></p>
-            <p>Materiales Requeridos: Plancha, tubo y cepillo; secadora y productos de cabello</p>
+            <p>Materiales Requeridos: Plancha, tubo y cepillo; secadora y productos de cabello.</p>
             
-            <p>2 DE JULIO</p>
+            <p>Agenda tu cita para confirmar fecha</p>
             
             <p className="class_links-module">Clases:</p>
+            <h3>IMPARTIDO POR NUESTRO TEAM DE PROFESIONALES</h3>
             <ul>
               <li><strong>9 AM : </strong> - Introducción, Demo 1</li>
               <li><strong>10 AM : </strong> - Práctica supervisada</li>
@@ -216,11 +217,11 @@ const Module_DayHair = () => {
               <li><strong>3 PM : </strong> - Práctica supervisada</li>
               <li><strong>4 PM : </strong> - Diplomas y fotos</li>
             </ul>
-            <p className="class_links-module">Fecha y Horario:</p>
+            <p className="class_links-module">Horario:</p>
             <ul>
-              <li>Miércoles 2 de Julio 9AM a 4PM</li>
+              <li>9AM a 4PM</li>
             </ul>
-            <p>IMPARTIDO POR NUESTRO TEAM DE PROFESIONALES</p>
+            
             <p className="class_links-module">Precio por persona: Q2,100</p>
             <p className="class_links-module">Inscripción: Q200</p>
             <p className="class_links-module"><div className='header-information-date'>Segundo alumno mitad de precio</div></p>
@@ -287,7 +288,7 @@ const Module_DayHair = () => {
               <button className='contact-button' 
               type="button" 
               onClick={handleWhatsAppSubmit}>
-                Regístrate por WhatsApp
+                Agenda tu cita por WhatsApp
               </button>
             </div>
 

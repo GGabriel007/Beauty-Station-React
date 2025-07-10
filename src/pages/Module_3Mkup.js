@@ -255,18 +255,36 @@ const Module_3Mkup = () => {
 
                 <p className="Demo-text"><strong>*DEMO PEINADO GRATIS</strong></p>
 
+                <p>8 DE OCTUBRE - 30 DE OCTUBRE</p>
+
                 <p className="class_links-module">Clases:</p>
 
-               <p>8 DE OCTUBRE - 30 DE OCTUBRE</p>
+               
 
 
+                <h3>IMPARTIDO POR ALEH</h3>
                 <ul>
-                <li> <strong>Foxy eyes, redes e iluminación</strong><p> Masterclass:<em> Miércoles 8 de Octubre </em></p> Práctica:<em> Jueves de 9 Octubre </em></li>
-                <li> <strong>Celebrity Makeup, hilos tensores</strong><p> Masterclass:<em> Miércoles 15 de Octubre </em></p> Práctica:<em> Jueves de 16 Octubre </em></li>
-                <li> <strong>Técnica airbrush</strong> <p> Masterclass:<em> Miércoles 22 de Octubre </em></p> Práctica:<em> Jueves 23 de Octubre</em></li>
-                <li> <strong>Brindal glam + demo peinado</strong> <p className='Wed-Class'>Masterclass:<em> Miércoles 29 de Octubre 6 PM</em> </p> Evaluacion final:<em> Jueves 30 de Octubre, entrega portafolio</em></li>
+                  <li> 
+                    <strong>Foxy eyes, redes e iluminación</strong>
+                    <p>Masterclass:<em> Miércoles 8 de Octubre </em></p> 
+                    Práctica:<em> Jueves 9 de Octubre</em>
+                  </li>
+                  <li> 
+                    <strong>Celebrity Makeup, hilos tensores</strong>
+                    <p>Masterclass:<em> Miércoles 15 de Octubre </em></p> 
+                    Práctica:<em> Jueves 16 de Octubre</em>
+                  </li>
+                  <li> 
+                    <strong>Técnica airbrush</strong>
+                    <p>Masterclass:<em> Miércoles 22 de Octubre </em></p> 
+                    Práctica:<em> Jueves 23 de Octubre</em>
+                  </li>
+                  <li> 
+                    <strong>Brindal glam + demo peinado</strong>
+                    <p className="Wed-Class">Masterclass:<em> Miércoles 29 de Octubre 6 PM</em></p> 
+                    Evaluación final:<em> Jueves 30 de Octubre, entrega portafolio</em>
+                  </li>
                 </ul>
-                <p>IMPARTIDO POR ALEH</p>
                 <p className="class_links-module">Horario:</p>
                 <ul>
                 <li>Miércoles y Jueves 6PM a 8PM</li>

@@ -258,6 +258,7 @@ const Module_2Mkup = () => {
                 <p>3 DE SEPTIEMBRE - 1 DE OCTUBRE</p>
 
                 <p className="class_links-module">Clases:</p>
+                <h3>IMPARTIDO POR NUESTRO TEAM DE PROFESIONALES</h3>
                 <ul>
                 <li> <strong>Clase 6: </strong><em>Miércoles 3 de Septiembre</em> - Delineados y pestañas</li>
                 <li> <strong>Clase 7: </strong><em>Miércoles 10 de Septiembre</em> - Maquillaje de día express</li>
@@ -265,7 +266,7 @@ const Module_2Mkup = () => {
                 <li> <strong>Clase 9: </strong><em>Miércoles 24 de Septiembre</em> - Técnica semi cut crease</li>
                 <li> <strong>Clase 10:</strong><em>Miércoles 1 de Octubre</em> - Técnica smokey latte makeup</li>
                 </ul>
-                <p>IMPARTIDO POR NUESTRO TEAM DE PROFESIONALES</p>
+                
                 <p className="class_links-module">Elige entre 2 horarios:</p>
                 <ul>
                 <li>Opción 1: 2PM</li>
