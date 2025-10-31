@@ -56,8 +56,8 @@ const Classes1 = () => {
                     
                     <div className='description-class'>
                     <div className='class_dates_button'>
-                        <span className='default-text'>29 DE JULIO AL <br></br>
-                        19 DE AGOSTO</span>
+                        <span className='default-text'>27 DE ENERO AL <br></br>
+                        17 DE FEBRERO</span>
                         <span className='hover-text'>MÁS INFORMACIÓN</span>
                         </div>
                     </div>
@@ -77,8 +77,8 @@ const Classes1 = () => {
                         
                     <div className='description-class'>
                     <div className='class_dates_button'>
-                        <span className='default-text'>26 DE AGOSTO AL <br></br>
-                        30 DE SEPTIEMBRE</span>
+                        <span className='default-text'>24 DE FEBRERO AL <br></br>
+                        7 DE ABRIL</span>
                         <span className='hover-text'>MÁS INFORMACIÓN</span>
                         </div>
                     </div>
@@ -99,8 +99,8 @@ const Classes1 = () => {
                     <div className='description-class'>
                     <div className='class_dates_button'>
 
-                        <span className='default-text'>7 DE OCTUBRE AL <br></br>
-                        30 DE OCTUBRE</span>
+                        <span className='default-text'>14 DE ABRIL AL <br></br>
+                        7 DE MAYO</span>
                         <span className='hover-text'>MÁS INFORMACIÓN</span>
 
                         </div>
@@ -120,8 +120,8 @@ const Classes1 = () => {
                         <p className = "class_links-class">Curso Completo</p>
                         <div className='description-class'>
                     <div className='class_dates_button'>
-                        <span className='default-text'>29 DE JULIO AL <br></br>
-                        30 DE OCTUBRE</span>
+                        <span className='default-text'>27 DE ENERO AL <br></br>
+                        7 DE MAYO</span>
                         <span className='hover-text'>MÁS INFORMACIÓN</span>
                         
                         </div>

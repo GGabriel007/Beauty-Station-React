@@ -255,22 +255,23 @@ const Module_2Mkup = () => {
 
                 <p>Los precios no incluye materiales</p>
 
-                <p>3 DE SEPTIEMBRE - 1 DE OCTUBRE</p>
+                <p>4 DE MARZO - 8 DE ABRIL</p>
 
                 <p className="class_links-module">Clases:</p>
                 <h3>IMPARTIDO POR NUESTRO TEAM DE PROFESIONALES</h3>
                 <ul>
-                <li> <strong>Clase 6: </strong><em>Miércoles 3 de Septiembre</em> - Delineados y pestañas</li>
-                <li> <strong>Clase 7: </strong><em>Miércoles 10 de Septiembre</em> - Maquillaje de día express</li>
-                <li> <strong>Clase 8: </strong><em>Miércoles 17 de Septiembre</em> - Glam con pgmentos quinceañera</li>
-                <li> <strong>Clase 9: </strong><em>Miércoles 24 de Septiembre</em> - Técnica semi cut crease</li>
-                <li> <strong>Clase 10:</strong><em>Miércoles 1 de Octubre</em> - Técnica smokey latte makeup</li>
+                <li> <strong>Clase 6: </strong><em>Miércoles 4 de Marzo</em> - Delineados y pestañas</li>
+                <li> <strong>Clase 7: </strong><em>Miércoles 11 de Marzo</em> - Maquillaje de día express</li>
+                <li> <strong>Clase 8: </strong><em>Miércoles 18 de Marzo</em> - Glam con pgmentos quinceañera</li>
+                <li> <strong>Clase 9: </strong><em>Miércoles 25 de Marzo</em> - Técnica semi cut crease</li>
+                <p className="Wed-Class"><b>SEMANA SANTA (NO HAY CLASE)</b></p>
+                <li> <strong>Clase 10: </strong><em>Miércoles 8 de Abril</em> - Técnica smokey latte makeup</li>
                 </ul>
                 
                 <p className="class_links-module">Elige entre 2 horarios:</p>
                 <ul>
-                <li>Opción 1: 2PM</li>
-                <li>Opción 2: 6PM</li>
+                <li>Opción 1: 2PM A 4PM</li>
+                <li>Opción 2: 6PM A 8PM</li>
                 </ul>
                 <p className="class_links-module">Precio por persona: Q3,500</p>
                 <p className="class_links-module">Inscripción: Q200</p>

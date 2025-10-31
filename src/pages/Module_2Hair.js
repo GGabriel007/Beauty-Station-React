@@ -200,22 +200,23 @@ const Module_2Hair = () => {
                     <p>Nivel: Intermedio</p>
                     <p>Materiales Requeridos: Kit completo de peinado</p>
                     <p>Los precios no incluye materiales</p>
-                    <p>26 DE AGOSTO - 30 DE SEPTIEMBRE</p>
+                    <p>24 DE FEBRERO - 7 DE ABRIL</p>
                     <p className="class_links-module">Clases:</p>
                     <h3>IMPARTIDO POR NUESTRO TEAM DE PROFESIONALES</h3>
                     <ul>
-                    <li> <strong>Clase 5: </strong> <em>Martes 26 de Agosto </em>- Trenzas en tendencias</li>
-                    <li> <strong>Clase 6: </strong> <em>Martes 2 de Septiembre </em>- Semirecogido</li>
-                    <li> <strong>Clase 7: </strong> <em>Martes 9 de Septiembre </em>- Recogido clásico</li>
-                    <li> <strong>Clase 8: </strong> <em>Martes 16 de Septiembre </em>- Recogido con volumen</li>
-                    <li> <strong>Clase 9: </strong> <em>Martes 23 de Septiembre </em>- Cola Baja</li>
-                    <li> <strong>Clase 10:</strong> <em>Martes 30 de Septiembre </em>- Sleek Bun</li>
+                    <li> <strong>Clase 5: </strong> <em>Martes 24 de Febrero </em>- Trenzas en tendencias</li>
+                    <li> <strong>Clase 6: </strong> <em>Martes 3 de Marzo </em>- Semirecogido</li>
+                    <li> <strong>Clase 7: </strong> <em>Martes 10 de Marzo </em>- Recogido clásico</li>
+                    <li> <strong>Clase 8: </strong> <em>Martes 17 de Marzo </em>- Recogido con volumen</li>
+                    <li> <strong>Clase 9: </strong> <em>Martes 24 de Marzo </em>- Cola Baja</li>
+                    <p className="Wed-Class"><b>SEMANA SANTA (NO HAY CLASE)</b></p>
+                    <li> <strong>Clase 10: </strong> <em>Martes 7 de Abril </em>- Sleek Bun</li>
                     </ul>
                     
                     <p className="class_links-module">Elige entre 2 horarios:</p>
                     <ul>
-                      <li>Opción 1: 2PM </li>
-                      <li>Opción 2: 6PM </li>
+                      <li>Opción 1: 2PM A 4PM </li>
+                      <li>Opción 2: 6PM A 8PM</li>
                     </ul>
                     <p className="class_links-module">Precio por persona: Q3,500</p>
                     <p className="class_links-module">Inscripción: Q200</p>

@@ -199,20 +199,20 @@ const Module_1Hair = () => {
             <p>Nivel: Principiante/Intermedio</p>
             <p>Materiales Requeridos: Plancha, tubo y cepillo; secadora y productos de cabello</p>
             <p>Los precios no incluye materiales</p>
-            <p>29 DE JULIO - 19 DE AGOSTO</p>
+            <p>27 DE ENERO - 17 DE FEBRERO</p>
             <p className="class_links-module">Clases:</p>
             <h3>IMPARTIDO POR NUESTRO TEAM DE PROFESIONALES</h3>
             <ul>
-              <li><strong>Clase 1:</strong> <em>Martes 29 de Julio</em> - Introduccíon, productos waves con plancha</li>
-              <li><strong>Clase 2:</strong> <em>Martes 5 de Agosto</em> - Natural waves</li>
-              <li><strong>Clase 3:</strong> <em>Martes 12 de Agosto</em> - Glam waves</li>
-              <li><strong>Clase 4:</strong> <em>Martes 19 de Agosto</em> - Old Hollywood waves + velo</li>
+              <li><strong>Clase 1:</strong> <em>Martes 27 de Enero</em> - Introduccíon, productos waves con plancha</li>
+              <li><strong>Clase 2:</strong> <em>Martes 3 de Febrero</em> - Natural waves</li>
+              <li><strong>Clase 3:</strong> <em>Martes 10 de Febrero</em> - Glam waves</li>
+              <li><strong>Clase 4:</strong> <em>Martes 17 de Febrero</em> - Old Hollywood waves + velo</li>
             </ul>
             
             <p className="class_links-module">Elige entre 2 horarios:</p>
             <ul>
-              <li>Opción 1: 2PM </li>
-              <li>Opción 2: 6PM </li>
+              <li>Opción 1: 2PM A 4PM</li>
+              <li>Opción 2: 6PM A 8 PM</li>
             </ul>
             <p className="class_links-module">Precio por persona: Q2,200</p>
             <p className="class_links-module">Inscripción: Q200</p>

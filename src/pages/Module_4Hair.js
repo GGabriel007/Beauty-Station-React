@@ -236,50 +236,53 @@ const Module_4Hair = () => {
                 <p>Los precios no incluye materiales</p>
 
                 <p className="Demo-text"><strong>*DEMO MAKEUP GRATIS</strong></p>
-                <p>29 DE JULIO - 30 DE OCTUBRE</p>
+                <p>27 DE ENERO - 7 DE MAYO</p>
 
                 <p className="class_links-module">Clases:</p>
                 <h3>IMPARTIDO POR NUESTRO TEAM DE PROFESIONALES</h3>
                 <ul>
-                  <li><strong>Clase 1:</strong> <em>Martes 29 de Julio</em> - Introducción, productos waves con plancha</li>
-                  <li><strong>Clase 2:</strong> <em>Martes 5 de Agosto</em> - Natural waves</li>
-                  <li><strong>Clase 3:</strong> <em>Martes 12 de Agosto</em> - Glam waves</li>
-                  <li><strong>Clase 4:</strong> <em>Martes 19 de Agosto</em> - Old Hollywood waves + velo</li>
-                  <li><strong>Clase 5:</strong> <em>Martes 26 de Agosto</em> - Trenzas en tendencias</li>
-                  <li><strong>Clase 6:</strong> <em>Martes 2 de Septiembre</em> - Semirecogido</li>
-                  <li><strong>Clase 7:</strong> <em>Martes 9 de Septiembre</em> - Recogido clásico</li>
-                  <li><strong>Clase 8:</strong> <em>Martes 16 de Septiembre</em> - Recogido con volumen</li>
-                  <li><strong>Clase 9:</strong> <em>Martes 23 de Septiembre</em> - Cola Baja</li>
-                  <li><strong>Clase 10:</strong> <em>Martes 30 de Septiembre</em> - Sleek Bun</li>
+                  <li><strong>Clase 1:</strong> <em>Martes 27 de Enero</em> - Introduccíon, productos waves con plancha</li>
+                  <li><strong>Clase 2:</strong> <em>Martes 3 de Febrero</em> - Natural waves</li>
+                  <li><strong>Clase 3:</strong> <em>Martes 10 de Febrero</em> - Glam waves</li>
+                  <li><strong>Clase 4:</strong> <em>Martes 17 de Febrero</em> - Old Hollywood waves + velo</li>
+
+                  <li> <strong>Clase 5: </strong> <em>Martes 24 de Febrero </em>- Trenzas en tendencias</li>
+                  <li> <strong>Clase 6: </strong> <em>Martes 3 de Marzo </em>- Semirecogido</li>
+                  <li> <strong>Clase 7: </strong> <em>Martes 10 de Marzo </em>- Recogido clásico</li>
+                  <li> <strong>Clase 8: </strong> <em>Martes 17 de Marzo </em>- Recogido con volumen</li>
+                  <li> <strong>Clase 9: </strong> <em>Martes 24 de Marzo </em>- Cola Baja</li>
+                  <p className="Wed-Class"><b>SEMANA SANTA (NO HAY CLASE)</b></p>
+                  <li> <strong>Clase 10: </strong> <em>Martes 7 de Abril </em>- Sleek Bun</li>
+
                 </ul>
 
                 <h3>IMPARTIDO POR ALEH</h3>
                 <ul>
                   <li> 
                     <strong>Redes e iluminación bridal hair + lift de cejas + velo</strong>
-                    <p>Masterclass:<em> Martes 7 de Octubre</em></p>
-                    Práctica:<em> Jueves 9 de Octubre</em>
+                    <p>Clase 11: Masterclass<em> Martes 14 de Abril</em></p>
+                    Clase 12: Práctica<em> Jueves 16 de Abril (EN MODELO)</em>
                   </li>
                   <li> 
                     <strong>Semirecogido con ondas retro</strong>
-                    <p>Masterclass:<em> Martes 14 de Octubre</em></p>
-                    Práctica:<em> Jueves 16 de Octubre</em>
+                    <p>Clase 13: Masterclass<em> Martes 21 de Abril</em></p>
+                    Clase 14: Práctica<em> Jueves 23 de Abril (EN MODELO)</em>
                   </li>
                   <li> 
                     <strong>Cola alta con volumen</strong>
-                    <p>Masterclass:<em> Martes 21 de Octubre</em></p>
-                    Práctica:<em> Jueves 23 de Octubre</em>
+                    <p>Clase 15: Masterclass<em> Martes 28 de Abril</em></p>
+                    Clase 16: Práctica<em> Jueves 30 de Abril (EN MODELO)</em>
                   </li>
                   <li> 
                     <strong>Peinado alto Kim Kardashian</strong>
-                    <p class="Wed-Class">Masterclass:<em> Miércoles 29 de Octubre 6 PM</em></p>
-                    Evaluación final:<em> Jueves 30 de Octubre, entrega de portafolio</em>
+                    <p>Clase 17:<span class="Wed-Class"> Masterclass<em> Miércoles 6 de Mayo 6 PM</em></span></p>
+                    Clase 18:<em> Jueves 7 de Mayo, evaluación final y entrega de portafolio (EN MODELO)</em>
                   </li>
                 </ul>
             
                 <p className="class_links-module">Elige entre 2 horarios:</p>
                 <ul>
-                <li>Martes y Jueves 2PM a 4PM<div className="Wed-Class">*a excepción módulo Maestría 6 PM</div></li>
+                <li>Martes y Jueves 2PM a 4PM<div className="Wed-Class">*a excepción módulo Maestría 6 PM A 8PM</div></li>
                 <li>Martes y Jueves 6PM a 8PM</li>
                 </ul>
                 <p className="class_links-module">Precio por persona: Q8,500</p>

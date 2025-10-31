@@ -251,23 +251,23 @@ const Module_1Mkup = () => {
 
                 <p>Los precios no incluye materiales</p>
 
-                <p>30 DE JULIO - 27 DE AGOSTO</p>
+                <p>28 DE ENERO - 25 DE FEBRERO</p>
 
 
                 <p className="class_links-module">Clases:</p>
                 <h3>IMPARTIDO POR NUESTRO TEAM DE PROFESIONALES</h3>
                 <ul>
-                <li><strong>Clase 1:</strong> <em>Miércoles 30 de Julio </em>- Introducción y teoría</li>
-                <li><strong>Clase 2:</strong> <em>Miércoles 6 de Agosto </em>- Skincare, piel HD</li>
-                <li><strong>Clase 3:</strong> <em>Miércoles 13 de Agosto </em>- Correcciones/Piel con acné full cobertura</li>
-                <li><strong>Clase 4:</strong> <em>Miércoles 20 de Agosto </em> - Piel madura</li>
-                <li><strong>Clase 5:</strong> <em>Miércoles 27 de Agosto </em> - Glowy skin, no makeup</li>
+                <li><strong>Clase 1:</strong> <em>Miércoles 28 de Enero </em>- Introducción y teoría</li>
+                <li><strong>Clase 2:</strong> <em>Miércoles 4 de Febrero </em>- Skincare, piel HD</li>
+                <li><strong>Clase 3:</strong> <em>Miércoles 11 de Febrero </em>- Correcciones/Piel con acné full cobertura</li>
+                <li><strong>Clase 4:</strong> <em>Miércoles 18 de Febrero </em> - Piel madura</li>
+                <li><strong>Clase 5:</strong> <em>Miércoles 25 de Febrero </em> - Glowy skin, no makeup</li>
                 </ul>
                
                 <p className="class_links-module">Elige entre 2 horarios:</p>
                 <ul>
-                  <li>Opción 1: 2PM </li>
-                  <li>Opción 2: 6PM</li>
+                  <li>Opción 1: 2PM A 4PM </li>
+                  <li>Opción 2: 6PM a 8PM</li>
                 </ul>
                 <p className="class_links-module">Precio por persona: Q3,000</p>
                 <p className="class_links-module">Inscripción: Q200</p>

@@ -255,7 +255,7 @@ const Module_3Mkup = () => {
 
                 <p className="Demo-text"><strong>*DEMO PEINADO GRATIS</strong></p>
 
-                <p>8 DE OCTUBRE - 30 DE OCTUBRE</p>
+                <p>15 DE ABRIL - 7 DE MAYO</p>
 
                 <p className="class_links-module">Clases:</p>
 
@@ -266,23 +266,23 @@ const Module_3Mkup = () => {
                 <ul>
                   <li> 
                     <strong>Foxy eyes, redes e iluminación</strong>
-                    <p>Masterclass:<em> Miércoles 8 de Octubre </em></p> 
-                    Práctica:<em> Jueves 9 de Octubre</em>
+                    <p>Clase 11: Masterclass<em> Miércoles 15 de Abril</em></p> 
+                    Clase 12: Práctica<em> Jueves 16 de Abril</em>
                   </li>
                   <li> 
                     <strong>Celebrity Makeup, hilos tensores</strong>
-                    <p>Masterclass:<em> Miércoles 15 de Octubre </em></p> 
-                    Práctica:<em> Jueves 16 de Octubre</em>
+                    <p>Clase 13: Masterclass<em> Miércoles 22 de Abril</em></p> 
+                    Clase 14: Práctica<em> Jueves 23 de Abril</em>
                   </li>
                   <li> 
                     <strong>Técnica airbrush</strong>
-                    <p>Masterclass:<em> Miércoles 22 de Octubre </em></p> 
-                    Práctica:<em> Jueves 23 de Octubre</em>
+                    <p>Clase 15: Masterclass<em> Miércoles 29 de Abril</em></p> 
+                    Clase 16: Práctica<em> Jueves 30 de Abril</em>
                   </li>
                   <li> 
                     <strong>Brindal glam + demo peinado</strong>
-                    <p className="Wed-Class">Masterclass:<em> Miércoles 29 de Octubre 6 PM</em></p> 
-                    Evaluación final:<em> Jueves 30 de Octubre, entrega portafolio</em>
+                    <p>Clase 17:<span className="Wed-Class"> Masterclass<em> Miércoles 6 de Mayo</em></span></p>
+                    Clase 18:<em> Jueves 7 de Mayo, evaluación final y entrega portafolio</em>
                   </li>
                 </ul>
                 <p className="class_links-module">Horario:</p>
