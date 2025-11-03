@@ -284,9 +284,10 @@ const Module_1Hair = () => {
             </div>
 
 
-            { /*
+             {/*
 
-            button para agregar al carrito
+            button para agregar al carrito 
+            */}
             
             <p className="class_links-module">Selecciona una Clase:</p>
             <ul className='button-schedule'>
@@ -307,7 +308,7 @@ const Module_1Hair = () => {
             {cartnotification && <p className="cart-notification">{cartnotification}</p>}
             </Link>
 
-            */}
+            
 
           </div>
           <div className="second-image-module">
