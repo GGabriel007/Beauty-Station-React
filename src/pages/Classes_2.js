@@ -16,7 +16,7 @@ const Classes2 = () => {
         <>
             <div className="information-class">
         <div className="top-information-class">
-            <h2 className="header-information-class">CURSOS DE MAQUILLAJE 2025</h2>
+            <h2 className="header-information-class">CURSOS DE MAQUILLAJE 2026</h2>
         </div>
 
         <div className="mid-information-module">

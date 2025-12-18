@@ -211,23 +211,23 @@ const Module_3Hair = () => {
 
                 <p className="Demo-text"><strong>*DEMO MAKEUP GRATIS</strong></p>
 
-                <p>14 DE ABRIL - 7 DE MAYO</p>
+                <p>15 DE ABRIL - 7 DE MAYO</p>
                 <p className="class_links-module">Clases:</p>
                 <h3>IMPARTIDO POR ALEH</h3>
                 <ul>
                   <li> 
                     <strong>Redes e iluminación bridal hair + lift de cejas + velo</strong>
-                    <p>Clase 11: Masterclass<em> Martes 14 de Abril</em></p>
+                    <p>Clase 11: Masterclass<em> Miércoles 15 de Abril</em></p>
                     Clase 12: Práctica<em> Jueves 16 de Abril (EN MODELO)</em>
                   </li>
                   <li> 
                     <strong>Semirecogido con ondas retro</strong>
-                    <p>Clase 13: Masterclass<em> Martes 21 de Abril</em></p>
+                    <p>Clase 13: Masterclass<em> Miércoles 22 de Abril</em></p>
                     Clase 14: Práctica<em> Jueves 23 de Abril (EN MODELO)</em>
                   </li>
                   <li> 
                     <strong>Cola alta con volumen</strong>
-                    <p>Clase 15: Masterclass<em> Martes 28 de Abril</em></p>
+                    <p>Clase 15: Masterclass<em> Miércoles 29 de Abril</em></p>
                     Clase 16: Práctica<em> Jueves 30 de Abril (EN MODELO)</em>
                   </li>
                   <li> 
@@ -239,7 +239,7 @@ const Module_3Hair = () => {
                 
                 <p className="class_links-module">Horario:</p>
                 <ul>
-                <li>Martes y Jueves 6PM A 8PM</li>
+                <li>Miércoles 4PM y Jueves 4PM ó 6PM</li>
                 </ul>
                 <p className="class_links-module">Precio por persona: Q4,000</p>
                 <p className="class_links-module">Inscripción: Q200</p>

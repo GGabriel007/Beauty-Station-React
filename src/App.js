@@ -64,6 +64,7 @@ const CartButton = () => {
 
   return (
     
+    
     <Link to = "/cart" className = "cart-button">
       🛒 {cartItems.length > 0 && <span>{cartItems.length}</span>}
     </Link>

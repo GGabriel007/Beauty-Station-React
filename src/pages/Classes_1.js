@@ -17,7 +17,7 @@ const Classes1 = () => {
         <>
             <div className="information-class">
         <div className="top-information-class">
-            <h2 className="header-information-class">CURSOS DE PEINADO 2025</h2>
+            <h2 className="header-information-class">CURSOS DE PEINADO 2026</h2>
         </div>
 
         <div className="mid-information-module">
@@ -99,7 +99,7 @@ const Classes1 = () => {
                     <div className='description-class'>
                     <div className='class_dates_button'>
 
-                        <span className='default-text'>14 DE ABRIL AL <br></br>
+                        <span className='default-text'>15 DE ABRIL AL <br></br>
                         7 DE MAYO</span>
                         <span className='hover-text'>MÁS INFORMACIÓN</span>
 
