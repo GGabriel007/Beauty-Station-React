@@ -39,7 +39,7 @@ const BeautyStation = () => {
         <div className="mid-information">
           <div className="center">
           <Link to = "/classes">
-              <img className="icon" src={`${process.env.PUBLIC_URL}images/cursos.png`} alt="Informacion de Cursos" />
+              <img className="icon" src={`${process.env.PUBLIC_URL}/images/cursos.png`} alt="Informacion de Cursos" />
           </Link>
           <Link to = "/classes" className='no-underline'>
             <p className="title_links-classes">CURSOS</p>
@@ -47,7 +47,7 @@ const BeautyStation = () => {
           </div>
           <div className="center">
           <Link to = "/servicio-a-domicilio" >
-              <img className="icon" src={`${process.env.PUBLIC_URL}images/eventos.png`} alt="Informacion de Cursos" />
+              <img className="icon" src={`${process.env.PUBLIC_URL}/images/eventos.png`} alt="Informacion de Cursos" />
           </Link>
           <Link to = "/servicio-a-domicilio" className='no-underline'>
             <p className="title_links-classes">EVENTOS</p>
