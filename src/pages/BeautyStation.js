@@ -36,8 +36,8 @@ const BeautyStation = () => {
               <div className="overlay-home"></div>
               
               <div className="hero-text-container">
-                  <h1 className="hero-title">Beauty Station</h1>
-                  <p className="hero-subtitle">Realza tu belleza interior con nuestros Masterclasses y Servicios Profesionales</p>
+                  <h1 className="hero-title">¡Bienvenida a Beauty Station!</h1>
+                  <p className="hero-subtitle">Aprende nuevas técnicas en nuestros cursos intensivos de belleza, o reserva un servicio profesional a domicilio para tu evento.</p>
               </div>
             </div>
             
