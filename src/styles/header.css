@@ -66,6 +66,7 @@ body {
     object-fit: cover;
     display: block;
     margin-left: 15px;
+
 }
 
 /* New styles for mobile menu */
@@ -128,7 +129,7 @@ a {
     .image-header {
         width: 150px;
         height: 75px;
-        padding-top: 15px;
+        margin-top: 15px;
     }
 
     .header-button {
