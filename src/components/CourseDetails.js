@@ -310,7 +310,7 @@ const CourseDetails = () => {
 
                                 setTimeout(() => {
                                     setCartNotification("");
-                                }, 3500);
+                                }, 35000);
                             }}
                         >
                             Añadir al Carrito
