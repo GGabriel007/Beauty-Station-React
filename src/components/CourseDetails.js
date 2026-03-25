@@ -107,13 +107,6 @@ const CourseDetails = () => {
         }
     }, [courseData]);
 
-    // Ensure kit is removed gracefully if navigating to a non-makeup course
-    useEffect(() => {
-        if (!isMakeupCourse && setIncludeKit) {
-            setIncludeKit(false);
-        }
-    }, [isMakeupCourse, setIncludeKit]);
-
     if (!courseData) {
         return <Navigate to="/classes" />;
     }
