@@ -30,27 +30,20 @@ const Header = () => {
         </div>
       </div>
       <ul className={`right-header-links ${menuOpen ? 'open' : ''}`}>
-          
-          <li className='cart-header'>
-            <Link className={`header-button-cart ${getActiveClass('/cart')}`} to="/cart">
-              <img className="image-header-cart" src={`${process.env.PUBLIC_URL}/images/bag-cart2.png`} alt="Beauty Station Cart" />
-            </Link>
-          </li>
-          
           <li><Link className={`header-button ${getActiveClass('/classes')}`} to="/classes">Cursos</Link></li>
           <li><Link className={`header-button ${getActiveClass('/servicio-a-domicilio')}`} to="/servicio-a-domicilio">Eventos</Link></li>
           <li><Link className={`header-button ${getActiveClass('/nosotros')}`} to="/nosotros">Nosotros</Link></li>
+          <li><Link className={`header-button ${getActiveClass('/cart')}`} to="/cart">Mi carrito</Link></li>
           
           {/* Dynamically swap UI if they are logged in vs logged out! */}
           {authStatus === 'authenticated' ? (
             <>
-              <li><Link className={`header-button ${getActiveClass('/cart')}`} to="/cart">Mi carrito</Link></li>
               <li><Link className={`header-button ${getActiveClass('/dashboard')}`} to="/dashboard">Mi perfil</Link></li>
               <li>
                 <button 
                   onClick={signOut} 
                   className={`header-button`} 
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', color: 'inherit' }}>
+                  style={{ cursor: 'pointer', fontFamily: 'inherit' }}>
                   Salir
                 </button>
               </li>

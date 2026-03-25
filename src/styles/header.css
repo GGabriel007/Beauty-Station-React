@@ -20,8 +20,23 @@ body {
 }
 
 .header-button {
-    color: #ed93b4;
+    color: #f1b2c9;
     text-decoration: none;
+    font-size: 20px;
+    border-radius: 40px;
+    padding: 8px 24px;
+    border: 2px solid #f1b2c9;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+.header-button:hover {
+    background-color: #fcebf0;
+}
+
+.header-button.active {
+    color: white;
+    background-color: #f1b2c9;
 }
 
 .line1 {
@@ -117,26 +132,13 @@ a {
     }
 
     .header-button {
-        color: #f1b2c9;
         font-size: 19px;
-        border-radius: 40px;
-        padding-left: 15px;
-        padding-right: 15px;
-        padding-top: 4px;
-        padding-bottom: 4px;
-        border: 2px solid #f1b2c9;
-        background-color: white;
+        padding: 6px 15px;
     }
 
     .header-button.active {
-        color: white;
         font-size: 19px;
-        border-radius: 40px;
-        padding-left: 15px;
-        padding-right: 15px;
-        padding-top: 4px;
-        padding-bottom: 4px;
-        background-color: #f1b2c9;
+        padding: 6px 15px;
     }
 
     .menu-icon {
@@ -162,7 +164,7 @@ a {
 
 
     .right-header-links.open {
-        max-height: 300px;
+        max-height: 500px;
         /* Adjust this value based on the number of menu items */
         visibility: visible;
         /* Show menu */
