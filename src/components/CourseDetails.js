@@ -37,8 +37,8 @@ const CourseDetails = () => {
     const { courseId } = useParams();
     const location = useLocation();
     const courseData = coursesInfo[courseId];
-    const { addToCart, includeKit, setIncludeKit } = useContext(CartContext);
-
+    const { addToCart, cartItems, includeKit, setIncludeKit } = useContext(CartContext);
+    
     const isMakeupCourse = MAKEUP_COURSES.includes(courseId);
 
     const [availableSeats, setAvailableSeats] = useState(null);
@@ -283,7 +283,11 @@ const CourseDetails = () => {
                         )}
 
                         {cartNotification && (
-                            <div className="notification" style={{ marginTop: '15px', marginBottom: '15px', backgroundColor: '#4caf50' }}>
+                            <div className="notification" style={{ 
+                                marginTop: '15px', 
+                                marginBottom: '15px', 
+                                backgroundColor: cartNotification.includes('⚠️') ? '#d32f2f' : '#4caf50' 
+                            }}>
                                 {cartNotification}
                             </div>
                         )}
@@ -295,6 +299,17 @@ const CourseDetails = () => {
                                 const priceInt = parseInt(priceRaw, 10) || 0;
 
                                 const cartItemName = activeDbKey || `${courseData.title} ${courseData.scheduleOptions[selectedScheduleIndex]}`;
+
+                                // Validation: Block user from adding multiple tickets for the identical parent course
+                                const isAlreadyInCart = cartItems.some(item => 
+                                    item.name.toLowerCase().includes(courseData.title.toLowerCase())
+                                );
+
+                                if (isAlreadyInCart) {
+                                    setCartNotification(`⚠️ Error: Ya tienes un cupo para "${courseData.title}" en tu carrito. Solo puedes agregar un horario por curso.`);
+                                    setTimeout(() => setCartNotification(""), 8000);
+                                    return;
+                                }
 
                                 addToCart({
                                     name: cartItemName,
