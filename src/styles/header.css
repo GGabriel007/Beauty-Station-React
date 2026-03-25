@@ -20,10 +20,10 @@ body {
 }
 
 .header-button {
-    color: #333;
+    color: #f1b2c9;
     text-decoration: none;
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 500;
     font-family: 'Montserrat', sans-serif;
     border-radius: 40px;
     padding: 8px 24px;
@@ -88,11 +88,13 @@ body {
 }
 
 .menu-icon .bar {
-    width: 35px;
+    width: 30px;
     height: 3px;
     background-color: #000;
-    margin: 5px;
-    transition: 0.4s;
+    margin: 6px auto;
+    border-radius: 3px;
+    transition: all 0.4s ease;
+    flex-shrink: 0;
 }
 
 a {
@@ -179,7 +181,17 @@ a {
         /* Striking invert logic on click */
     }
     
-    .border-menu.clicked .bar {
+    .border-menu.clicked .bar:nth-child(1) {
+        transform: translateY(9px) rotate(45deg);
+        background-color: white;
+    }
+    
+    .border-menu.clicked .bar:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .border-menu.clicked .bar:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
         background-color: white;
     }
 
