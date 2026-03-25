@@ -26,12 +26,21 @@ const DB_KEY_MAP = {
     "curso-completo-maquillaje-1": "Curso Completo Maquillaje 6PM a 8PM"
 };
 
+const MAKEUP_COURSES = [
+    'pieles-perfectas',
+    'maquillaje-social',
+    'maestria-novias-makeup',
+    'curso-completo-maquillaje'
+];
+
 const CourseDetails = () => {
     const { courseId } = useParams();
     const location = useLocation();
     const courseData = coursesInfo[courseId];
-    const { addToCart } = useContext(CartContext);
+    const { addToCart, includeKit, setIncludeKit } = useContext(CartContext);
     
+    const isMakeupCourse = MAKEUP_COURSES.includes(courseId);
+
     const [availableSeats, setAvailableSeats] = useState(null);
     const [selectedScheduleIndex, setSelectedScheduleIndex] = useState(0);
     const [allDbItems, setAllDbItems] = useState([]);
@@ -97,6 +106,13 @@ const CourseDetails = () => {
             setSelectedImage(`${process.env.PUBLIC_URL}/images/${courseData.images.folder}/imagen_module_1${ext}.jpeg`);
         }
     }, [courseData]);
+
+    // Ensure kit is removed gracefully if navigating to a non-makeup course
+    useEffect(() => {
+        if (!isMakeupCourse && setIncludeKit) {
+            setIncludeKit(false);
+        }
+    }, [isMakeupCourse, setIncludeKit]);
 
     if (!courseData) {
         return <Navigate to="/classes" />;
@@ -241,8 +257,8 @@ const CourseDetails = () => {
                         <div className="course-schedule-container">
                             <label className="course-schedule-label">Elige tu Horario de Inscripción:</label>
                             <br />
-                            <select 
-                                value={selectedScheduleIndex} 
+                            <select
+                                value={selectedScheduleIndex}
                                 onChange={(e) => setSelectedScheduleIndex(Number(e.target.value))}
                                 className="course-schedule-select"
                             >
@@ -254,8 +270,22 @@ const CourseDetails = () => {
 
                         {availableSeats !== null && (
                             <p className={availableSeats > 5 ? "seats-plenty" : "seats-low"}>
-                                ¡Solo quedan {availableSeats} asientos disponibles para este horario!
+                                Solo quedan {availableSeats} asientos disponibles para este horario
                             </p>
+                        )}
+
+                        {isMakeupCourse && (
+                            <div className="checkbox-container" style={{ marginTop: '20px', marginBottom: '10px', padding: '15px', backgroundColor: '#fdf3f6', borderRadius: '8px', border: '1px solid #fcebf0' }}>
+                                <input 
+                                    type="checkbox" 
+                                    id="kit-checkbox" 
+                                    checked={includeKit}
+                                    onChange={(e) => setIncludeKit(e.target.checked)}
+                                />
+                                <label htmlFor="kit-checkbox" style={{ fontWeight: '600', color: '#444' }}>
+                                    Incluir "Kit de Pieles Perfectas" (+ Q. 5,900.00)
+                                </label>
+                            </div>
                         )}
 
                         <button
@@ -286,61 +316,61 @@ const CourseDetails = () => {
                                 <p className="title-form" style={{ fontSize: '18px', marginBottom: '15px' }}>Formulario de Contacto Directo</p>
 
                                 <label className='form-label'>Nombre Completo:*</label>
-                            <input
-                                pattern="^[a-zA-Z\s]*$"
-                                type="text"
-                                value={whatsappForm.name}
-                                onChange={(e) => handleWhatsAppChange('name', e.target.value)}
-                                title="Sólo se permiten letras y espacios."
-                                required
-                            />
+                                <input
+                                    pattern="^[a-zA-Z\s]*$"
+                                    type="text"
+                                    value={whatsappForm.name}
+                                    onChange={(e) => handleWhatsAppChange('name', e.target.value)}
+                                    title="Sólo se permiten letras y espacios."
+                                    required
+                                />
 
-                            <label className="form-label">Email:</label>
-                            <input
-                                type="email"
-                                placeholder="email@domain.com"
-                                value={whatsappForm.email}
-                                onChange={(e) => handleWhatsAppChange('email', e.target.value)}
-                                title="Ingrese un correo electrónico válido."
-                                required
-                            />
+                                <label className="form-label">Email:</label>
+                                <input
+                                    type="email"
+                                    placeholder="email@domain.com"
+                                    value={whatsappForm.email}
+                                    onChange={(e) => handleWhatsAppChange('email', e.target.value)}
+                                    title="Ingrese un correo electrónico válido."
+                                    required
+                                />
 
-                            <label className='form-label'>Usuario de Instagram o Facebook:</label>
-                            <input
-                                type="text"
-                                value={whatsappForm.instagram}
-                                onChange={(e) => handleWhatsAppChange('instagram', e.target.value)}
-                                title="Sólo puede tener letras, números, puntos y guiones bajos."
-                                required
-                            />
+                                <label className='form-label'>Usuario de Instagram o Facebook:</label>
+                                <input
+                                    type="text"
+                                    value={whatsappForm.instagram}
+                                    onChange={(e) => handleWhatsAppChange('instagram', e.target.value)}
+                                    title="Sólo puede tener letras, números, puntos y guiones bajos."
+                                    required
+                                />
 
-                            <label className='form-label'>Número de Identificación:<div className="second-Text">(DPI o número de Pasaporte)</div></label>
-                            <input
-                                type="tel"
-                                value={whatsappForm.dpi}
-                                onChange={(e) => handleWhatsAppChange('dpi', e.target.value)}
-                                title="Ingresar solamente números"
-                                pattern="\d+"
-                                required
-                            />
+                                <label className='form-label'>Número de Identificación:<div className="second-Text">(DPI o número de Pasaporte)</div></label>
+                                <input
+                                    type="tel"
+                                    value={whatsappForm.dpi}
+                                    onChange={(e) => handleWhatsAppChange('dpi', e.target.value)}
+                                    title="Ingresar solamente números"
+                                    pattern="\d+"
+                                    required
+                                />
 
-                            <label className='form-label'>Número de Teléfono:*</label>
-                            <input
-                                type="tel"
-                                placeholder="XXXX-XXXX"
-                                value={whatsappForm.phone}
-                                onChange={(e) => handleWhatsAppChange('phone', e.target.value)}
-                                title='Ingrese solo números'
-                                required
-                            />
+                                <label className='form-label'>Número de Teléfono:*</label>
+                                <input
+                                    type="tel"
+                                    placeholder="XXXX-XXXX"
+                                    value={whatsappForm.phone}
+                                    onChange={(e) => handleWhatsAppChange('phone', e.target.value)}
+                                    title='Ingrese solo números'
+                                    required
+                                />
 
-                            {notificationError && (
-                                <p className="error-notification">{notificationError}</p>
-                            )}
+                                {notificationError && (
+                                    <p className="error-notification">{notificationError}</p>
+                                )}
 
-                            <button className='contact-button' style={{ backgroundColor: '#4caf50', marginTop: '15px' }} type="button" onClick={handleWhatsAppSubmit}>
-                                Regístrate por WhatsApp
-                            </button>
+                                <button className='contact-button' style={{ backgroundColor: '#4caf50', marginTop: '15px' }} type="button" onClick={handleWhatsAppSubmit}>
+                                    Regístrate por WhatsApp
+                                </button>
                             </div>
                         </div>
                     </div>
