@@ -1,5 +1,5 @@
 // src/pages/BeautyStation.js
-import React, {useState} from 'react';
+import React, { useState, useRef } from 'react';
 import '../styles/beauty-Station.css';
 import { Link } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ const BeautyStation = () => {
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const galleryRef = useRef(null);
 
   const images = [
     `${process.env.PUBLIC_URL}/images/social_media/review3.jpeg`,
@@ -23,6 +24,17 @@ const BeautyStation = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedImage(null);
+  };
+
+  const scrollGallery = (direction) => {
+    if (galleryRef.current) {
+      const scrollAmount = galleryRef.current.clientWidth * 0.75; // Scroll smoothly by 75% of the visible container width
+      if (direction === 'left') {
+        galleryRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      } else {
+        galleryRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      }
+    }
   };
 
 
@@ -80,17 +92,27 @@ const BeautyStation = () => {
           </div>
         </div>
 
-        {/* Scrolling Gallery */}
-        <div className="scrolling-wrapper-home">
-          {images.map((src, index) => (
-            <img
-              key={index}
-              src={src}
-              alt={`Gallery Image ${index + 1}`}
-              className="scrolling-image"
-              onClick={() => openModal(src)}
-            />
-          ))}
+        {/* Scrolling Gallery Container */}
+        <div className="gallery-container-wrapper">
+          <button className="gallery-arrow left-arrow" onClick={() => scrollGallery('left')}>
+            &#10094;
+          </button>
+          
+          <div className="scrolling-wrapper-home" ref={galleryRef}>
+            {images.map((src, index) => (
+              <img
+                key={index}
+                src={src}
+                alt={`Gallery Image ${index + 1}`}
+                className="scrolling-image"
+                onClick={() => openModal(src)}
+              />
+            ))}
+          </div>
+
+          <button className="gallery-arrow right-arrow" onClick={() => scrollGallery('right')}>
+            &#10095;
+          </button>
         </div>
 
         {/* Modal */}

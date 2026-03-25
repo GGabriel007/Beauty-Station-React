@@ -62,7 +62,7 @@ body {
     flex-direction: row;
     list-style-type: none;
     align-items: center;
-    gap: 40px;
+    gap: 20px;
     height: 100px;
     font-size: 29px;
     font-family: 'Montserrat', sans-serif;
@@ -109,7 +109,7 @@ a {
 
 
 
-@media (max-width: 1019px) {
+@media (max-width: 1150px) {
     .top-header {
         display: flex;
         flex-direction: column;
