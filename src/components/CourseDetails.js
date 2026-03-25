@@ -44,6 +44,7 @@ const CourseDetails = () => {
     const [availableSeats, setAvailableSeats] = useState(null);
     const [selectedScheduleIndex, setSelectedScheduleIndex] = useState(0);
     const [allDbItems, setAllDbItems] = useState([]);
+    const [cartNotification, setCartNotification] = useState("");
 
     const activeDbKey = DB_KEY_MAP[`${courseId}-${selectedScheduleIndex}`];
 
@@ -281,6 +282,12 @@ const CourseDetails = () => {
                             </div>
                         )}
 
+                        {cartNotification && (
+                            <div className="notification" style={{ marginTop: '15px', marginBottom: '15px', backgroundColor: '#4caf50' }}>
+                                {cartNotification}
+                            </div>
+                        )}
+
                         <button
                             className="course-add-cart-btn"
                             onClick={() => {
@@ -294,7 +301,16 @@ const CourseDetails = () => {
                                     price: priceInt,
                                     image: thumbnails[0]
                                 });
-                                alert(`¡Agregado al carrito: ${cartItemName}!`);
+                                
+                                if (includeKit) {
+                                    setCartNotification(`¡Agregado al carrito: ${cartItemName} y Kit de Pieles Perfectas!`);
+                                } else {
+                                    setCartNotification(`¡Agregado al carrito: ${cartItemName}!`);
+                                }
+
+                                setTimeout(() => {
+                                    setCartNotification("");
+                                }, 3500);
                             }}
                         >
                             Añadir al Carrito
