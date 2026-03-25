@@ -275,14 +275,14 @@ const CourseDetails = () => {
                         )}
 
                         {isMakeupCourse && (
-                            <div className="checkbox-container" style={{ marginTop: '20px', marginBottom: '10px', padding: '15px', backgroundColor: '#fdf3f6', borderRadius: '8px', border: '1px solid #fcebf0' }}>
+                            <div className="kit-checkbox-container">
                                 <input 
                                     type="checkbox" 
                                     id="kit-checkbox" 
                                     checked={includeKit}
                                     onChange={(e) => setIncludeKit(e.target.checked)}
                                 />
-                                <label htmlFor="kit-checkbox" style={{ fontWeight: '600', color: '#444' }}>
+                                <label htmlFor="kit-checkbox" className="kit-checkbox-label">
                                     Incluir "Kit de Pieles Perfectas" (+ Q. 5,900.00)
                                 </label>
                             </div>

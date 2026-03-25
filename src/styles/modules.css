@@ -480,3 +480,62 @@ ul {
     line-height: 1.4;
     margin-bottom: 5px;
 }
+
+/* Makeup Kit Checkbox Container */
+.kit-checkbox-container {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding: 15px;
+    background-color: #fdf3f6;
+    border-radius: 8px;
+    border: 1px solid #fcebf0;
+    transition: background-color 0.3s ease;
+}
+
+.kit-checkbox-container:hover {
+    background-color: #fcebf0;
+}
+
+.kit-checkbox-container input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: #fff;
+    margin: 0 15px 0 0;
+    width: 22px;
+    height: 22px;
+    border: 2px solid #f1b2c9;
+    border-radius: 4px;
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.kit-checkbox-container input[type="checkbox"]::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em white;
+    background-color: white;
+    transform-origin: center;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+.kit-checkbox-container input[type="checkbox"]:checked {
+    background-color: #f1b2c9;
+}
+
+.kit-checkbox-container input[type="checkbox"]:checked::before {
+    transform: scale(1);
+}
+
+.kit-checkbox-label {
+    font-weight: 600;
+    color: #444;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+}
