@@ -300,7 +300,9 @@ const CourseDetails = () => {
 
                                 const cartItemName = activeDbKey || `${courseData.title} ${courseData.scheduleOptions[selectedScheduleIndex]}`;
 
-                                // Validation: Block user from adding multiple tickets for the identical parent course
+                                const itemNameLower = cartItemName.toLowerCase();
+
+                                // 1. Generic exact-duplication check
                                 const isAlreadyInCart = cartItems.some(item => 
                                     item.name.toLowerCase().includes(courseData.title.toLowerCase())
                                 );
@@ -309,6 +311,44 @@ const CourseDetails = () => {
                                     setCartNotification(`⚠️ Error: Ya tienes un cupo para "${courseData.title}" en tu carrito. Solo puedes agregar un horario por curso.`);
                                     setTimeout(() => setCartNotification(""), 8000);
                                     return;
+                                }
+
+                                // 2. Makeup Hierarchical Lockout (Sub-courses vs Complete)
+                                const MAKEUP_SUB_STRINGS = ['pieles perfectas', 'maquillaje social', 'maestría en novias'];
+                                
+                                if (itemNameLower.includes('curso completo maquillaje')) {
+                                    const hasSubCourse = cartItems.some(item => MAKEUP_SUB_STRINGS.some(sub => item.name.toLowerCase().includes(sub)));
+                                    if (hasSubCourse) {
+                                        setCartNotification(`⚠️ Error: Ya tienes un curso individual de maquillaje en tu carrito. Elimínalo primero para adquirir el "Curso Completo".`);
+                                        setTimeout(() => setCartNotification(""), 8000);
+                                        return;
+                                    }
+                                } else if (MAKEUP_SUB_STRINGS.some(sub => itemNameLower.includes(sub))) {
+                                    const hasComplete = cartItems.some(item => item.name.toLowerCase().includes('curso completo maquillaje'));
+                                    if (hasComplete) {
+                                        setCartNotification(`⚠️ Error: Ya tienes el "Curso Completo de Maquillaje" en tu carrito, el cual ya incluye esta clase individual.`);
+                                        setTimeout(() => setCartNotification(""), 8000);
+                                        return;
+                                    }
+                                }
+
+                                // 3. Hair Hierarchical Lockout (Sub-courses vs Complete)
+                                const HAIR_SUB_STRINGS = ['master waves', 'peinados para eventos', 'maestrías en novias'];
+                                
+                                if (itemNameLower.includes('curso completo peinado')) {
+                                    const hasSubCourse = cartItems.some(item => HAIR_SUB_STRINGS.some(sub => item.name.toLowerCase().includes(sub)));
+                                    if (hasSubCourse) {
+                                        setCartNotification(`⚠️ Error: Ya tienes un curso individual de peinado en tu carrito. Elimínalo primero para adquirir el "Curso Completo".`);
+                                        setTimeout(() => setCartNotification(""), 8000);
+                                        return;
+                                    }
+                                } else if (HAIR_SUB_STRINGS.some(sub => itemNameLower.includes(sub))) {
+                                    const hasComplete = cartItems.some(item => item.name.toLowerCase().includes('curso completo peinado'));
+                                    if (hasComplete) {
+                                        setCartNotification(`⚠️ Error: Ya tienes el "Curso Completo de Peinado" en tu carrito, el cual ya incluye esta clase individual.`);
+                                        setTimeout(() => setCartNotification(""), 8000);
+                                        return;
+                                    }
                                 }
 
                                 addToCart({
