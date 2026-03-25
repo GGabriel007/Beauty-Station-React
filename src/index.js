@@ -10,8 +10,37 @@ import awsExports from './aws-exports';
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
-// Initialize Amplify globally
-Amplify.configure(awsExports);
+// Dynamically configure AWS Amplify OAuth Redirects to prevent CORS cross-origin blocks on Production
+const isLocalhost = Boolean(
+  window.location.hostname === "localhost" ||
+    window.location.hostname === "[::1]" ||
+    window.location.hostname.match(
+      /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
+    )
+);
+
+// Fallback logic to cleanly route OAuth correctly depending on whether we are developing locally or live
+const [
+  localRedirectSignIn,
+  productionRedirectSignIn,
+] = awsExports.oauth.redirectSignIn.split(",");
+
+const [
+  localRedirectSignOut,
+  productionRedirectSignOut,
+] = awsExports.oauth.redirectSignOut.split(",");
+
+const updatedAwsConfig = {
+  ...awsExports,
+  oauth: {
+    ...awsExports.oauth,
+    redirectSignIn: isLocalhost ? localRedirectSignIn : (productionRedirectSignIn || window.location.origin + '/'),
+    redirectSignOut: isLocalhost ? localRedirectSignOut : (productionRedirectSignOut || window.location.origin + '/'),
+  }
+};
+
+// Initialize Amplify globally with the exact browser origin
+Amplify.configure(updatedAwsConfig);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

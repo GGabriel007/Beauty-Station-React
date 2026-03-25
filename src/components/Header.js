@@ -44,7 +44,8 @@ const Header = () => {
           {/* Dynamically swap UI if they are logged in vs logged out! */}
           {authStatus === 'authenticated' ? (
             <>
-              <li><Link className={`header-button ${getActiveClass('/cart')}`} to="/cart">Mi Panel</Link></li>
+              <li><Link className={`header-button ${getActiveClass('/cart')}`} to="/cart">Mi carrito</Link></li>
+              <li><Link className={`header-button ${getActiveClass('/dashboard')}`} to="/dashboard">Mi perfil</Link></li>
               <li>
                 <button 
                   onClick={signOut} 

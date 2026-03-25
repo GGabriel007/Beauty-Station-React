@@ -55,6 +55,28 @@ app.get('/modulos', async function (req, res) {
   }
 });
 
+// SECURE USER HISTORY: Fetches previously purchased class history from DynamoDB based on User Email
+app.get('/my-orders', async function (req, res) {
+  try {
+    const { email } = req.query;
+    if (!email) return res.status(400).json({ error: "Email is required to fetch history" });
+    
+    const data = await ddbDocClient.send(new ScanCommand({
+      TableName: 'Payments',
+      FilterExpression: 'email = :email',
+      ExpressionAttributeValues: { ':email': email }
+    }));
+    
+    // Sort descending so the most recent purchases show at the top
+    const sortedItems = (data.Items || []).sort((a,b) => (b.Timestamp || 0) - (a.Timestamp || 0));
+    
+    res.json(sortedItems);
+  } catch (error) {
+    console.error("Error fetching User orders:", error);
+    res.status(500).json({ error: 'Hubo un error al buscar el historial de compras.' });
+  }
+});
+
 app.post('/checkout', async function (req, res) {
   try {
     const { email, Name, userName, DPI, phoneNumber, cartItems, IncludeKit, TotalPrice } = req.body;

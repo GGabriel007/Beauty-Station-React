@@ -14,6 +14,17 @@
         ]
       }
     },
+    "/my-orders": {
+      "name": "/my-orders",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read",
+          "create"
+        ]
+      }
+    },
     "/modulos": {
       "name": "/modulos",
       "lambdaFunction": "processCheckout",
