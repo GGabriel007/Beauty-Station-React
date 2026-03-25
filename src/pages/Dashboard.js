@@ -109,7 +109,7 @@ const Dashboard = () => {
                             <li key={i} style={{ marginBottom: courseSlug ? '15px' : '5px' }}>
                               <div style={{ fontWeight: '500', color: '#111' }}>{cleanName}</div>
                               {courseSlug && (
-                                <Link to={`/classes/${courseSlug}`} style={{ fontSize: '13px', color: '#555', textDecoration: 'underline', marginTop: '3px', display: 'inline-block' }}>
+                                <Link to={`/classes/course/${courseSlug}`} style={{ fontSize: '13px', color: '#555', textDecoration: 'underline', marginTop: '3px', display: 'inline-block' }}>
                                   Más información sobre el curso
                                 </Link>
                               )}
