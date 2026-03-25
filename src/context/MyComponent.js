@@ -10,7 +10,7 @@ const MyComponent = ({ onCaptchaSuccess }) => {
     if (!document.getElementById(scriptId)) {
       const script = document.createElement("script");
       script.id = scriptId;
-      script.src = process.env.REACT_APP_GOOGLE_RECAPTCHA_URL;
+      script.src = "https://www.google.com/recaptcha/api.js?render=6Lc0H74qAAAAAME8A4eQuydp-8ObZWE3mSviLq2c";
       script.async = true;
       script.defer = true;
 
