@@ -28,17 +28,23 @@
 
 .text-module {
     margin-bottom: 10px;
-    font-size: 20px;
-    width: 615px;
+    font-size: 18px;
+    color: #444; 
+    font-family: 'Montserrat', sans-serif;
+    width: 100%;
+    max-width: 615px;
     text-align: left;
-    line-height: 1.4;
-
+    line-height: 1.6;
 }
 
 .class_links-module {
-  color: black;
-  font-family: 'Lato', sans-serif;
-  font-weight: 600; /* Semi-bold */
+    color: #ed93b4;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    margin-top: 30px;
+    font-size: 22px;
+    border-bottom: 1px solid #fcebf0;
+    padding-bottom: 5px;
 }
 
 .gallery-module {
@@ -370,40 +376,107 @@ ul {
 }
 
 .course-schedule-select {
-    padding: 10px;
-    margin-top: 5px;
+    padding: 12px 20px;
+    margin-top: 10px;
     width: 100%;
-    max-width: 300px;
+    max-width: 350px;
     font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+    border: 2px solid #f1b2c9;
+    border-radius: 30px;
+    background-color: white;
     cursor: pointer;
+    color: #333;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(241, 178, 201, 0.1);
+}
+
+.course-schedule-select:hover {
+    border-color: #ed93b4;
+    box-shadow: 0 4px 8px rgba(241, 178, 201, 0.2);
 }
 
 .seats-plenty {
-    font-weight: 600;
-    font-size: 1.2rem;
-    color: #2db632;
-    margin-top: 15px;
+    display: inline-block;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #1b5e20;
+    background-color: #e8f5e9;
+    padding: 10px 20px;
+    border-radius: 30px;
+    margin-top: 20px;
     margin-bottom: 0;
+    border: 1px solid #c8e6c9;
 }
 
 .seats-low {
-    font-weight: 600;
-    font-size: 1.2rem;
-    color: #e63946;
-    margin-top: 15px;
+    display: inline-block;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #c62828;
+    background-color: #ffebee;
+    padding: 10px 20px;
+    border-radius: 30px;
+    margin-top: 20px;
     margin-bottom: 0;
+    border: 1px solid #ffcdd2;
+    animation: pulse-border 2s infinite;
+}
+
+@keyframes pulse-border {
+    0% { box-shadow: 0 0 0 0 rgba(229, 57, 70, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(229, 57, 70, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(229, 57, 70, 0); }
 }
 
 .course-add-cart-btn {
-    background-color: black;
+    background-color: #ed93b4;
     color: white;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    transition: background-color 0.3s ease;
+    margin-top: 25px;
+    margin-bottom: 30px;
+    padding: 18px 40px;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 40px;
+    border: none;
+    box-shadow: 0 8px 15px rgba(237, 147, 180, 0.4);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    width: 100%;
+    max-width: 400px;
+    cursor: pointer;
 }
 
 .course-add-cart-btn:hover {
-    background-color: #333;
+    background-color: #d67a9a;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 20px rgba(237, 147, 180, 0.5);
+}
+
+/* WhatsApp Details Formatting */
+.whatsapp-details {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background-color: #fafafa;
+    text-align: left;
+    width: 100%;
+    max-width: 615px;
+}
+.whatsapp-summary {
+    font-size: 15px;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    list-style: none;
+    line-height: 1.4;
+}
+.whatsapp-summary::-webkit-details-marker {
+    display: none;
+}
+.whatsapp-summary::before {
+    content: "💬 ";
 }

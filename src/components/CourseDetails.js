@@ -259,7 +259,7 @@ const CourseDetails = () => {
                         )}
 
                         <button
-                            className="contact-button course-add-cart-btn"
+                            className="course-add-cart-btn"
                             onClick={() => {
                                 const priceRaw = courseData.price ? courseData.price.replace(/\D/g, '') : "0";
                                 const priceInt = parseInt(priceRaw, 10) || 0;
@@ -278,10 +278,14 @@ const CourseDetails = () => {
                         </button>
 
                         {/* WhatsApp Quick Form */}
-                        <div className="whatsapp-form">
-                            <p className="title-form">Reserva tu asiento</p>
+                        <details className="whatsapp-details">
+                            <summary className="whatsapp-summary">
+                                Si quieres contactarnos con más información con respecto a este curso llena la información siguiente
+                            </summary>
+                            <div className="whatsapp-form" style={{ marginTop: '20px' }}>
+                                <p className="title-form" style={{ fontSize: '18px', marginBottom: '15px' }}>Formulario de Contacto Directo</p>
 
-                            <label className='form-label'>Nombre Completo:*</label>
+                                <label className='form-label'>Nombre Completo:*</label>
                             <input
                                 pattern="^[a-zA-Z\s]*$"
                                 type="text"
@@ -334,10 +338,11 @@ const CourseDetails = () => {
                                 <p className="error-notification">{notificationError}</p>
                             )}
 
-                            <button className='contact-button' type="button" onClick={handleWhatsAppSubmit}>
+                            <button className='contact-button' style={{ backgroundColor: '#4caf50', marginTop: '15px' }} type="button" onClick={handleWhatsAppSubmit}>
                                 Regístrate por WhatsApp
                             </button>
-                        </div>
+                            </div>
+                        </details>
                     </div>
 
                     {thumbnails.length > 1 && (
