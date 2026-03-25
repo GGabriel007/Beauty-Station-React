@@ -215,7 +215,7 @@ const CourseDetails = () => {
                                             const className = session.includes("6 PM") ? "Wed-Class" : "";
                                             return (
                                                 <p key={`session-${sIdx}`} className={className}>
-                                                    {isDemo ? <em style={{ marginRight: '5px' }}>{session}</em> : session}
+                                                    {isDemo ? <em className="course-session-demo">{session}</em> : session}
                                                 </p>
                                             );
                                         })}
@@ -238,13 +238,13 @@ const CourseDetails = () => {
 
                         <p className="Wed-Class"> {courseData.installments}</p>
 
-                        <div style={{ marginTop: '20px' }}>
-                            <label style={{ fontWeight: 'bold' }}>Elige tu Horario de Inscripción:</label>
+                        <div className="course-schedule-container">
+                            <label className="course-schedule-label">Elige tu Horario de Inscripción:</label>
                             <br />
                             <select 
                                 value={selectedScheduleIndex} 
                                 onChange={(e) => setSelectedScheduleIndex(Number(e.target.value))}
-                                style={{ padding: '10px', marginTop: '5px', width: '100%', maxWidth: '300px', fontSize: '1rem', border: '1px solid #ccc', borderRadius: '4px', cursor: 'pointer' }}
+                                className="course-schedule-select"
                             >
                                 {courseData.scheduleOptions.map((opt, idx) => (
                                     <option key={idx} value={idx}>{opt}</option>
@@ -253,14 +253,13 @@ const CourseDetails = () => {
                         </div>
 
                         {availableSeats !== null && (
-                            <p style={{ fontWeight: '600', fontSize: '1.2rem', color: availableSeats > 5 ? '#2db632' : '#e63946', marginTop: '15px', marginBottom: '0' }}>
+                            <p className={availableSeats > 5 ? "seats-plenty" : "seats-low"}>
                                 ¡Solo quedan {availableSeats} asientos disponibles para este horario!
                             </p>
                         )}
 
                         <button
-                            className="contact-button"
-                            style={{ backgroundColor: 'black', color: 'white', marginTop: '20px', marginBottom: '20px', cursor: 'pointer', transition: 'background-color 0.3s ease' }}
+                            className="contact-button course-add-cart-btn"
                             onClick={() => {
                                 const priceRaw = courseData.price ? courseData.price.replace(/\D/g, '') : "0";
                                 const priceInt = parseInt(priceRaw, 10) || 0;

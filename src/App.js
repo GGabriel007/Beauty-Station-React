@@ -20,7 +20,7 @@ function App() {
   return (
     <CartProvider>
       <Router>
-        <div className="App" style={{ backgroundColor: 'white', minHeight: '100vh' }}>
+        <div className="App">
           <Header />
           <Routes basename="/Beauty-Station-React">
             <Route path="/" element={<BeautyStation />} />

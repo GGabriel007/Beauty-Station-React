@@ -60,7 +60,7 @@ const Dashboard = () => {
   }, [authStatus, bestEmail]);
 
   if (authStatus !== 'authenticated') {
-    return <div style={{ textAlign: 'center', padding: '50px' }}>Cargando su cuenta...</div>;
+    return <div className="dashboard-loading-container">Cargando su cuenta...</div>;
   }
 
   // Gracefully extract just the first name if they have a long full name

@@ -22,7 +22,7 @@ const Classes2 = () => {
                 <div className="mid-information-module">
 
                     <div className='space-class'></div>
-                    <Link to="/classes/course/pieles-perfectas" style={{ textDecoration: 'none' }}>
+                    <Link to="/classes/course/pieles-perfectas" className="class-card-link">
                         <div className="center-class">
                             <div className='imagen-link'>
                                 <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_Mkup.jpeg`} alt="Informacion de Cursos" />
@@ -47,7 +47,7 @@ const Classes2 = () => {
                     </Link>
                     <div className='space-class'></div>
                     <div className='space-class'></div>
-                    <Link to="/classes/course/maquillaje-social" style={{ textDecoration: 'none' }}>
+                    <Link to="/classes/course/maquillaje-social" className="class-card-link">
                         <div className="center-class">
                             <div className='imagen-link'>
                                 <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_Mkup.jpeg`} alt="Informacion de Cursos" />
@@ -72,7 +72,7 @@ const Classes2 = () => {
                     </Link>
                     <div className='space-class'></div>
                     <div className='space-class'></div>
-                    <Link to="/classes/course/maestria-novias-makeup" style={{ textDecoration: 'none' }}>
+                    <Link to="/classes/course/maestria-novias-makeup" className="class-card-link">
                         <div className="center-class">
                             <div className='imagen-link'>
                                 <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_Mkup.jpeg`} alt="Informacion de Cursos" />
@@ -97,7 +97,7 @@ const Classes2 = () => {
                     </Link>
                     <div className='space-class'></div>
                     <div className='space-class'></div>
-                    <Link to="/classes/course/curso-completo-maquillaje" style={{ textDecoration: 'none' }}>
+                    <Link to="/classes/course/curso-completo-maquillaje" className="class-card-link">
                         <div className="center-class">
                             <div className='imagen-link'>
                                 <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_Mkup.jpeg`} alt="Informacion de Cursos" />

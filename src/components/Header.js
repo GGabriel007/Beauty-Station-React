@@ -42,8 +42,7 @@ const Header = () => {
               <li>
                 <button 
                   onClick={signOut} 
-                  className={`header-button`} 
-                  style={{ cursor: 'pointer', fontFamily: 'inherit' }}>
+                  className="header-button header-logout-btn">
                   Salir
                 </button>
               </li>

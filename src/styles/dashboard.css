@@ -56,6 +56,11 @@
     color: #555;
 }
 
+.dashboard-loading-container {
+    text-align: center;
+    padding: 50px;
+}
+
 /* Order Card */
 .dashboard-order-card {
     background: white;

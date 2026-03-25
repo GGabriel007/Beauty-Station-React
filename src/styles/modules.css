@@ -355,3 +355,55 @@ ul {
     }
 
 }
+
+/* Course Schedule dynamic blocks */
+.course-session-demo {
+    margin-right: 5px;
+}
+
+.course-schedule-container {
+    margin-top: 20px;
+}
+
+.course-schedule-label {
+    font-weight: bold;
+}
+
+.course-schedule-select {
+    padding: 10px;
+    margin-top: 5px;
+    width: 100%;
+    max-width: 300px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.seats-plenty {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #2db632;
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+
+.seats-low {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #e63946;
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+
+.course-add-cart-btn {
+    background-color: black;
+    color: white;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.course-add-cart-btn:hover {
+    background-color: #333;
+}

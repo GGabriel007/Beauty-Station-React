@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import { useNavigate } from 'react-router-dom';
+import '../styles/login.css';
 
 const Login = () => {
   const { authStatus } = useAuthenticator(context => [context.authStatus]);
@@ -14,7 +15,7 @@ const Login = () => {
   }, [authStatus, navigate]);
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', padding: '50px 20px', minHeight: '60vh' }}>
+    <div className="login-container">
       {/* This simple, pre-built component handles Sign-Up, Sign-In, and Password Resets automatically! */}
       {/* We pass the 'google' provider flag to automatically render the "Sign In With Google" button! */}
       <Authenticator socialProviders={['google']} />
