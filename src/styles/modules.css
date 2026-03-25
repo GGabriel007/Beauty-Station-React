@@ -376,25 +376,32 @@ ul {
 }
 
 .course-schedule-select {
-    padding: 12px 20px;
+    padding: 12px 15px;
     margin-top: 10px;
     width: 100%;
     max-width: 350px;
     font-size: 1rem;
     font-family: 'Montserrat', sans-serif;
-    border: 2px solid #f1b2c9;
-    border-radius: 30px;
+    border: 1px solid #c4c4c4;
+    border-radius: 8px;
     background-color: white;
     cursor: pointer;
     color: #333;
     outline: none;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 5px rgba(241, 178, 201, 0.1);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 16px;
 }
 
+.course-schedule-select:focus,
 .course-schedule-select:hover {
     border-color: #ed93b4;
-    box-shadow: 0 4px 8px rgba(241, 178, 201, 0.2);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05), 0 0 5px rgba(241, 178, 201, 0.5);
 }
 
 .seats-plenty {
@@ -404,7 +411,7 @@ ul {
     color: #1b5e20;
     background-color: #e8f5e9;
     padding: 10px 20px;
-    border-radius: 30px;
+    border-radius: 8px;
     margin-top: 20px;
     margin-bottom: 0;
     border: 1px solid #c8e6c9;
@@ -417,7 +424,7 @@ ul {
     color: #c62828;
     background-color: #ffebee;
     padding: 10px 20px;
-    border-radius: 30px;
+    border-radius: 8px;
     margin-top: 20px;
     margin-bottom: 0;
     border: 1px solid #ffcdd2;
@@ -438,9 +445,9 @@ ul {
     padding: 18px 40px;
     font-size: 20px;
     font-weight: bold;
-    border-radius: 40px;
+    border-radius: 8px;
     border: none;
-    box-shadow: 0 8px 15px rgba(237, 147, 180, 0.4);
+    box-shadow: 0 6px 15px rgba(237, 147, 180, 0.4);
     transition: all 0.3s ease;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -458,25 +465,18 @@ ul {
 /* WhatsApp Details Formatting */
 .whatsapp-details {
     margin-top: 20px;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
     background-color: #fafafa;
     text-align: left;
     width: 100%;
     max-width: 615px;
 }
 .whatsapp-summary {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 600;
-    color: #666;
-    cursor: pointer;
-    list-style: none;
+    color: #444;
     line-height: 1.4;
-}
-.whatsapp-summary::-webkit-details-marker {
-    display: none;
-}
-.whatsapp-summary::before {
-    content: "💬 ";
+    margin-bottom: 5px;
 }

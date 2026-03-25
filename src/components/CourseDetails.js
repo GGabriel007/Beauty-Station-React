@@ -278,10 +278,10 @@ const CourseDetails = () => {
                         </button>
 
                         {/* WhatsApp Quick Form */}
-                        <details className="whatsapp-details">
-                            <summary className="whatsapp-summary">
+                        <div className="whatsapp-details">
+                            <p className="whatsapp-summary">
                                 Si quieres contactarnos con más información con respecto a este curso llena la información siguiente
-                            </summary>
+                            </p>
                             <div className="whatsapp-form" style={{ marginTop: '20px' }}>
                                 <p className="title-form" style={{ fontSize: '18px', marginBottom: '15px' }}>Formulario de Contacto Directo</p>
 
@@ -342,7 +342,7 @@ const CourseDetails = () => {
                                 Regístrate por WhatsApp
                             </button>
                             </div>
-                        </details>
+                        </div>
                     </div>
 
                     {thumbnails.length > 1 && (
