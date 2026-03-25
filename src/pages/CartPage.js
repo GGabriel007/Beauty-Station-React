@@ -1,9 +1,10 @@
 // src/pages/CartPage.js
 import React, { useContext, useState, useEffect } from 'react';
 import { CartContext } from '../context/CartContext';
-import { db } from '../config/firestore';
-import { doc, updateDoc, increment, getDoc, addDoc, collection } from 'firebase/firestore'; 
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuthenticator } from '@aws-amplify/ui-react';
+import { fetchUserAttributes, fetchAuthSession } from 'aws-amplify/auth';
+import { post } from 'aws-amplify/api';
 import '../styles/CartPage.css';
 import { Link } from 'react-router-dom';
 import MyComponent from '../context/MyComponent';
@@ -16,6 +17,8 @@ import { validateCardNumber, validateCVV, validateExpiryDate } from '../utils/va
 
 
 const CartPage = () => {
+  const { authStatus, user } = useAuthenticator((context) => [context.authStatus, context.user]);
+  const navigate = useNavigate();
 
   const [isCaptchaValid, setIsCaptchaValid] = useState(false);
 
@@ -29,7 +32,6 @@ const CartPage = () => {
   };
 
   const [formData, setFormData] = useState({
-
     'emailAddress' : '',
     'entry.1580443907' : '',
     'entry.1295397219' : '',
@@ -42,11 +44,28 @@ const CartPage = () => {
      'entry.1913110792': ''
    });
 
-
+  // Force login and auto-fill user data to securely bind the cart to the authenticated user
+  useEffect(() => {
+    if (authStatus === 'unauthenticated') {
+      navigate('/login');
+    } else if (authStatus === 'authenticated') {
+      Promise.all([fetchUserAttributes(), fetchAuthSession()]).then(([attributes, session]) => {
+        const idTokenPayload = session?.tokens?.idToken?.payload || {};
+        const bestName = attributes.name || attributes.given_name || idTokenPayload.name || idTokenPayload.given_name || '';
+        const bestEmail = attributes.email || idTokenPayload.email || user?.signInDetails?.loginId || '';
+        
+        setFormData(prev => ({
+          ...prev,
+          name: bestName,
+          nameCard: bestName, // default to same name for credit card
+          emailAddress: bestEmail
+        }));
+      }).catch(err => console.error("Error pre-filling cart data", err));
+    }
+  }, [authStatus, navigate, user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
 
     // Validate form fields
     if (!validateCardNumber(formData.cardNumber)) {
@@ -54,147 +73,68 @@ const CartPage = () => {
       return;
     }
 
+    const expiryDateError = validateExpiryDate(formData.expiryDate);
+    if (expiryDateError) {
+      setNotificationError(DOMPurify.sanitize(expiryDateError));
+      return;
+    }
 
-    // Validate expiration date
-  const expiryDateError = validateExpiryDate(formData.expiryDate);
-  if (expiryDateError) {
-    setNotificationError(DOMPurify.sanitize(expiryDateError));
-    return;
-  }
+    const cvvError = validateCVV(formData.cvv);
+    if (cvvError) {
+      setNotificationError(DOMPurify.sanitize(cvvError));
+      return;
+    }
 
-  // Validate CVV
-  const cvvError = validateCVV(formData.cvv);
-  if (cvvError) {
-    setNotificationError(DOMPurify.sanitize(cvvError));
-    return;
-  }
+    if (!isCaptchaValid) {
+      alert("Por favor, valida el reCAPTCHA antes de enviar el formulario.");
+      return;
+    }
 
-    if (isCaptchaValid) {
     try {
+      setNotification(DOMPurify.sanitize("Procesando pago seguro en AWS..."));
 
-
-      // 2. Prepare data to save in Firestore
-      const paymentData = {
-        email: DOMPurify.sanitize(formData['emailAddress']),
-        Name: DOMPurify.sanitize(formData.name),
-        userName: DOMPurify.sanitize(formData['entry.1580443907']),
-        DPI: DOMPurify.sanitize(formData['entry.1295397219']),
-        phoneNumber: DOMPurify.sanitize(formData['entry.1830117511']),
-        Items: DOMPurify.sanitize(cartItems.map((item) => item.name)),
-        IncludeKit: DOMPurify.sanitize(includeKit),
-        TotalPrice: DOMPurify.sanitize(getTotalPrice()),
-        Timestamp: DOMPurify.sanitize(new Date()),
-      };
-
-      // 3. Save the data to Firestore
-      const docRef = await addDoc(collection(db, 'Payments'), paymentData);
-
-      const instagramInput = document.querySelector('[name="entry.637554253"]');
-      console.log('Payment Record created with ID:', docRef.id);
-
-      // Encrypt sensitive information
-      const secretKey = process.env.REACT_APP_SECRET_KEY; 
-      const encryptedCardNumber = CryptoJS.AES.encrypt(formData.cardNumber, secretKey).toString();
-      const encryptedUserName = CryptoJS.AES.encrypt(formData['entry.1580443907'], secretKey).toString();
-      const encryptedDPI = CryptoJS.AES.encrypt(formData['entry.1295397219'], secretKey).toString();
-
-      // Prepare form data
-      const urlEncodedformData = new URLSearchParams();
-      urlEncodedformData.append('emailAddress', document.querySelector('[name="emailAddress"]').value);
-      urlEncodedformData.append('entry.1580443907', document.querySelector('[name="entry.1580443907"]').value);
-      urlEncodedformData.append('entry.1295397219', document.querySelector('[name="entry.1295397219"]').value);
-      urlEncodedformData.append('entry.1830117511', document.querySelector('[name="entry.1830117511"]').value);
-      urlEncodedformData.append('entry.637554253', document.querySelector('[name="entry.637554253"]').value);
-      urlEncodedformData.append('entry.1913110792', document.querySelector('[name="entry.1913110792"]').value);
-
-
-      cartItems.forEach((item) => {
-        urlEncodedformData.append('entry.1855368963', item.name);
-      });
-
-      // Append "Kit de pieles perfectas" if included
-      if (includeKit) {
-        urlEncodedformData.append('entry.1855368963', 'Kit de pieles perfectas');
-      }
-
-
-      // Pre-check for seat availability
-      for (const item of cartItems) {
-        const moduleId = moduleIds[item.name];
-        if (moduleId) {
-          const moduleRef = doc(db, "Modulos", moduleId);
-          const docSnap = await getDoc(moduleRef);
-      
-          if (!docSnap.exists() || docSnap.data()[item.name] <= 0) {
-            throw new Error(`No hay más asientos disponibles para ${item.name}.`);
+      // 1. Submit cart payload securely to AWS REST API (replaces Firebase entirely!)
+      const restOperation = post({
+        apiName: 'checkoutApi',
+        path: '/checkout',
+        options: {
+          body: {
+            email: DOMPurify.sanitize(formData['emailAddress']),
+            Name: DOMPurify.sanitize(formData.name),
+            userName: DOMPurify.sanitize(formData['entry.1580443907']),
+            DPI: DOMPurify.sanitize(formData['entry.1295397219']),
+            phoneNumber: DOMPurify.sanitize(formData['entry.1830117511']),
+            cartItems: cartItems,
+            IncludeKit: includeKit,
+            TotalPrice: getTotalPrice()
           }
         }
-      }
-  
-      
-
-      // Check availability of "Kit de pieles perfectas"
-      if (includeKit) {
-        const kitRef = doc(db, "Modulos", moduleIds['Kit de pieles perfectas']);
-        const kitSnap = await getDoc(kitRef);
-  
-        if (!kitSnap.exists() || kitSnap.data()['Kit de pieles perfectas'] <= 0) {
-          throw new Error(`No hay más kits disponibles.`);
-        }
-      }
-  
-      // Proceed with the seat update if all items have available seats
-      for (const item of cartItems) {
-        const moduleId = moduleIds[item.name];
-        // Validate the moduleId before proceeding
-      if (!Object.values(moduleIds).includes(moduleId)) {
-        throw new Error("Invalid module ID");
-      }
-
-
-
-        if (moduleId) {
-          const moduleRef = doc(db, "Modulos", moduleId);
-          await updateDoc(moduleRef, {
-            [item.name]: increment(-1),
-          });
-        }
-      }
-  
-      // Update the stock of the "Kit de pieles perfectas" if selected
-      if (includeKit) {
-        const kitRef = doc(db, "Modulos", moduleIds['Kit de pieles perfectas']);
-        await updateDoc(kitRef, {
-          'Kit de pieles perfectas': increment(-1),
-        });
-      }
-  
-      
-  
-      
-  
-      // Submit form data using fetch
-      const response = await fetch(process.env.REACT_APP_GOOGLE_FORM_ACTION_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: urlEncodedformData.toString(),
       });
-  
+      
+      const response = await restOperation.response;
+      const responseBody = await response.body.json();
+
+      console.log('Secure AWS Checkout successful!', responseBody);
+
+
+
+      clearCart();
+      setPurchaseSuccess(true);
+      setNotification(DOMPurify.sanitize("¡Compra completada exitosamente!"));
+
     } catch (error) {
-      // Handle fetch-specific and other errors
-      if (error.message === 'Failed to fetch' || error.message === 'Load failed') {
-        clearCart();
-        setPurchaseSuccess(true);
-        setNotification(DOMPurify.sanitize("¡Compra completada exitosamente!"));
-      } else {
-        setNotificationError(DOMPurify.sanitize("Hubo un error al procesar tu compra. " + error.message));
-      }
+      // Extract specific AWS error messages if available
+      let errorMsg = error.message;
+      try { 
+         if (error.response) {
+            const errObj = await error.response.body.json(); 
+            if (errObj.error) errorMsg = errObj.error; 
+         }
+      } catch(e){}
+      
+      setNotificationError(DOMPurify.sanitize("Hubo un error al procesar tu compra con AWS: " + errorMsg));
+      setNotification("");
     }
-  }   else {
-    alert("Por favor, valida el reCAPTCHA antes de enviar el formulario.");
-  }
   };
 
   

@@ -4,20 +4,19 @@ import React, { createContext, useState, useEffect } from 'react';
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
-  const [includeKit, setIncludeKit] = useState(false);
-
-  // Load cart items from localStorage when the component mounts
-  useEffect(() => {
-    const savedCartItems = JSON.parse(localStorage.getItem('cartItems'));
-    const savedIncludeKit = JSON.parse(localStorage.getItem('includeKit'));
-    if (savedCartItems) {
-      setCartItems(savedCartItems);
-    }
-    if (savedIncludeKit) {
-      setIncludeKit(savedIncludeKit);
-    }
-  }, []);
+  const [cartItems, setCartItems] = useState(() => {
+    try {
+      const savedCartItems = localStorage.getItem('cartItems');
+      return savedCartItems ? JSON.parse(savedCartItems) : [];
+    } catch (e) { return []; }
+  });
+  
+  const [includeKit, setIncludeKit] = useState(() => {
+    try {
+      const savedIncludeKit = localStorage.getItem('includeKit');
+      return savedIncludeKit ? JSON.parse(savedIncludeKit) : false;
+    } catch (e) { return false; }
+  });
 
   // Save cart items to localStorage whenever they change
   useEffect(() => {

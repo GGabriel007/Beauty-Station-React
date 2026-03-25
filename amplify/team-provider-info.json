@@ -1,0 +1,30 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-beautystationreact-dev-450db-authRole",
+      "UnauthRoleArn": "arn:aws:iam::861079997667:role/amplify-beautystationreact-dev-450db-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::861079997667:role/amplify-beautystationreact-dev-450db-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-beautystationreact-dev-450db-deployment",
+      "UnauthRoleName": "amplify-beautystationreact-dev-450db-unauthRole",
+      "StackName": "amplify-beautystationreact-dev-450db",
+      "StackId": "arn:aws:cloudformation:us-east-1:861079997667:stack/amplify-beautystationreact-dev-450db/d475ec10-279e-11f1-9cf4-0e61884c7a1f",
+      "AmplifyAppId": "d3c62i0a0jatx9",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-beautystationreact-dev-450db-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+    },
+    "categories": {
+      "auth": {
+        "beautystationreact0ba4967a": {}
+      },
+      "function": {
+        "processCheckout": {
+          "deploymentBucketName": "amplify-beautystationreact-dev-450db-deployment",
+          "s3Key": "amplify-builds/processCheckout-575579707a704f4e6267-build.zip"
+        }
+      },
+      "api": {
+        "checkoutApi": {}
+      }
+    }
+  }
+}

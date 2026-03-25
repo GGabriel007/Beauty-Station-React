@@ -22,13 +22,11 @@ const Classes2 = () => {
                 <div className="mid-information-module">
 
                     <div className='space-class'></div>
-                    <Link to="/classes/course/pieles-perfectas">
-
+                    <Link to="/classes/course/pieles-perfectas" style={{ textDecoration: 'none' }}>
                         <div className="center-class">
-
-                            <Link className='imagen-link' to="/classes/course/pieles-perfectas">
+                            <div className='imagen-link'>
                                 <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_Mkup.jpeg`} alt="Informacion de Cursos" />
-                            </Link>
+                            </div>
 
                             <div className="text-class">
 
@@ -49,11 +47,11 @@ const Classes2 = () => {
                     </Link>
                     <div className='space-class'></div>
                     <div className='space-class'></div>
-                    <Link to="/classes/course/maquillaje-social">
+                    <Link to="/classes/course/maquillaje-social" style={{ textDecoration: 'none' }}>
                         <div className="center-class">
-                            <Link className='imagen-link' to="/classes/course/maquillaje-social">
+                            <div className='imagen-link'>
                                 <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_Mkup.jpeg`} alt="Informacion de Cursos" />
-                            </Link>
+                            </div>
 
                             <div className="text-class">
 
@@ -74,11 +72,11 @@ const Classes2 = () => {
                     </Link>
                     <div className='space-class'></div>
                     <div className='space-class'></div>
-                    <Link to="/classes/course/maestria-novias-makeup">
+                    <Link to="/classes/course/maestria-novias-makeup" style={{ textDecoration: 'none' }}>
                         <div className="center-class">
-                            <Link className='imagen-link' to="/classes/course/maestria-novias-makeup">
+                            <div className='imagen-link'>
                                 <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_Mkup.jpeg`} alt="Informacion de Cursos" />
-                            </Link>
+                            </div>
 
                             <div className="text-class">
 
@@ -99,11 +97,11 @@ const Classes2 = () => {
                     </Link>
                     <div className='space-class'></div>
                     <div className='space-class'></div>
-                    <Link to="/classes/course/curso-completo-maquillaje">
+                    <Link to="/classes/course/curso-completo-maquillaje" style={{ textDecoration: 'none' }}>
                         <div className="center-class">
-                            <Link className='imagen-link' to="/classes/course/curso-completo-maquillaje">
+                            <div className='imagen-link'>
                                 <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_Mkup.jpeg`} alt="Informacion de Cursos" />
-                            </Link>
+                            </div>
 
                             <div className="text-class">
 

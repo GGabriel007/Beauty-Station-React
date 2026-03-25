@@ -1,0 +1,40 @@
+{
+  "Records": [
+    {
+      "eventID": "1",
+      "eventName": "INSERT",
+      "eventVersion": "1.1",
+      "eventSource": "aws:dynamodb",
+      "awsRegion": "us-east-1",
+      "dynamodb": {
+        "ApproximateCreationDateTime": 1711200000,
+        "Keys": {
+          "id": {
+            "S": "test-payment-12345"
+          }
+        },
+        "NewImage": {
+          "id": {
+            "S": "test-payment-12345"
+          },
+          "email": {
+            "S": "g.a.gramirez007@gmail.com"
+          },
+          "Name": {
+            "S": "Jane Doe"
+          },
+          "Items": {
+            "S": "Serum Facial, Crema Hidratante"
+          },
+          "TotalPrice": {
+            "N": "85.50"
+          }
+        },
+        "SequenceNumber": "1234567890",
+        "SizeBytes": 256,
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      },
+      "eventSourceARN": "arn:aws:dynamodb:us-east-1:123456789012:table/Payments/stream/2026-03-22T00:00:00.000"
+    }
+  ]
+}

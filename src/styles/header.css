@@ -40,8 +40,9 @@ body {
     height: 100px;
     font-size: 29px;
     font-family: 'Montserrat', sans-serif;
-    font-weight: 500; /* Bold */
-    padding-right: 15px;
+    font-weight: 500;
+    /* Bold */
+    padding-right: 30px;
 }
 
 .image-header {
@@ -67,11 +68,11 @@ body {
     transition: 0.4s;
 }
 
-a{
+a {
     text-decoration: none;
 }
 
-.image-header-cart{
+.image-header-cart {
     height: 60px;
     width: 70px;
 }
@@ -91,14 +92,14 @@ a{
         font-size: 23px;
         position: static;
         width: 100%;
-        height: auto; 
+        height: auto;
         overflow: hidden;
         transition: max-height 0.3s ease-in-out, visibility 0.3s ease-in-out;
-        max-height: 0; 
-        visibility: hidden; 
+        max-height: 0;
+        visibility: hidden;
         padding-left: 27px;
         align-items: flex-start;
-        margin: 0; 
+        margin: 0;
         padding-top: 10px;
         padding-bottom: 15px;
     }
@@ -106,7 +107,7 @@ a{
     .header {
         flex-direction: row;
         justify-content: space-between;
-        align-items: flex-start; 
+        align-items: flex-start;
     }
 
     .image-header {
@@ -127,7 +128,7 @@ a{
         background-color: white;
     }
 
-    .header-button.active{
+    .header-button.active {
         color: white;
         font-size: 19px;
         border-radius: 40px;
@@ -140,39 +141,45 @@ a{
 
     .menu-icon {
         display: flex;
-        padding: 30px 20px 0 0; /* Adjust padding for better spacing */
+        padding: 30px 20px 0 0;
+        /* Adjust padding for better spacing */
         background-color: white;
     }
 
     .border-menu {
         background-color: #f3f3f3;
-        border: 1px solid rgb(219, 219, 219); /* Ensure there is a border */
+        border: 1px solid rgb(219, 219, 219);
+        /* Ensure there is a border */
         padding: 10px;
         border-radius: 10px;
     }
 
     .border-menu.clicked {
         border: 1px solid black;
-        background-color: #c0c0c0; /* Change to desired color on click */
+        background-color: #c0c0c0;
+        /* Change to desired color on click */
     }
 
 
     .right-header-links.open {
-        max-height: 300px; /* Adjust this value based on the number of menu items */
-        visibility: visible; /* Show menu */
-        margin: 0; /* Reset margin */
+        max-height: 300px;
+        /* Adjust this value based on the number of menu items */
+        visibility: visible;
+        /* Show menu */
+        margin: 0;
+        /* Reset margin */
         padding-top: 10px;
         padding-bottom: 15px;
         padding-left: 27px;
     }
 
-    .image-header-cart{
+    .image-header-cart {
         height: 50px;
         width: 65px;
         padding-left: 12px;
     }
-    
-    .cart-header{
+
+    .cart-header {
         height: 40px;
     }
 }

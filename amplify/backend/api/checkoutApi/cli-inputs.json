@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "paths": {
+    "/checkout": {
+      "name": "/checkout",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    },
+    "/modulos": {
+      "name": "/modulos",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "protected",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ],
+        "guest": [
+          "read"
+        ]
+      }
+    }
+  }
+}

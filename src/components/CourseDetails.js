@@ -1,13 +1,76 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import '../styles/modules.css';
 import { useParams, useLocation, Navigate } from 'react-router-dom';
 import useWhatsAppForm from '../hook/useWhatsAppForm';
 import { coursesInfo } from '../config/courseData';
+import { CartContext } from '../context/CartContext';
+import { get } from 'aws-amplify/api';
+
+const DB_KEY_MAP = {
+    "master-waves-0": "Master Waves 2PM a 4PM",
+    "master-waves-1": "Master Waves 6PM a 8PM",
+    "peinado-eventos-0": "Peinados Para Eventos 2PM a 4PM",
+    "peinado-eventos-1": "Peinados Para Eventos 6PM a 8PM",
+    "maestria-novias-0": "Maestrías en Novias y Tendencias 2PM a 4PM",
+    "maestria-novias-1": "Maestrías en Novias y Tendencias 6PM a 8PM",
+    "master-waves-intensivo-0": "Master Waves 2PM a 4PM",
+    "curso-completo-peinado-0": "Curso Completo Peinado 2PM a 4PM",
+    "curso-completo-peinado-1": "Curso Completo Peinado 6PM a 8PM",
+    "pieles-perfectas-0": "Pieles Perfectas 2PM a 4PM",
+    "pieles-perfectas-1": "Pieles Perfectas 6PM a 8PM",
+    "maquillaje-social-0": "Maquillaje Social 2PM a 4PM",
+    "maquillaje-social-1": "Maquillaje Social 6PM a 8PM",
+    "maestria-novias-makeup-0": "Maestría en Novias y Tendencias 2PM a 4PM",
+    "maestria-novias-makeup-1": "Maestría en Novias y Tendencias 6PM a 8PM",
+    "curso-completo-maquillaje-0": "Curso Completo Maquillaje 2PM a 4PM",
+    "curso-completo-maquillaje-1": "Curso Completo Maquillaje 6PM a 8PM"
+};
 
 const CourseDetails = () => {
     const { courseId } = useParams();
     const location = useLocation();
     const courseData = coursesInfo[courseId];
+    const { addToCart } = useContext(CartContext);
+    
+    const [availableSeats, setAvailableSeats] = useState(null);
+    const [selectedScheduleIndex, setSelectedScheduleIndex] = useState(0);
+    const [allDbItems, setAllDbItems] = useState([]);
+
+    const activeDbKey = DB_KEY_MAP[`${courseId}-${selectedScheduleIndex}`];
+
+    // Fetch live DynamoDB seats from our new public API silently on mount
+    useEffect(() => {
+        if (!courseData) return;
+
+        async function fetchSeats() {
+            try {
+                const restOperation = get({
+                    apiName: 'checkoutApi',
+                    path: '/modulos'
+                });
+                const response = await restOperation.response;
+                const dbItems = await response.body.json();
+                setAllDbItems(dbItems);
+            } catch (err) {
+                console.error("Error fetching live seats:", err);
+            }
+        }
+        fetchSeats();
+    }, [courseData]);
+
+    // Recalculate available seats visually whenever DB items load or user changes dropdown
+    useEffect(() => {
+        if (allDbItems.length === 0 || !activeDbKey) {
+            setAvailableSeats(null);
+            return;
+        }
+        const courseRecord = allDbItems.find(item => item[activeDbKey] !== undefined);
+        if (courseRecord) {
+            setAvailableSeats(courseRecord[activeDbKey]);
+        } else {
+            setAvailableSeats(null);
+        }
+    }, [allDbItems, activeDbKey]);
 
     // If the courseId doesn't exist in our data, redirect to classes page
     // We check this at the top level
@@ -174,6 +237,46 @@ const CourseDetails = () => {
                         {courseData.enrollmentPromo && <p className="class_links-module">{courseData.enrollmentPromo}</p>}
 
                         <p className="Wed-Class"> {courseData.installments}</p>
+
+                        <div style={{ marginTop: '20px' }}>
+                            <label style={{ fontWeight: 'bold' }}>Elige tu Horario de Inscripción:</label>
+                            <br />
+                            <select 
+                                value={selectedScheduleIndex} 
+                                onChange={(e) => setSelectedScheduleIndex(Number(e.target.value))}
+                                style={{ padding: '10px', marginTop: '5px', width: '100%', maxWidth: '300px', fontSize: '1rem', border: '1px solid #ccc', borderRadius: '4px', cursor: 'pointer' }}
+                            >
+                                {courseData.scheduleOptions.map((opt, idx) => (
+                                    <option key={idx} value={idx}>{opt}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {availableSeats !== null && (
+                            <p style={{ fontWeight: '600', fontSize: '1.2rem', color: availableSeats > 5 ? '#2db632' : '#e63946', marginTop: '15px', marginBottom: '0' }}>
+                                ¡Solo quedan {availableSeats} asientos disponibles para este horario!
+                            </p>
+                        )}
+
+                        <button
+                            className="contact-button"
+                            style={{ backgroundColor: 'black', color: 'white', marginTop: '20px', marginBottom: '20px', cursor: 'pointer', transition: 'background-color 0.3s ease' }}
+                            onClick={() => {
+                                const priceRaw = courseData.price ? courseData.price.replace(/\D/g, '') : "0";
+                                const priceInt = parseInt(priceRaw, 10) || 0;
+
+                                const cartItemName = activeDbKey || `${courseData.title} ${courseData.scheduleOptions[selectedScheduleIndex]}`;
+
+                                addToCart({
+                                    name: cartItemName,
+                                    price: priceInt,
+                                    image: thumbnails[0]
+                                });
+                                alert(`¡Agregado al carrito: ${cartItemName}!`);
+                            }}
+                        >
+                            Añadir al Carrito
+                        </button>
 
                         {/* WhatsApp Quick Form */}
                         <div className="whatsapp-form">
