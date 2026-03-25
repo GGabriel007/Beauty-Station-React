@@ -6,9 +6,18 @@ import reportWebVitals from './reportWebVitals';
 
 // AWS Amplify Configuration imports
 import { Amplify } from 'aws-amplify';
+import { I18n } from 'aws-amplify/utils';
 import awsExports from './aws-exports';
-import { Authenticator } from '@aws-amplify/ui-react';
+import { Authenticator, translations } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
+
+// Systematically load AWS's official UI translations and aggressively set it to Spanish 
+I18n.putVocabularies(translations);
+I18n.setLanguage('es');
+I18n.putVocabulariesForLanguage('es', {
+  'Sign in with Google': 'Iniciar sesión con Google',
+  'Sign up with Google': 'Continuar con Google'
+});
 
 // Initialize Amplify globally with the native configurations
 Amplify.configure(awsExports);

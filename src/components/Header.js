@@ -43,12 +43,12 @@ const Header = () => {
                 <button 
                   onClick={signOut} 
                   className="header-button header-logout-btn">
-                  Salir
+                  Cerrar sesión
                 </button>
               </li>
             </>
           ) : (
-            <li><Link className={`header-button ${getActiveClass('/login')}`} to="/login">Login</Link></li>
+            <li><Link className={`header-button ${getActiveClass('/login')}`} to="/login">Iniciar sesión</Link></li>
           )}
         </ul>
       </div>
