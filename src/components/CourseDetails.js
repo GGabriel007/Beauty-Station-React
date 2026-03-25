@@ -38,7 +38,7 @@ const CourseDetails = () => {
     const location = useLocation();
     const courseData = coursesInfo[courseId];
     const { addToCart, includeKit, setIncludeKit } = useContext(CartContext);
-    
+
     const isMakeupCourse = MAKEUP_COURSES.includes(courseId);
 
     const [availableSeats, setAvailableSeats] = useState(null);
@@ -269,14 +269,14 @@ const CourseDetails = () => {
 
                         {isMakeupCourse && (
                             <div className="kit-checkbox-container">
-                                <input 
-                                    type="checkbox" 
-                                    id="kit-checkbox" 
+                                <input
+                                    type="checkbox"
+                                    id="kit-checkbox"
                                     checked={includeKit}
                                     onChange={(e) => setIncludeKit(e.target.checked)}
                                 />
                                 <label htmlFor="kit-checkbox" className="kit-checkbox-label">
-                                    Incluir "Kit de Pieles Perfectas" (+ Q. 5,900.00)
+                                    Incluir "Kit de Pieles Perfectas" Q. 5,900.00
                                 </label>
                             </div>
                         )}

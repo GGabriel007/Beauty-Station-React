@@ -96,7 +96,10 @@ const Dashboard = () => {
                     {typeof order.Items === 'string' ? order.Items.split(',').map((mod, i) => {
                       const cleanName = mod.trim();
                       let courseSlug = null;
-                      if (cleanName.toLowerCase().includes('peinados para eventos') || cleanName.toLowerCase().includes('peinado para eventos')) courseSlug = 'peinado-eventos';
+                      
+                      // Explicitly exclude kits from getting a dynamic hyperlink
+                      if (cleanName.toLowerCase().includes('kit')) courseSlug = null; 
+                      else if (cleanName.toLowerCase().includes('peinados para eventos') || cleanName.toLowerCase().includes('peinado para eventos')) courseSlug = 'peinado-eventos';
                       else if (cleanName.toLowerCase().includes('master waves intensivo')) courseSlug = 'master-waves-intensivo';
                       else if (cleanName.toLowerCase().includes('master waves')) courseSlug = 'master-waves';
                       else if (cleanName.toLowerCase().includes('curso completo peinado')) courseSlug = 'curso-completo-peinado';
