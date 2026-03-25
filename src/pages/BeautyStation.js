@@ -36,7 +36,7 @@ const BeautyStation = () => {
               <div className="overlay-home"></div>
               
               <div className="hero-text-container">
-                  <h1 className="hero-title">¡Bienvenida a Beauty Station!</h1>
+                  <h1 className="hero-title">BEAUTY STATION</h1>
                   <p className="hero-subtitle">Aprende nuevas técnicas en nuestros cursos intensivos de belleza, o reserva un servicio profesional a domicilio para tu evento.</p>
               </div>
             </div>
