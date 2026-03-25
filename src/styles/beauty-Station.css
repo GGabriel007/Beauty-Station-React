@@ -259,11 +259,12 @@
 }
   
 .scrolling-image {
-    min-width: 70vw;
+    width: 80vw;
     max-width: 700px;
-    height: auto;
-    max-height: 600px;
+    height: 600px;
     object-fit: contain;
+    background-color: #fafafa;
+    padding: 10px;
     flex-shrink: 0;
     cursor: pointer;
     transition: all 0.4s ease;
@@ -363,10 +364,9 @@
     }
 
     .scrolling-image {
-        min-width: 85vw;
+        width: 85vw;
         max-width: 85vw;
-        height: auto;
-        max-height: 400px;
+        height: 500px;
         border-radius: 8px;
         flex-shrink: 0;
     }
