@@ -259,10 +259,12 @@
 }
   
 .scrolling-image {
-    height: 550px;
-    width: auto;
-    max-width: 90vw;
+    min-width: 70vw;
+    max-width: 700px;
+    height: auto;
+    max-height: 600px;
     object-fit: contain;
+    flex-shrink: 0;
     cursor: pointer;
     transition: all 0.4s ease;
     border-radius: 8px;
@@ -361,10 +363,12 @@
     }
 
     .scrolling-image {
+        min-width: 85vw;
+        max-width: 85vw;
         height: auto;
-        width: 100%;
         max-height: 400px;
         border-radius: 8px;
+        flex-shrink: 0;
     }
 
     .modal-image {
