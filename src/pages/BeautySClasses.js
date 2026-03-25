@@ -29,7 +29,7 @@ const BeautySClasses = () => {
         <div className="mid-information-classes">
         <div className="center-classes">
                 <Link to = "/classes/classes-2">
-                    <img className="icon-classes" src={`${process.env.PUBLIC_URL}images/Class_1/imagen_Module_Mkup.jpeg`} alt="Informacion de Cursos"/>
+                    <img className="icon-classes" src={`${process.env.PUBLIC_URL}/images/Class_1/imagen_Module_Mkup.jpeg`} alt="Informacion de Cursos"/>
                 </Link>
                 <div className="text-classes">
                         <Link to = "/classes/classes-2">
@@ -40,7 +40,7 @@ const BeautySClasses = () => {
         </div>
             <div className="center-classes">
                 <Link to = "/classes/classes-1">
-                    <img className="icon-classes" src={`${process.env.PUBLIC_URL}images/Class_1/imagen_Module_Hair.jpeg`} alt="Informacion de Cursos"/>
+                    <img className="icon-classes" src={`${process.env.PUBLIC_URL}/images/Class_1/imagen_Module_Hair.jpeg`} alt="Informacion de Cursos"/>
                 </Link>
                 <div className="text-classes">
                     <Link to = "/classes/classes-1">
