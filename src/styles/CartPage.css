@@ -366,13 +366,14 @@
         width: 108%;
     }
 
-    .name-price{
-        width: 61%;
+    .name-price {
+        flex: 1;
+        padding-right: 8px;
     }
 
-    .item-name{
-        width: 80px;
-        font-size: 12px;
+    .item-name {
+        width: 45%;
+        font-size: 13px;
     }
 
     .price{
@@ -389,9 +390,10 @@
    }
 
     .cart-page-remove {
-        height: 28px;
-        width: 57px;
-        font-size: 8px;
+        height: auto;
+        width: auto;
+        font-size: 12px;
+        padding: 6px 12px;
     }
 
     .total-price {
