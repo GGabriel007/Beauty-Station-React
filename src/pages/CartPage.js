@@ -32,17 +32,17 @@ const CartPage = () => {
   };
 
   const [formData, setFormData] = useState({
-    'emailAddress' : '',
-    'entry.1580443907' : '',
-    'entry.1295397219' : '',
-    'entry.1830117511' : '',
-     cardNumber: '',
-     expiryDate: '',
-     cvv: '',
-     name: '',
-     nameCard: '',
-     'entry.1913110792': ''
-   });
+    'emailAddress': '',
+    'entry.1580443907': '',
+    'entry.1295397219': '',
+    'entry.1830117511': '',
+    cardNumber: '',
+    expiryDate: '',
+    cvv: '',
+    name: '',
+    nameCard: '',
+    'entry.1913110792': ''
+  });
 
   // Force login and auto-fill user data to securely bind the cart to the authenticated user
   useEffect(() => {
@@ -53,7 +53,7 @@ const CartPage = () => {
         const idTokenPayload = session?.tokens?.idToken?.payload || {};
         const bestName = attributes.name || attributes.given_name || idTokenPayload.name || idTokenPayload.given_name || '';
         const bestEmail = attributes.email || idTokenPayload.email || user?.signInDetails?.loginId || '';
-        
+
         setFormData(prev => ({
           ...prev,
           name: bestName,
@@ -110,7 +110,7 @@ const CartPage = () => {
           }
         }
       });
-      
+
       const response = await restOperation.response;
       const responseBody = await response.body.json();
 
@@ -125,25 +125,25 @@ const CartPage = () => {
     } catch (error) {
       // Extract specific AWS error messages if available
       let errorMsg = error.message;
-      try { 
-         if (error.response) {
-            const errObj = await error.response.body.json(); 
-            if (errObj.error) errorMsg = errObj.error; 
-         }
-      } catch(e){}
-      
+      try {
+        if (error.response) {
+          const errObj = await error.response.body.json();
+          if (errObj.error) errorMsg = errObj.error;
+        }
+      } catch (e) { }
+
       setNotificationError(DOMPurify.sanitize("Hubo un error al procesar tu compra con AWS: " + errorMsg));
       setNotification("");
     }
   };
 
-  
+
 
   const location = useLocation();
-    
+
   useEffect(() => {
 
-      window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   }, [location]);
 
   const { cartItems, removeFromCart, clearCart, includeKit, setIncludeKit } = useContext(CartContext);
@@ -151,7 +151,7 @@ const CartPage = () => {
   const [notificationError, setNotificationError] = useState("");
   const [purchaseSuccess, setPurchaseSuccess] = useState(false);
 
-  
+
   const moduleIds = {
     'Master Waves 2PM a 4PM': '1Qk3ZTR8Mu9cvxdGGVYER',
     'Master Waves 6PM a 8PM': '2lAsVcE1N0gZl4Iiki3GP',
@@ -177,15 +177,15 @@ const CartPage = () => {
     'Curso Completo Maquillaje 2PM a 4PM': '98aq0pkxn574RJGFiIB4CQ',
     'Curso Completo Maquillaje 6PM a 8PM': '991XsOABf2lp5CdSMm21YR3',
 
-    'Kit de pieles perfectas' : '992U9kQfUcpxR0FpY9l4mDI',
+    'Kit de pieles perfectas': '992U9kQfUcpxR0FpY9l4mDI',
 
   };
 
   const handleNameChange = (e) => {
-    const {value} = e.target;
+    const { value } = e.target;
     const regex = /^[a-zA-Z\s]*$/; // Allow only letters and spaces
     if (regex.test(value)) {
-      setFormData({ ...formData, name: value});
+      setFormData({ ...formData, name: value });
     }
   };
 
@@ -194,50 +194,50 @@ const CartPage = () => {
 
     const { name, value } = e.target;
     let sanitizedValue = DOMPurify.sanitize(value); // Sanitize input value
-    let formattedValue = sanitizedValue; 
+    let formattedValue = sanitizedValue;
 
 
 
     switch (name) {
 
       case 'nameCard':
-          formattedValue = value.replace(/[^a-zA-Z\s]*$/g,'');
-          break;
-      case 'emailAddress': 
-          // Allow only valid email characters (letters, numbers, dots, hyphens, underscores, and @)
-          formattedValue = value.replace(/[^a-zA-Z0-9.@_-]/g, '');
-          break;
+        formattedValue = value.replace(/[^a-zA-Z\s]*$/g, '');
+        break;
+      case 'emailAddress':
+        // Allow only valid email characters (letters, numbers, dots, hyphens, underscores, and @)
+        formattedValue = value.replace(/[^a-zA-Z0-9.@_-]/g, '');
+        break;
       case 'entry.1295397219':
-          formattedValue = value.replace(/\D/g, ''); // Allow only digits
-          break;
+        formattedValue = value.replace(/\D/g, ''); // Allow only digits
+        break;
       case 'entry.1830117511':
-          formattedValue = value.replace(/\D/g, ''); // Allow only digits
-          break;
+        formattedValue = value.replace(/\D/g, ''); // Allow only digits
+        break;
       case 'cardNumber':
-          formattedValue = value.replace(/\D/g, '').replace(/(\d{4})(?=\d)/g, '$1-').slice(0, 19); // Format as XXXX-XXXX-XXXX-XXXX
-          break;
+        formattedValue = value.replace(/\D/g, '').replace(/(\d{4})(?=\d)/g, '$1-').slice(0, 19); // Format as XXXX-XXXX-XXXX-XXXX
+        break;
       case 'expiryDate':
-          formattedValue = value.replace(/\D/g, '').replace(/(\d{2})(?=\d)/, '$1/').slice(0, 5); // Format as XX/XX
-          break;
+        formattedValue = value.replace(/\D/g, '').replace(/(\d{2})(?=\d)/, '$1/').slice(0, 5); // Format as XX/XX
+        break;
       case 'cvv':
-        formattedValue = value.replace(/\D/g,''); // Allow only digits
+        formattedValue = value.replace(/\D/g, ''); // Allow only digits
         formattedValue = formattedValue.slice(0, 4); // Limit to 4 digits
         break;
       case 'entry.1913110792':
-          formattedValue = value.replace(/[^0-9CcFf]/g, ''); // Allow digits and letters C, c, F, f
-          break;
+        formattedValue = value.replace(/[^0-9CcFf]/g, ''); // Allow digits and letters C, c, F, f
+        break;
       case 'entry.1580443907':
-          formattedValue = value.replace(/[^a-zA-Z0-9._]/g, ''); // Allow only letters, numbers, dots, and underscores
-          break;
+        formattedValue = value.replace(/[^a-zA-Z0-9._]/g, ''); // Allow only letters, numbers, dots, and underscores
+        break;
       default:
-          break;
-  }
+        break;
+    }
 
-      setFormData ({
-        ...formData,
-        [name]: formattedValue,
-      });
-    };
+    setFormData({
+      ...formData,
+      [name]: formattedValue,
+    });
+  };
 
   const getTotalPrice = () => {
     const total = cartItems.reduce((total, item) => {
@@ -251,86 +251,86 @@ const CartPage = () => {
   };
 
   return (
-<div>
-  <p className="header-information-cartpage">CARRITO</p>
+    <div>
+      <p className="header-information-cartpage">CARRITO</p>
 
-  <div className="information-cart">
-    <div className="cart-page">
-    {notification && <p className="notification">{notification}</p>}
-      {purchaseSuccess ? (
-        <div>
-          <p>¡Gracias por su compra!</p>
-          <p>La informacion de tu registro llegara a tu correo electronico. Si no encuentras el correo revisa la seccion de SPAM.</p>
-        </div>
-      ) : (
-        <>
-          {cartItems.length === 0 ? (
+      <div className="information-cart">
+        <div className="cart-page">
+          {notification && <p className="notification">{notification}</p>}
+          {purchaseSuccess ? (
             <div>
-            <p>Tu carrito esta vacío 🥺</p>
-            <Link to="/classes">
-              <div className="browse-button">Explora la tienda</div>
-            </Link>
-          </div>
+              <p>¡Gracias por su compra!</p>
+              <p>La informacion de tu registro llegara a tu correo electronico. Si no encuentras el correo revisa la seccion de SPAM.</p>
+            </div>
           ) : (
-            <div className="cart-container">
-              <div className="cart-total-price">
-                <div className="cart-items">
-                  <ul>
-                    {cartItems.map((item, index) => (
-                      <li key={index}>
-                        <img src={item.image} alt={item.name} />
-                        <div className="name-price">
-                          <div className="item-name">{item.name}</div>
-                          <div className="price">Q {item.price}.00</div>
-                        </div>
-                        <button className="cart-page-remove" onClick={() => removeFromCart(item)}>Remover</button>
-                      </li>
-                    ))}
-                  </ul>
+            <>
+              {cartItems.length === 0 ? (
+                <div>
+                  <p>Tu carrito esta vacío 🥺</p>
+                  <Link to="/classes">
+                    <div className="browse-button">Explora la tienda</div>
+                  </Link>
                 </div>
-                <div className="name-price-INS">
-                  {includeKit && (
-                    <>
-                      <img src={`${process.env.PUBLIC_URL}/images/Kit-Maquillaje.png`} alt="Icono de maquillaje" />
+              ) : (
+                <div className="cart-container">
+                  <div className="cart-total-price">
+                    <div className="cart-items">
+                      <ul>
+                        {cartItems.map((item, index) => (
+                          <li key={index}>
+                            <img src={item.image} alt={item.name} />
+                            <div className="name-price">
+                              <div className="item-name">{item.name}</div>
+                              <div className="price">Q {item.price}.00</div>
+                            </div>
+                            <button className="cart-page-remove" onClick={() => removeFromCart(item)}>Remover</button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="name-price-INS">
+                      {includeKit && (
+                        <>
+                          <img src={`${process.env.PUBLIC_URL}/images/Kit-Maquillaje.png`} alt="Icono de maquillaje" />
+                          <div className="name-price">
+                            <p className="item-name">Kit de pieles perfectas</p>
+                            <div className="price">Q 5900.00</div>
+                          </div>
+                          <button className="cart-page-remove" onClick={handleRemoveKit}>Remover</button>
+                        </>
+                      )}
+                    </div>
+                    <div className="name-price-INS">
+                      <div className='block'></div>
                       <div className="name-price">
-                        <p className="item-name">Kit de pieles perfectas</p>
-                        <div className="price">Q 5900.00</div>
+                        <p className="item-name">Incripción</p>
+                        <div className="price">Q 200.00</div>
                       </div>
-                      <button className="cart-page-remove" onClick={handleRemoveKit}>Remover</button>
-                    </>
-                  )}
-                </div>
-                <div className="name-price-INS">
-                <div className='block'></div>
-                <div className="name-price">
-                  <p className="item-name">Incripción</p>
-                  <div className="price">Q 200.00</div>
-                </div>
-                <div className='block-remove'></div>
-                </div>
-                <div className="line"></div>
-                <div className="total-price">
-                  <div className="total-text">TOTAL</div>
-                  <div className="total-number">Q {getTotalPrice()}.00</div>
-                </div>
-              </div>
-              <form id="registration-form"  method="post" className='form-from-user' onSubmit={handleSubmit}>
-                <div className="information-User">
-                  <p className="title-form">Formulario de inscripción 2024</p>
-                  <div className="form-user">
-                  <label htmlFor="email" className="form-label">Email:*</label>
-                    <input  
-                        type="email" 
-                        id="email" 
-                        name="emailAddress" 
-                        placeholder="email@domain.com"
-                        value={formData['emailAddress']}
-                        onChange={handleChange}  
-                        required 
-                    />
-                    
-                    <label htmlFor="name" className='form-label'>Nombre Completo:*</label>
-                    
+                      <div className='block-remove'></div>
+                    </div>
+                    <div className="line"></div>
+                    <div className="total-price">
+                      <div className="total-text">TOTAL</div>
+                      <div className="total-number">Q {getTotalPrice()}.00</div>
+                    </div>
+                  </div>
+                  <form id="registration-form" method="post" className='form-from-user' onSubmit={handleSubmit}>
+                    <div className="information-User">
+                      <p className="title-form">Formulario de inscripción</p>
+                      <div className="form-user">
+                        <label htmlFor="email" className="form-label">Email:*</label>
+                        <input
+                          type="email"
+                          id="email"
+                          name="emailAddress"
+                          placeholder="email@domain.com"
+                          value={formData['emailAddress']}
+                          onChange={handleChange}
+                          required
+                        />
+
+                        <label htmlFor="name" className='form-label'>Nombre Completo:*</label>
+
                         <input
                           pattern="^[a-zA-Z\s]*$"
                           type="text"
@@ -341,85 +341,85 @@ const CartPage = () => {
                           title="Sólo se permiten letras y espacios."
                           required
                         />
-                    
-                    <label htmlFor="instagram" className='form-label'>
-                      Usuario de Instagram o Facebook:*
-                      </label>
 
-                      <input 
-                          type="text" 
-                          id="instagram" 
-                          name="entry.1580443907" 
+                        <label htmlFor="instagram" className='form-label'>
+                          Usuario de Instagram o Facebook:*
+                        </label>
+
+                        <input
+                          type="text"
+                          id="instagram"
+                          name="entry.1580443907"
                           value={formData['entry.1580443907']}
                           onChange={handleChange}
-                          title="Sólo puede tener letras, números, puntos y guiones bajos."  
+                          title="Sólo puede tener letras, números, puntos y guiones bajos."
                           required
-                      />
-                    
-                    <label htmlFor="identification" className='form-label'>
-                      Número de Identificación:* <div className="second-Text">(DPI o número de Pasaporte)</div>
-                    </label>
-                    
-                    <input
-                      type="tel"
-                      id="identification"
-                      name="entry.1295397219"
-                      value={formData['entry.1295397219']}
-                      onChange={handleChange}
-                      title='Ingresar solamente numeros'
-                      pattern="\d+"
-                      required
-                    />
-                    
-                    <label htmlFor="whatsapp" className='form-label'>Número de Teléfono:*</label>
-                         
-                              <input
-                                type="tel"
-                                id="whatsapp"
-                                name="entry.1830117511"
-                                value={formData['entry.1830117511']}
-                                onChange={handleChange}
-                                placeholder="XXXX-XXXX"
-                                required
-                    />
-                      
-                    <label htmlFor="nit" className='form-label'>Datos de facturación NIT:* <div className="second-Text">Ingresar NIT o CF</div></label>
-                    
-                    <input 
-                    type="text" 
-                    id="nit" 
-                    name="entry.1913110792" 
-                    value={formData['entry.1913110792']}
-                    onChange={handleChange}
-                    placeholder="1234456778941"
-                    title="Coloque su NIT o CF" 
-                    required 
-                    />
-                    
+                        />
+
+                        <label htmlFor="identification" className='form-label'>
+                          Número de Identificación:* <div className="second-Text">(DPI o número de Pasaporte)</div>
+                        </label>
+
+                        <input
+                          type="tel"
+                          id="identification"
+                          name="entry.1295397219"
+                          value={formData['entry.1295397219']}
+                          onChange={handleChange}
+                          title='Ingresar solamente numeros'
+                          pattern="\d+"
+                          required
+                        />
+
+                        <label htmlFor="whatsapp" className='form-label'>Número de Teléfono:*</label>
+
+                        <input
+                          type="tel"
+                          id="whatsapp"
+                          name="entry.1830117511"
+                          value={formData['entry.1830117511']}
+                          onChange={handleChange}
+                          placeholder="XXXX-XXXX"
+                          required
+                        />
+
+                        <label htmlFor="nit" className='form-label'>Datos de facturación NIT:* <div className="second-Text">Ingresar NIT o CF</div></label>
+
+                        <input
+                          type="text"
+                          id="nit"
+                          name="entry.1913110792"
+                          value={formData['entry.1913110792']}
+                          onChange={handleChange}
+                          placeholder="1234456778941"
+                          title="Coloque su NIT o CF"
+                          required
+                        />
+
+                      </div>
                     </div>
-                </div>
-                <div className="payment">
-                  <p className="title-form">Datos de la tarjeta</p>
-                  <div>
-                  <label htmlFor="cardNumber" className='form-label'>Número de tarjeta:</label>
-                  <div className='input-container'>
-                    <input
-                      type="tel"
-                      id="cardNumber"
-                      name="cardNumber"
-                      value={formData.cardNumber}
-                      onChange={handleChange}
-                      maxLength="19"
-                      placeholder="4000-1234-5678-9010"
-                      required
-                    />
-                    <img src={`${process.env.PUBLIC_URL}/images/neopay.png`} alt="NeoNet Logo by NeoNet website" className="input-icon" />
-                  </div>
+                    <div className="payment">
+                      <p className="title-form">Datos de la tarjeta</p>
+                      <div>
+                        <label htmlFor="cardNumber" className='form-label'>Número de tarjeta:</label>
+                        <div className='input-container'>
+                          <input
+                            type="tel"
+                            id="cardNumber"
+                            name="cardNumber"
+                            value={formData.cardNumber}
+                            onChange={handleChange}
+                            maxLength="19"
+                            placeholder="4000-1234-5678-9010"
+                            required
+                          />
+                          <img src={`${process.env.PUBLIC_URL}/images/neopay.png`} alt="NeoNet Logo by NeoNet website" className="input-icon" />
+                        </div>
 
 
-                  <label htmlFor="cardNumber" className='form-label'>Nombre impreso en la tarjeta:</label>
-                  
-                  <input
+                        <label htmlFor="cardNumber" className='form-label'>Nombre impreso en la tarjeta:</label>
+
+                        <input
                           pattern="^[a-zA-Z\s]*$"
                           type="text"
                           id="name"
@@ -430,83 +430,83 @@ const CartPage = () => {
                           title="Sólo se permiten letras y espacios."
                           required
                         />
-                    
-                  <label htmlFor="expiryDate" className='form-label'>Fecha de caducidad:</label>
-                  
-                  <input
-                    type="tel"
-                    id="expiryDate"
-                    name="expiryDate"
-                    value={formData.expiryDate}
-                    onChange={handleChange}
-                    maxLength="5"
-                    placeholder="mm/aa"
-                    required
-                  />
-                  
-                  <label htmlFor="cvv" className='form-label'>CVV:</label>
-                  
-                    <input
-                      type="tel"
-                      id="cvv"
-                      name="cvv"
-                      value={formData.cvv}
-                      onChange={handleChange}
-                      maxLength="4"
-                      placeholder="321"
-                      required
-                  />
-                    
-                    {notificationError && <p className="error-notification">{notificationError}</p>}
 
-                  {/* Add hidden inputs for each cart item */}
-                  {cartItems.map((item, index) => (
-                    <div key={index}>
-                      <input
-                        type="hidden"
-                        name="entry.1855368963"
-                        value={item.name}
-                      /> {renderItemName(item.name) && null}
-                    </div>
-                  ))}
-                    {/* Add hidden input if "Kit de pieles perfectas" is included */}
-                    {includeKit && (
-                      <input
-                        type="hidden"
-                        name="entry.1855368963"
-                        value="Kit de pieles perfectas"
-                      />
-                    )}
-                    {cartItems.length > 0 && (
-                      <div>
-                        
-                        <MyComponent onCaptchaSuccess={handleCaptchaSuccess} />
-                        
-                          <button
-                            className="checkout-button"
-                            type="submit"
-                            value="Submit"
-                            disabled={!isCaptchaValid}
-                          >
-                            Pagar
-                          </button>
-                        
+                        <label htmlFor="expiryDate" className='form-label'>Fecha de caducidad:</label>
+
+                        <input
+                          type="tel"
+                          id="expiryDate"
+                          name="expiryDate"
+                          value={formData.expiryDate}
+                          onChange={handleChange}
+                          maxLength="5"
+                          placeholder="mm/aa"
+                          required
+                        />
+
+                        <label htmlFor="cvv" className='form-label'>CVV:</label>
+
+                        <input
+                          type="tel"
+                          id="cvv"
+                          name="cvv"
+                          value={formData.cvv}
+                          onChange={handleChange}
+                          maxLength="4"
+                          placeholder="321"
+                          required
+                        />
+
+                        {notificationError && <p className="error-notification">{notificationError}</p>}
+
+                        {/* Add hidden inputs for each cart item */}
+                        {cartItems.map((item, index) => (
+                          <div key={index}>
+                            <input
+                              type="hidden"
+                              name="entry.1855368963"
+                              value={item.name}
+                            /> {renderItemName(item.name) && null}
+                          </div>
+                        ))}
+                        {/* Add hidden input if "Kit de pieles perfectas" is included */}
+                        {includeKit && (
+                          <input
+                            type="hidden"
+                            name="entry.1855368963"
+                            value="Kit de pieles perfectas"
+                          />
+                        )}
+                        {cartItems.length > 0 && (
+                          <div>
+
+                            <MyComponent onCaptchaSuccess={handleCaptchaSuccess} />
+
+                            <button
+                              className="checkout-button"
+                              type="submit"
+                              value="Submit"
+                              disabled={!isCaptchaValid}
+                            >
+                              Pagar
+                            </button>
+
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
+                    </div>
+                    <div className="text-module-cart">
+                      <p className="class_links-module">TÉRMINOS Y CONDICIONES</p>
+                      <p>*Los pagos para este curso son necesarios para asegurar su cupo y no son reembolsables bajo ninguna circunstancia. En caso de cancelación o ausencia, incluyendo enfermedad, no se permite el canje por otros cursos, servicios o productos. La reposición de clases tiene un costo adicional y está sujeta a la disponibilidad del equipo. No se permiten acompañantes en clase, a menos que se solicite como modelo en días específicos. Es indispensable estar solvente para participar en las clases.</p>
+                    </div>
+                  </form>
                 </div>
-                <div className = "text-module-cart">
-                <p className="class_links-module">TÉRMINOS Y CONDICIONES</p>
-                <p>*Los pagos para este curso son necesarios para asegurar su cupo y no son reembolsables bajo ninguna circunstancia. En caso de cancelación o ausencia, incluyendo enfermedad, no se permite el canje por otros cursos, servicios o productos. La reposición de clases tiene un costo adicional y está sujeta a la disponibilidad del equipo. No se permiten acompañantes en clase, a menos que se solicite como modelo en días específicos. Es indispensable estar solvente para participar en las clases.</p>
-            </div>
-              </form>
-            </div>
+              )}
+            </>
           )}
-        </>
-      )}
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
   );
 };

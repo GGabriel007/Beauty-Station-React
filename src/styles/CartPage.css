@@ -317,8 +317,9 @@
 }
 
 .input-container input {
-    width: 96%;
-
+    width: 100%;
+    padding-right: 130px;
+    box-sizing: border-box;
 }
 
 .input-icon {
@@ -410,8 +411,8 @@
     }
 
     .input-container input {
-        width: 91.5%;
-    
+        width: 100%;
+        padding-right: 100px;
     }
 
 
