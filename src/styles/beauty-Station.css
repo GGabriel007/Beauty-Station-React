@@ -11,7 +11,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 690px;
+    min-height: 800px;
 }
 
 .top-imagen-home {
@@ -76,13 +76,13 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 60px;
+    gap: 80px;
     font-family: 'Merriweather', serif;
     text-align: center;
     z-index: 3;
     width: 100%;
     position: absolute;
-    top: 86%;
+    top: 72%;
     transform: translateY(-50%);
 }
 
@@ -144,7 +144,7 @@
 .content {
     display: flex;
     flex-direction: column;
-    padding: 200px 10% 0 10%;
+    padding: 280px 10% 0 10%;
     justify-content: flex-start;
     background-color: white;
 }
