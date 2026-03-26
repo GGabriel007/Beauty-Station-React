@@ -4,7 +4,7 @@
     background-color: white;
     width: 100%;
     text-align: center;
-    
+
 }
 
 .mid-information-classes {
@@ -81,15 +81,18 @@
 .text-classes {
     font-size: 25px;
     text-align: left;
-    word-break: break-word; /* Break long words to fit within the container */
-    max-width: 100%; /* Ensure it doesn't overflow */
-    
+    word-break: break-word;
+    /* Break long words to fit within the container */
+    max-width: 100%;
+    /* Ensure it doesn't overflow */
+
 }
 
 .title_links-classes {
     color: white;
     font-family: 'Lato', sans-serif;
-    font-weight: 500; /* Semi-bold */
+    font-weight: 500;
+    /* Semi-bold */
     font-style: normal;
     text-align: center;
     font-size: 50px;
@@ -200,13 +203,13 @@
     }
 
     .center-classes {
-        width: 85%;
-        max-width: 320px;
+        width: 70%;
+        max-width: 240px;
     }
 
     .icon-classes {
         width: 100%;
-        height: 300px;
+        height: 240px;
         border-radius: 0;
         padding: 0;
         background-color: transparent;
@@ -214,6 +217,6 @@
     }
 
     .header-information-classes {
-        font-size: 2.5rem;
+        font-size: 3rem;
     }
 }
