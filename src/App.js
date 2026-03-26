@@ -1,9 +1,13 @@
 // src/App.js
 import React, { useContext } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from 'react-router-dom';
+import { useAuthenticator } from '@aws-amplify/ui-react';
+import { toast } from 'react-toastify';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import './styles/App.css';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import BeautyStation from './pages/BeautyStation';
 import BeautySDomicilio from './pages/BeautySDomicilio';
 import BeautySClasses from './pages/BeautySClasses';
@@ -39,6 +43,15 @@ function App() {
           </Routes>
           <CartButton />
           <Footer />
+          <ToastContainer
+            position="top-center"
+            autoClose={4000}
+            hideProgressBar={false}
+            closeOnClick
+            pauseOnHover
+            draggable
+            theme="light"
+          />
         </div>
       </Router>
     </CartProvider>
@@ -46,12 +59,28 @@ function App() {
 }
 
 const CartButton = () => {
-  const { cartItems } = useContext(CartContext); // Access cartItems from context 
+  const { cartItems } = useContext(CartContext);
+  const { authStatus } = useAuthenticator((context) => [context.authStatus]);
+  const navigate = useNavigate();
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    if (authStatus !== 'authenticated') {
+      sessionStorage.setItem('loginRedirect', '/classes');
+      toast.warn('¡Inicia sesión para ver tu carrito!', {
+        onClick: () => navigate('/login'),
+        style: { cursor: 'pointer' },
+      });
+      navigate('/login');
+      return;
+    }
+    navigate('/cart');
+  };
 
   return (
-    <Link to="/cart" className="cart-button">
+    <a href="/cart" className="cart-button" onClick={handleClick}>
       🛒 {cartItems.length > 0 && <span>{cartItems.length}</span>}
-    </Link>
+    </a>
   );
 };
 

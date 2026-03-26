@@ -4,19 +4,29 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/login.css';
 
 // ─── Security Validators ──────────────────────────────────────────────────────
-// Blocks HTML tags, javascript: URIs, event handlers, and common injection
-// patterns from being stored in Cognito user attributes.
-const INJECTION_PATTERN = /<[^>]*>|javascript\s*:|on\w+\s*=|<\s*script/i;
 
-// Valid name: letters (including accented), spaces, hyphens, apostrophes — 2–60 chars
+// 1. XSS: HTML tags, javascript: URIs, inline event handlers, <script>
+const XSS_PATTERN = /<[^>]*>|javascript\s*:|on\w+\s*=|<\s*script/i;
+
+// 2. SQL injection: dangerous keywords, comment sequences, statement terminators
+const SQL_PATTERN = /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|UNION|EXEC|EXECUTE|TRUNCATE|DECLARE|CAST|CONVERT)\b|--|;|\/\*|\*\/|xp_)/i;
+
+// 3. Null bytes and ASCII control characters (often used to bypass filters)
+const CONTROL_CHAR_PATTERN = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/;
+
+// 4. Valid name: letters (incl. accented), spaces, hyphens, apostrophes — 2–60 chars
+//    This already blocks !, @, #, ;, <, >, ", numbers, etc. by construction.
 const NAME_PATTERN = /^[a-zA-ZÀ-ÿ\s'\-]{2,60}$/;
+
+const hasDangerousContent = (value) =>
+  XSS_PATTERN.test(value) || SQL_PATTERN.test(value) || CONTROL_CHAR_PATTERN.test(value);
 
 const validateName = (value) => {
   if (!value || value.trim().length < 2)
     return 'Mínimo 2 caracteres.';
   if (value.trim().length > 60)
     return 'Máximo 60 caracteres.';
-  if (INJECTION_PATTERN.test(value))
+  if (hasDangerousContent(value))
     return 'El campo contiene caracteres no permitidos.';
   if (!NAME_PATTERN.test(value))
     return 'Solo se permiten letras, espacios, guiones y apóstrofes.';
@@ -25,10 +35,10 @@ const validateName = (value) => {
 const validateEmail = (value) => {
   if (!value || value.trim() === '')
     return 'El correo electrónico es requerido.';
-  if (INJECTION_PATTERN.test(value))
+  if (hasDangerousContent(value))
     return 'El campo contiene caracteres no permitidos.';
-  // RFC-5321 compliant basic check
-  const emailRegex = /^[^\s@<>"']+@[^\s@<>"']+\.[^\s@<>"']{2,}$/;
+  // Only allow safe email characters: alphanumeric + . _ + - before @, domain after
+  const emailRegex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
   if (!emailRegex.test(value.trim()))
     return 'Ingrese un correo electrónico válido.';
 };
@@ -36,6 +46,10 @@ const validateEmail = (value) => {
 const validatePassword = (value) => {
   if (!value || value.length < 8)
     return 'La contraseña debe tener al menos 8 caracteres.';
+  // Block XSS and null bytes in passwords (SQL chars are intentionally allowed
+  // as they are valid password characters and handled safely by Cognito)
+  if (XSS_PATTERN.test(value) || CONTROL_CHAR_PATTERN.test(value))
+    return 'La contraseña contiene caracteres no permitidos.';
   if (!/[A-Z]/.test(value))
     return 'Debe incluir al menos una letra mayúscula.';
   if (!/[a-z]/.test(value))
@@ -46,6 +60,25 @@ const validatePassword = (value) => {
     return 'Debe incluir al menos un carácter especial (ej. @, #, !).';
 };
 
+// ─── Confirm Sign-Up: Cancel button ───────────────────────────────────────────
+
+function ConfirmSignUpFooter() {
+  const { toSignIn } = useAuthenticator();
+  return (
+    <div className="confirm-cancel-footer">
+      <button type="button" className="confirm-cancel-btn" onClick={toSignIn}>
+        Cancelar
+      </button>
+    </div>
+  );
+}
+
+const authenticatorComponents = {
+  ConfirmSignUp: {
+    Footer: ConfirmSignUpFooter,
+  },
+};
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 const Login = () => {
@@ -54,7 +87,9 @@ const Login = () => {
 
   useEffect(() => {
     if (authStatus === 'authenticated') {
-      navigate('/cart');
+      const redirect = sessionStorage.getItem('loginRedirect') || '/classes';
+      sessionStorage.removeItem('loginRedirect');
+      navigate(redirect);
     }
   }, [authStatus, navigate]);
 
@@ -64,6 +99,7 @@ const Login = () => {
       <div className="login-container">
         <Authenticator
           socialProviders={['google']}
+          components={authenticatorComponents}
           formFields={{
             signUp: {
               given_name: {

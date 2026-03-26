@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
 import '../styles/modules.css';
-import { useParams, useLocation, Navigate } from 'react-router-dom';
+import { useParams, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import useWhatsAppForm from '../hook/useWhatsAppForm';
 import { coursesInfo } from '../config/courseData';
 import { CartContext } from '../context/CartContext';
 import { get } from 'aws-amplify/api';
+import { useAuthenticator } from '@aws-amplify/ui-react';
+import { toast } from 'react-toastify';
 
 const DB_KEY_MAP = {
     "master-waves-0": "Master Waves 2PM a 4PM",
@@ -36,8 +38,10 @@ const MAKEUP_COURSES = [
 const CourseDetails = () => {
     const { courseId } = useParams();
     const location = useLocation();
+    const navigate = useNavigate();
     const courseData = coursesInfo[courseId];
     const { addToCart, cartItems, includeKit, setIncludeKit } = useContext(CartContext);
+    const { authStatus } = useAuthenticator(context => [context.authStatus]);
     
     const isMakeupCourse = MAKEUP_COURSES.includes(courseId);
 
@@ -295,6 +299,16 @@ const CourseDetails = () => {
                         <button
                             className="course-add-cart-btn"
                             onClick={() => {
+                                if (authStatus !== 'authenticated') {
+                                    sessionStorage.setItem('loginRedirect', window.location.pathname);
+                                    toast.warn('¡Inicia sesión para agregar cursos al carrito!', {
+                                        onClick: () => navigate('/login'),
+                                        style: { cursor: 'pointer' },
+                                    });
+                                    navigate('/login');
+                                    return;
+                                }
+
                                 const priceRaw = courseData.price ? courseData.price.replace(/\D/g, '') : "0";
                                 const priceInt = parseInt(priceRaw, 10) || 0;
 

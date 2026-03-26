@@ -1,3 +1,12 @@
+// ─── Shared injection / XSS / SQL patterns ────────────────────────────────────
+export const XSS_PATTERN     = /<[^>]*>|javascript\s*:|on\w+\s*=|<\s*script/i;
+export const SQL_PATTERN     = /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|UNION|EXEC|EXECUTE|TRUNCATE|DECLARE|CAST|CONVERT)\b|--|;|\/\*|\*\/|xp_)/i;
+export const CONTROL_PATTERN = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/;
+
+export const hasDangerousContent = (value) =>
+  XSS_PATTERN.test(value) || SQL_PATTERN.test(value) || CONTROL_PATTERN.test(value);
+
+// ─── Card validators ───────────────────────────────────────────────────────────
 export const validateCardNumber = (cardNumber) => {
     cardNumber = cardNumber.replace(/\D/g, '');
 

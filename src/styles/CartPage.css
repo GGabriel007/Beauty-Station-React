@@ -384,7 +384,8 @@ input:focus {
 
 
     .cart-page li {
-        width: 108%;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .cart-page ul {
@@ -435,21 +436,145 @@ input:focus {
 }
 
 @media (max-width: 600px) {
+    /* ── Layout: stop all horizontal overflow ── */
+    .information-cart {
+        overflow-x: hidden;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .cart-page {
+        width: 100%;
+        padding: 10px 12px;
+        box-sizing: border-box;
+    }
+
+    /* Fix the 108% width that causes right-side overflow */
+    .cart-page li {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .cart-total-price {
+        padding-left: 0;
+        padding-right: 0;
+        padding-bottom: 20px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .total-price {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .name-price {
+        width: auto;
+        flex: 1;
+        min-width: 0;
+        padding-right: 6px;
+        box-sizing: border-box;
+    }
+
+    .name-price-INS {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* ── Text sizes ── */
     .header-information-cartpage {
         font-size: 2.2rem;
         margin: 15px 12px;
     }
 
     .text-module-cart {
-        font-size: 15px;
+        font-size: 13px;
     }
 
     .title-form {
-        font-size: 1.1em;
+        font-size: 1em;
+        margin-bottom: 6px;
     }
 
-    .cart-page {
-        width: 95%;
-        padding: 12px;
+    .cart-page ul {
+        gap: 8px;
+        padding: 0;
+    }
+
+    .cart-container {
+        margin-bottom: 12px;
+    }
+
+    .item-name {
+        font-size: 11px;
+        width: auto;
+        min-width: 0;
+    }
+
+    .price {
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+    .total-text,
+    .total-number {
+        font-size: 0.9rem;
+        padding-top: 5px;
+    }
+
+    .cart-page-remove {
+        font-size: 11px;
+        padding: 5px 8px;
+        min-width: 60px;
+        white-space: nowrap;
+    }
+
+    /* ── Form ── */
+    label {
+        font-size: 0.75rem;
+        margin-bottom: 1px;
+    }
+
+    input {
+        padding: 7px 9px;
+        font-size: 0.82em;
+        margin-bottom: 3px;
+        box-sizing: border-box;
+        width: 100%;
+    }
+
+    .checkout-button {
+        font-size: 0.88em;
+        padding: 10px 12px;
+        margin-top: 10px;
+    }
+
+    .line {
+        margin-top: 8px;
+        margin-bottom: 3px;
+    }
+
+    .form-from-user {
+        margin-top: 20px;
+        padding-left: 0;
+        padding-right: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .input-container {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .input-container input {
+        padding-right: 90px;
+    }
+
+    .input-icon {
+        width: 70px;
+        height: 16px;
+        right: 4px;
+        bottom: 20px;
     }
 }

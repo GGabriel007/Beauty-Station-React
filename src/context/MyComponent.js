@@ -51,9 +51,8 @@ const MyComponent = ({ onCaptchaSuccess }) => {
       .then((token) => {
         //console.log("Generated token:", token);
         setRecaptchaToken(token); // Store the token in state
-        // Optionally, send the token to your backend for verification
         if (onCaptchaSuccess) {
-            onCaptchaSuccess();
+            onCaptchaSuccess(token); // Pass token so backend can verify it
         }
       })
       .catch((error) => {

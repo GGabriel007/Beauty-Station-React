@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import MyComponent from '../context/MyComponent';
 import DOMPurify from 'dompurify';
 import CryptoJS from 'crypto-js';
-import { validateCardNumber, validateCVV, validateExpiryDate } from '../utils/validation';
+import { validateCardNumber, validateCVV, validateExpiryDate, hasDangerousContent } from '../utils/validation';
 
 
 
@@ -21,10 +21,12 @@ const CartPage = () => {
   const navigate = useNavigate();
 
   const [isCaptchaValid, setIsCaptchaValid] = useState(false);
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleCaptchaSuccess = () => {
+  const handleCaptchaSuccess = (token) => {
     setIsCaptchaValid(true);
-
+    setRecaptchaToken(token);
   };
 
   const renderItemName = (name) => {
@@ -67,6 +69,9 @@ const CartPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Prevent double-submission
+    if (isSubmitting) return;
+
     // Validate form fields
     if (!validateCardNumber(formData.cardNumber)) {
       setNotificationError(DOMPurify.sanitize("¡Tarjeta inválida!"));
@@ -85,10 +90,12 @@ const CartPage = () => {
       return;
     }
 
-    if (!isCaptchaValid) {
+    if (!isCaptchaValid || !recaptchaToken) {
       alert("Por favor, valida el reCAPTCHA antes de enviar el formulario.");
       return;
     }
+
+    setIsSubmitting(true);
 
     try {
       setNotification(DOMPurify.sanitize("Procesando pago seguro en AWS..."));
@@ -106,7 +113,8 @@ const CartPage = () => {
             phoneNumber: DOMPurify.sanitize(formData['entry.1830117511']),
             cartItems: cartItems,
             IncludeKit: includeKit,
-            TotalPrice: getTotalPrice()
+            TotalPrice: getTotalPrice(),
+            recaptchaToken: recaptchaToken
           }
         }
       });
@@ -123,7 +131,6 @@ const CartPage = () => {
       setNotification(DOMPurify.sanitize("¡Compra completada exitosamente!"));
 
     } catch (error) {
-      // Extract specific AWS error messages if available
       let errorMsg = error.message;
       try {
         if (error.response) {
@@ -134,6 +141,8 @@ const CartPage = () => {
 
       setNotificationError(DOMPurify.sanitize("Hubo un error al procesar tu compra con AWS: " + errorMsg));
       setNotification("");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -183,51 +192,54 @@ const CartPage = () => {
 
   const handleNameChange = (e) => {
     const { value } = e.target;
-    const regex = /^[a-zA-Z\s]*$/; // Allow only letters and spaces
-    if (regex.test(value)) {
-      setFormData({ ...formData, name: value });
+    if (hasDangerousContent(value)) {
+      setNotificationError(DOMPurify.sanitize('El campo contiene caracteres no permitidos.'));
+      return;
     }
+    const cleaned = DOMPurify.sanitize(value.replace(/[^a-zA-ZÀ-ÿ\s]/g, '').slice(0, 60));
+    setFormData({ ...formData, name: cleaned });
   };
 
   const handleChange = (e) => {
-
-
     const { name, value } = e.target;
-    let sanitizedValue = DOMPurify.sanitize(value); // Sanitize input value
+
+    // Reject any input containing XSS / SQL injection / control characters
+    if (hasDangerousContent(value)) {
+      setNotificationError(DOMPurify.sanitize('El campo contiene caracteres no permitidos.'));
+      return;
+    }
+
+    let sanitizedValue = DOMPurify.sanitize(value);
     let formattedValue = sanitizedValue;
 
-
-
     switch (name) {
-
       case 'nameCard':
-        formattedValue = value.replace(/[^a-zA-Z\s]*$/g, '');
+        // Fix: strip ALL non-letter chars (previous regex only stripped from end of string)
+        formattedValue = value.replace(/[^a-zA-ZÀ-ÿ\s]/g, '').slice(0, 60);
         break;
       case 'emailAddress':
-        // Allow only valid email characters (letters, numbers, dots, hyphens, underscores, and @)
-        formattedValue = value.replace(/[^a-zA-Z0-9.@_-]/g, '');
+        formattedValue = value.replace(/[^a-zA-Z0-9.@_+-]/g, '').slice(0, 100);
         break;
-      case 'entry.1295397219':
-        formattedValue = value.replace(/\D/g, ''); // Allow only digits
+      case 'entry.1295397219': // DPI / Passport
+        formattedValue = value.replace(/\D/g, '').slice(0, 20);
         break;
-      case 'entry.1830117511':
-        formattedValue = value.replace(/\D/g, ''); // Allow only digits
+      case 'entry.1830117511': // Phone
+        formattedValue = value.replace(/\D/g, '').slice(0, 15);
         break;
       case 'cardNumber':
-        formattedValue = value.replace(/\D/g, '').replace(/(\d{4})(?=\d)/g, '$1-').slice(0, 19); // Format as XXXX-XXXX-XXXX-XXXX
+        formattedValue = value.replace(/\D/g, '').replace(/(\d{4})(?=\d)/g, '$1-').slice(0, 19);
         break;
       case 'expiryDate':
-        formattedValue = value.replace(/\D/g, '').replace(/(\d{2})(?=\d)/, '$1/').slice(0, 5); // Format as XX/XX
+        formattedValue = value.replace(/\D/g, '').replace(/(\d{2})(?=\d)/, '$1/').slice(0, 5);
         break;
       case 'cvv':
-        formattedValue = value.replace(/\D/g, ''); // Allow only digits
-        formattedValue = formattedValue.slice(0, 4); // Limit to 4 digits
+        formattedValue = value.replace(/\D/g, '').slice(0, 4);
         break;
-      case 'entry.1913110792':
-        formattedValue = value.replace(/[^0-9CcFf]/g, ''); // Allow digits and letters C, c, F, f
+      case 'entry.1913110792': // NIT
+        formattedValue = value.replace(/[^0-9CcFf]/g, '').slice(0, 15);
         break;
-      case 'entry.1580443907':
-        formattedValue = value.replace(/[^a-zA-Z0-9._]/g, ''); // Allow only letters, numbers, dots, and underscores
+      case 'entry.1580443907': // Instagram / Facebook
+        formattedValue = value.replace(/[^a-zA-Z0-9._]/g, '').slice(0, 40);
         break;
       default:
         break;
@@ -332,12 +344,12 @@ const CartPage = () => {
                         <label htmlFor="name" className='form-label'>Nombre Completo:*</label>
 
                         <input
-                          pattern="^[a-zA-Z\s]*$"
                           type="text"
                           id="name"
                           name="entry.637554253"
                           value={formData.name}
                           onChange={handleNameChange}
+                          maxLength={60}
                           title="Sólo se permiten letras y espacios."
                           required
                         />
@@ -352,6 +364,7 @@ const CartPage = () => {
                           name="entry.1580443907"
                           value={formData['entry.1580443907']}
                           onChange={handleChange}
+                          maxLength={40}
                           title="Sólo puede tener letras, números, puntos y guiones bajos."
                           required
                         />
@@ -366,6 +379,7 @@ const CartPage = () => {
                           name="entry.1295397219"
                           value={formData['entry.1295397219']}
                           onChange={handleChange}
+                          maxLength={20}
                           title='Ingresar solamente numeros'
                           pattern="\d+"
                           required
@@ -391,6 +405,7 @@ const CartPage = () => {
                           name="entry.1913110792"
                           value={formData['entry.1913110792']}
                           onChange={handleChange}
+                          maxLength={15}
                           placeholder="1234456778941"
                           title="Coloque su NIT o CF"
                           required
@@ -420,12 +435,12 @@ const CartPage = () => {
                         <label htmlFor="cardNumber" className='form-label'>Nombre impreso en la tarjeta:</label>
 
                         <input
-                          pattern="^[a-zA-Z\s]*$"
                           type="text"
-                          id="name"
+                          id="nameCard"
                           name="nameCard"
                           value={formData.nameCard}
                           onChange={handleChange}
+                          maxLength={60}
                           placeholder="Juan Perez"
                           title="Sólo se permiten letras y espacios."
                           required
@@ -485,10 +500,9 @@ const CartPage = () => {
                             <button
                               className="checkout-button"
                               type="submit"
-                              value="Submit"
-                              disabled={!isCaptchaValid}
+                              disabled={!isCaptchaValid || isSubmitting}
                             >
-                              Pagar
+                              {isSubmitting ? 'Procesando...' : 'Pagar'}
                             </button>
 
                           </div>

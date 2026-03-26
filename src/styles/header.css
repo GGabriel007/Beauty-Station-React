@@ -22,11 +22,13 @@ body {
 .header-button {
     color: #f1b2c9;
     text-decoration: none;
-    font-size: 20px;
-    font-weight: 500;
+    font-size: 15px;
+    font-weight: 600;
     font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     border-radius: 40px;
-    padding: 8px 24px;
+    padding: 8px 18px;
     border: 2px solid #f1b2c9;
     background-color: white;
     transition: all 0.3s ease;
@@ -146,13 +148,13 @@ a {
     }
 
     .header-button {
-        font-size: 19px;
-        padding: 6px 15px;
+        font-size: 14px;
+        padding: 6px 13px;
     }
 
     .header-button.active {
-        font-size: 19px;
-        padding: 6px 15px;
+        font-size: 14px;
+        padding: 6px 13px;
     }
 
     .menu-icon {
