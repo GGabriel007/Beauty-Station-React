@@ -208,8 +208,17 @@
 
 .class-card-link {
     text-decoration: none;
+    display: block;
     width: 100%;
     max-width: 700px;
+}
+
+/* Safety net: all direct link children of the card list are block */
+.mid-information-module > a {
+    display: block;
+    width: 100%;
+    max-width: 700px;
+    text-decoration: none;
 }
 
 /* =====================================================
