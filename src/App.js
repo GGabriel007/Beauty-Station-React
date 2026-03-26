@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from 'react-router-dom';
 import { useAuthenticator } from '@aws-amplify/ui-react';
+import { Hub } from 'aws-amplify/utils';
 import { toast } from 'react-toastify';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -42,6 +43,7 @@ function App() {
             <Route path="/cart" element={<CartPage />} />
           </Routes>
           <AuthRedirectHandler />
+          <AuthRouteWatcher />
           <CartButton />
           <Footer />
           <ToastContainer
@@ -60,31 +62,52 @@ function App() {
 }
 
 // ─── Handles post-auth redirects and login/logout toasts ──────────────────────
-// Works for BOTH email sign-in and Google OAuth (which bypasses Login.js).
-// Uses useRef to distinguish a real login/logout from a page-refresh.
+// Uses Amplify Hub so it fires for BOTH email sign-in AND Google OAuth.
+// Hub fires 'signedIn' on actual logins only (not on page refreshes, which
+// fire 'tokenRefresh' instead), so toasts never appear on reload.
 const AuthRedirectHandler = () => {
-  const { authStatus } = useAuthenticator((context) => [context.authStatus]);
   const navigate = useNavigate();
-  // Start at 'configuring' so the initial configuring→authenticated transition
-  // (page refresh with existing session) is silently ignored.
-  const prevStatus = useRef('configuring');
 
   useEffect(() => {
-    const prev = prevStatus.current;
-    prevStatus.current = authStatus;
+    const unsubscribe = Hub.listen('auth', ({ payload }) => {
+      if (payload.event === 'signedIn') {
+        toast.success('¡Bienvenido/a! Has iniciado sesión exitosamente.', { autoClose: 3000 });
+        const redirect = sessionStorage.getItem('loginRedirect') || '/classes';
+        sessionStorage.removeItem('loginRedirect');
+        navigate(redirect, { replace: true });
+      } else if (payload.event === 'signedOut') {
+        toast.info('Has cerrado sesión. ¡Hasta pronto!', { autoClose: 3000 });
+        navigate('/', { replace: true });
+      } else if (payload.event === 'tokenRefresh_failure') {
+        toast.warn('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.', { autoClose: 5000 });
+        navigate('/login', { replace: true });
+      }
+    });
+    return () => unsubscribe();
+  }, [navigate]);
 
-    if (prev === 'unauthenticated' && authStatus === 'authenticated') {
-      // Real sign-in (email or Google OAuth)
-      toast.success('¡Bienvenido/a! Has iniciado sesión exitosamente.', { autoClose: 3000 });
-      const redirect = sessionStorage.getItem('loginRedirect') || '/classes';
-      sessionStorage.removeItem('loginRedirect');
-      navigate(redirect, { replace: true });
-    } else if (prev === 'authenticated' && authStatus === 'unauthenticated') {
-      // Real sign-out
-      toast.info('Has cerrado sesión. ¡Hasta pronto!', { autoClose: 3000 });
-      navigate('/', { replace: true });
+  return null;
+};
+
+// ─── Watches Authenticator UI route transitions for sign-up / password-reset toasts
+// route transitions only fire while the <Authenticator> is mounted (i.e. /login page).
+// Authenticator.Provider in index.js makes useAuthenticator available everywhere.
+const AuthRouteWatcher = () => {
+  const { route } = useAuthenticator(context => [context.route]);
+  const prevRoute = useRef(null);
+
+  useEffect(() => {
+    const prev = prevRoute.current;
+    prevRoute.current = route;
+
+    if (prev === 'signUp' && route === 'confirmSignUp') {
+      toast.info('¡Cuenta creada! Revisa tu correo para confirmar tu registro.', { autoClose: 5000 });
+    } else if (prev === 'forgotPassword' && route === 'confirmResetPassword') {
+      toast.info('Te hemos enviado un código a tu correo electrónico.', { autoClose: 5000 });
+    } else if (prev === 'confirmResetPassword' && route === 'signIn') {
+      toast.success('¡Contraseña restablecida exitosamente! Ya puedes iniciar sesión.', { autoClose: 4000 });
     }
-  }, [authStatus, navigate]);
+  }, [route]);
 
   return null;
 };

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import DOMPurify from 'dompurify';
+import { toast } from 'react-toastify';
 
 const useWhatsAppForm = (courseName = "este curso") => {
     const [whatsappForm, setWhatsAppForm] = useState({
@@ -75,6 +76,7 @@ const useWhatsAppForm = (courseName = "este curso") => {
 
     const whatsappURL = `https://wa.me/${businessWhatsAppNumber}?text=${encodeURIComponent(message)}`;
     window.open(decodeURIComponent(whatsappURL), '_blank');
+    toast.success('¡Abriendo WhatsApp! Envía el mensaje para completar tu registro de interés.', { autoClose: 5000 });
     };
 
     return {

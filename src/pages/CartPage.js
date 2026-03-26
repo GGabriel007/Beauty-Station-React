@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import MyComponent from '../context/MyComponent';
 import DOMPurify from 'dompurify';
 import CryptoJS from 'crypto-js';
+import { toast } from 'react-toastify';
 import { validateCardNumber, validateCVV, validateExpiryDate, hasDangerousContent } from '../utils/validation';
 
 
@@ -91,7 +92,7 @@ const CartPage = () => {
     }
 
     if (!isCaptchaValid || !recaptchaToken) {
-      alert("Por favor, valida el reCAPTCHA antes de enviar el formulario.");
+      toast.warn('Por favor, completa el reCAPTCHA antes de enviar el formulario.', { autoClose: 4000 });
       return;
     }
 
@@ -129,6 +130,7 @@ const CartPage = () => {
       clearCart();
       setPurchaseSuccess(true);
       setNotification(DOMPurify.sanitize("¡Compra completada exitosamente!"));
+      toast.success('¡Compra completada! Recibirás un correo con los detalles de tu registro.', { autoClose: 7000 });
 
     } catch (error) {
       let errorMsg = error.message;
@@ -141,6 +143,7 @@ const CartPage = () => {
 
       setNotificationError(DOMPurify.sanitize("Hubo un error al procesar tu compra con AWS: " + errorMsg));
       setNotification("");
+      toast.error('Error al procesar el pago. Por favor, verifica tus datos e intenta nuevamente.', { autoClose: 5000 });
     } finally {
       setIsSubmitting(false);
     }
@@ -260,6 +263,7 @@ const CartPage = () => {
 
   const handleRemoveKit = () => {
     setIncludeKit(false);
+    toast.info('Kit de Pieles Perfectas eliminado del carrito.', { autoClose: 3000 });
   };
 
   return (
@@ -295,7 +299,7 @@ const CartPage = () => {
                               <div className="item-name">{item.name}</div>
                               <div className="price">Q {item.price}.00</div>
                             </div>
-                            <button className="cart-page-remove" onClick={() => removeFromCart(item)}>Remover</button>
+                            <button className="cart-page-remove" onClick={() => { removeFromCart(item); toast.info(`"${item.name}" eliminado del carrito.`, { autoClose: 3000 }); }}>Remover</button>
                           </li>
                         ))}
                       </ul>

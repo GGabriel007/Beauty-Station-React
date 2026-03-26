@@ -48,7 +48,6 @@ const CourseDetails = () => {
     const [availableSeats, setAvailableSeats] = useState(null);
     const [selectedScheduleIndex, setSelectedScheduleIndex] = useState(0);
     const [allDbItems, setAllDbItems] = useState([]);
-    const [cartNotification, setCartNotification] = useState("");
 
     const activeDbKey = DB_KEY_MAP[`${courseId}-${selectedScheduleIndex}`];
 
@@ -286,16 +285,6 @@ const CourseDetails = () => {
                             </label>
                         )}
 
-                        {cartNotification && (
-                            <div className="notification" style={{ 
-                                marginTop: '15px', 
-                                marginBottom: '15px', 
-                                backgroundColor: cartNotification.includes('⚠️') ? '#d32f2f' : '#4caf50' 
-                            }}>
-                                {cartNotification}
-                            </div>
-                        )}
-
                         <button
                             className="course-add-cart-btn"
                             onClick={() => {
@@ -322,8 +311,7 @@ const CourseDetails = () => {
                                 );
 
                                 if (isAlreadyInCart) {
-                                    setCartNotification(`⚠️ Error: Ya tienes un cupo para "${courseData.title}" en tu carrito. Solo puedes agregar un horario por curso.`);
-                                    setTimeout(() => setCartNotification(""), 8000);
+                                    toast.error(`Ya tienes un cupo para "${courseData.title}" en tu carrito. Solo puedes agregar un horario por curso.`, { autoClose: 6000 });
                                     return;
                                 }
 
@@ -333,15 +321,13 @@ const CourseDetails = () => {
                                 if (itemNameLower.includes('curso completo maquillaje')) {
                                     const hasSubCourse = cartItems.some(item => MAKEUP_SUB_STRINGS.some(sub => item.name.toLowerCase().includes(sub)));
                                     if (hasSubCourse) {
-                                        setCartNotification(`⚠️ Error: Ya tienes un curso individual de maquillaje en tu carrito. Elimínalo primero para adquirir el "Curso Completo".`);
-                                        setTimeout(() => setCartNotification(""), 8000);
+                                        toast.error('Ya tienes un curso individual de maquillaje en tu carrito. Elimínalo primero para adquirir el "Curso Completo".', { autoClose: 6000 });
                                         return;
                                     }
                                 } else if (MAKEUP_SUB_STRINGS.some(sub => itemNameLower.includes(sub))) {
                                     const hasComplete = cartItems.some(item => item.name.toLowerCase().includes('curso completo maquillaje'));
                                     if (hasComplete) {
-                                        setCartNotification(`⚠️ Error: Ya tienes el "Curso Completo de Maquillaje" en tu carrito, el cual ya incluye esta clase individual.`);
-                                        setTimeout(() => setCartNotification(""), 8000);
+                                        toast.error('Ya tienes el "Curso Completo de Maquillaje" en tu carrito, el cual ya incluye esta clase individual.', { autoClose: 6000 });
                                         return;
                                     }
                                 }
@@ -352,15 +338,13 @@ const CourseDetails = () => {
                                 if (itemNameLower.includes('curso completo peinado')) {
                                     const hasSubCourse = cartItems.some(item => HAIR_SUB_STRINGS.some(sub => item.name.toLowerCase().includes(sub)));
                                     if (hasSubCourse) {
-                                        setCartNotification(`⚠️ Error: Ya tienes un curso individual de peinado en tu carrito. Elimínalo primero para adquirir el "Curso Completo".`);
-                                        setTimeout(() => setCartNotification(""), 8000);
+                                        toast.error('Ya tienes un curso individual de peinado en tu carrito. Elimínalo primero para adquirir el "Curso Completo".', { autoClose: 6000 });
                                         return;
                                     }
                                 } else if (HAIR_SUB_STRINGS.some(sub => itemNameLower.includes(sub))) {
                                     const hasComplete = cartItems.some(item => item.name.toLowerCase().includes('curso completo peinado'));
                                     if (hasComplete) {
-                                        setCartNotification(`⚠️ Error: Ya tienes el "Curso Completo de Peinado" en tu carrito, el cual ya incluye esta clase individual.`);
-                                        setTimeout(() => setCartNotification(""), 8000);
+                                        toast.error('Ya tienes el "Curso Completo de Peinado" en tu carrito, el cual ya incluye esta clase individual.', { autoClose: 6000 });
                                         return;
                                     }
                                 }
@@ -372,14 +356,10 @@ const CourseDetails = () => {
                                 });
                                 
                                 if (includeKit) {
-                                    setCartNotification(`¡Agregado al carrito: ${cartItemName} y Kit de Pieles Perfectas!`);
+                                    toast.success(`¡Agregado al carrito: ${cartItemName} y Kit de Pieles Perfectas!`, { autoClose: 4000 });
                                 } else {
-                                    setCartNotification(`¡Agregado al carrito: ${cartItemName}!`);
+                                    toast.success(`¡Agregado al carrito: ${cartItemName}!`, { autoClose: 4000 });
                                 }
-
-                                setTimeout(() => {
-                                    setCartNotification("");
-                                }, 35000);
                             }}
                         >
                             Añadir al Carrito
