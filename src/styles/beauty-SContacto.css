@@ -36,16 +36,16 @@
 .centered-text-contact {
     position: absolute;
     color: white;
-    font-size: 80px;
-    font-family: "Raleway", sans-serif;
+    font-size: 4rem;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 700;
-    font-style: normal;
+    letter-spacing: 1px;
+    text-transform: uppercase;
     text-align: center;
     z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
 }
 
 .about-text-contact {
@@ -144,8 +144,8 @@
         height: 165px;
     }
 
-    .centered-text-contact {    
-        font-size: 36PX;
+    .centered-text-contact {
+        font-size: 3rem;
     }
 
     .about-text-contact{

@@ -84,6 +84,7 @@
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
     letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .cart-page ul {
@@ -397,6 +398,11 @@
         height: 19px;
         right: 5px;
         bottom: 23px;
+    }
+
+    .header-information-cartpage {
+        font-size: 3rem;
+        margin: 20px;
     }
 
 }

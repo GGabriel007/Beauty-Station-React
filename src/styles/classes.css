@@ -103,6 +103,7 @@
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
     letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .header-information-date {
@@ -203,6 +204,10 @@
         border-radius: 8px 8px 0 0;
     }
 
+    .header-information-class {
+        font-size: 3rem;
+        margin: 20px;
+    }
 
 }
 

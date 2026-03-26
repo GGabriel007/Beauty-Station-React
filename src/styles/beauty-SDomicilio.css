@@ -17,6 +17,7 @@
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
     letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .mid-information-form {
@@ -77,6 +78,11 @@ textarea {
     /*Content*/
     .mid-information-form {
         width: 80%;
+    }
+
+    .header-information-form {
+        font-size: 3rem;
+        margin: 20px;
     }
 
 }
