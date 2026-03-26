@@ -16,7 +16,11 @@ I18n.putVocabularies(translations);
 I18n.setLanguage('es');
 I18n.putVocabulariesForLanguage('es', {
   'Sign in with Google': 'Iniciar sesión con Google',
-  'Sign up with Google': 'Continuar con Google'
+  'Sign up with Google': 'Continuar con Google',
+  'First Name': 'Nombre',
+  'Last Name': 'Apellido',
+  'Given Name': 'Nombre',
+  'Family Name': 'Apellido'
 });
 
 // Initialize Amplify globally with the native configurations

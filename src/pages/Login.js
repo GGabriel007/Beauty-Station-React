@@ -18,7 +18,34 @@ const Login = () => {
     <div className="login-container">
       {/* This simple, pre-built component handles Sign-Up, Sign-In, and Password Resets automatically! */}
       {/* We pass the 'google' provider flag to automatically render the "Sign In With Google" button! */}
-      <Authenticator socialProviders={['google']} />
+      <Authenticator 
+        socialProviders={['google']} 
+        formFields={{
+          signUp: {
+            given_name: {
+              order: 1,
+              placeholder: 'Ingrese su nombre',
+              isRequired: true,
+              label: 'Nombre'
+            },
+            family_name: {
+              order: 2,
+              placeholder: 'Ingrese su apellido',
+              isRequired: true,
+              label: 'Apellido'
+            },
+            email: {
+              order: 3
+            },
+            password: {
+              order: 4
+            },
+            confirm_password: {
+              order: 5
+            }
+          }
+        }}
+      />
     </div>
   );
 };
