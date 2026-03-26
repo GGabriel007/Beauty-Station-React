@@ -11,7 +11,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 600px;
+    min-height: 690px;
 }
 
 .top-imagen-home {
@@ -82,7 +82,7 @@
     z-index: 3;
     width: 100%;
     position: absolute;
-    top: 78%;
+    top: 86%;
     transform: translateY(-50%);
 }
 
@@ -144,7 +144,7 @@
 .content {
     display: flex;
     flex-direction: column;
-    padding: 0 10%;
+    padding: 200px 10% 0 10%;
     justify-content: flex-start;
     background-color: white;
 }
