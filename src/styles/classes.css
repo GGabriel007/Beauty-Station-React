@@ -7,7 +7,7 @@
 .information-class {
     background-color: #fff;
     width: 100%;
-    padding-bottom: 60px;
+
 }
 
 .top-information-class {
@@ -154,6 +154,7 @@
     transition: opacity 0.25s ease;
     font-weight: 700;
     letter-spacing: 1px;
+    font-size: 15px;
 }
 
 .class_dates_button:hover {
@@ -216,14 +217,13 @@
     text-decoration: none;
     display: block;
     width: 100%;
-    max-width: 700px;
+    max-width: 500px;
 }
 
 /* Safety net: all direct link children of the card list are block */
 .mid-information-module>a {
     display: block;
     width: 100%;
-    max-width: 700px;
     text-decoration: none;
 }
 
@@ -261,13 +261,13 @@
     }
 
     .class_links-class {
-        font-size: 15px;
-        text-align: left;
+        font-size: 16px;
+        text-align: center;
     }
 
     .class_dates_button {
-        font-size: 11px;
-        padding: 5px 14px;
+        font-size: 15px;
+        padding: 5px 24px;
     }
 
     .header-information-class {
@@ -277,6 +277,10 @@
 
     .class-card-link {
         width: 90%;
-        max-width: 340px;
+        max-width: 245px;
+    }
+
+    .class_dates_button .hover-text {
+        font-size: 11px;
     }
 }
