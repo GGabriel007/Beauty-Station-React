@@ -57,7 +57,7 @@
     opacity: 0.93;
 }
 
-.center-classes img:hover {
+.center-classes:hover .icon-classes {
     transform: scale(1.015);
     opacity: 0.88;
 }
