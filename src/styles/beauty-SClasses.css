@@ -25,33 +25,40 @@
 }
 
 .center-classes {
-
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 25px;
-    width: 275px;
+    justify-content: flex-start;
+    width: 320px;
+    background-color: white;
+    border: 2px solid #f1b2c9;
+    border-radius: 10px;
+    overflow: hidden;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
 }
 
 .icon-classes {
-    height: 275px;
-    width: 275px;
-    border-radius: 15px; 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: white;
-    padding: 3px;
-
+    width: 100%;
+    height: 235px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+    border-radius: 0;
+    padding: 0;
+    background-color: transparent;
 }
 
-.center-classes img {
-    transition: transform 0.2s ease, opacity 0.2s ease;
-
+.center-classes:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 22px rgba(241, 178, 201, 0.5);
+    opacity: 0.93;
 }
 
 .center-classes img:hover {
-    transform: scale(1.02);
+    transform: scale(1.015);
     opacity: 0.88;
 }
 
@@ -84,15 +91,16 @@
 
 }
 
-.title_links-cursos{
-    color: white;
-    font-family: 'Lato', sans-serif;
-    font-weight: 500; /* Semi-bold */
-    font-style: normal;
+.title_links-cursos {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: #444;
+    letter-spacing: 1.5px;
+    padding: 14px 0 12px 0;
     text-align: center;
-    font-size: 40px;
-    margin-top: 20px;
-
+    width: 100%;
+    text-decoration: none;
 }
 
 .info1-classes {
@@ -141,8 +149,14 @@
     }
     
     .center-classes {
+        width: 85%;
+        max-width: 320px;
+    }
+
+    .icon-classes {
         width: 100%;
-        flex-direction: column;
+        height: 200px;
+        border-radius: 0;
     }
     
     .text-classes{
