@@ -3,7 +3,8 @@
     "Action": ["dynamodb:PutItem", "dynamodb:GetItem", "dynamodb:UpdateItem", "dynamodb:Scan"],
     "Resource": [
       "arn:aws:dynamodb:*:*:table/Payments",
-      "arn:aws:dynamodb:*:*:table/Modulos"
+      "arn:aws:dynamodb:*:*:table/Modulos",
+      "arn:aws:dynamodb:*:*:table/Carts"
     ]
   }
 ]

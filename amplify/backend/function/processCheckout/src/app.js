@@ -55,6 +55,49 @@ app.get('/modulos', async function (req, res) {
   }
 });
 
+// SEARCH SAVED CART: Fetches the user's persistent shopping cart from DynamoDB
+app.get('/cart', async function (req, res) {
+  try {
+    const { email } = req.query;
+    if (!email) return res.status(400).json({ error: "Email is required to fetch cart" });
+
+    const data = await ddbDocClient.send(new GetCommand({
+      TableName: 'Carts',
+      Key: { email: email }
+    }));
+
+    res.json(data.Item || { cartItems: [], includeKit: false });
+  } catch (error) {
+    console.error("Error fetching cart:", error);
+    res.status(500).json({ error: 'Hubo un error al recuperar su carrito guardado.' });
+  }
+});
+
+// PERSIST CART: Saves the user's current shopping cart state to DynamoDB
+app.post('/cart', async function (req, res) {
+  try {
+    const { email, cartItems, includeKit } = req.body;
+    if (!email) return res.status(400).json({ error: "Email is required to save cart" });
+
+    const cartData = {
+      email: email,
+      cartItems: cartItems || [],
+      includeKit: includeKit || false,
+      Timestamp: Date.now()
+    };
+
+    await ddbDocClient.send(new PutCommand({
+      TableName: 'Carts',
+      Item: cartData
+    }));
+
+    res.json({ success: true, message: 'Carrito guardado en la nube.' });
+  } catch (error) {
+    console.error("Error persisting cart:", error);
+    res.status(500).json({ error: 'Hubo un error al guardar su carrito en el servidor AWS.' });
+  }
+});
+
 // SECURE USER HISTORY: Fetches previously purchased class history from DynamoDB based on User Email
 app.get('/my-orders', async function (req, res) {
   try {

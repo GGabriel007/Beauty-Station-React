@@ -1,6 +1,247 @@
+/* ─── Page Shell ─────────────────────────────────────────────────────────── */
+
+.login-wrapper {
+    width: 100%;
+
+    min-height: 70vh;
+    padding-bottom: 60px;
+}
+
+.login-page-title {
+    font-size: 4rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #111;
+    margin: 30px 50px;
+    text-align: center;
+}
+
 .login-container {
     display: flex;
     justify-content: center;
-    padding: 50px 20px;
-    min-height: 60vh;
+    padding: 10px 20px 30px;
+}
+
+/* ─── Amplify Brand Color Tokens → Site Pink ─────────────────────────────── */
+
+[data-amplify-authenticator] {
+    --amplify-colors-brand-primary-10:  #fdf0f5;
+    --amplify-colors-brand-primary-20:  #fce0eb;
+    --amplify-colors-brand-primary-40:  #f7bad0;
+    --amplify-colors-brand-primary-60:  #f1b2c9;
+    --amplify-colors-brand-primary-80:  #ed93b4;
+    --amplify-colors-brand-primary-90:  #d97da0;
+    --amplify-colors-brand-primary-100: #c4678c;
+
+    --amplify-colors-border-focus:      #ed93b4;
+    --amplify-colors-font-interactive:  #ed93b4;
+
+    /* Card */
+    --amplify-components-authenticator-router-border-color: #f1d0dc;
+    --amplify-components-authenticator-router-border-width: 1px;
+    --amplify-components-authenticator-router-border-style: solid;
+    --amplify-components-authenticator-router-border-radius: 14px;
+    --amplify-components-authenticator-router-box-shadow: 0 4px 24px rgba(237, 147, 180, 0.12);
+    --amplify-components-authenticator-router-background-color: #ffffff;
+
+    /* Inputs */
+    --amplify-components-fieldcontrol-border-color:       #e0c8d5;
+    --amplify-components-fieldcontrol-border-radius:      10px;
+    --amplify-components-fieldcontrol-focus-border-color: #ed93b4;
+    --amplify-components-fieldcontrol-focus-box-shadow:   0 0 0 3px rgba(241, 178, 201, 0.2);
+    --amplify-components-fieldcontrol-font-size:          1rem;
+    --amplify-components-fieldcontrol-padding-inline:     14px;
+    --amplify-components-fieldcontrol-padding-block:      12px;
+
+    /* Primary button */
+    --amplify-components-button-primary-background-color:        #ed93b4;
+    --amplify-components-button-primary-border-color:            #ed93b4;
+    --amplify-components-button-primary-color:                   #ffffff;
+    --amplify-components-button-primary-hover-background-color:  #f1b2c9;
+    --amplify-components-button-primary-hover-border-color:      #f1b2c9;
+    --amplify-components-button-primary-focus-background-color:  #f1b2c9;
+    --amplify-components-button-primary-active-background-color: #d97da0;
+    --amplify-components-button-border-radius:                   50px;
+
+    /* Link / text buttons (Forgot password, etc.) */
+    --amplify-components-button-link-color:               #ed93b4;
+    --amplify-components-button-link-hover-color:         #d97da0;
+    --amplify-components-button-link-hover-background-color: transparent;
+
+    /* Tabs */
+    --amplify-components-tabs-item-active-color:          #ed93b4;
+    --amplify-components-tabs-item-active-border-color:   #ed93b4;
+    --amplify-components-tabs-item-hover-color:           #ed93b4;
+    --amplify-components-tabs-border-color:               #f1d0dc;
+
+    /* Typography */
+    --amplify-fonts-default-static:  'Montserrat', sans-serif;
+    --amplify-fonts-default-variable: 'Montserrat', sans-serif;
+    --amplify-font-sizes-medium:      1rem;
+}
+
+/* ─── Card width & padding ───────────────────────────────────────────────── */
+
+[data-amplify-authenticator] [data-amplify-router] {
+    max-width: 440px;
+    width: 100%;
+}
+
+/* ─── Labels ─────────────────────────────────────────────────────────────── */
+
+.amplify-label {
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    color: #333 !important;
+    margin-bottom: 4px !important;
+}
+
+/* ─── Inputs ─────────────────────────────────────────────────────────────── */
+
+.amplify-input,
+.amplify-select {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 1rem !important;
+    border: 1.5px solid #e0c8d5 !important;
+    border-radius: 10px !important;
+    padding: 12px 14px !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+    background-color: #fff !important;
+}
+
+.amplify-input:focus {
+    border-color: #ed93b4 !important;
+    box-shadow: 0 0 0 3px rgba(241, 178, 201, 0.2) !important;
+    outline: none !important;
+}
+
+/* ─── Primary button (Iniciar sesión / Crear cuenta) ─────────────────────── */
+
+.amplify-button--primary {
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    letter-spacing: 0.5px !important;
+    border-radius: 50px !important;
+    padding: 13px 24px !important;
+    background-color: #ed93b4 !important;
+    border-color: #ed93b4 !important;
+    transition: background-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.amplify-button--primary:hover {
+    background-color: #f1b2c9 !important;
+    border-color: #f1b2c9 !important;
+    box-shadow: 0 6px 16px rgba(241, 178, 201, 0.45) !important;
+}
+
+/* ─── Google / social button ─────────────────────────────────────────────── */
+
+.amplify-button--default,
+[data-variation='default'].amplify-button {
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    border-radius: 50px !important;
+    border: 1.5px solid #e0c8d5 !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.amplify-button--default:hover {
+    border-color: #ed93b4 !important;
+    box-shadow: 0 0 0 3px rgba(241, 178, 201, 0.15) !important;
+}
+
+/* ─── Link buttons (Forgot password, Back to sign in, etc.) ─────────────── */
+
+.amplify-button--link {
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 0.88rem !important;
+    color: #ed93b4 !important;
+}
+
+.amplify-button--link:hover {
+    color: #d97da0 !important;
+    background-color: transparent !important;
+    text-decoration: underline !important;
+}
+
+/* ─── Tabs (Iniciar sesión / Crear cuenta) ───────────────────────────────── */
+
+.amplify-tabs__item {
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+}
+
+.amplify-tabs__item--active {
+    color: #ed93b4 !important;
+    border-color: #ed93b4 !important;
+}
+
+/* ─── Heading inside the card ────────────────────────────────────────────── */
+
+.amplify-heading {
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 700 !important;
+    color: #111 !important;
+}
+
+/* ─── Validation error messages ──────────────────────────────────────────── */
+
+.amplify-text--error,
+[data-amplify-authenticator] .amplify-alert--error {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+}
+
+/* ─── Divider text ("o continúa con") ───────────────────────────────────── */
+
+.amplify-divider--label {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 0.85rem !important;
+    color: #aaa !important;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 1150px) {
+    .login-page-title {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .login-page-title {
+        font-size: 2.2rem;
+        margin: 15px 12px;
+    }
+
+    .login-container {
+        padding: 10px 12px 30px;
+    }
+
+    [data-amplify-authenticator] [data-amplify-router] {
+        max-width: 100%;
+    }
+
+    .amplify-label {
+        font-size: 0.85rem !important;
+    }
+
+    .amplify-input {
+        font-size: 0.95rem !important;
+        padding: 10px 12px !important;
+    }
+
+    .amplify-button--primary {
+        font-size: 0.9rem !important;
+        padding: 12px 20px !important;
+    }
 }

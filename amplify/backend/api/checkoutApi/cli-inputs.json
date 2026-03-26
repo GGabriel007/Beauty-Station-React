@@ -40,6 +40,19 @@
           "read"
         ]
       }
+    },
+    "/cart": {
+      "name": "/cart",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
     }
   }
 }

@@ -566,3 +566,54 @@ ul {
     margin: 20px;
   }
 }
+
+@media (max-width: 600px) {
+  .header-information-module {
+    font-size: 2.2rem;
+    margin: 15px 12px;
+  }
+
+  .text-module {
+    font-size: 15px;
+    width: 92%;
+  }
+
+  .class_links-module {
+    font-size: 18px;
+  }
+
+  /* Gallery — switch from fixed px to fluid widths */
+  .main-image-module img {
+    width: 82vw;
+    height: auto;
+    max-height: 340px;
+    object-fit: cover;
+  }
+
+  .second-image-module img {
+    width: 82vw;
+    height: auto;
+    max-height: 380px;
+    object-fit: cover;
+  }
+
+  .thumbnails-module img {
+    width: 68px;
+    height: 110px;
+  }
+
+  .seats-plenty,
+  .seats-low {
+    font-size: 0.95rem;
+    padding: 8px 14px;
+  }
+
+  .course-add-cart-btn {
+    font-size: 15px;
+    padding: 14px 20px;
+  }
+
+  .course-schedule-select {
+    font-size: 0.9rem;
+  }
+}

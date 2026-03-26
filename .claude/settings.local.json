@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cmd.exe /c \"where aws\")",
+      "Bash(ls /c/Python*/Scripts/aws*)",
+      "Read(//c/Users/gagra/AppData/Roaming/npm/**)",
+      "Bash(echo \"PATH: $PATH\")",
+      "Read(//c/Program Files/Amazon/AWSCLIV2/**)",
+      "Read(//c/Users/gagra/.aws//**)",
+      "Bash(node:*)",
+      "Bash(node -e \"require\\(''@aws-sdk/client-dynamodb''\\)\" 2)",
+      "Bash(/dev/null --prefix /c/Users/gagra/Desktop/Projects/Beauty-Station-React/amplify/backend/function/processCheckout/src)",
+      "Bash(amplify push:*)"
+    ]
+  }
+}

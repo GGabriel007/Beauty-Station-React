@@ -63,12 +63,10 @@ const Dashboard = () => {
     return <div className="dashboard-loading-container">Cargando su cuenta...</div>;
   }
 
-  // Gracefully extract just the first name if they have a long full name
-  const firstName = displayName.split(' ')[0];
-
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-wrapper">
       <h1 className="dashboard-title">Mi Perfil</h1>
+    <div className="dashboard-container">
 
       <div className="dashboard-personal-info">
         <h2 className="dashboard-section-title">Datos Personales</h2>
@@ -138,6 +136,7 @@ const Dashboard = () => {
           </div>
         )}
       </div>
+    </div>
     </div>
   );
 };

@@ -432,5 +432,24 @@ input:focus {
         font-size: 3rem;
         margin: 20px;
     }
+}
 
+@media (max-width: 600px) {
+    .header-information-cartpage {
+        font-size: 2.2rem;
+        margin: 15px 12px;
+    }
+
+    .text-module-cart {
+        font-size: 15px;
+    }
+
+    .title-form {
+        font-size: 1.1em;
+    }
+
+    .cart-page {
+        width: 95%;
+        padding: 12px;
+    }
 }

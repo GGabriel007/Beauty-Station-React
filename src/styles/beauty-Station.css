@@ -421,3 +421,42 @@
         max-width: 90vw;
     }
 }
+
+@media (max-width: 600px) {
+    .hero-title {
+        font-size: 2.2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .reviews-title {
+        font-size: 22px;
+    }
+
+    .reviews-subtitle {
+        font-size: 15px;
+    }
+
+    .contact-banner-text h3 {
+        font-size: 20px;
+    }
+
+    .contact-banner-text p {
+        font-size: 15px;
+    }
+
+    /* Review gallery images — much shorter on phone */
+    .scrolling-image {
+        width: 90vw;
+        max-width: 90vw;
+        height: 280px;
+    }
+
+    .gallery-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+}
