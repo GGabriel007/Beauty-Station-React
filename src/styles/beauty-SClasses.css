@@ -37,6 +37,15 @@
     transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
 }
 
+/* Ensure image fills the card with no inline whitespace gap */
+.center-classes .glass-card-image-wrap {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    flex-shrink: 0;
+}
+
 .icon-classes {
     width: 100%;
     height: 320px;
