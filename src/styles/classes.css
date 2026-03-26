@@ -1,104 +1,25 @@
-/*Information*/
+/* =====================================================
+   Classes Detail Pages — Modernized Style
+   CURSOS DE MAQUILLAJE 2026 / CURSOS DE PEINADO 2026
+   ===================================================== */
 
-
-.center-class {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    border-radius: 10px;
-    background-color: white;
-    border: 2px solid #f1b2c9;
-    color: black;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    overflow: hidden;
+/* Page wrapper */
+.information-class {
+    background-color: #fff;
+    width: 100%;
+    padding-bottom: 60px;
 }
 
-.icon-class {
-    height: 250px;
-    width: 250px;
-    border-radius: 8px 0 0 8px;
-    object-fit: cover;
-    flex-shrink: 0;
-    transition: transform 0.25s ease, opacity 0.25s ease;
-}
-
-.center-class img {
-    transition: transform 0.25s ease, opacity 0.25s ease;
-}
-
-.center-class:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 22px rgba(241, 178, 201, 0.45);
-}
-
-.center-class:hover img {
-    transform: scale(1.015);
-    opacity: 0.88;
-}
-
-.center-class:hover .class_links-class {
-    text-decoration: underline;
-}
-
-.description-class {
-    text-decoration: none;
-}
-
-
-.class_dates_button {
-  position: relative;
-  text-align: center;
-  background-color: gray;
-  color: white;
-  border-radius: 20% / 100%;
-  font-family: Lato, sans-serif;
-  font-weight: 700;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  cursor: pointer;
-  overflow: hidden;
-  transition: background-color 0.3s ease;
-  margin-bottom: 10px;
-}
-
-.class_dates_button .hover-text {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.class_dates_button:hover {
-  background-color: #ed93b4;
-}
-
-.class_dates_button:hover .default-text {
-  opacity: 0;
-}
-
-.class_dates_button:hover .hover-text {
-  opacity: 1;
-}
-
-.one-day {
-    color: red;
-    font-weight: 700;
-    font-family: Lato, sans-serif;
-    margin-top: -20px;
-    margin-bottom: 15px;
+.top-information-class {
     text-align: center;
+    padding-top: 10px;
+    border-bottom: 2px solid #fcebf0;
+    margin-bottom: 10px;
 }
 
-
+/* Title */
 .header-information-class {
-    margin: 30px 50px;
+    margin: 30px 50px 20px;
     font-size: 4rem;
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
@@ -106,102 +27,226 @@
     text-transform: uppercase;
 }
 
+/* Card list container — replaces space-class divs */
+.mid-information-module {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding: 20px 8% 50px;
+    background-color: #fafafa;
+}
+
+/* ---- Card ---- */
+.center-class {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    width: 100%;
+    max-width: 700px;
+    border-radius: 10px;
+    background-color: white;
+    border: 2px solid #f1b2c9;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+}
+
+.center-class:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 22px rgba(241, 178, 201, 0.45);
+}
+
+/* Image */
+.icon-class {
+    height: 200px;
+    width: 240px;
+    border-radius: 0;
+    object-fit: cover;
+    flex-shrink: 0;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+    display: block;
+}
+
+.center-class:hover .icon-class {
+    transform: scale(1.015);
+    opacity: 0.9;
+}
+
+/* Image wrapper link */
+.imagen-link {
+    display: block;
+    flex-shrink: 0;
+    line-height: 0;
+}
+
+/* Text side */
+.text-class {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 18px 22px;
+    gap: 10px;
+}
+
+/* Course name */
+.class_links-class {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: #333;
+    line-height: 1.3;
+    margin: 0;
+}
+
+/* Description wrapper */
+.description-class {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* ---- Date pill button ---- */
+.class_dates_button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    padding: 6px 18px;
+    background-color: #fcebf0;
+    color: #c2668a;
+    border: 1px solid #f1b2c9;
+    border-radius: 50px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    text-align: center;
+    cursor: pointer;
+    overflow: hidden;
+    transition: background-color 0.25s ease, color 0.25s ease;
+    width: fit-content;
+    max-width: 100%;
+}
+
+.class_dates_button .hover-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.class_dates_button:hover {
+    background-color: #f1b2c9;
+    color: white;
+}
+
+.class_dates_button:hover .default-text {
+    opacity: 0;
+}
+
+.class_dates_button:hover .hover-text {
+    opacity: 1;
+}
+
+/* "1 DÍA" badge */
+.one-day {
+    display: inline-block;
+    background-color: #f1b2c9;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 3px 12px;
+    border-radius: 12px;
+    width: fit-content;
+    margin-bottom: 2px;
+}
+
+/* Date text accent */
 .header-information-date {
-    color: red;
+    color: #c2668a;
     font-weight: 600;
 }
 
-.text-class {
-    font-size: 25px;
-    width: 350px;
-    text-align: left;
-    line-height: 1.4;
-    
-    word-break: break-word; 
-    max-width: 100%;
-    
+.Wed-Class {
+    color: #c2668a;
 }
 
-.space-class{
-    height: 25px;
+.Demo-text {
+    color: #ed93b4;
 }
 
-.class_links-class {
-    color: black;
-    font-family: 'Lato', sans-serif;
-    font-weight: 600; /* Semi-bold */
-    padding-right: 15px;
-    padding-left: 15px;
-    text-align: center;
+.Complete-text {
+    gap: 0;
+    margin: 0;
+}
+
+/* Legacy spacer — keep for JSX compatibility but make it zero */
+.space-class {
+    display: none;
 }
 
 .info1-class {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: rgb(158, 159, 159);
-
+    display: none;
 }
 
-.imagen-link{
-    height: 250px;
+.class-card-link {
+    text-decoration: none;
+    width: 100%;
+    max-width: 700px;
 }
 
-.description-class {
-    text-align: justify;
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
-.Wed-Class{
-    color: red;
-}
-
-.Demo-text{
-    color: rgb(235, 89, 235);
-}
-
-.Complete-text{
-    gap: 0px;
-    margin: 0px;
-}
-
-
-
+/* =====================================================
+   Mobile Responsive
+   ===================================================== */
 @media (max-width: 1019px) {
 
-    /*Content*/
-    .mid-information-class {
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
+    .mid-information-module {
+        padding: 15px 5% 40px;
+        gap: 18px;
     }
-    
+
     .center-class {
         flex-direction: column;
-        text-align: center;
-        width: 249px;
-
-    }
-    
-    .text-class {
-        font-size: 19px;
-        width: 220px;
-    }
-
-    .class_links-class{
-        padding-left: 0px;
-        padding-right: 0px;
-    }
-
-    .description-class{
-        padding-left: 0px;
-        padding-right: 0px;
+        width: 90%;
+        max-width: 340px;
     }
 
     .icon-class {
-        border-radius: 8px 8px 0 0;
+        width: 100%;
+        height: 200px;
+        border-radius: 0;
+        object-fit: cover;
+    }
+
+    .imagen-link {
+        width: 100%;
+    }
+
+    .text-class {
+        padding: 14px 16px;
+        gap: 8px;
+    }
+
+    .class_links-class {
+        font-size: 15px;
+        text-align: left;
+    }
+
+    .class_dates_button {
+        font-size: 11px;
+        padding: 5px 14px;
     }
 
     .header-information-class {
@@ -209,8 +254,8 @@
         margin: 20px;
     }
 
-}
-
-.class-card-link {
-    text-decoration: none;
+    .class-card-link {
+        width: 90%;
+        max-width: 340px;
+    }
 }
