@@ -13,7 +13,6 @@
 .top-information-class {
     text-align: center;
     padding-top: 10px;
-    border-bottom: 2px solid #fcebf0;
     margin-bottom: 10px;
 }
 
@@ -242,6 +241,7 @@
         flex-direction: column;
         width: 90%;
         max-width: 340px;
+        height: auto;
     }
 
     .icon-class {
