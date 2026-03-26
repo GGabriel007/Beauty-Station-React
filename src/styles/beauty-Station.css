@@ -380,6 +380,10 @@
         max-width: 240px;
     }
 
+    .icon {
+        height: 240px;
+    }
+
     .content {
         padding: 0 5%;
     }
