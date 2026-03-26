@@ -1,5 +1,5 @@
 // src/App.js
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from 'react-router-dom';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { toast } from 'react-toastify';
@@ -41,6 +41,7 @@ function App() {
 
             <Route path="/cart" element={<CartPage />} />
           </Routes>
+          <AuthRedirectHandler />
           <CartButton />
           <Footer />
           <ToastContainer
@@ -57,6 +58,36 @@ function App() {
     </CartProvider>
   );
 }
+
+// ─── Handles post-auth redirects and login/logout toasts ──────────────────────
+// Works for BOTH email sign-in and Google OAuth (which bypasses Login.js).
+// Uses useRef to distinguish a real login/logout from a page-refresh.
+const AuthRedirectHandler = () => {
+  const { authStatus } = useAuthenticator((context) => [context.authStatus]);
+  const navigate = useNavigate();
+  // Start at 'configuring' so the initial configuring→authenticated transition
+  // (page refresh with existing session) is silently ignored.
+  const prevStatus = useRef('configuring');
+
+  useEffect(() => {
+    const prev = prevStatus.current;
+    prevStatus.current = authStatus;
+
+    if (prev === 'unauthenticated' && authStatus === 'authenticated') {
+      // Real sign-in (email or Google OAuth)
+      toast.success('¡Bienvenido/a! Has iniciado sesión exitosamente.', { autoClose: 3000 });
+      const redirect = sessionStorage.getItem('loginRedirect') || '/classes';
+      sessionStorage.removeItem('loginRedirect');
+      navigate(redirect, { replace: true });
+    } else if (prev === 'authenticated' && authStatus === 'unauthenticated') {
+      // Real sign-out
+      toast.info('Has cerrado sesión. ¡Hasta pronto!', { autoClose: 3000 });
+      navigate('/', { replace: true });
+    }
+  }, [authStatus, navigate]);
+
+  return null;
+};
 
 const CartButton = () => {
   const { cartItems } = useContext(CartContext);

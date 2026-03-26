@@ -10,7 +10,9 @@
       "Bash(node:*)",
       "Bash(node -e \"require\\(''@aws-sdk/client-dynamodb''\\)\" 2)",
       "Bash(/dev/null --prefix /c/Users/gagra/Desktop/Projects/Beauty-Station-React/amplify/backend/function/processCheckout/src)",
-      "Bash(amplify push:*)"
+      "Bash(amplify push:*)",
+      "Bash(npm audit:*)",
+      "Bash(npm install:*)"
     ]
   }
 }

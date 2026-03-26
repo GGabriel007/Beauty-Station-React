@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import '../styles/login.css';
 
 // ─── Security Validators ──────────────────────────────────────────────────────
@@ -83,15 +83,12 @@ const authenticatorComponents = {
 
 const Login = () => {
   const { authStatus } = useAuthenticator(context => [context.authStatus]);
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (authStatus === 'authenticated') {
-      const redirect = sessionStorage.getItem('loginRedirect') || '/classes';
-      sessionStorage.removeItem('loginRedirect');
-      navigate(redirect);
-    }
-  }, [authStatus, navigate]);
+  // If the user navigates directly to /login while already authenticated,
+  // send them away. AuthRedirectHandler in App.js handles the real sign-in redirect.
+  if (authStatus === 'authenticated') {
+    return <Navigate to="/classes" replace />;
+  }
 
   return (
     <div className="login-wrapper">
