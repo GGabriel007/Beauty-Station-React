@@ -4,125 +4,83 @@ import '../styles/classes.css';
 import { Link, useLocation } from 'react-router-dom';
 
 const Classes2 = () => {
+  const location = useLocation();
 
-    const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
 
-    useEffect(() => {
+  return (
+    <div className="information-class">
 
-        window.scrollTo(0, 0);
-    }, [location]);
+      {/* ── Hero — mirrors home & cursos style ── */}
+      <div className="top-information-class">
+        <p className="classes-tagline">Categoría</p>
+        <h2 className="header-information-class">Cursos de Maquillaje 2026</h2>
+        <p className="subheader-information-class">
+          Elige el curso que más se adapte a tus metas y nivel de experiencia.
+          Aprende técnicas profesionales con instructoras especializadas.
+        </p>
+      </div>
 
-    return (
-        <>
-            <div className="information-class">
-                <div className="top-information-class">
-                    <h2 className="header-information-class">CURSOS DE MAQUILLAJE 2026</h2>
-                </div>
+      {/* ── Course grid ── */}
+      <div className="course-grid">
 
-                <div className="mid-information-module">
-
-                    <div className='space-class'></div>
-                    <Link to="/classes/course/pieles-perfectas" className="class-card-link">
-                        <div className="center-class">
-                            <div className='imagen-link'>
-                                <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_Mkup.jpeg`} alt="Informacion de Cursos" />
-                            </div>
-
-                            <div className="text-class">
-
-                                <p className="class_links-class">Pieles Perfectas</p>
-
-                                <div className='description-class'>
-                                    <div className='class_dates_button'>
-                                        <span className='default-text'>28 DE ENERO AL <br></br>
-                                            25 DE FEBRERO</span>
-                                        <span className='hover-text'>MÁS INFORMACIÓN</span>
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-                        </div>
-                    </Link>
-                    <div className='space-class'></div>
-                    <div className='space-class'></div>
-                    <Link to="/classes/course/maquillaje-social" className="class-card-link">
-                        <div className="center-class">
-                            <div className='imagen-link'>
-                                <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_Mkup.jpeg`} alt="Informacion de Cursos" />
-                            </div>
-
-                            <div className="text-class">
-
-                                <p className="class_links-class">Maquillaje Social</p>
-
-                                <div className='description-class'>
-                                    <div className='class_dates_button'>
-                                        <span className='default-text'>4 DE MARZO AL <br></br>
-                                            8 DE ABRIL</span>
-                                        <span className='hover-text'>MÁS INFORMACIÓN</span>
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-                        </div>
-                    </Link>
-                    <div className='space-class'></div>
-                    <div className='space-class'></div>
-                    <Link to="/classes/course/maestria-novias-makeup" className="class-card-link">
-                        <div className="center-class">
-                            <div className='imagen-link'>
-                                <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_Mkup.jpeg`} alt="Informacion de Cursos" />
-                            </div>
-
-                            <div className="text-class">
-
-                                <p className="class_links-class">Maestría en Novias y Tendencias</p>
-
-                                <div className='description-class'>
-                                    <div className='class_dates_button'>
-                                        <span className='default-text'>15 DE ABRIL AL <br></br>
-                                            7 DE MAYO</span>
-                                        <span className='hover-text'>MÁS INFORMACIÓN</span>
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-                        </div>
-                    </Link>
-                    <div className='space-class'></div>
-                    <div className='space-class'></div>
-                    <Link to="/classes/course/curso-completo-maquillaje" className="class-card-link">
-                        <div className="center-class">
-                            <div className='imagen-link'>
-                                <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_Mkup.jpeg`} alt="Informacion de Cursos" />
-                            </div>
-
-                            <div className="text-class">
-
-                                <p className="class_links-class">Curso Completo Maquillaje</p>
-
-                                <div className='description-class'>
-                                    <div className='class_dates_button'>
-                                        <span className='default-text'>28 DE ENERO AL <br></br>
-                                            7 DE MAYO</span>
-                                        <span className='hover-text'>MÁS INFORMACIÓN</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </Link>
-                    <div className='space-class'></div>
-                </div>
+        <Link to="/classes/course/pieles-perfectas" className="course-grid-card">
+          <div className="course-grid-img-wrap">
+            <img className="course-grid-img" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_Mkup.jpeg`} alt="Pieles Perfectas" />
+          </div>
+          <div className="course-grid-info">
+            <p className="course-grid-name">Pieles Perfectas</p>
+            <div className="course-grid-date">
+              <span className="default-text">28 Ene — 25 Feb</span>
+              <span className="hover-text">Más Información →</span>
             </div>
-        </>
-    );
+          </div>
+        </Link>
+
+        <Link to="/classes/course/maquillaje-social" className="course-grid-card">
+          <div className="course-grid-img-wrap">
+            <img className="course-grid-img" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_Mkup.jpeg`} alt="Maquillaje Social" />
+          </div>
+          <div className="course-grid-info">
+            <p className="course-grid-name">Maquillaje Social</p>
+            <div className="course-grid-date">
+              <span className="default-text">4 Mar — 8 Abr</span>
+              <span className="hover-text">Más Información →</span>
+            </div>
+          </div>
+        </Link>
+
+        <Link to="/classes/course/maestria-novias-makeup" className="course-grid-card">
+          <div className="course-grid-img-wrap">
+            <img className="course-grid-img" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_Mkup.jpeg`} alt="Maestría en Novias y Tendencias" />
+          </div>
+          <div className="course-grid-info">
+            <p className="course-grid-name">Maestría en Novias y Tendencias</p>
+            <div className="course-grid-date">
+              <span className="default-text">15 Abr — 7 May</span>
+              <span className="hover-text">Más Información →</span>
+            </div>
+          </div>
+        </Link>
+
+        <Link to="/classes/course/curso-completo-maquillaje" className="course-grid-card">
+          <div className="course-grid-img-wrap">
+            <img className="course-grid-img" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_Mkup.jpeg`} alt="Curso Completo Maquillaje" />
+          </div>
+          <div className="course-grid-info">
+            <p className="course-grid-name">Curso Completo Maquillaje</p>
+            <div className="course-grid-date">
+              <span className="default-text">28 Ene — 7 May</span>
+              <span className="hover-text">Más Información →</span>
+            </div>
+          </div>
+        </Link>
+
+      </div>
+    </div>
+  );
 };
 
 export default Classes2;

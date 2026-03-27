@@ -1,462 +1,453 @@
-/* Information  */
+/* ===================================================
+   Home Page — Beauty Station
+   3-color rhythm:
+     Deep Rose  #A0647A  → intro hero + contact (bookends)
+     Light Rose #F0E2E9  → page ground, split text, reviews
+     White      #FFFFFF  → gallery cards, nav, elements that pop
+   =================================================== */
 
-.information {
-    width: 100%;
-    text-align: center;
+.home-page {
+    background-color: #F0E2E9;
 }
 
-.image-container-home {
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 800px;
-}
-
-.top-imagen-home {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-.background-imagen-home {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 25%;
-}
-
-.overlay-home {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom,
-            rgba(0, 0, 0, 0.4) 0%,
-            rgba(241, 178, 201, 0.4) 60%,
-            rgba(255, 255, 255, 1) 100%);
-    z-index: 1;
-}
-
-.hero-text-container {
-    position: absolute;
-    top: 18%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    color: white;
-    z-index: 2;
-    width: 90%;
-    max-width: 800px;
-}
-
-.hero-title {
-    font-size: 4rem;
+/* ── Shared CTA button — rose on light bg ── */
+.home-cta-btn {
+    display: inline-block;
     font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    margin-bottom: 15px;
-    letter-spacing: 1px;
-}
-
-.hero-subtitle {
-    font-size: 1.3rem;
-    font-family: 'Lato', sans-serif;
-    font-weight: 400;
-    line-height: 1.6;
-}
-
-.mid-information {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 180px;
-    font-family: 'Merriweather', serif;
-    text-align: center;
-    z-index: 3;
-    width: 100%;
-    position: absolute;
-    top: 72%;
-    transform: translateY(-50%);
-}
-
-.center {
-    width: 320px;
-}
-
-/* Cards — styled after center-class */
-.glass-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    background-color: white;
-    border: 2px solid #f1b2c9;
-    border-radius: 10px;
-    overflow: hidden;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: #A0647A;
+    border: 1px solid #A0647A;
+    padding: 13px 30px;
     text-decoration: none;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
-    width: 100%;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease;
 }
 
-.glass-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 22px rgba(241, 178, 201, 0.5);
-    opacity: 0.92;
+.home-cta-btn:hover {
+    background: #A0647A;
+    color: #FFFFFF;
 }
 
-.glass-card-image-wrap {
+/* ── CTA button override — white on dark rose bg ── */
+.home-contact .home-cta-btn {
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.65);
+}
+
+.home-contact .home-cta-btn:hover {
+    background: #FFFFFF;
+    color: #A0647A;
+    border-color: #FFFFFF;
+}
+
+/* ===================================================
+   1. Intro — deep rose hero (opener)
+   =================================================== */
+.home-intro {
+    text-align: center;
+    padding: 110px 20px 100px;
+    background-color: #A0647A;
     width: 100%;
+    box-sizing: border-box;
+}
+
+.home-intro-tagline {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0 0 20px 0;
+}
+
+.home-intro-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3rem;
+    font-weight: 300;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    margin: 0 0 28px 0;
+}
+
+.home-intro-body {
+    font-family: 'Lato', sans-serif;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.82);
+    line-height: 1.85;
+    margin: 0 auto;
+    max-width: 580px;
+}
+
+/* ===================================================
+   2. Split sections — light rose text panels
+   =================================================== */
+.home-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 560px;
+    margin-top: 0;
+}
+
+/* Reversed — text left, image right */
+.home-split.reverse {
+    direction: rtl;
+}
+
+.home-split.reverse > * {
+    direction: ltr;
+}
+
+.home-split-media {
     overflow: hidden;
-    flex-shrink: 0;
 }
 
-.icon {
+.home-split-img {
     width: 100%;
-    height: 320px;
+    height: 100%;
     object-fit: cover;
     object-position: center;
     display: block;
-    transition: transform 0.25s ease;
+    transition: transform 0.5s ease;
 }
 
-.glass-card:hover .icon {
-    transform: scale(1.015);
-    opacity: 0.88;
+.home-split-media:hover .home-split-img {
+    transform: scale(1.03);
 }
 
-.glass-card-text {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 24px;
-    color: #444;
-    letter-spacing: 1.5px;
-    padding: 14px 0 12px 0;
-    text-align: center;
-    width: 100%;
-}
-
-.content {
+/* Light rose — matches page ground color, seamless */
+.home-split-text {
     display: flex;
     flex-direction: column;
-    padding: 0px 10% 0 10%;
-    justify-content: flex-start;
-    background-color: white;
+    justify-content: center;
+    padding: 60px 70px;
+    background-color: #F0E2E9;
 }
 
-.all-content {
-    background-color: white;
-}
-
-/* Modern Contact Banner */
-.modern-contact-banner {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    background: linear-gradient(135deg, #fdf3f6 0%, #fcebf0 100%);
-    border-radius: 20px;
-    padding: 35px 50px;
-    margin: 50px 0;
-    box-shadow: 0 4px 15px rgba(241, 178, 201, 0.2);
-}
-
-.contact-banner-text h3 {
+.home-split-label {
     font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 26px;
-    color: #333;
-    margin: 0 0 10px 0;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #A0647A;
+    margin: 0 0 16px 0;
 }
 
-.contact-banner-text p {
+.home-split-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 300;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #2A2A2A;
+    margin: 0 0 24px 0;
+}
+
+.home-split-body {
     font-family: 'Lato', sans-serif;
-    font-size: 18px;
-    color: #666;
-    margin: 0;
+    font-size: 1rem;
+    color: #6A6A6A;
+    line-height: 1.85;
+    margin: 0 0 36px 0;
 }
 
-.contact-banner-btn {
-    display: flex;
-    align-items: center;
-    background-color: white;
-    color: #444;
-    text-decoration: none;
-    padding: 12px 28px;
-    border-radius: 50px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 16px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    margin-top: 15px;
-    border: 1px solid #eee;
-}
-
-.contact-banner-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-    color: #25D366;
-}
-
-.btn-whatsapp-icon {
-    width: 32px;
-    height: 32px;
-    margin-right: 12px;
-}
-
-/* Reviews Header */
-.reviews-header {
+/* ===================================================
+   3. Contact — deep rose (bookend, mirrors intro)
+   =================================================== */
+.home-contact {
     text-align: center;
-    margin: 95px 0 55px 0;
+    padding: 100px 20px;
+    background-color: #A0647A;
+    margin-top: 0;
 }
 
-.reviews-title {
+.home-contact-label {
     font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 34px;
-    color: #333;
-    margin-bottom: 15px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0 0 16px 0;
 }
 
-.reviews-subtitle {
+.home-contact-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    margin: 0 0 20px 0;
+}
+
+.home-contact-body {
     font-family: 'Lato', sans-serif;
-    font-size: 18px;
-    color: #666;
-    max-width: 650px;
-    margin: 0 auto;
-    line-height: 1.6;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0 auto 36px;
+    max-width: 480px;
+    line-height: 1.75;
 }
 
-/* Scrolling Gallery */
-.scrolling-wrapper-home {
-    display: flex;
-    overflow-x: scroll;
-    padding: 20px 10% 60px 10%;
-    background-color: white;
-    scroll-snap-type: x mandatory;
-    gap: 30px;
-    scroll-behavior: smooth;
+/* ===================================================
+   4. Reviews — light rose ground
+   =================================================== */
+.home-reviews {
+    padding: 90px 0 60px;
+    background-color: #F0E2E9;
+    text-align: center;
 }
 
-.scrolling-wrapper-home::-webkit-scrollbar {
-    height: 10px;
+.home-reviews-tagline {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #A0647A;
+    margin: 0 0 20px 0;
 }
 
-.scrolling-wrapper-home::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
+.home-reviews-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #2A2A2A;
+    margin: 0 0 20px 0;
 }
 
-.scrolling-wrapper-home::-webkit-scrollbar-thumb {
-    background: #f1b2c9;
-    border-radius: 10px;
+.home-reviews-body {
+    font-family: 'Lato', sans-serif;
+    font-size: 1rem;
+    color: #888;
+    max-width: 550px;
+    margin: 0 auto 50px;
+    line-height: 1.7;
 }
 
-.scrolling-image {
-    width: 80vw;
-    max-width: 700px;
-    height: 600px;
-    object-fit: contain;
-    background-color: #fafafa;
-    padding: 10px;
-    flex-shrink: 0;
-    cursor: pointer;
-    transition: all 0.4s ease;
-    border-radius: 8px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    scroll-snap-align: center;
-}
-
-.scrolling-image:hover {
-    transform: scale(1.02) translateY(-5px);
-    box-shadow: 0 15px 35px rgba(241, 178, 201, 0.4);
-}
-
-/* Gallery Navigation Wrapper */
+/* ===================================================
+   Scrolling gallery — white cards pop off light pink
+   =================================================== */
 .gallery-container-wrapper {
     position: relative;
     width: 100%;
-    margin-bottom: 30px;
+}
+
+.scrolling-wrapper-home {
+    display: flex;
+    overflow-x: scroll;
+    padding: 10px 8% 50px;
+    scroll-snap-type: x mandatory;
+    gap: 24px;
+    scroll-behavior: smooth;
+    background-color: #F0E2E9;
+}
+
+.scrolling-wrapper-home::-webkit-scrollbar {
+    height: 3px;
+}
+
+.scrolling-wrapper-home::-webkit-scrollbar-track {
+    background: #EDD8DE;
+}
+
+.scrolling-wrapper-home::-webkit-scrollbar-thumb {
+    background: #A0647A;
+    border-radius: 10px;
+}
+
+/* White image cards pop against the light pink bg */
+.scrolling-image {
+    width: 70vw;
+    max-width: 620px;
+    height: 580px;
+    object-fit: contain;
+    background-color: #FFFFFF;
+    padding: 10px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    scroll-snap-align: center;
+    box-shadow: 0 4px 18px rgba(160, 100, 122, 0.12);
+}
+
+.scrolling-image:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(160, 100, 122, 0.22);
 }
 
 .gallery-arrow {
     position: absolute;
     top: 45%;
     transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.95);
-    border: none;
+    background: #FFFFFF;
+    border: 1px solid #E8CBD4;
     border-radius: 50%;
-    width: 55px;
-    height: 55px;
-    font-size: 26px;
-    color: #f1b2c9;
+    width: 48px;
+    height: 48px;
+    font-size: 18px;
+    color: #A0647A;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     z-index: 10;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 10px rgba(160, 100, 122, 0.15);
 }
 
 .gallery-arrow:hover {
-    background: #f1b2c9;
-    color: white;
-    box-shadow: 0 6px 20px rgba(241, 178, 201, 0.4);
-    transform: translateY(-50%) scale(1.1);
+    background: #A0647A;
+    color: #FFFFFF;
+    border-color: #A0647A;
+    transform: translateY(-50%) scale(1.08);
 }
 
-.left-arrow {
-    left: 3%;
-}
+.left-arrow  { left: 2%; }
+.right-arrow { right: 2%; }
 
-.right-arrow {
-    right: 3%;
-}
-
-/* Modal */
+/* ===================================================
+   Modal
+   =================================================== */
 .modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: rgba(0, 0, 0, 0.88);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
 }
 
-.modal-content {
-    position: relative;
-}
-
 .modal-image {
-    max-width: 75vw;
+    max-width: 78vw;
     max-height: 90vh;
-    border-radius: 10px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-    transition: transform 0.3s;
 }
 
-
-/* Media queries for smaller screens */
+/* ===================================================
+   Tablet — max-width 1150px
+   =================================================== */
 @media (max-width: 1150px) {
-
-    .image-container-home {
-        min-height: 800px;
+    .home-intro {
+        padding: 60px 30px 50px;
     }
 
-    .hero-title {
-        font-size: 3rem;
-    }
-
-    .hero-subtitle {
-        font-size: 1.1rem;
-    }
-
-    .hero-text-container {
-        top: 15%;
-    }
-
-    .mid-information {
-        flex-direction: column;
-        top: 60%;
-        gap: 30px;
-        position: relative;
-        transform: none;
-        padding-top: 350px;
-    }
-
-    .center {
-        width: 70%;
-        max-width: 240px;
-    }
-
-    .icon {
-        height: 240px;
-    }
-
-    .content {
-        padding: 0 5%;
-    }
-
-    .modern-contact-banner {
-        flex-direction: column;
-        text-align: center;
-        padding: 25px;
-    }
-
-    .contact-banner-btn {
-        margin-top: 20px;
-        width: 100%;
-        justify-content: center;
-    }
-
-    .reviews-title {
-        font-size: 28px;
-    }
-
-    .scrolling-wrapper-home {
-        padding: 20px 5% 40px 5%;
-        gap: 15px;
-    }
-
-    .scrolling-image {
-        width: 85vw;
-        max-width: 85vw;
-        height: 500px;
-        border-radius: 8px;
-        flex-shrink: 0;
-    }
-
-    .modal-image {
-        max-width: 90vw;
-    }
-}
-
-@media (max-width: 600px) {
-    .hero-title {
+    .home-intro-title {
         font-size: 2.2rem;
     }
 
-    .hero-subtitle {
+    .home-split {
+        grid-template-columns: 1fr;
+        margin-top: 0;
+    }
+
+    .home-split.reverse {
+        direction: ltr;
+    }
+
+    /* On mobile, image always first, text always second */
+    .home-split.reverse .home-split-media {
+        order: -1;
+    }
+
+    .home-split-media {
+        height: 340px;
+    }
+
+    .home-split-text {
+        padding: 50px 40px;
+    }
+
+    .home-split-title {
+        font-size: 1.8rem;
+    }
+
+    .home-contact {
+        padding: 70px 30px;
+    }
+
+    .home-contact-title {
+        font-size: 1.6rem;
+    }
+
+    .home-reviews {
+        padding: 70px 0 40px;
+    }
+
+    .scrolling-image {
+        width: 80vw;
+        max-width: 80vw;
+        height: 460px;
+    }
+}
+
+/* ===================================================
+   Mobile — max-width 600px
+   =================================================== */
+@media (max-width: 600px) {
+    .home-intro {
+        padding: 50px 24px 40px;
+    }
+
+    .home-intro-title {
+        font-size: 1.8rem;
+        letter-spacing: 3px;
+    }
+
+    .home-intro-body {
         font-size: 0.95rem;
     }
 
-    .reviews-title {
-        font-size: 22px;
+    .home-split-media {
+        height: 260px;
     }
 
-    .reviews-subtitle {
-        font-size: 15px;
+    .home-split-text {
+        padding: 40px 24px;
     }
 
-    .contact-banner-text h3 {
-        font-size: 20px;
+    .home-split-title {
+        font-size: 1.5rem;
     }
 
-    .contact-banner-text p {
-        font-size: 15px;
+    .home-split-body {
+        font-size: 0.9rem;
     }
 
-    /* Review gallery images — much shorter on phone */
+    .home-contact {
+        padding: 60px 24px;
+    }
+
+    .home-contact-title {
+        font-size: 1.3rem;
+    }
+
     .scrolling-image {
-        width: 90vw;
-        max-width: 90vw;
-        height: 280px;
+        width: 88vw;
+        max-width: 88vw;
+        height: 300px;
     }
 
     .gallery-arrow {
-        width: 40px;
-        height: 40px;
-        font-size: 20px;
+        width: 38px;
+        height: 38px;
+        font-size: 15px;
+    }
+
+    .modal-image {
+        max-width: 92vw;
     }
 }

@@ -1,150 +1,167 @@
-/* =====================================================
-   Classes Detail Pages — Modernized Style
+/* ===================================================
+   Classes Detail Pages — Beauty Station
    CURSOS DE MAQUILLAJE 2026 / CURSOS DE PEINADO 2026
-   ===================================================== */
+   Same color rhythm as all other pages:
+     Deep Rose  #A0647A  — hero
+     Light Rose #F0E2E9  — page background
+     White      #FFFFFF  — cards
+     Text       #2A2A2A
+   =================================================== */
 
-/* Page wrapper */
+/* ── Page wrapper ── */
 .information-class {
-    background-color: #fff;
-    width: 100%;
-
+    background-color: #F0E2E9;
+    min-height: 100vh;
 }
 
+/* ===================================================
+   Hero — deep rose, mirrors home + cursos
+   =================================================== */
 .top-information-class {
     text-align: center;
-    padding-top: 10px;
-    margin-bottom: 10px;
+    padding: 80px 20px 70px;
+    background-color: #A0647A;
 }
 
-/* Title */
-.header-information-class {
-    margin: 30px 50px 20px;
-    font-size: 4rem;
+.classes-tagline {
     font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    letter-spacing: 1px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
     text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0 0 16px 0;
 }
 
-/* Card list container — replaces space-class divs */
-.mid-information-module {
+.header-information-class {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 300;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    margin: 0 0 22px 0;
+}
+
+.subheader-information-class {
+    font-family: 'Lato', sans-serif;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.82);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.85;
+}
+
+/* ===================================================
+   Course grid — 4 columns, reference layout
+   =================================================== */
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 26px;
+    max-width: 1080px;
+    margin: 60px auto 80px;
+    padding: 0 40px;
+}
+
+/* ===================================================
+   Course card
+   =================================================== */
+.course-grid-card {
+    background-color: #FFFFFF;
+    text-decoration: none;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 24px;
-    padding: 20px 0 50px;
-    background-color: #fafafa;
-    width: 100%;
-}
-
-/* ---- Card ---- */
-.center-class {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    width: 100%;
-    max-width: 500px;
-    height: 190px;
-    border-radius: 10px;
-    background-color: white;
-    border: 2px solid #f1b2c9;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
     overflow: hidden;
-    text-decoration: none;
-    color: inherit;
+    box-shadow: 0 3px 16px rgba(160, 100, 122, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.center-class:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 22px rgba(241, 178, 201, 0.45);
+.course-grid-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 34px rgba(160, 100, 122, 0.22);
 }
 
-/* Image */
-.icon-class {
-    width: 210px;
-    height: 190px;
-    border-radius: 0;
+/* ── Image ── */
+.course-grid-img-wrap {
+    overflow: hidden;
+    height: 240px;
+    flex-shrink: 0;
+}
+
+.course-grid-img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     object-position: center top;
-    flex-shrink: 0;
-    align-self: stretch;
-    transition: transform 0.25s ease, opacity 0.25s ease;
     display: block;
+    transition: transform 0.5s ease;
 }
 
-.center-class:hover .icon-class {
-    transform: scale(1.015);
-    opacity: 0.9;
+.course-grid-card:hover .course-grid-img {
+    transform: scale(1.05);
 }
 
-/* Image wrapper link */
-.imagen-link {
-    display: flex;
-    flex-shrink: 0;
-    align-self: stretch;
-    line-height: 0;
-    width: 220px;
-}
-
-/* Text side */
-.text-class {
-    flex: 1;
+/* ── Card info ── */
+.course-grid-info {
+    padding: 16px 18px 20px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px 11px;
     gap: 10px;
-    text-align: center;
-    margin-bottom: 10px;
-    ;
+    flex: 1;
 }
 
-/* Course name */
-.class_links-class {
+.course-grid-name {
     font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 28px;
-    color: #333;
-    line-height: 1.3;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #2A2A2A;
     margin: 0;
-    text-align: center;
+    line-height: 1.5;
 }
 
-/* Description wrapper */
-.description-class {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+/* ── "1 Día" badge ── */
+.one-day-badge {
+    display: inline-block;
+    background-color: #A0647A;
+    color: #FFFFFF;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    width: fit-content;
 }
 
-/* ---- Date pill button ---- */
-.class_dates_button {
+/* ── Date pill — hover reveals CTA ── */
+.course-grid-date {
     position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 36px;
-    padding: 15px 28px;
-    background-color: #fcebf0;
-    color: #c2668a;
-    border: 1px solid #f1b2c9;
-    border-radius: 50px;
+    padding: 7px 14px;
+    background-color: #F0E2E9;
+    color: #A0647A;
+    border: 1px solid #E8CBD4;
     font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 16px;
-    letter-spacing: 0.5px;
-    text-align: center;
-    cursor: pointer;
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
     overflow: hidden;
-    transition: background-color 0.25s ease, color 0.25s ease;
-    width: fit-content;
-    max-width: 100%;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    align-self: flex-start;
+    min-height: 30px;
+    white-space: nowrap;
 }
 
-.class_dates_button .hover-text {
+.course-grid-date .default-text {
+    transition: opacity 0.25s ease;
+}
+
+.course-grid-date .hover-text {
     position: absolute;
     inset: 0;
     display: flex;
@@ -154,169 +171,77 @@
     transition: opacity 0.25s ease;
     font-weight: 700;
     letter-spacing: 1px;
-    font-size: 15px;
+    font-size: 10px;
+    white-space: nowrap;
+    padding: 0 8px;
 }
 
-.class_dates_button:hover {
-    background-color: #f1b2c9;
-    color: white;
+.course-grid-card:hover .course-grid-date {
+    background-color: #A0647A;
+    color: #FFFFFF;
+    border-color: #A0647A;
 }
 
-.class_dates_button:hover .default-text {
+.course-grid-card:hover .course-grid-date .default-text {
     opacity: 0;
 }
 
-.class_dates_button:hover .hover-text {
+.course-grid-card:hover .course-grid-date .hover-text {
     opacity: 1;
 }
 
-/* "1 DÍA" badge */
-.one-day {
-    display: inline-block;
-    background-color: #f1b2c9;
-    color: white;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 16px;
-    letter-spacing: 1px;
-    padding: 3px 12px;
-    border-radius: 12px;
-    width: fit-content;
-    margin-bottom: 2px;
-}
-
-/* Date text accent */
-.header-information-date {
-    color: #c2668a;
-    font-weight: 600;
-}
-
-.Wed-Class {
-    color: #c2668a;
-}
-
-.Demo-text {
-    color: #ed93b4;
-}
-
-.Complete-text {
-    gap: 0;
-    margin: 0;
-}
-
-/* Legacy spacer — keep for JSX compatibility but make it zero */
-.space-class {
-    display: none;
-}
-
-.info1-class {
-    display: none;
-}
-
-.class-card-link {
-    text-decoration: none;
-    display: block;
-    width: 100%;
-    max-width: 500px;
-}
-
-/* Safety net: all direct link children of the card list are block */
-.mid-information-module>a {
-    display: block;
-    text-decoration: none;
-}
-
-/* =====================================================
-   Mobile Responsive
-   ===================================================== */
-@media (max-width: 1019px) {
-
-    .mid-information-module {
-        padding: 15px 0% 40px;
-        gap: 18px;
+/* ===================================================
+   Tablet — max-width 900px  →  2 columns
+   =================================================== */
+@media (max-width: 900px) {
+    .course-grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 600px;
+        gap: 22px;
+        margin: 50px auto 70px;
+        padding: 0 30px;
     }
 
-    .center-class {
-        flex-direction: column;
-        width: 90%;
-        max-width: 340px;
-        height: auto;
+    .course-grid-img-wrap {
+        height: 220px;
     }
 
-    .icon-class {
-        width: 100%;
-        height: 200px;
-        border-radius: 0;
-        object-fit: cover;
-    }
-
-    .imagen-link {
-        width: 100%;
-    }
-
-    .text-class {
-        padding: 14px 16px;
-        gap: 8px;
-    }
-
-    .class_links-class {
-        font-size: 16px;
-        text-align: center;
-    }
-
-    .class_dates_button {
-        font-size: 15px;
-        padding: 5px 24px;
-    }
-
-    .header-information-class {
-        font-size: 3rem;
-        margin: 20px;
-    }
-
-    .class-card-link {
-        width: 60%;
-        max-width: 245px;
-    }
-
-    .class_dates_button .hover-text {
-        font-size: 11px;
-    }
-}
-
-@media (max-width: 600px) {
     .header-information-class {
         font-size: 2.2rem;
-        margin: 15px 12px;
+        letter-spacing: 3px;
     }
 
-    .class-card-link {
-        width: 60%;
+    .top-information-class {
+        padding: 65px 20px 55px;
+    }
+}
+
+/* ===================================================
+   Mobile — max-width 500px  →  1 column
+   =================================================== */
+@media (max-width: 500px) {
+    .course-grid {
+        grid-template-columns: 1fr;
+        max-width: 340px;
+        gap: 18px;
+        margin: 40px auto 60px;
+        padding: 0 20px;
     }
 
-    .center-class {
-        max-width: 300px;
+    .course-grid-img-wrap {
+        height: 200px;
     }
 
-    .icon-class {
-        height: 160px;
+    .header-information-class {
+        font-size: 1.7rem;
+        letter-spacing: 2px;
     }
 
-    .class_links-class {
-        font-size: 13px;
+    .top-information-class {
+        padding: 50px 20px 45px;
     }
 
-    .class_dates_button {
-        font-size: 12px;
-        padding: 4px 14px;
-    }
-
-    .one-day {
-        font-size: 13px;
-    }
-
-    .mid-information-module {
-        gap: 14px;
-        padding: 12px 0% 30px;
+    .subheader-information-class {
+        font-size: 0.9rem;
     }
 }

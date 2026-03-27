@@ -3,7 +3,7 @@
 .information-module {
   width: 100%;
   text-align: center;
-  background-color: white;
+  background-color: #F0E2E9;
 }
 
 .mid-information-module {
@@ -11,10 +11,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #ffd8e659;
+  background-color: #F0E2E9;
   font-family: 'Merriweather', serif;
   font-weight: 400;
-  /* Regular */
 }
 
 

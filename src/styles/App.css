@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  background-color: rgb(255, 255, 255);
+  background-color: #F0E2E9;
   min-height: 100vh;
 }
 
@@ -10,7 +10,7 @@
 }
 
 html, body {
-  overflow-x: hidden;
+  overflow-x: clip;
   width: 100%;
 }
 

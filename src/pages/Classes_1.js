@@ -3,115 +3,98 @@ import React, { useEffect } from 'react';
 import '../styles/classes.css';
 import { Link, useLocation } from 'react-router-dom';
 
-
 const Classes1 = () => {
+  const location = useLocation();
 
-    const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
 
-    useEffect(() => {
+  return (
+    <div className="information-class">
 
-        window.scrollTo(0, 0);
-    }, [location]);
+      {/* ── Hero — mirrors home & cursos style ── */}
+      <div className="top-information-class">
+        <p className="classes-tagline">Categoría</p>
+        <h2 className="header-information-class">Cursos de Peinado 2026</h2>
+        <p className="subheader-information-class">
+          Elige el curso que más se adapte a tus metas y nivel de experiencia.
+          Aprende técnicas profesionales con instructoras especializadas.
+        </p>
+      </div>
 
-    return (
-        <>
-            <div className="information-class">
-                <div className="top-information-class">
-                    <h2 className="header-information-class">CURSOS DE PEINADO 2026</h2>
-                </div>
+      {/* ── Course grid ── */}
+      <div className="course-grid">
 
-                <div className="mid-information-module">
-
-                    <Link to="/classes/course/master-waves-intensivo" className="class-card-link">
-                        <div className="center-class">
-                            <div className='imagen-link'>
-                                <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_Day/imagen_module_H.jpeg`} alt="Informacion de Cursos" />
-                            </div>
-                            <div className="text-class">
-                                <p className="class_links-class">Master en Waves Intensivo</p>
-                                <div className='description-class'>
-                                    <div className='one-day'>1 DÍA</div>
-                                    <div className='class_dates_button'>
-                                        <span className='default-text'>BAJO CITA</span>
-                                        <span className='hover-text'>MÁS INFORMACIÓN</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </Link>
-
-                    <Link to="/classes/course/master-waves" className="class-card-link">
-                        <div className="center-class">
-                            <div className='imagen-link'>
-                                <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_Hair.jpeg`} alt="Informacion de Cursos" />
-                            </div>
-                            <div className="text-class">
-                                <p className="class_links-class">Master en Waves</p>
-                                <div className='description-class'>
-                                    <div className='class_dates_button'>
-                                        <span className='default-text'>27 DE ENERO AL <br/>17 DE FEBRERO</span>
-                                        <span className='hover-text'>MÁS INFORMACIÓN</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </Link>
-
-                    <Link to="/classes/course/peinado-eventos" className="class-card-link">
-                        <div className="center-class">
-                            <div className='imagen-link'>
-                                <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_Hair.jpeg`} alt="Informacion de Cursos" />
-                            </div>
-                            <div className="text-class">
-                                <p className="class_links-class">Peinado para Eventos</p>
-                                <div className='description-class'>
-                                    <div className='class_dates_button'>
-                                        <span className='default-text'>24 DE FEBRERO AL <br/>7 DE ABRIL</span>
-                                        <span className='hover-text'>MÁS INFORMACIÓN</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </Link>
-
-                    <Link to="/classes/course/maestria-novias" className="class-card-link">
-                        <div className="center-class">
-                            <div className='imagen-link'>
-                                <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_Hair.jpeg`} alt="Informacion de Cursos" />
-                            </div>
-                            <div className="text-class">
-                                <p className="class_links-class">Maestría en Novias y Tendencias</p>
-                                <div className='description-class'>
-                                    <div className='class_dates_button'>
-                                        <span className='default-text'>15 DE ABRIL AL <br/>7 DE MAYO</span>
-                                        <span className='hover-text'>MÁS INFORMACIÓN</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </Link>
-
-                    <Link to="/classes/course/curso-completo-peinado" className="class-card-link">
-                        <div className="center-class">
-                            <div className='imagen-link'>
-                                <img className="icon-class" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_Hair.jpeg`} alt="Informacion de Cursos" />
-                            </div>
-                            <div className="text-class">
-                                <p className="class_links-class">Curso Completo</p>
-                                <div className='description-class'>
-                                    <div className='class_dates_button'>
-                                        <span className='default-text'>27 DE ENERO AL <br/>7 DE MAYO</span>
-                                        <span className='hover-text'>MÁS INFORMACIÓN</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </Link>
-
-                </div>
+        <Link to="/classes/course/master-waves-intensivo" className="course-grid-card">
+          <div className="course-grid-img-wrap">
+            <img className="course-grid-img" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_Day/imagen_module_H.jpeg`} alt="Master en Waves Intensivo" />
+          </div>
+          <div className="course-grid-info">
+            <p className="course-grid-name">Master en Waves Intensivo</p>
+            <div className="one-day-badge">1 Día</div>
+            <div className="course-grid-date">
+              <span className="default-text">Bajo Cita</span>
+              <span className="hover-text">Más Información →</span>
             </div>
-        </>
-    );
+          </div>
+        </Link>
+
+        <Link to="/classes/course/master-waves" className="course-grid-card">
+          <div className="course-grid-img-wrap">
+            <img className="course-grid-img" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_Hair.jpeg`} alt="Master en Waves" />
+          </div>
+          <div className="course-grid-info">
+            <p className="course-grid-name">Master en Waves</p>
+            <div className="course-grid-date">
+              <span className="default-text">27 Ene — 17 Feb</span>
+              <span className="hover-text">Más Información →</span>
+            </div>
+          </div>
+        </Link>
+
+        <Link to="/classes/course/peinado-eventos" className="course-grid-card">
+          <div className="course-grid-img-wrap">
+            <img className="course-grid-img" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_Hair.jpeg`} alt="Peinado para Eventos" />
+          </div>
+          <div className="course-grid-info">
+            <p className="course-grid-name">Peinado para Eventos</p>
+            <div className="course-grid-date">
+              <span className="default-text">24 Feb — 7 Abr</span>
+              <span className="hover-text">Más Información →</span>
+            </div>
+          </div>
+        </Link>
+
+        <Link to="/classes/course/maestria-novias" className="course-grid-card">
+          <div className="course-grid-img-wrap">
+            <img className="course-grid-img" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_Hair.jpeg`} alt="Maestría en Novias y Tendencias" />
+          </div>
+          <div className="course-grid-info">
+            <p className="course-grid-name">Maestría en Novias y Tendencias</p>
+            <div className="course-grid-date">
+              <span className="default-text">15 Abr — 7 May</span>
+              <span className="hover-text">Más Información →</span>
+            </div>
+          </div>
+        </Link>
+
+        <Link to="/classes/course/curso-completo-peinado" className="course-grid-card">
+          <div className="course-grid-img-wrap">
+            <img className="course-grid-img" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_Hair.jpeg`} alt="Curso Completo" />
+          </div>
+          <div className="course-grid-info">
+            <p className="course-grid-name">Curso Completo</p>
+            <div className="course-grid-date">
+              <span className="default-text">27 Ene — 7 May</span>
+              <span className="hover-text">Más Información →</span>
+            </div>
+          </div>
+        </Link>
+
+      </div>
+    </div>
+  );
 };
 
 export default Classes1;

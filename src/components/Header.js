@@ -32,6 +32,7 @@ const Header = () => {
 
   return (
     <div className="top">
+      {menuOpen && <div className="menu-overlay" onClick={() => setMenuOpen(false)} />}
       <div className='top-header'>
       <div className="header">
         <Link to="/">
@@ -46,6 +47,7 @@ const Header = () => {
         </div>
       </div>
       <ul className={`right-header-links ${menuOpen ? 'open' : ''}`}>
+          <li><Link className={`header-button ${getActiveClass('/')}`} to="/" onClick={() => setMenuOpen(false)}>Inicio</Link></li>
           <li><Link className={`header-button ${getActiveClass('/classes')}`} to="/classes" onClick={() => setMenuOpen(false)}>Cursos</Link></li>
           <li><a className={`header-button ${getActiveClass('/cart')}`} href="/cart" onClick={handleCartClick}>Mi carrito</a></li>
           <li><Link className={`header-button ${getActiveClass('/servicio-a-domicilio')}`} to="/servicio-a-domicilio" onClick={() => setMenuOpen(false)}>Eventos</Link></li>

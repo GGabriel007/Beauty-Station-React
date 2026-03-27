@@ -1,251 +1,199 @@
-/* Information  */
+/* ===================================================
+   Cursos Page — Beauty Station
+   Same color rhythm as home page:
+     Deep Rose  #A0647A  — hero section
+     Light Rose #F0E2E9  — page background
+     White      #FFFFFF  — cards
+     Text       #2A2A2A
+   =================================================== */
 
-.information-classes {
-    background-color: white;
-    width: 100%;
-    text-align: center;
-
+.classes-page {
+    background-color: #F0E2E9;
+    min-height: 100vh;
 }
 
-.mid-information-classes {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 180px;
-    font-family: 'Merriweather', serif;
+/* ===================================================
+   Hero — deep rose, mirrors home intro
+   =================================================== */
+.classes-hero {
     text-align: center;
-    z-index: 3;
-    width: 100%;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    padding: 90px 20px 80px;
+    background-color: #A0647A;
 }
 
-.center-classes {
+.classes-hero-tagline {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0 0 18px 0;
+}
+
+.classes-hero-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3rem;
+    font-weight: 300;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    margin: 0 0 24px 0;
+}
+
+.classes-hero-body {
+    font-family: 'Lato', sans-serif;
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.82);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.85;
+}
+
+/* ===================================================
+   Cards grid
+   =================================================== */
+.classes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+    max-width: 860px;
+    margin: 70px auto 90px;
+    padding: 0 40px;
+}
+
+/* ===================================================
+   Individual card
+   =================================================== */
+.classes-card {
+    background-color: #FFFFFF;
+    text-decoration: none;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    width: 320px;
-    background-color: white;
-    border: 2px solid #f1b2c9;
-    border-radius: 10px;
     overflow: hidden;
-    text-decoration: none;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+    box-shadow: 0 4px 20px rgba(160, 100, 122, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Ensure image fills the card with no inline whitespace gap */
-.center-classes .glass-card-image-wrap {
-    display: block;
-    width: 100%;
+.classes-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 36px rgba(160, 100, 122, 0.22);
+}
+
+/* ── Image + overlay label ── */
+.classes-card-media {
+    position: relative;
     overflow: hidden;
-    line-height: 0;
+    height: 320px;
     flex-shrink: 0;
 }
 
-.icon-classes {
+.classes-card-img {
     width: 100%;
-    height: 320px;
+    height: 100%;
     object-fit: cover;
     object-position: center;
     display: block;
-    transition: transform 0.25s ease, opacity 0.25s ease;
-    border-radius: 0;
-    padding: 0;
-    background-color: transparent;
+    transition: transform 0.5s ease;
 }
 
-.center-classes:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 22px rgba(241, 178, 201, 0.5);
-    opacity: 0.93;
+.classes-card:hover .classes-card-img {
+    transform: scale(1.04);
 }
 
-.center-classes:hover .icon-classes {
-    transform: scale(1.015);
-    opacity: 0.88;
-}
-
-.header-information-classes {
-    font-size: 4rem;
+/* Rose label bar over bottom of image — like reference's tan bar */
+.classes-card-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #A0647A;
+    color: #FFFFFF;
     font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    letter-spacing: 1px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
     text-transform: uppercase;
-    margin: 30px;
-}
-
-.text-classes {
-    font-size: 25px;
-    text-align: left;
-    word-break: break-word;
-    /* Break long words to fit within the container */
-    max-width: 100%;
-    /* Ensure it doesn't overflow */
-
-}
-
-.title_links-classes {
-    color: white;
-    font-family: 'Lato', sans-serif;
-    font-weight: 500;
-    /* Semi-bold */
-    font-style: normal;
+    padding: 15px 20px;
     text-align: center;
-    font-size: 50px;
-    margin-top: 20px;
-
-
 }
 
-.title_links-cursos {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 24px;
-    color: #444;
-    letter-spacing: 1.5px;
-    padding: 16px 0 14px 0;
-    text-align: center;
-    width: 100%;
-    text-decoration: none;
-}
-
-.info1-classes {
+/* ── Card footer — title + arrow ── */
+.classes-card-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: rgb(158, 159, 159);
+    padding: 20px 24px 22px;
+    background-color: #FFFFFF;
 }
 
-.image-container-classes {
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 550px;
+.classes-card-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #2A2A2A;
 }
 
-.top-imagen-classes {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+.classes-card-arrow {
+    font-size: 16px;
+    color: #A0647A;
+    transition: transform 0.25s ease;
 }
 
-.background-imagen-classes {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 25%;
+.classes-card:hover .classes-card-arrow {
+    transform: translateX(4px);
 }
 
-.overlay-classes {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom,
-            rgba(0, 0, 0, 0.4) 0%,
-            rgba(241, 178, 201, 0.4) 60%,
-            rgba(255, 255, 255, 1) 100%);
-    z-index: 1;
+/* ===================================================
+   Tablet — max-width 768px
+   =================================================== */
+@media (max-width: 768px) {
+    .classes-grid {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+        gap: 28px;
+        padding: 0 24px;
+        margin: 50px auto 70px;
+    }
+
+    .classes-card-media {
+        height: 280px;
+    }
+
+    .classes-hero-title {
+        font-size: 2.4rem;
+    }
+
+    .classes-hero {
+        padding: 70px 20px 60px;
+    }
 }
 
-
-
-@media (max-width: 1150px) {
-
-    .image-container-classes {
-        min-height: auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        overflow: visible;
-        padding-bottom: 117px;
+/* ===================================================
+   Mobile — max-width 480px
+   =================================================== */
+@media (max-width: 480px) {
+    .classes-hero {
+        padding: 55px 24px 50px;
     }
 
-    .top-imagen-classes {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 0;
-        min-height: 100%;
+    .classes-hero-title {
+        font-size: 1.9rem;
+        letter-spacing: 4px;
     }
 
-    .background-imagen-classes {
-        width: 100%;
-        height: 100%;
-        min-height: 900px;
-        object-fit: cover;
+    .classes-hero-body {
+        font-size: 0.95rem;
     }
 
-    .overlay-classes {
-        min-height: 900px;
+    .classes-grid {
+        max-width: 100%;
+        margin: 40px auto 60px;
     }
 
-    .mid-information-classes {
-        position: relative;
-        top: auto;
-        transform: none;
-        flex-direction: column;
-        gap: 25px;
-        padding: 120px 0 20px 0;
-        align-items: center;
-        z-index: 3;
-    }
-
-    .center-classes {
-        width: 70%;
-        max-width: 240px;
-    }
-
-    .icon-classes {
-        width: 100%;
+    .classes-card-media {
         height: 240px;
-        border-radius: 0;
-        padding: 0;
-        background-color: transparent;
-        display: block;
-    }
-
-    .header-information-classes {
-        font-size: 3rem;
-    }
-}
-
-@media (max-width: 600px) {
-    .header-information-classes {
-        font-size: 2.2rem;
-        margin: 15px 12px;
-    }
-
-    /* Stack cards closer together on phone */
-    .mid-information-classes {
-        gap: 16px;
-        padding: 80px 0 30px 0;
-    }
-
-    /* Match home page card dimensions exactly */
-    .center-classes {
-        width: 70%;
-        max-width: 240px;
-    }
-
-    .icon-classes {
-        height: 240px;
-    }
-
-    .title_links-cursos {
-        font-size: 16px;
-        letter-spacing: 0.5px;
-        padding: 11px 0 10px 0;
     }
 }

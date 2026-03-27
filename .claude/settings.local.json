@@ -12,7 +12,8 @@
       "Bash(/dev/null --prefix /c/Users/gagra/Desktop/Projects/Beauty-Station-React/amplify/backend/function/processCheckout/src)",
       "Bash(amplify push:*)",
       "Bash(npm audit:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(find /c/Users/gagra/Desktop/Projects/Beauty-Station-React -maxdepth 2 -name tailwind.config.* -o -name .css -o -name *.css)"
     ]
   }
 }

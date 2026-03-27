@@ -4,45 +4,60 @@ import '../styles/beauty-SClasses.css';
 import { Link, useLocation } from 'react-router-dom';
 
 const BeautySClasses = () => {
+  const location = useLocation();
 
-    const location = useLocation();
-
-    useEffect(() => {
-
-        window.scrollTo(0,0);
-    }, [location]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
 
   return (
-    <>
-      <div className="information-module">
-        <div className="top-information-classes">
-            <h2 className="header-information-classes">CURSOS</h2>
-        </div>
+    <div className="classes-page">
 
-        <div className='image-container-classes'>
-        <div className = "top-imagen-classes">
-        <img className = "background-imagen-classes" src ={`${process.env.PUBLIC_URL}/images/background.jpeg`} alt ="imagen of the salon"/>
-        <div className="overlay-classes"></div>
+      {/* ── Page hero — mirrors home intro style ── */}
+      <section className="classes-hero">
+        <p className="classes-hero-tagline">Aprende con nosotras</p>
+        <h1 className="classes-hero-title">Cursos</h1>
+        <p className="classes-hero-body">
+          Elige la categoría que más te interesa y descubre nuestros cursos
+          intensivos diseñados para llevar tu técnica al siguiente nivel.
+        </p>
+      </section>
 
-        </div>
+      {/* ── Category cards grid ── */}
+      <section className="classes-grid">
 
-        <div className="mid-information-classes">
-          <Link to="/classes/classes-2" className="center-classes">
-            <div className="glass-card-image-wrap">
-              <img className="icon-classes" src={`${process.env.PUBLIC_URL}/images/Class_1/imagen_Module_Mkup.jpeg`} alt="Informacion de Cursos"/>
-            </div>
-            <div className="title_links-cursos">MAQUILLAJE</div>
-          </Link>
-          <Link to="/classes/classes-1" className="center-classes">
-            <div className="glass-card-image-wrap">
-              <img className="icon-classes" src={`${process.env.PUBLIC_URL}/images/Class_1/imagen_Module_Hair.jpeg`} alt="Informacion de Cursos"/>
-            </div>
-            <div className="title_links-cursos">PEINADO</div>
-          </Link>
-        </div>
+        <Link to="/classes/classes-2" className="classes-card">
+          <div className="classes-card-media">
+            <img
+              src={`${process.env.PUBLIC_URL}/images/Class_1/imagen_Module_Mkup.jpeg`}
+              alt="Cursos de Maquillaje"
+              className="classes-card-img"
+            />
+            <div className="classes-card-label">Maquillaje</div>
+          </div>
+          <div className="classes-card-footer">
+            <span className="classes-card-title">Maquillaje</span>
+            <span className="classes-card-arrow">→</span>
+          </div>
+        </Link>
+
+        <Link to="/classes/classes-1" className="classes-card">
+          <div className="classes-card-media">
+            <img
+              src={`${process.env.PUBLIC_URL}/images/Class_1/imagen_Module_Hair.jpeg`}
+              alt="Cursos de Peinado"
+              className="classes-card-img"
+            />
+            <div className="classes-card-label">Peinado</div>
+          </div>
+          <div className="classes-card-footer">
+            <span className="classes-card-title">Peinado</span>
+            <span className="classes-card-arrow">→</span>
+          </div>
+        </Link>
+
+      </section>
     </div>
-    </div>
-    </>
   );
 };
 
