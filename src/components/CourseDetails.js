@@ -7,7 +7,39 @@ import { CartContext } from '../context/CartContext';
 import { get } from 'aws-amplify/api';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { toast } from 'react-toastify';
-import { FiZoomIn, FiX, FiChevronDown } from 'react-icons/fi';
+import { FiZoomIn, FiX, FiChevronDown, FiCheckCircle, FiShoppingBag } from 'react-icons/fi';
+
+/* ── Custom cart-added toast ── */
+const CartToast = ({ closeToast, courseName, courseImage, includeKit }) => {
+    const nav = useNavigate();
+    return (
+        <div className="cart-toast-content">
+            <div className="cart-toast-header">
+                <FiCheckCircle className="cart-toast-check-icon" />
+                <span>Curso agregado a tu carrito</span>
+            </div>
+            <div className="cart-toast-course">
+                {courseImage && <img src={courseImage} alt="" className="cart-toast-img" />}
+                <div className="cart-toast-names">
+                    <span className="cart-toast-name">{courseName}</span>
+                    {includeKit && (
+                        <span className="cart-toast-kit">+ Kit de Pieles Perfectas</span>
+                    )}
+                </div>
+            </div>
+            <button
+                className="cart-toast-btn-primary"
+                onClick={() => { closeToast(); nav('/cart'); }}
+            >
+                <FiShoppingBag style={{ marginRight: 7 }} />
+                Ver el carrito
+            </button>
+            <button className="cart-toast-btn-secondary" onClick={closeToast}>
+                Continúa comprando
+            </button>
+        </div>
+    );
+};
 
 const DB_KEY_MAP = {
     "master-waves-0": "Master Waves 2PM a 4PM",
@@ -304,11 +336,22 @@ const CourseDetails = () => {
                                     image: thumbnails[0]
                                 });
 
-                                if (includeKit) {
-                                    toast.success(`¡Agregado al carrito: ${cartItemName} y Kit de Pieles Perfectas!`, { autoClose: 4000 });
-                                } else {
-                                    toast.success(`¡Agregado al carrito: ${cartItemName}!`, { autoClose: 4000 });
-                                }
+                                toast(
+                                    (props) => (
+                                        <CartToast
+                                            {...props}
+                                            courseName={cartItemName}
+                                            courseImage={thumbnails[0]}
+                                            includeKit={includeKit}
+                                        />
+                                    ),
+                                    {
+                                        autoClose: 8000,
+                                        closeButton: false,
+                                        className: 'cart-toast-container',
+                                        icon: false,
+                                    }
+                                );
                             }}
                         >
                             Añadir al Carrito
