@@ -61,10 +61,17 @@ const MyComponent = ({ onCaptchaSuccess }) => {
   };
 
   return (
-    <div>
-      <div id="recaptcha-container">
-        <p>reCAPTCHA {recaptchaToken ? "válido ✅" : "aún no esta validado ⛔"}</p>
+    <div id="recaptcha-container" className="recaptcha-status">
+      <div className="recaptcha-left">
+        <svg className="recaptcha-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true">
+          <path fill="#4A90D9" d="M32 4L8 14v18c0 14 10.3 27.1 24 30 13.7-2.9 24-16 24-30V14L32 4z"/>
+          <path fill="#fff" d="M28 42l-8-8 2.8-2.8L28 36.4l13.2-13.2L44 26z"/>
+        </svg>
+        <span className="recaptcha-brand">reCAPTCHA</span>
       </div>
+      <span className="recaptcha-state-label">
+        {recaptchaToken ? 'Verificado' : 'Verificando...'}
+      </span>
     </div>
   );
 };

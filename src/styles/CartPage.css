@@ -1,259 +1,482 @@
 /* src/styles/CartPage.css */
 
-.information-cart {
+/* ── Wrapper ── */
+.cp-wrapper {
+    min-height: 80vh;
+    background-color: #f7eef3;
+    padding: 48px 24px 72px;
+    box-sizing: border-box;
+}
+
+/* ── Page title — matches site-wide hero title style ── */
+.cp-title {
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3rem;
+    font-weight: 300;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: #2A2A2A;
+    margin-bottom: 40px;
+}
+
+/* ── Two-column layout ── */
+.cp-columns {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 28px;
+    max-width: 1080px;
+    margin: 0 auto;
+}
+
+.cp-left {
+    flex: 1 1 58%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.cp-right {
+    flex: 0 0 38%;
+    max-width: 400px;
+    position: sticky;
+    top: 24px;
+}
+
+/* ── Section cards ── */
+.cp-section {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 28px 28px 22px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 10px rgba(200, 140, 170, 0.08);
+}
+
+.cp-section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #ed93b4;
+    margin: 0 0 20px 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f3dce6;
+}
+
+/* ── Form labels ── */
+.cp-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 4px;
+    margin-top: 12px;
+    display: block;
+}
+
+.cp-label:first-of-type {
+    margin-top: 0;
+}
+
+.cp-label-sub {
+    font-weight: 400;
+    color: #888;
+    font-size: 0.75rem;
+}
+
+/* ── Inputs (scoped to cp-section to avoid global override conflicts) ── */
+.cp-section input {
+    padding: 11px 14px;
+    margin-bottom: 2px;
+    border: 1.5px solid #e0c8d5;
+    border-radius: 10px;
+    font-size: 0.92em;
+    font-family: 'Montserrat', sans-serif;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    color: #2b2b2b;
+    background: #fdfafa;
+}
+
+.cp-section input:focus {
+    border-color: #ed93b4;
+    box-shadow: 0 0 0 3px rgba(237, 147, 180, 0.15);
+    background: #fff;
+}
+
+/* ── Card number row with logo ── */
+.cp-input-icon-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.cp-input-icon-wrap input {
+    padding-right: 130px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.cp-card-logo {
+    position: absolute;
+    right: 12px;
+    width: 110px;
+    height: 24px;
+    object-fit: contain;
+    opacity: 0.45;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.cp-input-icon-wrap input:focus ~ .cp-card-logo {
+    opacity: 1;
+}
+
+/* ── Expiry / CVV side-by-side ── */
+.cp-card-row {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.cp-card-col {
+    flex: 1 1 50%;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+/* ── In-section divider between sub-sections ── */
+.cp-section-divider {
+    height: 1px;
+    background-color: #f3dce6;
+    margin: 24px 0 20px;
+}
+
+/* ── Terms section ── */
+.cp-terms-section {
+    gap: 0;
+}
+
+.cp-terms-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    color: #777;
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* ── Checkout button ── */
+.cp-checkout-btn {
+    width: 100%;
+    background-color: #ed93b4;
+    color: #fff;
+    border: none;
+    padding: 16px 20px;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 18px;
+    transition: background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.cp-checkout-btn:hover:not(:disabled) {
+    background-color: #f1b2c9;
+    box-shadow: 0 6px 20px rgba(237, 147, 180, 0.35);
+}
+
+.cp-checkout-btn:disabled {
+    background-color: #e8c6d4;
+    cursor: not-allowed;
+    opacity: 0.75;
+}
+
+/* ── Processing note ── */
+.cp-processing-note {
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    color: #ed93b4;
+    font-weight: 600;
+    margin-bottom: 16px;
+    max-width: 1080px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ── Error notification ── */
+.error-notification {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem;
+    color: #c0392b;
+    background: #fdf0ee;
+    border: 1px solid #f5c6c0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+}
+
+/* ── Order summary card ── */
+.cp-summary-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 28px 24px 24px;
+    box-shadow: 0 2px 10px rgba(200, 140, 170, 0.08);
+}
+
+.cp-summary-heading {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #ed93b4;
+    margin: 0 0 18px 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f3dce6;
+}
+
+/* ── Summary items ── */
+.cp-summary-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f9f0f4;
+}
+
+.cp-summary-item.cp-summary-fee {
+    border-bottom: none;
+}
+
+.cp-summary-img {
+    width: 52px;
+    height: 52px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.cp-summary-name {
+    flex: 1 1 auto;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #333;
+    line-height: 1.4;
+    min-width: 0;
+}
+
+.cp-summary-price {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #2b2b2b;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.cp-summary-remove {
+    background: none;
+    border: none;
+    color: #ccc;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.cp-summary-remove:hover {
+    color: #ed93b4;
+    background-color: #fdf0f5;
+}
+
+/* ── Divider + Total ── */
+.cp-summary-divider {
+    height: 1px;
+    background-color: #e8d0db;
+    margin: 14px 0 10px;
+}
+
+.cp-summary-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 4px;
+}
+
+.cp-summary-total-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #333;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.cp-summary-total-value {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #2b2b2b;
+}
+
+/* ── Empty cart ── */
+.cp-empty {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #f7f7f7;
-    padding-bottom: 25px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 64px 32px;
+    max-width: 520px;
+    margin: 0 auto;
+    box-shadow: 0 2px 10px rgba(200, 140, 170, 0.08);
+    text-align: center;
+    gap: 12px;
 }
 
-.cart-page {
-    padding: 20px;
-    background-color: #f7f7f7;
-    width: 80%;
-    max-width: 1200px;
-    border-radius: 10px;
-
+.cp-empty-icon {
+    font-size: 3rem;
+    margin: 0;
 }
 
-.cart-container {
+.cp-empty-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+}
+
+.cp-empty-sub {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    color: #888;
+    margin: 0 0 8px;
+}
+
+/* ── Success card ── */
+.cp-success-card {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    margin-bottom: 25px;
+    align-items: center;
+    background: #fff;
+    border-radius: 16px;
+    padding: 64px 32px;
+    max-width: 520px;
+    margin: 0 auto;
+    box-shadow: 0 2px 10px rgba(200, 140, 170, 0.08);
+    text-align: center;
+    gap: 14px;
 }
 
-.cart-total-price {
-    padding-left: 25%;
-    padding-right: 25%;
-    padding-bottom: 55px;
-    text-align: left;
-
-}
-
-.block {
-    height: 2px;
-    width: 50px;
-    min-width: 50px;
-    max-width: 50px;
-    margin-right: 10px;
-}
-
-.cart-items ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.cart-items li {
+.cp-success-check {
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    background-color: #ed93b4;
+    color: #fff;
+    font-size: 2rem;
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
-}
-
-.name-price-INS img {
-    width: 50px;
-    margin-right: 10px;
-}
-
-.cart-items img {
-    width: 50px;
-    margin-right: 10px;
-}
-
-.payment form {
-    display: flex;
-    flex-direction: column;
-}
-
-.payment label {
-    margin: 5px 0;
-}
-
-.payment input {
-    margin-bottom: 10px;
-}
-
-.payment button {
-    margin-top: 10px;
-}
-
-.header-information-cartpage {
-    margin: 30px 50px;
-    font-size: 4rem;
-    font-family: 'Montserrat', sans-serif;
+    justify-content: center;
     font-weight: 700;
-    letter-spacing: 1px;
+    flex-shrink: 0;
+}
+
+.cp-success-heading {
+    font-family: 'Playfair Display', 'Georgia', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #2b2b2b;
+    margin: 0;
+}
+
+.cp-success-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.88rem;
+    color: #666;
+    line-height: 1.7;
+    margin: 0 0 8px;
+    max-width: 380px;
+}
+
+/* ── Browse button (shared: empty + success) ── */
+.cp-browse-btn {
+    background-color: #ed93b4;
+    color: #fff;
+    border: none;
+    padding: 13px 32px;
+    border-radius: 50px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.cp-browse-btn:hover {
+    background-color: #f1b2c9;
+    box-shadow: 0 6px 20px rgba(237, 147, 180, 0.3);
+}
+
+/* ── reCAPTCHA — subtle, low-attention indicator ── */
+.recaptcha-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    margin-top: 14px;
+    border-top: 1px solid #f0e4ea;
+}
+
+.recaptcha-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.recaptcha-logo {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.recaptcha-brand {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #bbb;
     text-transform: uppercase;
 }
 
-.cart-page ul {
-    list-style-type: none;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.cart-page li {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.cart-page-remove {
-    margin-left: auto;
-    padding: 8px 14px;
-    background-color: #f5f5f5;
-    color: #888;
-    border: 1px solid #e0e0e0;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 12px;
+.recaptcha-state-label {
     font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: #ccc;
+    font-style: italic;
 }
 
-.cart-page-remove:hover {
-    background-color: #f1b2c9;
-    color: white;
-    border-color: #f1b2c9;
-}
-
-.block-remove {
-    width: 54px;
-    height: 14px;
-    padding: 8px 12px;
-    margin-left: auto;
-    min-width: 32.45px;
-    max-width: 32.45px;
-
-}
-
-.cart-page .notification {
-    margin-bottom: 20px;
-    color: rgb(255, 255, 255);
-
-}
-
-.price {
-    font-size: medium;
-    color: rgb(0, 0, 0);
-}
-
-.line {
-    width: 100%;
-    height: 1px;
-    background-color: #f1d0dc;
-    margin-top: 15px;
-    margin-bottom: 5px;
-}
-
-.total-price {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 77.7%;
-}
-
-.total-text {
-    font-size: larger;
-    padding-top: 10px;
-}
-
-.total-number {
-    font-size: larger;
-    padding-top: 10px;
-    font-weight: bold;
-}
-
-.name-price {
-    padding-right: 14px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 66.8%;
-}
-
-.item-name {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 600;
-    /* Bold */
-    width: 60%;
-}
-
-
-.checkout-button {
-    background-color: #ed93b4;
-    color: white;
-    border: none;
-    padding: 15px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    margin-top: 20px;
-    cursor: pointer;
-    border-radius: 50px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 1em;
-    letter-spacing: 0.5px;
-    transition: background-color 0.25s ease, box-shadow 0.25s ease;
-    width: 100%;
-}
-
-.checkout-button:hover {
-    background-color: #f1b2c9;
-    color: white;
-    box-shadow: 0 6px 16px rgba(241, 178, 201, 0.4);
-}
-
-.name-price-INS {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.form-from-user {
-    margin-top: 25px;
-    padding-left: 30%;
-    padding-right: 30%;
-}
-
-.information-User,
-.payment {
-    width: 100%;
-}
-
-.title-form {
-    font-size: 1.4em;
-    font-weight: 700;
-    font-family: 'Montserrat', sans-serif;
-    letter-spacing: 0.5px;
-    margin-bottom: 12px;
-    margin-top: 5px;
-    text-align: start;
-    color: #222;
-}
-
-.form-user,
-.payment div {
-    display: flex;
-    flex-direction: column;
-}
-
-label {
-    margin-bottom: 1px;
-    font-weight: bold;
-}
-
-.form-label {
-    text-align: start;
-}
-
+/* ── Keep legacy input styles for any non-cp-section inputs ── */
 input {
     padding: 12px;
     margin-bottom: 5px;
@@ -270,311 +493,60 @@ input:focus {
     box-shadow: 0 0 0 3px rgba(241, 178, 201, 0.2);
 }
 
-.checkout-button {
-    background-color: #ed93b4;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 50px;
-    cursor: pointer;
-    font-size: 1.2em;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    width: 100%;
-    transition: background-color 0.25s ease;
-}
-
-.checkout-button:hover {
-    background-color: #f1b2c9;
-}
-
-/* Check out notification */
-
-.browse-button {
-    background-color: #ed93b4;
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 12px;
-    transition: background-color 0.6s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.315);
-
-}
-
-.browse-button:hover {
-    background-color: #ffffff;
-    color: #ed93b4;
-}
-
-/*neo net image*/
-
-.input-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.input-container input {
-    width: 100%;
-    padding-right: 130px;
-    box-sizing: border-box;
-}
-
-.input-icon {
-    position: absolute;
-    right: 10px;
-    bottom: 20px;
-    width: 115px;
-    height: 25px;
-    opacity: 0.45;
-    transition: opacity 0.5s ease-in-out;
-}
-
-
-/* Fade in the image when input is focused */
-
-.input-container input:focus+.input-icon {
-    opacity: 1;
-}
-
-.text-module-cart {
-    font-size: 20px;
-    text-align: left;
-    line-height: 1.4;
-
-}
-
-/* Media query for mobile devices */
-@media (max-width: 1019px) {
-    .cart-container {
+/* ── Responsive: tablet ── */
+@media (max-width: 900px) {
+    .cp-columns {
         flex-direction: column;
+        gap: 20px;
     }
 
-    .cart-total-price,
-    .payment {
+    .cp-right {
+        position: static;
+        max-width: 100%;
         width: 100%;
-        padding: 0;
     }
 
-    .payment {
-        padding-top: 20px;
-    }
-
-    .name-price-INS {}
-
-    .name-price {
-        flex: 1;
-        padding-right: 8px;
-    }
-
-    .item-name {
-        width: 45%;
-        font-size: 13px;
-    }
-
-    .price {
-        font-size: 13px;
-    }
-
-
-    .cart-page li {
+    .cp-left {
         width: 100%;
-        box-sizing: border-box;
-    }
-
-    .cart-page ul {
-        margin-bottom: 0px;
-    }
-
-    .cart-page-remove {
-        height: auto;
-        width: auto;
-        min-width: 85px;
-        font-size: 12px;
-        padding: 6px 12px;
-    }
-
-    .total-price {
-        width: 87.1%;
-    }
-
-    .form-from-user {
-        margin-top: 45px;
-        padding-left: 0px;
-        padding-right: 0px;
-    }
-
-    .block-remove {
-        height: 28px;
-        width: auto;
-        min-width: 85px;
-    }
-
-    .input-container input {
-        width: 100%;
-        padding-right: 100px;
-    }
-
-
-    .input-icon {
-        width: 80px;
-        height: 19px;
-        right: 5px;
-        bottom: 23px;
-    }
-
-    .header-information-cartpage {
-        font-size: 3rem;
-        margin: 20px;
     }
 }
 
+/* ── Responsive: mobile ── */
 @media (max-width: 600px) {
-    /* ── Layout: stop all horizontal overflow ── */
-    .information-cart {
-        overflow-x: hidden;
-        width: 100%;
-        box-sizing: border-box;
+    .cp-wrapper {
+        padding: 32px 14px 56px;
     }
 
-    .cart-page {
-        width: 100%;
-        padding: 10px 12px;
-        box-sizing: border-box;
+    .cp-title {
+        font-size: 2rem;
+        letter-spacing: 4px;
+        margin-bottom: 28px;
     }
 
-    /* Fix the 108% width that causes right-side overflow */
-    .cart-page li {
-        width: 100%;
-        box-sizing: border-box;
+    .cp-section {
+        padding: 20px 16px 16px;
     }
 
-    .cart-total-price {
-        padding-left: 0;
-        padding-right: 0;
-        padding-bottom: 20px;
-        width: 100%;
-        box-sizing: border-box;
+    .cp-summary-card {
+        padding: 20px 16px 16px;
     }
 
-    .total-price {
-        width: 100%;
-        box-sizing: border-box;
+    .cp-summary-total-value {
+        font-size: 1.1rem;
     }
 
-    .name-price {
-        width: auto;
-        flex: 1;
-        min-width: 0;
-        padding-right: 6px;
-        box-sizing: border-box;
+    .cp-card-row {
+        flex-direction: column;
+        gap: 0;
     }
 
-    .name-price-INS {
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    /* ── Text sizes ── */
-    .header-information-cartpage {
-        font-size: 2.2rem;
-        margin: 15px 12px;
-    }
-
-    .text-module-cart {
-        font-size: 13px;
-    }
-
-    .title-form {
-        font-size: 1em;
-        margin-bottom: 6px;
-    }
-
-    .cart-page ul {
-        gap: 8px;
-        padding: 0;
-    }
-
-    .cart-container {
-        margin-bottom: 12px;
-    }
-
-    .item-name {
-        font-size: 11px;
-        width: auto;
-        min-width: 0;
-    }
-
-    .price {
-        font-size: 11px;
-        white-space: nowrap;
-    }
-
-    .total-text,
-    .total-number {
+    .cp-checkout-btn {
         font-size: 0.9rem;
-        padding-top: 5px;
+        padding: 13px 16px;
     }
 
-    .cart-page-remove {
-        font-size: 11px;
-        padding: 5px 8px;
-        min-width: 60px;
-        white-space: nowrap;
-    }
-
-    /* ── Form ── */
-    label {
-        font-size: 0.75rem;
-        margin-bottom: 1px;
-    }
-
-    input {
-        padding: 7px 9px;
-        font-size: 0.82em;
-        margin-bottom: 3px;
-        box-sizing: border-box;
-        width: 100%;
-    }
-
-    .checkout-button {
-        font-size: 0.88em;
-        padding: 10px 12px;
-        margin-top: 10px;
-    }
-
-    .line {
-        margin-top: 8px;
-        margin-bottom: 3px;
-    }
-
-    .form-from-user {
-        margin-top: 20px;
-        padding-left: 0;
-        padding-right: 0;
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    .input-container {
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    .input-container input {
-        padding-right: 90px;
-    }
-
-    .input-icon {
-        width: 70px;
-        height: 16px;
-        right: 4px;
-        bottom: 20px;
+    .cp-empty,
+    .cp-success-card {
+        padding: 40px 20px;
     }
 }

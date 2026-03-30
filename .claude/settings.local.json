@@ -14,7 +14,9 @@
       "Bash(npm audit:*)",
       "Bash(npm install:*)",
       "Bash(find /c/Users/gagra/Desktop/Projects/Beauty-Station-React -maxdepth 2 -name tailwind.config.* -o -name .css -o -name *.css)",
-      "Bash(npm list:*)"
+      "Bash(npm list:*)",
+      "Bash(npm run:*)",
+      "Bash(find /c/Users/gagra/Desktop/Projects/Beauty-Station-React -type f -name *course* -o -name *detail* -o -name *description*)"
     ]
   }
 }
