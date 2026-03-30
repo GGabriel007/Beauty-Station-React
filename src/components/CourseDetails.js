@@ -7,7 +7,7 @@ import { CartContext } from '../context/CartContext';
 import { get } from 'aws-amplify/api';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { toast } from 'react-toastify';
-import { FiZoomIn, FiX, FiChevronDown, FiCheckCircle, FiShoppingBag } from 'react-icons/fi';
+import { FiZoomIn, FiX, FiChevronDown, FiCheckCircle } from 'react-icons/fi';
 
 /* ── Custom cart-added toast ── */
 const CartToast = ({ closeToast, courseName, courseImage, includeKit }) => {
@@ -31,7 +31,6 @@ const CartToast = ({ closeToast, courseName, courseImage, includeKit }) => {
                 className="cart-toast-btn-primary"
                 onClick={() => { closeToast(); nav('/cart'); }}
             >
-                <FiShoppingBag style={{ marginRight: 7 }} />
                 Ver el carrito
             </button>
             <button className="cart-toast-btn-secondary" onClick={closeToast}>

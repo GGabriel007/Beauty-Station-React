@@ -8,34 +8,47 @@
   background: #fff !important;
   border-radius: 10px !important;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.14) !important;
-  min-width: 300px;
-  max-width: 340px;
+  width: 360px !important;
+  min-width: 360px !important;
+  max-width: 360px !important;
   overflow: hidden;
+}
+
+/* Remove internal body padding so content fills edge-to-edge */
+.cart-toast-container .Toastify__toast-body {
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+/* Pink progress bar */
+.cart-toast-container .Toastify__progress-bar {
+  background: #ed93b4 !important;
 }
 
 .cart-toast-content {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  width: 100%;
   font-family: 'Montserrat', sans-serif;
 }
 
-/* Green header bar */
+/* Header bar */
 .cart-toast-header {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
   background-color: #f7f7f7;
   border-bottom: 1px solid #eee;
-  padding: 12px 16px;
-  font-size: 13px;
+  padding: 14px 18px;
+  font-size: 14px;
   font-weight: 700;
   color: #2a2a2a;
 }
 
 .cart-toast-check-icon {
-  color: #4caf50;
-  font-size: 17px;
+  color: #ed93b4;
+  font-size: 18px;
   flex-shrink: 0;
 }
 
@@ -43,14 +56,14 @@
 .cart-toast-course {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
+  gap: 14px;
+  padding: 16px 18px;
   border-bottom: 1px solid #f0e4e9;
 }
 
 .cart-toast-img {
-  width: 54px;
-  height: 54px;
+  width: 60px;
+  height: 60px;
   object-fit: cover;
   border-radius: 4px;
   flex-shrink: 0;
@@ -59,18 +72,20 @@
 .cart-toast-names {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
 }
 
 .cart-toast-name {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: #1e1e1e;
   line-height: 1.35;
 }
 
 .cart-toast-kit {
-  font-size: 11px;
+  font-size: 12px;
   color: #ed93b4;
   font-weight: 600;
 }
@@ -81,12 +96,12 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 12px 16px;
+  padding: 14px 18px;
   background-color: #ed93b4;
   color: #fff;
   border: none;
   font-family: 'Montserrat', sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -101,12 +116,12 @@
 .cart-toast-btn-secondary {
   display: block;
   width: 100%;
-  padding: 11px 16px;
+  padding: 13px 18px;
   background: none;
   border: none;
   border-top: 1px solid #f0e4e9;
   font-family: 'Montserrat', sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: #777;
   text-decoration: underline;
