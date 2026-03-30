@@ -139,6 +139,33 @@ const CourseDetails = () => {
         handleWhatsAppSubmit
     } = useWhatsAppForm(courseData?.courseName || "");
 
+    const carouselRef = useRef(null);
+    const thumbnailsCount = courseData?.images?.count || 0;
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (!carouselRef.current || thumbnailsCount === 0) return;
+            const maxScroll = carouselRef.current.scrollWidth - carouselRef.current.clientWidth;
+            if (maxScroll <= 0) return;
+            const scrollRatio = carouselRef.current.scrollLeft / maxScroll;
+            const newIndex = Math.round(scrollRatio * (thumbnailsCount - 1));
+            
+            if (newIndex !== currentIndex && newIndex >= 0 && newIndex < thumbnailsCount) {
+                setCurrentIndex(newIndex);
+            }
+        };
+
+        const currentRef = carouselRef.current;
+        if (currentRef) {
+            currentRef.addEventListener('scroll', handleScroll, { passive: true });
+        }
+        return () => {
+            if (currentRef) {
+                currentRef.removeEventListener('scroll', handleScroll);
+            }
+        };
+    }, [currentIndex, thumbnailsCount]);
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [location, courseId]);
@@ -174,21 +201,28 @@ const CourseDetails = () => {
                     <div className="gallery-module">
                         <div className="gallery-carousel">
 
-                            {/* Main image */}
-                            <div
-                                className="carousel-img-wrap"
-                                onClick={() => {
-                                    setSelectedImage(thumbnails[currentIndex]);
-                                    setIsModalOpen(true);
-                                }}
-                            >
-                                <img
-                                    src={thumbnails[currentIndex]}
-                                    alt={`Course image ${currentIndex + 1}`}
-                                    className="carousel-main-img"
-                                />
-                                <div className="image-zoom-icon">
-                                    <FiZoomIn />
+                            {/* Main image carousel */}
+                            <div className="carousel-track-container" ref={carouselRef}>
+                                <div className="carousel-track">
+                                    {thumbnails.map((src, index) => (
+                                        <div
+                                            key={index}
+                                            className={`carousel-img-wrap ${index === currentIndex ? 'active' : ''}`}
+                                            onClick={() => {
+                                                setSelectedImage(src);
+                                                setIsModalOpen(true);
+                                            }}
+                                        >
+                                            <img
+                                                src={src}
+                                                alt={`Course image ${index + 1}`}
+                                                className="carousel-main-img"
+                                            />
+                                            <div className="image-zoom-icon">
+                                                <FiZoomIn />
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
 
@@ -197,17 +231,38 @@ const CourseDetails = () => {
                                 <div className="carousel-nav">
                                     <button
                                         className="carousel-arrow"
-                                        onClick={() => setCurrentIndex(i => (i - 1 + thumbnails.length) % thumbnails.length)}
+                                        onClick={() => {
+                                            if (!carouselRef.current) return;
+                                            const itemWidth = carouselRef.current.clientWidth * 0.8 + 15;
+                                            carouselRef.current.scrollBy({ left: -itemWidth, behavior: 'smooth' });
+                                        }}
                                         aria-label="Imagen anterior"
                                     >
                                         <FiChevronLeft />
                                     </button>
-                                    <span className="carousel-counter">
-                                        {currentIndex + 1} / {thumbnails.length}
-                                    </span>
+                                    
+                                    <div className="carousel-dots">
+                                        {thumbnails.map((_, idx) => (
+                                            <span 
+                                                key={idx} 
+                                                className={`carousel-dot ${idx === currentIndex ? 'active' : ''}`}
+                                                onClick={() => {
+                                                    if (!carouselRef.current) return;
+                                                    const maxScroll = carouselRef.current.scrollWidth - carouselRef.current.clientWidth;
+                                                    const targetScroll = (maxScroll / (thumbnails.length - 1)) * idx;
+                                                    carouselRef.current.scrollTo({ left: targetScroll, behavior: 'smooth' });
+                                                }}
+                                            />
+                                        ))}
+                                    </div>
+
                                     <button
                                         className="carousel-arrow"
-                                        onClick={() => setCurrentIndex(i => (i + 1) % thumbnails.length)}
+                                        onClick={() => {
+                                            if (!carouselRef.current) return;
+                                            const itemWidth = carouselRef.current.clientWidth * 0.8 + 15;
+                                            carouselRef.current.scrollBy({ left: itemWidth, behavior: 'smooth' });
+                                        }}
                                         aria-label="Siguiente imagen"
                                     >
                                         <FiChevronRight />
