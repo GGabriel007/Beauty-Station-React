@@ -13,7 +13,8 @@
       "Bash(amplify push:*)",
       "Bash(npm audit:*)",
       "Bash(npm install:*)",
-      "Bash(find /c/Users/gagra/Desktop/Projects/Beauty-Station-React -maxdepth 2 -name tailwind.config.* -o -name .css -o -name *.css)"
+      "Bash(find /c/Users/gagra/Desktop/Projects/Beauty-Station-React -maxdepth 2 -name tailwind.config.* -o -name .css -o -name *.css)",
+      "Bash(npm list:*)"
     ]
   }
 }
