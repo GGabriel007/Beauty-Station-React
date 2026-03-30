@@ -129,37 +129,19 @@ const CourseDetails = () => {
 
                     {/* ── LEFT COLUMN: Gallery ── */}
                     <div className="gallery-module">
-                        <div className="main-image-module" onClick={toggleModal}>
-                            <img
-                                id="selectedImage-module"
-                                src={selectedImage}
-                                alt="Selected Course Information"
-                            />
-                        </div>
-
-                        <div className="thumbnails-module">
+                        <div className="image-row-module">
                             {thumbnails.map((src, index) => (
                                 <img
                                     key={index}
-                                    className={`thumbnail-module ${selectedImage === src ? "active-thumbnail" : ""}`}
                                     src={src}
-                                    alt={`Thumbnail ${index + 1}`}
-                                    onClick={() => handleThumbnailClick(src)}
+                                    alt={`Course image ${index + 1}`}
+                                    onClick={() => {
+                                        setSelectedImage(src);
+                                        setIsModalOpen(true);
+                                    }}
                                 />
                             ))}
                         </div>
-
-                        {thumbnails.length > 1 && (
-                            <div className="second-image-module">
-                                <img src={thumbnails[1]} alt="Informacion de Cursos" />
-                            </div>
-                        )}
-
-                        {thumbnails.length > 2 && (
-                            <div className="second-image-module">
-                                <img src={thumbnails[2]} alt="Informacion de Cursos" />
-                            </div>
-                        )}
 
                         {isModalOpen && (
                             <div className="modal" onClick={toggleModal}>

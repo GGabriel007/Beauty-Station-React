@@ -23,75 +23,34 @@
 /* ── LEFT: Gallery ── */
 .gallery-module {
   width: 42%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   position: sticky;
   top: 90px;
   align-self: flex-start;
 }
 
-.main-image-module {
-  cursor: pointer;
-  width: 100%;
-  margin-bottom: 12px;
-}
-
-.main-image-module img {
-  width: 100%;
-  height: auto;
-  max-height: 540px;
-  object-fit: cover;
-  border-radius: 14px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.13);
-  transition: transform 0.3s ease;
-  display: block;
-}
-
-.main-image-module img:hover {
-  transform: scale(1.02);
-}
-
-.thumbnails-module {
+/* Horizontal row of equal-sized images — click any to zoom */
+.image-row-module {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: row;
   gap: 10px;
-  justify-content: flex-start;
   width: 100%;
-  margin-bottom: 16px;
 }
 
-.thumbnail-module {
-  width: 78px;
-  height: 78px;
+.image-row-module img {
+  flex: 1;
+  min-width: 0;
+  height: 240px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
-  border: 2px solid transparent;
-  transition: transform 0.2s ease, border-color 0.2s ease;
-}
-
-.thumbnail-module:hover {
-  transform: scale(1.08);
-}
-
-.active-thumbnail {
-  border-color: #ed93b4;
-}
-
-.second-image-module {
-  width: 100%;
-  margin-top: 16px;
-}
-
-.second-image-module img {
-  width: 100%;
-  height: auto;
-  max-height: 400px;
-  object-fit: cover;
-  border-radius: 14px;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
   display: block;
+}
+
+.image-row-module img:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
 }
 
 /* ── RIGHT: Course info ── */
@@ -99,8 +58,8 @@
   width: 58%;
   font-family: 'Montserrat', sans-serif;
   font-size: 16px;
-  color: #3a3a3a;
-  line-height: 1.75;
+  color: #2e2e2e;
+  line-height: 1.8;
 }
 
 /* Course title */
@@ -108,7 +67,7 @@
   font-family: 'Montserrat', sans-serif;
   font-size: 2.1rem;
   font-weight: 700;
-  color: #2a2a2a;
+  color: #1e1e1e;
   line-height: 1.2;
   letter-spacing: 0.3px;
   margin-top: 0;
@@ -123,34 +82,27 @@
 /* Quick info strip: level · materials · note */
 .course-quick-info {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px 20px;
-  font-size: 13px;
-  color: #777;
-  margin-bottom: 24px;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 14px;
+  color: #555;
+  font-weight: 500;
+  margin-bottom: 22px;
   padding-bottom: 20px;
   border-bottom: 1px solid #e8cdd6;
-}
-
-.course-quick-info span::before {
-  content: "· ";
-  color: #ed93b4;
-}
-
-.course-quick-info span:first-child::before {
-  content: "";
+  line-height: 1.6;
 }
 
 /* Price block */
 .course-price-block {
   background-color: #fff;
   border: 1px solid #f0d6df;
-  border-radius: 10px;
+  border-radius: 8px;
   padding: 18px 22px;
   margin-bottom: 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .course-price-row {
@@ -164,13 +116,13 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #888;
+  color: #777;
 }
 
 .course-price-value {
-  font-size: 1.45rem;
+  font-size: 1.4rem;
   font-weight: 700;
-  color: #2a2a2a;
+  color: #1e1e1e;
   letter-spacing: 0.3px;
 }
 
@@ -186,39 +138,40 @@
   display: block;
   font-family: 'Montserrat', sans-serif;
   font-weight: 700;
-  font-size: 11px;
+  font-size: 13px;
   text-transform: uppercase;
-  letter-spacing: 2.5px;
+  letter-spacing: 2px;
   color: #ed93b4;
-  margin-top: 36px;
-  margin-bottom: 12px;
+  margin-top: 34px;
+  margin-bottom: 14px;
   padding-bottom: 8px;
   border-bottom: 2px solid #f5d4e0;
 }
 
 /* Instructor line */
 .instructor-heading {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #555;
-  margin-bottom: 10px;
+  color: #444;
+  margin-bottom: 12px;
   margin-top: 4px;
 }
 
 ul {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding-left: 18px;
+  gap: 14px;
+  padding-left: 20px;
+  color: #2e2e2e;
 }
 
 /* Horizontal divider before course details */
 .course-detail-divider {
   height: 1px;
   background-color: #e8cdd6;
-  margin: 32px 0;
+  margin: 30px 0;
 }
 
 /* ── Schedule selector ── */
@@ -601,19 +554,10 @@ ul {
   .gallery-module {
     width: 100%;
     position: static;
-    align-items: center;
   }
 
-  .main-image-module img {
-    max-height: 460px;
-  }
-
-  .thumbnails-module {
-    justify-content: center;
-  }
-
-  .second-image-module img {
-    max-height: 340px;
+  .image-row-module img {
+    height: 200px;
   }
 
   .text-module {
@@ -640,20 +584,16 @@ ul {
   }
 
   .class_links-module {
-    font-size: 10px;
+    font-size: 11px;
   }
 
-  .main-image-module img {
-    max-height: 320px;
+  .image-row-module {
+    gap: 7px;
   }
 
-  .second-image-module img {
-    max-height: 260px;
-  }
-
-  .thumbnail-module {
-    width: 62px;
-    height: 62px;
+  .image-row-module img {
+    height: 150px;
+    border-radius: 5px;
   }
 
   .seats-plenty,
@@ -674,6 +614,6 @@ ul {
   }
 
   .modal-image {
-    max-width: 92%;
+    max-width: 94%;
   }
 }
