@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import '../styles/modules.css';
 import { useParams, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import useWhatsAppForm from '../hook/useWhatsAppForm';
@@ -7,7 +7,7 @@ import { CartContext } from '../context/CartContext';
 import { get } from 'aws-amplify/api';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { toast } from 'react-toastify';
-import { FiZoomIn, FiX, FiChevronDown, FiCheckCircle } from 'react-icons/fi';
+import { FiZoomIn, FiX, FiChevronDown, FiChevronLeft, FiChevronRight, FiCheckCircle } from 'react-icons/fi';
 
 /* ── Custom cart-added toast ── */
 const CartToast = ({ closeToast, courseName, courseImage, includeKit }) => {
@@ -127,6 +127,7 @@ const CourseDetails = () => {
         }
     }, [allDbItems, activeDbKey]);
 
+    const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedImage, setSelectedImage] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isWhatsAppOpen, setIsWhatsAppOpen] = useState(false);
@@ -143,11 +144,8 @@ const CourseDetails = () => {
     }, [location, courseId]);
 
     useEffect(() => {
-        if (courseData && courseData.images) {
-            const ext = courseData.images.extension || "Hair";
-            setSelectedImage(`${process.env.PUBLIC_URL}/images/${courseData.images.folder}/imagen_module_1${ext}.jpeg`);
-        }
-    }, [courseData]);
+        setCurrentIndex(0);
+    }, [courseId]);
 
     if (!courseData) {
         return <Navigate to="/classes" />;
@@ -172,24 +170,50 @@ const CourseDetails = () => {
                 {courseId === 'maestria-novias' && <div className="line1-module"></div>}
                 <div className="mid-information-module">
 
-                    {/* ── LEFT COLUMN: Gallery ── */}
+                    {/* ── LEFT COLUMN: Gallery carousel ── */}
                     <div className="gallery-module">
-                        <div className="image-row-module">
-                            {thumbnails.map((src, index) => (
-                                <div
-                                    key={index}
-                                    className="image-card"
-                                    onClick={() => {
-                                        setSelectedImage(src);
-                                        setIsModalOpen(true);
-                                    }}
-                                >
-                                    <img src={src} alt={`Course image ${index + 1}`} />
-                                    <div className="image-zoom-icon">
-                                        <FiZoomIn />
-                                    </div>
+                        <div className="gallery-carousel">
+
+                            {/* Main image */}
+                            <div
+                                className="carousel-img-wrap"
+                                onClick={() => {
+                                    setSelectedImage(thumbnails[currentIndex]);
+                                    setIsModalOpen(true);
+                                }}
+                            >
+                                <img
+                                    src={thumbnails[currentIndex]}
+                                    alt={`Course image ${currentIndex + 1}`}
+                                    className="carousel-main-img"
+                                />
+                                <div className="image-zoom-icon">
+                                    <FiZoomIn />
                                 </div>
-                            ))}
+                            </div>
+
+                            {/* Navigation row */}
+                            {thumbnails.length > 1 && (
+                                <div className="carousel-nav">
+                                    <button
+                                        className="carousel-arrow"
+                                        onClick={() => setCurrentIndex(i => (i - 1 + thumbnails.length) % thumbnails.length)}
+                                        aria-label="Imagen anterior"
+                                    >
+                                        <FiChevronLeft />
+                                    </button>
+                                    <span className="carousel-counter">
+                                        {currentIndex + 1} / {thumbnails.length}
+                                    </span>
+                                    <button
+                                        className="carousel-arrow"
+                                        onClick={() => setCurrentIndex(i => (i + 1) % thumbnails.length)}
+                                        aria-label="Siguiente imagen"
+                                    >
+                                        <FiChevronRight />
+                                    </button>
+                                </div>
+                            )}
                         </div>
 
                         {isModalOpen && (

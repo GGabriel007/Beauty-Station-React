@@ -1,116 +1,181 @@
-/* ─── Dashboard Page ─────────────────────────────────────────────────────── */
+/* ─── Dashboard / Mi Perfil ──────────────────────────────────────────────── */
 
 .dashboard-wrapper {
-    width: 100%;
-    min-height: 60vh;
-    padding-bottom: 60px;
+    min-height: 80vh;
+    background-color: #f7eef3;
+    padding: 48px 24px 72px;
+    box-sizing: border-box;
 }
 
 .dashboard-container {
-    max-width: 780px;
+    max-width: 680px;
     margin: 0 auto;
-    padding: 0 24px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-/* ─── Page Title ─────────────────────────────────────────────────────────── */
+/* ─── Page Title — matches site-wide style ───────────────────────────────── */
 
 .dashboard-title {
-    font-size: 4rem;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: #111;
-    margin: 30px 50px;
     text-align: center;
-}
-
-/* ─── Section Label (matches .class_links-module) ────────────────────────── */
-
-.dashboard-section-title {
     font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 1.25rem;
-    color: #ed93b4;
+    font-size: 3rem;
+    font-weight: 300;
+    letter-spacing: 6px;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    border-bottom: 1px solid #fcebf0;
-    padding-bottom: 8px;
-    margin: 0 0 18px 0;
-}
-
-.dashboard-courses-title {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 1.25rem;
-    color: #ed93b4;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-bottom: 1px solid #fcebf0;
-    padding-bottom: 8px;
-    margin: 0 0 20px 0;
+    color: #2A2A2A;
+    margin: 0 0 40px 0;
 }
 
 /* ─── Cards ──────────────────────────────────────────────────────────────── */
 
-.dashboard-personal-info {
-    background: white;
-    border: 1px solid #f1d0dc;
-    border-radius: 12px;
-    padding: 24px 28px;
-    margin-top: 10px;
+.dashboard-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    box-shadow: 0 2px 10px rgba(200, 140, 170, 0.08);
 }
 
-.dashboard-text-item {
+.dashboard-card-label {
     font-family: 'Montserrat', sans-serif;
-    font-size: 1.15rem;
-    color: #444;
-    margin: 8px 0;
-    line-height: 1.6;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #ed93b4;
+    margin: 0 0 20px 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f3dce6;
 }
 
-.dashboard-text-item strong {
-    color: #111;
+/* ─── Info rows (name / email) ───────────────────────────────────────────── */
+
+.dashboard-info-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 0;
+    min-height: 44px;
 }
 
-.dashboard-text-capitalize {
-    text-transform: capitalize;
+.dashboard-info-divider {
+    height: 1px;
+    background-color: #f3dce6;
 }
 
-/* ─── Courses Section ────────────────────────────────────────────────────── */
-
-.dashboard-courses-section {
-    background: white;
-    border: 1px solid #f1d0dc;
-    border-radius: 12px;
-    padding: 24px 28px;
-    margin-top: 20px;
-}
-
-.dashboard-loading-text {
+.dashboard-info-key {
     font-family: 'Montserrat', sans-serif;
-    font-size: 1.1rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #aaa;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    min-width: 80px;
+}
+
+.dashboard-info-value-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.dashboard-info-value {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #2b2b2b;
+    text-align: right;
+}
+
+/* ─── Name edit ──────────────────────────────────────────────────────────── */
+
+.dashboard-edit-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #e0afc3;
+    font-size: 0.85rem;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.dashboard-edit-btn:hover {
+    color: #ed93b4;
+}
+
+.dashboard-name-edit {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.dashboard-name-input {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.92rem;
+    color: #2b2b2b;
+    border: 1.5px solid #ed93b4;
+    border-radius: 8px;
+    padding: 6px 10px;
+    outline: none;
+    width: 200px;
+    box-shadow: 0 0 0 3px rgba(237, 147, 180, 0.12);
+    background: #fdfafa;
+}
+
+.dashboard-edit-action {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 6px;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.dashboard-edit-action.save {
+    color: #4a8a55;
+}
+
+.dashboard-edit-action.save:hover {
+    background-color: #edf7ef;
+}
+
+.dashboard-edit-action.cancel {
+    color: #aaa;
+}
+
+.dashboard-edit-action.cancel:hover {
+    background-color: #f5f5f5;
     color: #888;
-    text-align: center;
-    padding: 20px 0;
 }
 
-.dashboard-loading-container {
-    text-align: center;
-    padding: 60px;
-    font-family: 'Montserrat', sans-serif;
-    color: #888;
-}
+/* ─── Orders list ────────────────────────────────────────────────────────── */
 
-/* ─── Order Card ─────────────────────────────────────────────────────────── */
+.dashboard-orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
 
 .dashboard-order-card {
-    background: #fffafb;
-    border: 1px solid #f1d0dc;
-    border-left: 4px solid #ed93b4;
+    border: 1px solid #f0e0e8;
     border-radius: 10px;
-    padding: 20px 22px;
-    margin-bottom: 16px;
+    padding: 18px 20px;
+    background: #fdfafa;
 }
 
 .dashboard-order-header {
@@ -122,35 +187,31 @@
     margin-bottom: 14px;
 }
 
-.dashboard-order-header-text {
+.dashboard-order-id {
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #999;
-    margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.dashboard-order-modules {
-    border-top: 1px solid #fcebf0;
-    padding-top: 14px;
-}
-
-.dashboard-modules-title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    color: #555;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin: 0 0 10px 0;
+    color: #ed93b4;
+    background: #fdf0f5;
+    padding: 3px 10px;
+    border-radius: 20px;
 }
+
+.dashboard-order-date {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #aaa;
+}
+
+/* ─── Module list ────────────────────────────────────────────────────────── */
 
 .dashboard-modules-list {
     list-style: none;
     padding: 0;
-    margin: 0 0 16px 0;
+    margin: 0 0 14px 0;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -158,122 +219,156 @@
 
 .dashboard-module-item {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
+    align-items: flex-start;
+    gap: 10px;
 }
 
-.dashboard-module-item-compact {
+.dashboard-module-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #ed93b4;
+    flex-shrink: 0;
+    margin-top: 6px;
+}
+
+.dashboard-module-body {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    gap: 2px;
 }
 
 .dashboard-module-name {
     font-family: 'Montserrat', sans-serif;
-    font-size: 1.1rem;
+    font-size: 0.88rem;
     font-weight: 600;
-    color: #222;
+    color: #2b2b2b;
+    line-height: 1.4;
 }
 
 .dashboard-module-link {
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.95rem;
+    font-size: 0.75rem;
     font-weight: 600;
     color: #ed93b4;
     text-decoration: none;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
     transition: color 0.2s ease;
 }
 
 .dashboard-module-link:hover {
     color: #d67a9a;
-    text-decoration: underline;
 }
 
-.dashboard-order-total {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: #111;
-    text-align: right;
-    border-top: 1px solid #fcebf0;
+/* ─── Order footer / total ───────────────────────────────────────────────── */
+
+.dashboard-order-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #f0e0e8;
     padding-top: 12px;
-    margin: 0;
+    margin-top: 4px;
 }
 
-/* ─── Empty State ────────────────────────────────────────────────────────── */
+.dashboard-order-total-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #aaa;
+}
+
+.dashboard-order-total-value {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #2b2b2b;
+}
+
+/* ─── Loading ─────────────────────────────────────────────────────────────── */
+
+.dashboard-loading-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.88rem;
+    color: #aaa;
+    text-align: center;
+    padding: 24px 0;
+    font-style: italic;
+}
+
+.dashboard-loading-container {
+    text-align: center;
+    padding: 80px 24px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+/* ─── Empty state ─────────────────────────────────────────────────────────── */
 
 .dashboard-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 28px 0 8px;
     text-align: center;
-    padding: 30px 0 10px;
 }
 
 .dashboard-empty-text {
     font-family: 'Montserrat', sans-serif;
-    font-size: 1.1rem;
-    color: #888;
+    font-size: 0.88rem;
+    color: #aaa;
     line-height: 1.6;
-    margin-bottom: 20px;
+    margin: 0;
 }
 
 .dashboard-explore-button {
     display: inline-block;
-    padding: 14px 36px;
+    padding: 13px 32px;
     background-color: #ed93b4;
     color: white;
     border: none;
-    border-radius: 50px;
+    border-radius: 8px;
     cursor: pointer;
     font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
+    font-size: 0.85rem;
     font-weight: 700;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     text-transform: uppercase;
     transition: background-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .dashboard-explore-button:hover {
     background-color: #f1b2c9;
-    box-shadow: 0 6px 16px rgba(241, 178, 201, 0.45);
+    box-shadow: 0 6px 16px rgba(241, 178, 201, 0.4);
 }
 
-/* ─── Responsive ─────────────────────────────────────────────────────────── */
-
-@media (max-width: 1150px) {
-    .dashboard-title {
-        font-size: 3rem;
-    }
-}
+/* ─── Responsive ──────────────────────────────────────────────────────────── */
 
 @media (max-width: 600px) {
+    .dashboard-wrapper {
+        padding: 32px 14px 56px;
+    }
+
     .dashboard-title {
-        font-size: 2.2rem;
-        margin: 15px 12px;
+        font-size: 2rem;
+        letter-spacing: 4px;
+        margin-bottom: 28px;
     }
 
-    .dashboard-section-title,
-    .dashboard-courses-title {
-        font-size: 1.05rem;
+    .dashboard-card {
+        padding: 20px 18px;
     }
 
-    .dashboard-text-item {
-        font-size: 1rem;
+    .dashboard-info-key {
+        min-width: 64px;
     }
 
-    .dashboard-module-name {
-        font-size: 0.97rem;
-    }
-
-    .dashboard-order-total {
-        font-size: 1rem;
-    }
-
-    .dashboard-personal-info,
-    .dashboard-courses-section {
-        padding: 18px 16px;
-    }
-
-    .dashboard-order-card {
-        padding: 16px;
+    .dashboard-name-input {
+        width: 140px;
     }
 
     .dashboard-order-header {
