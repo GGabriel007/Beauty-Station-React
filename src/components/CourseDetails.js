@@ -7,6 +7,7 @@ import { CartContext } from '../context/CartContext';
 import { get } from 'aws-amplify/api';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { toast } from 'react-toastify';
+import { FiZoomIn, FiX, FiChevronDown } from 'react-icons/fi';
 
 const DB_KEY_MAP = {
     "master-waves-0": "Master Waves 2PM a 4PM",
@@ -85,6 +86,7 @@ const CourseDetails = () => {
 
     const [selectedImage, setSelectedImage] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isWhatsAppOpen, setIsWhatsAppOpen] = useState(false);
 
     const {
         whatsappForm,
@@ -131,21 +133,28 @@ const CourseDetails = () => {
                     <div className="gallery-module">
                         <div className="image-row-module">
                             {thumbnails.map((src, index) => (
-                                <img
+                                <div
                                     key={index}
-                                    src={src}
-                                    alt={`Course image ${index + 1}`}
+                                    className="image-card"
                                     onClick={() => {
                                         setSelectedImage(src);
                                         setIsModalOpen(true);
                                     }}
-                                />
+                                >
+                                    <img src={src} alt={`Course image ${index + 1}`} />
+                                    <div className="image-zoom-icon">
+                                        <FiZoomIn />
+                                    </div>
+                                </div>
                             ))}
                         </div>
 
                         {isModalOpen && (
                             <div className="modal" onClick={toggleModal}>
-                                <div className="modal-content">
+                                <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                                    <button className="modal-close-btn" onClick={toggleModal}>
+                                        <FiX />
+                                    </button>
                                     <img className="modal-image" src={selectedImage} alt="Expanded view" />
                                 </div>
                             </div>
@@ -367,71 +376,81 @@ const CourseDetails = () => {
                             ))}
                         </ul>
 
-                        {/* WhatsApp Contact Form */}
+                        {/* WhatsApp Contact Form — collapsible */}
                         <div className="whatsapp-details">
-                            <p className="whatsapp-summary">
-                                Si quieres contactarnos con más información con respecto a este curso llena la información siguiente
-                            </p>
-                            <div className="whatsapp-form" style={{ marginTop: '20px' }}>
-                                <p className="title-form" style={{ fontSize: '18px', marginBottom: '15px' }}>Formulario de Contacto Directo</p>
+                            <button
+                                className="whatsapp-toggle"
+                                onClick={() => setIsWhatsAppOpen(!isWhatsAppOpen)}
+                            >
+                                <span>¿Tienes preguntas? Contáctanos por WhatsApp</span>
+                                <FiChevronDown className={`whatsapp-chevron ${isWhatsAppOpen ? 'chevron-open' : ''}`} />
+                            </button>
 
-                                <label className='form-label'>Nombre Completo:*</label>
-                                <input
-                                    pattern="^[a-zA-Z\s]*$"
-                                    type="text"
-                                    value={whatsappForm.name}
-                                    onChange={(e) => handleWhatsAppChange('name', e.target.value)}
-                                    title="Sólo se permiten letras y espacios."
-                                    required
-                                />
+                            {isWhatsAppOpen && (
+                                <div className="whatsapp-form-body">
+                                    <p className="whatsapp-summary">
+                                        Llena el formulario y nos pondremos en contacto contigo por WhatsApp.
+                                    </p>
+                                    <div className="whatsapp-form">
+                                        <label className='form-label'>Nombre Completo:*</label>
+                                        <input
+                                            pattern="^[a-zA-Z\s]*$"
+                                            type="text"
+                                            value={whatsappForm.name}
+                                            onChange={(e) => handleWhatsAppChange('name', e.target.value)}
+                                            title="Sólo se permiten letras y espacios."
+                                            required
+                                        />
 
-                                <label className="form-label">Email:</label>
-                                <input
-                                    type="email"
-                                    placeholder="email@domain.com"
-                                    value={whatsappForm.email}
-                                    onChange={(e) => handleWhatsAppChange('email', e.target.value)}
-                                    title="Ingrese un correo electrónico válido."
-                                    required
-                                />
+                                        <label className="form-label">Email:</label>
+                                        <input
+                                            type="email"
+                                            placeholder="email@domain.com"
+                                            value={whatsappForm.email}
+                                            onChange={(e) => handleWhatsAppChange('email', e.target.value)}
+                                            title="Ingrese un correo electrónico válido."
+                                            required
+                                        />
 
-                                <label className='form-label'>Usuario de Instagram o Facebook:</label>
-                                <input
-                                    type="text"
-                                    value={whatsappForm.instagram}
-                                    onChange={(e) => handleWhatsAppChange('instagram', e.target.value)}
-                                    title="Sólo puede tener letras, números, puntos y guiones bajos."
-                                    required
-                                />
+                                        <label className='form-label'>Usuario de Instagram o Facebook:</label>
+                                        <input
+                                            type="text"
+                                            value={whatsappForm.instagram}
+                                            onChange={(e) => handleWhatsAppChange('instagram', e.target.value)}
+                                            title="Sólo puede tener letras, números, puntos y guiones bajos."
+                                            required
+                                        />
 
-                                <label className='form-label'>Número de Identificación:<div className="second-Text">(DPI o número de Pasaporte)</div></label>
-                                <input
-                                    type="tel"
-                                    value={whatsappForm.dpi}
-                                    onChange={(e) => handleWhatsAppChange('dpi', e.target.value)}
-                                    title="Ingresar solamente números"
-                                    pattern="\d+"
-                                    required
-                                />
+                                        <label className='form-label'>Número de Identificación:<div className="second-Text">(DPI o número de Pasaporte)</div></label>
+                                        <input
+                                            type="tel"
+                                            value={whatsappForm.dpi}
+                                            onChange={(e) => handleWhatsAppChange('dpi', e.target.value)}
+                                            title="Ingresar solamente números"
+                                            pattern="\d+"
+                                            required
+                                        />
 
-                                <label className='form-label'>Número de Teléfono:*</label>
-                                <input
-                                    type="tel"
-                                    placeholder="XXXX-XXXX"
-                                    value={whatsappForm.phone}
-                                    onChange={(e) => handleWhatsAppChange('phone', e.target.value)}
-                                    title='Ingrese solo números'
-                                    required
-                                />
+                                        <label className='form-label'>Número de Teléfono:*</label>
+                                        <input
+                                            type="tel"
+                                            placeholder="XXXX-XXXX"
+                                            value={whatsappForm.phone}
+                                            onChange={(e) => handleWhatsAppChange('phone', e.target.value)}
+                                            title='Ingrese solo números'
+                                            required
+                                        />
 
-                                {notificationError && (
-                                    <p className="error-notification">{notificationError}</p>
-                                )}
+                                        {notificationError && (
+                                            <p className="error-notification">{notificationError}</p>
+                                        )}
 
-                                <button className='contact-button' style={{ backgroundColor: '#4caf50', marginTop: '15px' }} type="button" onClick={handleWhatsAppSubmit}>
-                                    Regístrate por WhatsApp
-                                </button>
-                            </div>
+                                        <button className='contact-button' style={{ backgroundColor: '#4caf50', marginTop: '15px' }} type="button" onClick={handleWhatsAppSubmit}>
+                                            Regístrate por WhatsApp
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
 
