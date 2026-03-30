@@ -188,7 +188,7 @@
   overflow: hidden;
   border-radius: 8px;
   background: transparent;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: none;
   transition: transform 0.3s ease;
 }
 
@@ -224,7 +224,7 @@
     object-fit: cover !important;
   }
 
-  .image-zoom-icon {
+  .carousel-img-wrap:not(.active) .image-zoom-icon {
     display: none !important;
   }
 }
