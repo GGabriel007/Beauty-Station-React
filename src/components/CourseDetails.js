@@ -68,6 +68,18 @@ const MAKEUP_COURSES = [
     'curso-completo-maquillaje'
 ];
 
+// Returns all known cart-item names for a courseId (e.g. "master-waves" → ["master waves 2pm a 4pm", "master waves 6pm a 8pm"])
+// Uses exact key format ${id}-0, ${id}-1, ... to avoid false matches like "maestria-novias-makeup" when looking up "maestria-novias"
+const getCourseCartNames = (id) => {
+    const names = [];
+    let i = 0;
+    while (DB_KEY_MAP[`${id}-${i}`]) {
+        names.push(DB_KEY_MAP[`${id}-${i}`].toLowerCase());
+        i++;
+    }
+    return names;
+};
+
 const CourseDetails = () => {
     const { courseId } = useParams();
     const location = useLocation();
@@ -289,12 +301,16 @@ const CourseDetails = () => {
 
                                 const itemNameLower = cartItemName.toLowerCase();
 
+                                // 1. Per-course duplication check — matches against the actual DB key
+                                //    names so it works for every course regardless of how
+                                //    courseData.title is worded in Spanish.
+                                const courseCartNames = getCourseCartNames(courseId);
                                 const isAlreadyInCart = cartItems.some(item =>
-                                    item.name.toLowerCase().includes(courseData.title.toLowerCase())
+                                    courseCartNames.includes(item.name.toLowerCase())
                                 );
 
                                 if (isAlreadyInCart) {
-                                    toast.error(`Ya tienes un cupo para "${courseData.title}" en tu carrito. Solo puedes agregar un horario por curso.`, { autoClose: 6000 });
+                                    toast.error(`Ya tienes un cupo para "${courseData.courseName}" en tu carrito. Solo puedes agregar un horario por curso.`, { autoClose: 6000 });
                                     return;
                                 }
 
