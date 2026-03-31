@@ -113,11 +113,16 @@
     object-fit: cover;
     object-position: center;
     display: block;
-    transition: transform 0.5s ease;
 }
 
-.home-split-media:hover .home-split-img {
-    transform: scale(1.03);
+/* Perfect fit helper for group photography */
+.home-split-media.group-media-bg {
+    background-color: #F0E2E9; 
+}
+
+.home-split-img.group-photo-fit {
+    object-fit: contain;
+    height: 100%;
 }
 
 /* Light rose — matches page ground color, seamless */

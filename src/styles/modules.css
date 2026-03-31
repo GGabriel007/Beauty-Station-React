@@ -157,7 +157,7 @@
 
 /* ── LEFT: Gallery ── */
 .gallery-module {
-  width: 42%;
+  width: 48%;
   position: sticky;
   top: 90px;
   align-self: flex-start;
@@ -175,8 +175,8 @@
 }
 
 .carousel-track {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
 }
 
@@ -208,6 +208,7 @@
   }
 
   .carousel-track {
+    display: flex;
     flex-direction: row;
     gap: 8px;
     padding: 0 4%;
@@ -219,10 +220,7 @@
     box-shadow: none;
   }
 
-  .carousel-main-img {
-    aspect-ratio: 4 / 5 !important;
-    object-fit: cover !important;
-  }
+  /* Removed forced aspect-ratio and cover overrides so pictures keep their original resolution and dimensions natively */
 
   .carousel-img-wrap:not(.active) .image-zoom-icon {
     display: none !important;
@@ -231,7 +229,7 @@
 
 .carousel-main-img {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  height: auto;
   object-fit: contain;
   display: block;
   border-radius: 8px;
@@ -324,7 +322,7 @@
 
 /* ── RIGHT: Course info ── */
 .text-module {
-  width: 58%;
+  width: 48%;
   font-family: 'Montserrat', sans-serif;
   font-size: 16px;
   color: #2e2e2e;

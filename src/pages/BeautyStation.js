@@ -39,11 +39,11 @@ const BeautyStation = () => {
 
       {/* ── Split section — Cursos ── */}
       <section className="home-split">
-        <div className="home-split-media">
+        <div className="home-split-media group-media-bg">
           <img
-            src={`${process.env.PUBLIC_URL}/images/cursos.png`}
-            alt="Cursos de maquillaje"
-            className="home-split-img"
+            src={`${process.env.PUBLIC_URL}/images/cursos_graduadas.jpg`}
+            alt="Grupo de graduadas Beauty Station"
+            className="home-split-img group-photo-fit"
           />
         </div>
         <div className="home-split-text">
@@ -63,7 +63,7 @@ const BeautyStation = () => {
       <section className="home-split reverse">
         <div className="home-split-media">
           <img
-            src={`${process.env.PUBLIC_URL}/images/eventos.png`}
+            src={`${process.env.PUBLIC_URL}/images/home_eventos_mirror.jpg`}
             alt="Eventos y servicios a domicilio"
             className="home-split-img"
           />

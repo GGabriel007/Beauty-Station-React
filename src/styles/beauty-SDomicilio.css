@@ -1,100 +1,191 @@
-/*Information*/
+/* src/styles/beauty-SDomicilio.css */
 
-.information-form {
-    width: 100%;
-    text-align: center;
-    background-color: white;
-    padding-bottom: 50px; 
-}
-
-.top-information-form {
-    padding-top: 1px;
-}
-
-.header-information-form {
-    margin: 30px 50px;
-    font-size: 4rem;
+.domicilio-page-container {
+    background-color: #ffffff;
+    min-height: 100vh;
+    padding-bottom: 80px;
     font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
 }
 
-.mid-information-form {
-    width: 53%;
+/* ── TOP SECTION: OVERLAPPING LAYOUT ── */
+.domicilio-staggered-layout {
+    display: flex;
+    flex-direction: row;
+    max-width: 1250px;
     margin: 0 auto;
-    padding: 20px;
-    border-radius: 8px;
-    background-color: #e6e0e2;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    font-family: "Barlow Condensed", sans-serif;
+    padding: 60px 20px 100px;
+    position: relative;
+    align-items: flex-start;
 }
 
-form {
+.domicilio-image-box {
+    flex: 0 0 45%; 
+    border-radius: 4px;
+    overflow: hidden;
+    /* Soft shadow to highlight overlap */
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08); 
+}
+
+.domicilio-portrait-img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    display: block;
+}
+
+/* ── FORM SECTION (Overlapping Box) ── */
+.domicilio-form-box {
+    flex: 0 0 52%; /* Give it the remainder */
+    background-color: #f7ebe6; /* Beige / Nude Elegant Tone matching reference */
+    padding: 55px 50px;
+    margin-left: -5%; /* THE OVERLAP EFFECT */
+    margin-top: 50px; /* Stagger it downwards slightly */
+    border-radius: 2px;
+    z-index: 2; /* Put it above the image */
+}
+
+.domicilio-elegant-title {
+    font-size: 1.8rem;
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    color: #1a1a1a;
+    margin-bottom: 15px;
+}
+
+.domicilio-elegant-subtitle {
+    font-size: 13.5px;
+    line-height: 1.8;
+    color: #4a4a4a;
+    margin-bottom: 35px;
+}
+
+.domicilio-elegant-form {
     display: flex;
     flex-direction: column;
+    gap: 20px;
 }
 
-label {
-    margin-top: 6px;
-    text-align: start;
+/* ── LUXURY FORM INPUT STYLES ── */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
 }
 
-input, textarea {
-    padding: 6px;
-    margin-top: 1px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+.elegant-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
 }
 
-input[type="submit"] {
-    background-color: #4CAF50;
-    color: white;
+.elegant-label-hint {
+    display: block;
+    font-size: 11px;
+    color: #777;
+    text-transform: none;
+    margin-top: 3px;
+}
+
+.elegant-input, .elegant-textarea {
+    background-color: transparent;
     border: none;
-    padding: 15px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    margin-top: 20px;
-    cursor: pointer;
-    border-radius: 4px;
-
-}
-
-textarea {
-    resize: none;
-}
-
-.second-Text {
-    margin-top: 5px;
+    border-bottom: 1px solid #c9b1a2; /* Elegant underline */
+    padding: 10px 5px;
+    font-family: 'Montserrat', sans-serif;
     font-size: 14px;
-    color: #7b7b7b
-    ;
+    color: #2e2e2e;
+    transition: border-bottom-color 0.3s ease;
 }
 
+.elegant-input:focus, .elegant-textarea:focus {
+    outline: none;
+    border-bottom: 2px solid #ed93b4; /* Theme pink on focus */
+}
 
-@media (max-width: 1019px) {
+.elegant-input::placeholder, .elegant-textarea::placeholder {
+    color: #a9968a;
+    font-weight: 300;
+}
 
-    /*Content*/
-    .mid-information-form {
-        width: 80%;
+.elegant-textarea {
+    resize: vertical;
+}
+
+.elegant-submit-btn {
+    background-color: #ed93b4; /* Theme button */
+    color: #ffffff;
+    padding: 16px 0;
+    font-size: 13px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.elegant-submit-btn:hover {
+    background-color: #d87ea0;
+    transform: translateY(-2px);
+}
+
+/* ── BOTTOM GALLERY ── */
+.domicilio-gallery-section {
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.domicilio-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px; /* Nice visual gap between photos */
+}
+
+.gallery-img-item {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 4px;
+    transition: transform 0.3s ease;
+}
+
+.gallery-img-item:hover {
+    transform: scale(1.02);
+}
+
+/* ── RESPONSIVE DESIGN ── */
+@media (max-width: 900px) {
+    .domicilio-staggered-layout {
+        flex-direction: column;
+        padding-top: 30px;
+        align-items: center;
     }
 
-    .header-information-form {
-        font-size: 3rem;
-        margin: 20px;
+    .domicilio-image-box {
+        width: 100%;
+        max-width: 450px;
     }
 
+    .domicilio-form-box {
+        width: 100%;
+        margin-left: 0;
+        margin-top: -30px; /* Standard overlap upwards on mobile */
+        padding: 40px 25px;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+    }
+
+    .domicilio-gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 600px) {
-    .header-information-form {
-        font-size: 2.2rem;
-        margin: 15px 12px;
-    }
-
-    .mid-information-form {
-        width: 92%;
-        padding: 15px;
+    .domicilio-gallery-grid {
+        grid-template-columns: 1fr;
     }
 }
