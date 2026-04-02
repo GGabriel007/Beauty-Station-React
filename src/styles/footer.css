@@ -2,7 +2,7 @@
    Footer — Beauty Station
    Matches site color rhythm:
      Light Rose  #F0E2E9  — background (same as page)
-     Primary Rose #A0647A — text & icon accents
+     Primary Rose #cd929d — text & icon accents
      Rose Tint   #E8CBD4  — separator line
    =================================================== */
 
@@ -20,7 +20,7 @@
     justify-content: center;
     align-items: center;
     padding-bottom: 60px;
-    color: #A0647A;
+    color: #cd929d;
     font-family: 'Montserrat', sans-serif;
     background-color: #F0E2E9;
 }
@@ -57,7 +57,7 @@
     font-weight: 600;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    color: #A0647A;
+    color: #cd929d;
 }
 
 .icons_social {
@@ -90,7 +90,7 @@
     align-items: center;
     justify-content: center;
     background-color: #F0E2E9;
-    color: #A0647A;
+    color: #cd929d;
     padding-top: 20px;
     padding-bottom: 30px;
     font-size: 13px;

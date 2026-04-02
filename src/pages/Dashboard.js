@@ -91,7 +91,7 @@ const Dashboard = () => {
   }, [authStatus, bestEmail]);
 
   if (authStatus !== 'authenticated') {
-    return <div className="dashboard-loading-container">Cargando su cuenta...</div>;
+    return <div className="dashboard-loading-container">Cargando tu cuenta...</div>;
   }
 
   return (
@@ -195,7 +195,7 @@ const Dashboard = () => {
 
                   <div className="dashboard-order-footer">
                     <span className="dashboard-order-total-label">Total cancelado</span>
-                    <span className="dashboard-order-total-value">Q {order.TotalPrice}.00</span>
+                    <span className="dashboard-order-total-value">Q {Number(order.TotalPrice).toLocaleString('en-US')}.00</span>
                   </div>
                 </div>
               ))}

@@ -20,6 +20,7 @@ const CartPage = () => {
   const [isCaptchaValid, setIsCaptchaValid] = useState(false);
   const [recaptchaToken, setRecaptchaToken] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const handleCaptchaSuccess = (token) => {
     setIsCaptchaValid(true);
@@ -77,6 +78,10 @@ const CartPage = () => {
     const cvvError = validateCVV(formData.cvv);
     if (cvvError) {
       setNotificationError(DOMPurify.sanitize(cvvError));
+      return;
+    }
+    if (!termsAccepted) {
+      setNotificationError('Debes aceptar los Términos y Condiciones antes de continuar.');
       return;
     }
     if (!isCaptchaValid || !recaptchaToken) {
@@ -221,7 +226,7 @@ const CartPage = () => {
   if (!purchaseSuccess && cartItems.length === 0) {
     return (
       <div className="cp-wrapper">
-        <h1 className="cp-title">Tu Carrito</h1>
+        <h1 className="cp-title">Carrito</h1>
         <div className="cp-empty">
           <p className="cp-empty-icon">🛒</p>
           <p className="cp-empty-text">Tu carrito está vacío</p>
@@ -238,7 +243,7 @@ const CartPage = () => {
   if (purchaseSuccess) {
     return (
       <div className="cp-wrapper">
-        <h1 className="cp-title">Tu Carrito</h1>
+        <h1 className="cp-title">Carrito</h1>
         <div className="cp-success-card">
           <div className="cp-success-check">✓</div>
           <h2 className="cp-success-heading">¡Gracias por tu compra!</h2>
@@ -254,7 +259,7 @@ const CartPage = () => {
   /* ── Main cart ── */
   return (
     <div className="cp-wrapper">
-      <h1 className="cp-title">Tu Carrito</h1>
+      <h1 className="cp-title">Carrito</h1>
 
       {notification && <p className="cp-processing-note">{notification}</p>}
 
@@ -267,7 +272,7 @@ const CartPage = () => {
             {/* All form fields in one card */}
             <div className="cp-section">
 
-              <p className="cp-section-title">Datos Personales</p>
+              <p className="cp-section-title">Datos del Certificado</p>
 
               <label className="cp-label" htmlFor="email">Email:*</label>
               <input
@@ -302,7 +307,7 @@ const CartPage = () => {
                 type="tel" id="identification" name="entry.1295397219"
                 value={formData['entry.1295397219']}
                 onChange={handleChange} maxLength={20}
-                title="Ingresar solamente números" pattern="\d+" required
+                title="Ingresa solamente números" pattern="\d+" required
               />
 
               <label className="cp-label" htmlFor="whatsapp">Número de Teléfono:*</label>
@@ -314,14 +319,14 @@ const CartPage = () => {
 
               <label className="cp-label" htmlFor="nit">
                 Datos de facturación NIT:*
-                <span className="cp-label-sub"> Ingresar NIT o CF</span>
+                <span className="cp-label-sub"> Ingresa NIT o CF</span>
               </label>
               <input
                 type="text" id="nit" name="entry.1913110792"
                 value={formData['entry.1913110792']}
                 onChange={handleChange} maxLength={15}
                 placeholder="1234456778941"
-                title="Coloque su NIT o CF" required
+                title="Coloca tu NIT o CF" required
               />
 
               <div className="cp-section-divider"></div>
@@ -371,8 +376,20 @@ const CartPage = () => {
               <div className="cp-section-divider"></div>
               <p className="cp-section-title">Términos y Condiciones</p>
               <p className="cp-terms-text">
-                *Los pagos para este curso son necesarios para asegurar su cupo y no son reembolsables bajo ninguna circunstancia. En caso de cancelación o ausencia, incluyendo enfermedad, no se permite el canje por otros cursos, servicios o productos. La reposición de clases tiene un costo adicional y está sujeta a la disponibilidad del equipo. No se permiten acompañantes en clase, a menos que se solicite como modelo en días específicos. Es indispensable estar solvente para participar en las clases.
+                *Los pagos para este curso son necesarios para asegurar tu cupo y no son reembolsables bajo ninguna circunstancia. En caso de cancelación o ausencia, incluyendo enfermedad, no se permite el canje por otros cursos, servicios o productos. La reposición de clases tiene un costo adicional y está sujeta a la disponibilidad del equipo. No se permiten acompañantes en clase, a menos que se solicite como modelo en días específicos. Es indispensable estar solvente para participar en las clases.
               </p>
+              <label className="cp-terms-checkbox-label">
+                <input
+                  type="checkbox"
+                  className="cp-terms-checkbox"
+                  checked={termsAccepted}
+                  onChange={(e) => {
+                    setTermsAccepted(e.target.checked);
+                    if (e.target.checked) setNotificationError('');
+                  }}
+                />
+                He leído y acepto los Términos y Condiciones
+              </label>
 
             </div>
 
@@ -393,7 +410,7 @@ const CartPage = () => {
             <button
               className="cp-checkout-btn"
               type="submit"
-              disabled={!isCaptchaValid || isSubmitting}
+              disabled={!isCaptchaValid || isSubmitting || !termsAccepted}
             >
               {isSubmitting ? 'Procesando...' : 'Pagar'}
             </button>
@@ -410,7 +427,7 @@ const CartPage = () => {
               <div key={index} className="cp-summary-item">
                 <img src={item.image} alt={item.name} className="cp-summary-img" />
                 <span className="cp-summary-name">{item.name}</span>
-                <span className="cp-summary-price">Q {item.price}.00</span>
+                <span className="cp-summary-price">Q {item.price.toLocaleString('en-US')}.00</span>
                 <button
                   className="cp-summary-remove"
                   onClick={() => {
@@ -443,7 +460,7 @@ const CartPage = () => {
             <div className="cp-summary-divider"></div>
             <div className="cp-summary-total-row">
               <span className="cp-summary-total-label">Total</span>
-              <span className="cp-summary-total-value">Q {getTotalPrice()}.00</span>
+              <span className="cp-summary-total-value">Q {getTotalPrice().toLocaleString('en-US')}.00</span>
             </div>
           </div>
         </div>

@@ -1,7 +1,7 @@
 /* ===================================================
    Cursos Page — Beauty Station
    Same color rhythm as home page:
-     Deep Rose  #A0647A  — hero section
+     Deep Rose  #cd929d  — hero section
      Light Rose #F0E2E9  — page background
      White      #FFFFFF  — cards
      Text       #2A2A2A
@@ -18,7 +18,7 @@
 .classes-hero {
     text-align: center;
     padding: 90px 20px 80px;
-    background-color: #A0647A;
+    background-color: #cd929d;
 }
 
 .classes-hero-tagline {
@@ -107,7 +107,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: #A0647A;
+    background-color: #cd929d;
     color: #FFFFFF;
     font-family: 'Montserrat', sans-serif;
     font-size: 11px;
@@ -138,7 +138,7 @@
 
 .classes-card-arrow {
     font-size: 16px;
-    color: #A0647A;
+    color: #cd929d;
     transition: transform 0.25s ease;
 }
 

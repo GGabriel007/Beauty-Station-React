@@ -68,6 +68,16 @@ function App() {
 const AuthRedirectHandler = () => {
   const navigate = useNavigate();
 
+  // ── OAuth sign-out: after Google redirects back the app remounts fresh.
+  // The Hub 'signedOut' event may not fire in that case, so we check the
+  // sessionStorage flag set by Header's confirm handler on every cold mount.
+  useEffect(() => {
+    if (sessionStorage.getItem('showLogoutToast')) {
+      sessionStorage.removeItem('showLogoutToast');
+      toast.success('¡Has cerrado sesión exitosamente! ¡Hasta pronto!', { autoClose: 3000 });
+    }
+  }, []);
+
   useEffect(() => {
     const unsubscribe = Hub.listen('auth', ({ payload }) => {
       if (payload.event === 'signedIn') {
@@ -76,7 +86,13 @@ const AuthRedirectHandler = () => {
         sessionStorage.removeItem('loginRedirect');
         navigate(redirect, { replace: true });
       } else if (payload.event === 'signedOut') {
-        toast.info('Has cerrado sesión. ¡Hasta pronto!', { autoClose: 3000 });
+        // Local account sign-out: Hub fires synchronously, handle here.
+        // OAuth sign-out: page already redirected so this branch won't run;
+        // the mount-time useEffect above handles the toast instead.
+        if (sessionStorage.getItem('showLogoutToast')) {
+          sessionStorage.removeItem('showLogoutToast');
+          toast.success('¡Has cerrado sesión exitosamente! ¡Hasta pronto!', { autoClose: 3000 });
+        }
         navigate('/', { replace: true });
       } else if (payload.event === 'tokenRefresh_failure') {
         toast.warn('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.', { autoClose: 5000 });

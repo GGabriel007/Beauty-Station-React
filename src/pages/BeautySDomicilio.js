@@ -178,7 +178,7 @@ const BeautySDomicilio = () => {
                 <div className="form-group">
                   <label htmlFor="time" className="elegant-label">
                   ¿A qué Hora Necesitan Estar Listas?*
-                    <span className="elegant-label-hint"> (Toma en Consideración si su Fotógrafo les Hará Fotos)</span>
+                    <span className="elegant-label-hint"> (Toma en Consideración si tu Fotógrafo les Hará Fotos)</span>
                   </label>
                   <input 
                     className="elegant-input"

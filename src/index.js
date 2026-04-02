@@ -20,7 +20,25 @@ I18n.putVocabulariesForLanguage('es', {
   'First Name': 'Nombre',
   'Last Name': 'Apellido',
   'Given Name': 'Nombre',
-  'Family Name': 'Apellido'
+  'Family Name': 'Apellido',
+  // Overrides: cambiar de "usted" a "tú"
+  'Enter your Email': 'Escribe tu Email',
+  'Enter your email': 'Escribe tu email',
+  'Enter your Password': 'Escribe tu Contraseña',
+  'Enter your code': 'Ingresa el código',
+  'Enter your phone number': 'Ingresa el número de teléfono',
+  'Enter your username': 'Ingresa el nombre de usuario',
+  'Enter your Family Name': 'Escribe tu apellido',
+  'Enter your Given Name': 'Escribe tu nombre',
+  'Forgot your password?': '¿Olvidaste tu contraseña?',
+  'Reset your password': 'Restablece tu contraseña',
+  'Reset your Password': 'Restablece tu Contraseña',
+  'Please confirm your Password': 'Confirma tu contraseña',
+  'We Emailed You': 'Te hemos enviado un correo electrónico',
+  'We Texted You': 'Te hemos enviado un mensaje de texto',
+  'Your code is on the way. To log in, enter the code we sent you': 'El código está en camino. Para iniciar sesión, escribe el código que te hemos enviado',
+  'Your code is on the way. To log in, enter the code we emailed to': 'El código está en camino. Para iniciar sesión, escribe el código que te enviamos por correo electrónico a',
+  'Your code is on the way. To log in, enter the code we texted to': 'El código está en camino. Para iniciar sesión, escribe el código que te enviamos por mensaje de texto a',
 });
 
 // Initialize Amplify globally with the native configurations

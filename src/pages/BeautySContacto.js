@@ -26,7 +26,7 @@ const BeautySContacto = () => {
 
           {/* Right Column: Bio Information */}
           <div className="nosotros-info-column">
-            <h1 className="nosotros-elegant-title">ALEH</h1>
+            <h1 className="nosotros-elegant-title">BEAUTY STATION</h1>
             <p className="nosotros-elegant-bio">
               Aleh es una artista de cabello y maquillaje de lujo para novias y eventos, certificada internacionalmente, en Guatemala. Especializada en crear looks elegantes para bodas y ocasiones especiales. Ofrece cursos profesionales y talleres avanzados de arte de maquillaje.
             </p>

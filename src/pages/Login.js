@@ -40,7 +40,7 @@ const validateEmail = (value) => {
   // Only allow safe email characters: alphanumeric + . _ + - before @, domain after
   const emailRegex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
   if (!emailRegex.test(value.trim()))
-    return 'Ingrese un correo electrónico válido.';
+    return 'Ingresa un correo electrónico válido.';
 };
 
 const validatePassword = (value) => {
@@ -102,14 +102,14 @@ const Login = () => {
               given_name: {
                 order: 1,
                 label: 'Nombre',
-                placeholder: 'Ingrese su nombre',
+                placeholder: 'Ingresa tu nombre',
                 isRequired: true,
                 validate: validateName,
               },
               family_name: {
                 order: 2,
                 label: 'Apellido',
-                placeholder: 'Ingrese su apellido',
+                placeholder: 'Ingresa tu apellido',
                 isRequired: true,
                 validate: validateName,
               },

@@ -28,55 +28,56 @@ const BeautyStation = () => {
     <div className="home-page">
 
       {/* ── Intro text — editorial, centered ── */}
-      <section className="home-intro">
+      <section
+        className="home-intro"
+        style={{ backgroundImage: `linear-gradient(rgba(205, 146, 157, 0.72), rgba(205, 146, 157, 0.72)), url('${process.env.PUBLIC_URL}/images/beauty-station-hero.jpeg')` }}
+      >
         <p className="home-intro-tagline">Maquillaje Profesional · Guatemala</p>
-        <h1 className="home-intro-title">Beauty Station</h1>
+        <img
+          src={`${process.env.PUBLIC_URL}/images/beauty-station-logo.png`}
+          alt="Beauty Station"
+          className="home-intro-logo"
+        />
         <p className="home-intro-body">
           Aprende nuevas técnicas en nuestros cursos intensivos de belleza, o reserva
           un servicio profesional a domicilio para tu evento especial.
         </p>
       </section>
 
-      {/* ── Split section — Cursos ── */}
-      <section className="home-split">
-        <div className="home-split-media group-media-bg">
-          <img
-            src={`${process.env.PUBLIC_URL}/images/cursos_graduadas.jpg`}
-            alt="Grupo de graduadas Beauty Station"
-            className="home-split-img group-photo-fit"
-          />
-        </div>
-        <div className="home-split-text">
-          <p className="home-split-label">Aprende con nosotros</p>
-          <h2 className="home-split-title">Cursos</h2>
-          <p className="home-split-body">
-            Descubre nuestros cursos intensivos diseñados para principiantes y
-            profesionales que desean elevar sus técnicas de maquillaje a un nivel
-            superior. Aprende con instructoras expertas en un ambiente cálido y
-            profesional.
-          </p>
-          <Link to="/classes" className="home-cta-btn">Ver Cursos</Link>
-        </div>
-      </section>
+      {/* ── Services — 3 cards: Cursos, Cursos en Línea, Eventos ── */}
+      <section className="home-cards-section">
+        <div className="home-cards-grid">
 
-      {/* ── Split section — Eventos (reversed) ── */}
-      <section className="home-split reverse">
-        <div className="home-split-media">
-          <img
-            src={`${process.env.PUBLIC_URL}/images/home_eventos_mirror.jpg`}
-            alt="Eventos y servicios a domicilio"
-            className="home-split-img"
-          />
-        </div>
-        <div className="home-split-text">
-          <p className="home-split-label">Servicio a domicilio</p>
-          <h2 className="home-split-title">Eventos</h2>
-          <p className="home-split-body">
-            Servicio profesional de maquillaje a domicilio para bodas, quinceañeras
-            y eventos especiales. Llevamos la experiencia Beauty Station hasta donde
-            tú estés, con productos de alta calidad y un acabado impecable.
-          </p>
-          <Link to="/servicio-a-domicilio" className="home-cta-btn">Ver Eventos</Link>
+          <Link to="/classes" className="home-card home-card--link">
+            <div className="home-card-img-wrap">
+              <img src={`${process.env.PUBLIC_URL}/images/cursos_graduadas.jpg`} alt="Cursos" className="home-card-img" />
+            </div>
+            <div className="home-card-body">
+              <p className="home-card-name">CURSOS</p>
+              <span className="home-card-btn">MÁS INFORMACIÓN </span>
+            </div>
+          </Link>
+
+          <a href="https://api.whatsapp.com/send?phone=50250177803&text=Quisiera%20m%C3%A1s%20informaci%C3%B3n%20sobre%20cursos%20en%20l%C3%ADnea" target="_blank" rel="noopener noreferrer" className="home-card home-card--link">
+            <div className="home-card-img-wrap">
+              <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Makeup/imagen_module_1Mkup.jpeg`} alt="Cursos en Línea" className="home-card-img" />
+            </div>
+            <div className="home-card-body">
+              <p className="home-card-name">CURSOS EN LÍNEA</p>
+              <span className="home-card-btn">MÁS INFORMACIÓN </span>
+            </div>
+          </a>
+
+          <Link to="/servicio-a-domicilio" className="home-card home-card--link">
+            <div className="home-card-img-wrap">
+              <img src={`${process.env.PUBLIC_URL}/images/home_eventos_mirror.jpg`} alt="Eventos" className="home-card-img" />
+            </div>
+            <div className="home-card-body">
+              <p className="home-card-name">EVENTOS</p>
+              <span className="home-card-btn">MÁS INFORMACIÓN </span>
+            </div>
+          </Link>
+
         </div>
       </section>
 

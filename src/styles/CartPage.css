@@ -172,6 +172,33 @@
     margin: 0;
 }
 
+/* ── Terms checkbox ── */
+.cp-terms-checkbox-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #444;
+    cursor: pointer;
+    user-select: none;
+}
+
+.cp-terms-checkbox {
+    width: 17px !important;
+    height: 17px !important;
+    min-width: 17px;
+    accent-color: #ed93b4;
+    cursor: pointer;
+    border-radius: 4px;
+    margin: 0 !important;
+    padding: 0 !important;
+    flex-shrink: 0;
+}
+
 /* ── Checkout button ── */
 .cp-checkout-btn {
     width: 100%;
@@ -257,6 +284,7 @@
 
 .cp-summary-item.cp-summary-fee {
     border-bottom: none;
+    padding-right: 37.75px;
 }
 
 .cp-summary-img {
@@ -284,6 +312,8 @@
     color: #2b2b2b;
     white-space: nowrap;
     flex-shrink: 0;
+    min-width: 82px;
+    text-align: right;
 }
 
 .cp-summary-remove {
@@ -332,6 +362,7 @@
     font-size: 1.25rem;
     font-weight: 800;
     color: #2b2b2b;
+    text-align: right;
 }
 
 /* ── Empty cart ── */
@@ -504,10 +535,12 @@ input:focus {
         position: static;
         max-width: 100%;
         width: 100%;
+        order: -1;
     }
 
     .cp-left {
         width: 100%;
+        order: 0;
     }
 }
 

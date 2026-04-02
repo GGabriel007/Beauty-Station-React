@@ -16,7 +16,23 @@
       "Bash(find /c/Users/gagra/Desktop/Projects/Beauty-Station-React -maxdepth 2 -name tailwind.config.* -o -name .css -o -name *.css)",
       "Bash(npm list:*)",
       "Bash(npm run:*)",
-      "Bash(find /c/Users/gagra/Desktop/Projects/Beauty-Station-React -type f -name *course* -o -name *detail* -o -name *description*)"
+      "Bash(find /c/Users/gagra/Desktop/Projects/Beauty-Station-React -type f -name *course* -o -name *detail* -o -name *description*)",
+      "Bash(find C:UsersgagraDesktopProjectsBeauty-Station-React -path */src/* -type f \\\\\\(-name *.jsx -o -name *.js -o -name *.tsx -o -name *.ts \\\\\\) ! -path */node_modules/* ! -path */.amplify/* ! -path */amplify/backend/*)",
+      "Bash(find C:/Users/gagra/Desktop/Projects/Beauty-Station-React/node_modules/@aws-amplify -name translations* -o -name i18n*)",
+      "Bash(magick --version)",
+      "Bash(convert --version)",
+      "Bash(gs --version)",
+      "Bash(inkscape --version)",
+      "Bash(where magick:*)",
+      "Bash(where gs:*)",
+      "Bash(where inkscape:*)",
+      "Bash(where python:*)",
+      "Bash(where python3:*)",
+      "Bash(python -c \"import fitz; print\\(''pymupdf ok''\\)\")",
+      "Bash(python -c \"import pdf2image; print\\(''pdf2image ok''\\)\")",
+      "Bash(python -c \"from PIL import Image; print\\(''pillow ok''\\)\")",
+      "Bash(C:/Users/gagra/AppData/Local/Programs/Python/Python313/python.exe -m pip install pymupdf -q)",
+      "Bash(cd:*)"
     ]
   }
 }

@@ -339,12 +339,6 @@ const CourseDetails = () => {
                             </select>
                         </div>
 
-                        {availableSeats !== null && (
-                            <p className={availableSeats > 5 ? "seats-plenty" : "seats-low"}>
-                                Solo quedan {availableSeats} asientos disponibles para este horario
-                            </p>
-                        )}
-
                         {isMakeupCourse && (
                             <label className="kit-checkbox-container" htmlFor="kit-checkbox">
                                 <input
@@ -369,6 +363,11 @@ const CourseDetails = () => {
                                         style: { cursor: 'pointer' },
                                     });
                                     navigate('/login');
+                                    return;
+                                }
+
+                                if (availableSeats !== null && availableSeats === 0) {
+                                    toast.error('Lo sentimos, no hay cupos disponibles para este horario.', { autoClose: 5000 });
                                     return;
                                 }
 
@@ -545,7 +544,7 @@ const CourseDetails = () => {
                                             placeholder="email@domain.com"
                                             value={whatsappForm.email}
                                             onChange={(e) => handleWhatsAppChange('email', e.target.value)}
-                                            title="Ingrese un correo electrónico válido."
+                                            title="Ingresa un correo electrónico válido."
                                             required
                                         />
 
@@ -563,7 +562,7 @@ const CourseDetails = () => {
                                             type="tel"
                                             value={whatsappForm.dpi}
                                             onChange={(e) => handleWhatsAppChange('dpi', e.target.value)}
-                                            title="Ingresar solamente números"
+                                            title="Ingresa solamente números"
                                             pattern="\d+"
                                             required
                                         />
@@ -574,7 +573,7 @@ const CourseDetails = () => {
                                             placeholder="XXXX-XXXX"
                                             value={whatsappForm.phone}
                                             onChange={(e) => handleWhatsAppChange('phone', e.target.value)}
-                                            title='Ingrese solo números'
+                                            title='Ingresa solo números'
                                             required
                                         />
 

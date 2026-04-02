@@ -192,17 +192,18 @@
   transition: transform 0.3s ease;
 }
 
-@media (max-width: 768px) {
+
+@media (max-width: 900px) {
   .carousel-track-container {
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     display: flex;
-    align-items: center;
-    padding: 10px 0;
+    align-items: stretch;
+    padding: 0;
   }
-  
+
   .carousel-track-container::-webkit-scrollbar {
     display: none;
   }
@@ -215,12 +216,20 @@
   }
 
   .carousel-img-wrap {
-    flex: 0 0 92%;
+    flex: 0 0 88%;
     scroll-snap-align: center;
     box-shadow: none;
+    aspect-ratio: 2 / 3;
+    height: 60vh; 
+    width: 13vh;
+    overflow: hidden;
   }
 
-  /* Removed forced aspect-ratio and cover overrides so pictures keep their original resolution and dimensions natively */
+  .carousel-img-wrap:last-child:nth-child(odd) {
+    grid-column: unset;
+    max-width: unset;
+    margin: 0;
+  }
 
   .carousel-img-wrap:not(.active) .image-zoom-icon {
     display: none !important;
@@ -229,8 +238,8 @@
 
 .carousel-main-img {
   width: 100%;
-  height: auto;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
   display: block;
   border-radius: 8px;
   transition: transform 0.35s ease;
@@ -333,11 +342,12 @@
 /* Course title */
 .course-title-module {
   font-family: 'Montserrat', sans-serif;
-  font-size: 2.1rem;
-  font-weight: 700;
-  color: #1e1e1e;
+  font-size: 3rem;
+  font-weight: 300;
+  color: #2A2A2A;
   line-height: 1.2;
-  letter-spacing: 0.3px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
   margin-top: 0;
   margin-bottom: 18px;
 }
@@ -918,7 +928,8 @@ ul {
   }
 
   .course-title-module {
-    font-size: 1.75rem;
+    font-size: 2rem;
+    letter-spacing: 4px;
   }
 }
 
@@ -939,7 +950,8 @@ ul {
   }
   
   .course-title-module {
-    font-size: 1.15rem !important;
+    font-size: 1.4rem !important;
+    letter-spacing: 3px !important;
     margin-bottom: 12px;
   }
 

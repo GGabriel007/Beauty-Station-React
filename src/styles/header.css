@@ -1,7 +1,7 @@
 /* ===================================================
    Header / Navigation — Beauty Station
    Design tokens:
-     Primary Rose:  #A0647A  — nav links, accents
+     Primary Rose:  #cd929d  — nav links, accents
      Deep Rose:     #7D4E61  — hover / active states
      Rose Tint:     #E8CBD4  — separator, subtle borders
      Light Rose:    #F0E2E9  — page & header background
@@ -74,7 +74,7 @@ body {
 }
 
 .header-button {
-    color: #A0647A;
+    color: #cd929d;
     text-decoration: none;
     font-size: 12px;
     font-weight: 600;
@@ -124,6 +124,96 @@ body {
     font-family: inherit;
 }
 
+/* ── Logout confirmation modal ── */
+.logout-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    backdrop-filter: blur(2px);
+}
+
+.logout-modal {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 36px 32px 28px;
+    max-width: 360px;
+    width: 90%;
+    box-shadow: 0 8px 32px rgba(237, 147, 180, 0.22);
+    text-align: center;
+    animation: logout-modal-in 0.18s ease;
+}
+
+@keyframes logout-modal-in {
+    from { opacity: 0; transform: scale(0.95) translateY(8px); }
+    to   { opacity: 1; transform: scale(1)    translateY(0);   }
+}
+
+.logout-modal-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #2A2A2A;
+    margin: 0 0 10px;
+}
+
+.logout-modal-body {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.88rem;
+    color: #666;
+    line-height: 1.6;
+    margin: 0 0 28px;
+}
+
+.logout-modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.logout-modal-cancel {
+    flex: 1;
+    background: transparent;
+    border: 1.5px solid #e0c8d5;
+    border-radius: 50px;
+    padding: 11px 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #888;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.logout-modal-cancel:hover {
+    border-color: #ed93b4;
+    color: #ed93b4;
+}
+
+.logout-modal-confirm {
+    flex: 1;
+    background: #ed93b4;
+    border: none;
+    border-radius: 50px;
+    padding: 11px 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.logout-modal-confirm:hover {
+    background-color: #f1b2c9;
+    box-shadow: 0 4px 14px rgba(237, 147, 180, 0.4);
+}
+
 /* ── Separator line ── */
 .line1 {
     width: 100%;
@@ -155,7 +245,7 @@ body {
     left: 0;
     width: 28px;
     height: 2px;
-    background-color: #A0647A;
+    background-color: #cd929d;
     border-radius: 1px;
     transition: transform 0.35s ease, opacity 0.35s ease, background-color 0.25s ease;
 }

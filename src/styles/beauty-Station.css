@@ -1,7 +1,7 @@
 /* ===================================================
    Home Page — Beauty Station
    3-color rhythm:
-     Deep Rose  #A0647A  → intro hero + contact (bookends)
+     Deep Rose  #cd929d  → intro hero + contact (bookends)
      Light Rose #F0E2E9  → page ground, split text, reviews
      White      #FFFFFF  → gallery cards, nav, elements that pop
    =================================================== */
@@ -18,8 +18,8 @@
     font-weight: 600;
     letter-spacing: 1.8px;
     text-transform: uppercase;
-    color: #A0647A;
-    border: 1px solid #A0647A;
+    color: #cd929d;
+    border: 1px solid #cd929d;
     padding: 13px 30px;
     text-decoration: none;
     background: transparent;
@@ -28,7 +28,7 @@
 }
 
 .home-cta-btn:hover {
-    background: #A0647A;
+    background: #cd929d;
     color: #FFFFFF;
 }
 
@@ -40,7 +40,7 @@
 
 .home-contact .home-cta-btn:hover {
     background: #FFFFFF;
-    color: #A0647A;
+    color: #cd929d;
     border-color: #FFFFFF;
 }
 
@@ -49,8 +49,10 @@
    =================================================== */
 .home-intro {
     text-align: center;
-    padding: 110px 20px 100px;
-    background-color: #A0647A;
+    padding: 130px 20px 120px;
+    background-size: cover;
+    background-position: center 30%;
+    background-repeat: no-repeat;
     width: 100%;
     box-sizing: border-box;
 }
@@ -59,33 +61,165 @@
     font-family: 'Montserrat', sans-serif;
     font-size: 11px;
     font-weight: 600;
-    letter-spacing: 2.5px;
+    letter-spacing: 3px;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.65);
+    color: rgba(255, 236, 242, 0.85);
     margin: 0 0 20px 0;
 }
 
-.home-intro-title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 3rem;
-    font-weight: 300;
-    letter-spacing: 6px;
-    text-transform: uppercase;
-    color: #FFFFFF;
-    margin: 0 0 28px 0;
+.home-intro-logo {
+    width: 300px;
+    max-width: 80%;
+    margin: 0 auto 32px;
+    display: block;
+    filter: drop-shadow(0 4px 18px rgba(120, 60, 60, 0.18));
 }
 
 .home-intro-body {
     font-family: 'Lato', sans-serif;
     font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.82);
+    color: rgba(255, 236, 242, 0.92);
     line-height: 1.85;
     margin: 0 auto;
     max-width: 580px;
 }
 
 /* ===================================================
-   2. Split sections — light rose text panels
+   2. Card grid sections — Cursos / Eventos / En Línea
+   =================================================== */
+
+.home-cards-section {
+    padding: 56px 40px 52px;
+    background-color: #F7EEF3;
+    text-align: center;
+}
+
+.home-cards-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #ed93b4;
+    margin: 0 0 12px;
+}
+
+.home-cards-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 300;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: #2A2A2A;
+    margin: 0 0 44px;
+}
+
+.home-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 860px;
+    margin: 0 auto 40px;
+}
+
+.home-card {
+    background: #ffffff;
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: 0 2px 14px rgba(200, 140, 170, 0.10);
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    text-align: center;
+}
+
+.home-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 28px rgba(200, 140, 170, 0.20);
+}
+
+.home-card-img-wrap {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+}
+
+.home-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.home-card:hover .home-card-img {
+    transform: scale(1.04);
+}
+
+.home-card-body {
+    padding: 14px 16px 18px;
+}
+
+.home-card-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #2A2A2A;
+    margin: 0 0 10px;
+    line-height: 1.4;
+    letter-spacing: 1px;
+}
+
+.home-card-date {
+    display: inline-block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #ed93b4;
+    background: #fdf0f5;
+    border: 1px solid #f7d0e0;
+    border-radius: 50px;
+    padding: 4px 12px;
+}
+
+.home-card-desc {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    color: #777;
+    line-height: 1.6;
+    margin: 0 0 10px;
+}
+
+.home-card-btn {
+    display: block;
+    margin-top: 8px;
+    background-color: #cd929d;
+    color: #ffffff;
+    padding: 9px 14px;
+    border-radius: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.home-card--link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.home-card--link:hover .home-card-btn {
+    background-color: #b57390;
+}
+
+/* ===================================================
+   3. Split sections — kept for reference (unused)
    =================================================== */
 .home-split {
     display: grid;
@@ -121,8 +255,10 @@
 }
 
 .home-split-img.group-photo-fit {
-    object-fit: contain;
+    object-fit: cover;
+    object-position: center center;
     height: 100%;
+    width: 100%;
 }
 
 /* Light rose — matches page ground color, seamless */
@@ -140,7 +276,7 @@
     font-weight: 600;
     letter-spacing: 2.5px;
     text-transform: uppercase;
-    color: #A0647A;
+    color: #cd929d;
     margin: 0 0 16px 0;
 }
 
@@ -168,7 +304,7 @@
 .home-contact {
     text-align: center;
     padding: 100px 20px;
-    background-color: #A0647A;
+    background-color: #cd929d;
     margin-top: 0;
 }
 
@@ -216,7 +352,7 @@
     font-weight: 600;
     letter-spacing: 2.5px;
     text-transform: uppercase;
-    color: #A0647A;
+    color: #cd929d;
     margin: 0 0 20px 0;
 }
 
@@ -266,7 +402,7 @@
 }
 
 .scrolling-wrapper-home::-webkit-scrollbar-thumb {
-    background: #A0647A;
+    background: #cd929d;
     border-radius: 10px;
 }
 
@@ -300,7 +436,7 @@
     width: 48px;
     height: 48px;
     font-size: 18px;
-    color: #A0647A;
+    color: #cd929d;
     cursor: pointer;
     z-index: 10;
     display: flex;
@@ -311,9 +447,9 @@
 }
 
 .gallery-arrow:hover {
-    background: #A0647A;
+    background: #cd929d;
     color: #FFFFFF;
-    border-color: #A0647A;
+    border-color: #cd929d;
     transform: translateY(-50%) scale(1.08);
 }
 
@@ -350,8 +486,23 @@
         padding: 60px 30px 50px;
     }
 
-    .home-intro-title {
-        font-size: 2.2rem;
+    .home-intro-logo {
+        width: 220px;
+    }
+
+    .home-cards-section {
+        padding: 56px 20px 48px;
+    }
+
+    .home-cards-title {
+        font-size: 1.9rem;
+        margin-bottom: 32px;
+    }
+
+    .home-cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+        max-width: 700px;
     }
 
     .home-split {
@@ -407,13 +558,30 @@
         padding: 50px 24px 40px;
     }
 
-    .home-intro-title {
-        font-size: 1.8rem;
-        letter-spacing: 3px;
+    .home-intro-logo {
+        width: 180px;
     }
 
     .home-intro-body {
         font-size: 0.95rem;
+    }
+
+    .home-cards-section {
+        padding: 40px 16px 36px;
+    }
+
+    .home-cards-title {
+        font-size: 1.6rem;
+        letter-spacing: 4px;
+        margin-bottom: 28px;
+    }
+
+    .home-cards-grid {
+        grid-template-columns: 1fr;
+        max-width: 360px;
+        margin-left: auto;
+        margin-right: auto;
+        gap: 16px;
     }
 
     .home-split-media {
