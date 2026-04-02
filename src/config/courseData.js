@@ -155,6 +155,30 @@ export const coursesInfo = {
         }
     },
 
+    // Online Course
+    "curso-en-linea": {
+        courseName: "Curso en Línea",
+        title: "CURSO",
+        subtitle: "EN LÍNEA",
+        level: "Por confirmar",
+        materialsRequired: "Por confirmar",
+        description: "La descripción completa de este curso estará disponible muy pronto. Estamos preparando el mejor contenido para que puedas aprender desde donde estés, a tu propio ritmo y con la calidad que nos caracteriza en Beauty Station.",
+        price: "Por confirmar",
+        enrollment: "Q200",
+        installments: "Por confirmar",
+        classes: [
+            { name: "Próximamente:", topics: "Contenido del curso por confirmar" }
+        ],
+        scheduleOptions: [
+            "Por confirmar"
+        ],
+        images: {
+            folder: "cursos-en-linea",
+            count: 3
+        },
+        online: true
+    },
+
     // Makeup Modules
     "pieles-perfectas": {
         courseName: "Pieles Perfectas",

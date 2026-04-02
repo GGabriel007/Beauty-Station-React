@@ -12,6 +12,7 @@ import DOMPurify from 'dompurify';
 import CryptoJS from 'crypto-js';
 import { toast } from 'react-toastify';
 import { validateCardNumber, validateCVV, validateExpiryDate, hasDangerousContent } from '../utils/validation';
+import { FiUser, FiCheckCircle, FiLock } from 'react-icons/fi';
 
 const CartPage = () => {
   const { authStatus, user } = useAuthenticator((context) => [context.authStatus, context.user]);
@@ -45,9 +46,7 @@ const CartPage = () => {
   });
 
   useEffect(() => {
-    if (authStatus === 'unauthenticated') {
-      navigate('/login');
-    } else if (authStatus === 'authenticated') {
+    if (authStatus === 'authenticated') {
       Promise.all([fetchUserAttributes(), fetchAuthSession()]).then(([attributes, session]) => {
         const idTokenPayload = session?.tokens?.idToken?.payload || {};
         const bestName = attributes.name || attributes.given_name || idTokenPayload.name || idTokenPayload.given_name || '';
@@ -60,11 +59,21 @@ const CartPage = () => {
         }));
       }).catch(err => console.error("Error pre-filling cart data", err));
     }
-  }, [authStatus, navigate, user]);
+  }, [authStatus, user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+    const hasOnlineItem = cartItems.some(item => item.online);
+    if (hasOnlineItem && authStatus !== 'authenticated') {
+      toast.warn('¡Inicia sesión para comprar cursos en línea!', {
+        onClick: () => navigate('/login'),
+        style: { cursor: 'pointer' },
+      });
+      navigate('/login');
+      return;
+    }
 
     if (!validateCardNumber(formData.cardNumber)) {
       setNotificationError(DOMPurify.sanitize("¡Tarjeta inválida!"));
@@ -136,6 +145,7 @@ const CartPage = () => {
   useEffect(() => { window.scrollTo(0, 0); }, [location]);
 
   const { cartItems, removeFromCart, clearCart, includeKit, setIncludeKit } = useContext(CartContext);
+  const hasOnlineItem = cartItems.some(item => item.online);
   const [notification, setNotification] = useState("");
   const [notificationError, setNotificationError] = useState("");
   const [purchaseSuccess, setPurchaseSuccess] = useState(false);
@@ -267,6 +277,53 @@ const CartPage = () => {
 
         {/* ── LEFT: Form ── */}
         <div className="cp-left">
+
+          {/* ── Online course: account required warning ── */}
+          {authStatus === 'unauthenticated' && hasOnlineItem && (
+            <div className="cp-online-warning">
+              <div className="cp-online-warning-icon-wrap">
+                <FiLock className="cp-online-warning-icon" />
+              </div>
+              <h3 className="cp-online-warning-title">Cuenta requerida para cursos en línea</h3>
+              <p className="cp-online-warning-body">
+                Tu carrito contiene un <strong>curso en línea</strong>. Para completar
+                tu compra es necesario iniciar sesión o crear una cuenta gratuita.
+              </p>
+              <div className="cp-guest-actions">
+                <button className="cp-guest-btn-primary" onClick={() => navigate('/login')}>
+                  Crear cuenta gratis
+                </button>
+                <button className="cp-guest-btn-secondary" onClick={() => navigate('/login')}>
+                  Ya tengo cuenta — iniciar sesión
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* ── Optional guest banner — only when no online items ── */}
+          {authStatus === 'unauthenticated' && !hasOnlineItem && (
+            <div className="cp-guest-banner">
+              <div className="cp-guest-icon-wrap">
+                <FiUser className="cp-guest-icon" />
+              </div>
+              <h3 className="cp-guest-title">¿Quieres llevar un registro de tus cursos?</h3>
+              <p className="cp-guest-subtitle">Crea una cuenta gratuita y podrás:</p>
+              <ul className="cp-guest-benefits">
+                <li><FiCheckCircle className="cp-guest-check" />Ver todos tus cursos registrados en un solo lugar</li>
+                <li><FiCheckCircle className="cp-guest-check" />Consultar tu historial de compras cuando quieras</li>
+                <li><FiCheckCircle className="cp-guest-check" />Guardar tu carrito automáticamente al iniciar sesión</li>
+              </ul>
+              <div className="cp-guest-actions">
+                <button className="cp-guest-btn-primary" onClick={() => navigate('/login')}>
+                  Crear cuenta gratis
+                </button>
+                <button className="cp-guest-btn-secondary" onClick={() => navigate('/login')}>
+                  Ya tengo cuenta — iniciar sesión
+                </button>
+              </div>
+            </div>
+          )}
+
           <form id="registration-form" method="post" onSubmit={handleSubmit}>
 
             {/* All form fields in one card */}
@@ -410,7 +467,7 @@ const CartPage = () => {
             <button
               className="cp-checkout-btn"
               type="submit"
-              disabled={!isCaptchaValid || isSubmitting || !termsAccepted}
+              disabled={!isCaptchaValid || isSubmitting || !termsAccepted || (hasOnlineItem && authStatus !== 'authenticated')}
             >
               {isSubmitting ? 'Procesando...' : 'Pagar'}
             </button>

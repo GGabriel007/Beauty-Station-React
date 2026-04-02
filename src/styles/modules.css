@@ -140,7 +140,7 @@
 
 .information-module {
   background-color: #F0E2E9;
-  padding: 50px 40px 80px;
+  padding: 50px 40px 120px;
   min-height: 100vh;
 }
 
@@ -234,6 +234,10 @@
   .carousel-img-wrap:not(.active) .image-zoom-icon {
     display: none !important;
   }
+}
+
+.carousel-img-wrap {
+  background-color: #e0c8d4;
 }
 
 .carousel-main-img {
@@ -901,7 +905,7 @@ ul {
 /* Tablet — stack gallery above text */
 @media (max-width: 900px) {
   .information-module {
-    padding: 0 0 60px;
+    padding: 0 0 100px;
   }
 
   .mid-information-module {
@@ -936,7 +940,7 @@ ul {
 /* Mobile */
 @media (max-width: 600px) {
   .information-module {
-    padding: 0 0 50px;
+    padding: 0 0 80px;
   }
 
   .text-module {

@@ -213,16 +213,16 @@ const BeautySDomicilio = () => {
            <div className="domicilio-gallery-grid">
               {/* Newly Uploaded Bridal Images */}
               <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal1.jpg`} alt="Bridal Event Preview 1" className="gallery-img-item" />
-              <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal2.jpg`} alt="Bridal Event Preview 2" className="gallery-img-item" />
-              <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal3.jpg`} alt="Bridal Event Preview 3" className="gallery-img-item" />
+              <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal3.jpg`} alt="Bridal Event Preview 2" className="gallery-img-item" />
+              <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal2.jpg`} alt="Bridal Event Preview 3" className="gallery-img-item" />
               <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal4.jpg`} alt="Bridal Event Preview 4" className="gallery-img-item" />
-              <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal5.jpg`} alt="Bridal Event Preview 5" className="gallery-img-item" />
+              <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal6.jpg`} alt="Bridal Event Preview 5" className="gallery-img-item" />
               
               {/* Newly Uploaded Bridal Images (Set 2) */}
-              <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal6.jpg`} alt="Bridal Event Preview 6" className="gallery-img-item" />
+              <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal5.jpg`} alt="Bridal Event Preview 6" className="gallery-img-item" />
               <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal7.jpg`} alt="Bridal Event Preview 7" className="gallery-img-item" />
-              <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal8.jpg`} alt="Bridal Event Preview 8" className="gallery-img-item" />
-              <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal9.jpg`} alt="Bridal Event Preview 9" className="gallery-img-item" />
+              <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal9.jpg`} alt="Bridal Event Preview 8" className="gallery-img-item" />
+              <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal8.jpg`} alt="Bridal Event Preview 9" className="gallery-img-item" />
            </div>
         </div>
 

@@ -5,7 +5,6 @@ import useWhatsAppForm from '../hook/useWhatsAppForm';
 import { coursesInfo } from '../config/courseData';
 import { CartContext } from '../context/CartContext';
 import { get } from 'aws-amplify/api';
-import { useAuthenticator } from '@aws-amplify/ui-react';
 import { toast } from 'react-toastify';
 import { FiZoomIn, FiX, FiChevronDown, FiChevronLeft, FiChevronRight, FiCheckCircle } from 'react-icons/fi';
 
@@ -57,7 +56,8 @@ const DB_KEY_MAP = {
     "maestria-novias-makeup-0": "Maestría en Novias y Tendencias 2PM a 4PM",
     "maestria-novias-makeup-1": "Maestría en Novias y Tendencias 6PM a 8PM",
     "curso-completo-maquillaje-0": "Curso Completo Maquillaje 2PM a 4PM",
-    "curso-completo-maquillaje-1": "Curso Completo Maquillaje 6PM a 8PM"
+    "curso-completo-maquillaje-1": "Curso Completo Maquillaje 6PM a 8PM",
+    "curso-en-linea-0": "Curso en Línea"
 };
 
 const MAKEUP_COURSES = [
@@ -85,7 +85,6 @@ const CourseDetails = () => {
     const navigate = useNavigate();
     const courseData = coursesInfo[courseId];
     const { addToCart, cartItems, includeKit, setIncludeKit } = useContext(CartContext);
-    const { authStatus } = useAuthenticator(context => [context.authStatus]);
 
     const isMakeupCourse = MAKEUP_COURSES.includes(courseId);
 
@@ -356,16 +355,6 @@ const CourseDetails = () => {
                         <button
                             className="course-add-cart-btn"
                             onClick={() => {
-                                if (authStatus !== 'authenticated') {
-                                    sessionStorage.setItem('loginRedirect', window.location.pathname);
-                                    toast.warn('¡Inicia sesión para agregar cursos al carrito!', {
-                                        onClick: () => navigate('/login'),
-                                        style: { cursor: 'pointer' },
-                                    });
-                                    navigate('/login');
-                                    return;
-                                }
-
                                 if (availableSeats !== null && availableSeats === 0) {
                                     toast.error('Lo sentimos, no hay cupos disponibles para este horario.', { autoClose: 5000 });
                                     return;
@@ -426,7 +415,8 @@ const CourseDetails = () => {
                                 addToCart({
                                     name: cartItemName,
                                     price: priceInt,
-                                    image: thumbnails[0]
+                                    image: thumbnails[0],
+                                    online: courseData.online || false
                                 });
 
                                 toast(

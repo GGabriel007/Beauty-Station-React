@@ -14,7 +14,10 @@ const BeautySClasses = () => {
     <div className="classes-page">
 
       {/* ── Page hero — mirrors home intro style ── */}
-      <section className="classes-hero">
+      <section
+        className="classes-hero"
+        style={{ backgroundImage: `linear-gradient(rgba(205, 146, 157, 0.72), rgba(205, 146, 157, 0.72)), url('${process.env.PUBLIC_URL}/images/beauty-station-hero.jpeg')` }}
+      >
         <p className="classes-hero-tagline">Aprende con nosotras</p>
         <h1 className="classes-hero-title">Cursos</h1>
         <p className="classes-hero-body">

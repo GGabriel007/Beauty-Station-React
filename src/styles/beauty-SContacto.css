@@ -1,57 +1,63 @@
 /* src/styles/beauty-SContacto.css */
 
 .nosotros-page-container {
-    background-color: #ffffff; /* Clean aesthetic start */
-    padding: 40px 20px 20px;
+    background-color: #ffffff;
+    min-height: 100vh;
+    padding-bottom: 120px;
     font-family: 'Montserrat', sans-serif;
 }
 
-.nosotros-split-layout {
+/* ── TOP SECTION: STAGGERED OVERLAPPING LAYOUT ── */
+.nosotros-staggered-layout {
     display: flex;
     flex-direction: row;
-    align-items: center;  /* Vertically center the text to portrait if preferred, or flex-start */
-    justify-content: center;
-    max-width: 1100px;
+    max-width: 1250px;
     margin: 0 auto;
-    gap: 70px; /* Spacious gap between image and text */
+    padding: 60px 20px 100px;
+    position: relative;
+    align-items: flex-start;
 }
 
-/* ── LEFT COLUMN ── */
-.nosotros-image-column {
-    flex: 1;
-    max-width: 450px; /* Constrain image width elegantly */
+/* ── CONTENT BOX (staggered down) ── */
+.nosotros-content-box {
+    flex: 0 0 52%;
+    background-color: #f7ebe6;
+    padding: 55px 50px;
+    border-radius: 2px;
+    z-index: 2;
+    margin-top: 50px;
 }
 
-.aleh-portrait-img {
-    width: 100%;
-    height: auto;
+/* ── IMAGE BOX (overlapping) ── */
+.nosotros-image-box {
+    flex: 0 0 45%;
     border-radius: 4px;
-    object-fit: contain;
-    display: block;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    margin-left: -5%;
 }
 
-
-/* ── RIGHT COLUMN ── */
-.nosotros-info-column {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    max-width: 500px; /* Readability constraint */
+.nosotros-portrait-img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    display: block;
+    background-color: #ead5de;
 }
 
 .nosotros-elegant-title {
-    font-size: 2.5rem;
-    font-weight: 500;
-    letter-spacing: 2px;
-    color: #1a1a1a;
+    font-size: 3rem;
+    font-weight: 300;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: #2A2A2A;
+    text-align: center;
     margin-bottom: 30px;
-    text-align: left;
 }
 
 .nosotros-elegant-bio {
-    font-size: 15px;
-    line-height: 1.9;
+    font-size: 13.5px;
+    line-height: 1.8;
     color: #4a4a4a;
     margin-bottom: 25px;
     text-align: left;
@@ -60,70 +66,91 @@
 
 .nosotros-button-link {
     text-decoration: none;
+    display: block;
     margin-top: 15px;
 }
 
 .elegant-action-btn {
-    background-color: #ed93b4; /* Beauty Station theme pink */
+    background-color: #ed93b4;
     color: #ffffff;
-    padding: 14px 45px;
+    padding: 16px 0;
+    width: 100%;
     font-size: 13px;
     text-transform: uppercase;
     font-weight: 600;
-    letter-spacing: 1.5px;
+    letter-spacing: 1px;
     border: none;
-    border-radius: 4px; /* Slight edge */
     cursor: pointer;
+    margin-top: 20px;
     transition: background-color 0.3s ease, transform 0.2s;
     font-family: 'Montserrat', sans-serif;
 }
 
 .elegant-action-btn:hover {
-    background-color: #d87ea0; /* Darker pink down-state */
+    background-color: #d87ea0;
     transform: translateY(-2px);
 }
 
-/* ── RESPONSIVE DESIGN ── */
+/* ── BOTTOM GALLERY ── */
+.nosotros-gallery-section {
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.nosotros-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.nosotros-gallery-img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+    background-color: #ead5de;
+    transition: transform 0.3s ease;
+}
+
+.nosotros-gallery-img:hover {
+    transform: scale(1.02);
+}
+
+/* ── RESPONSIVE ── */
 @media (max-width: 900px) {
-    .nosotros-split-layout {
-        gap: 40px;
-        padding: 0 20px;
+    .nosotros-staggered-layout {
+        flex-direction: column;
+        padding-top: 30px;
+        align-items: center;
+    }
+
+    .nosotros-content-box {
+        width: 100%;
+        padding: 40px 25px;
+    }
+
+    .nosotros-image-box {
+        width: 100%;
+        max-width: 450px;
+        margin-left: 0;
+        margin-top: -30px;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .nosotros-gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
-@media (max-width: 768px) {
-    .nosotros-page-container {
-        padding: 40px 15px;
-    }
-
-    .nosotros-split-layout {
-        flex-direction: column;
-        align-items: center;
-        gap: 30px;
-    }
-
-    .nosotros-info-column {
-        align-items: flex-start;
-        max-width: 100%;
-    }
-
-    .nosotros-image-column {
-        width: 100%;
-        max-width: 100%;
-    }
-
+@media (max-width: 600px) {
     .nosotros-elegant-title {
         font-size: 2rem;
-        margin-bottom: 20px;
+        letter-spacing: 4px;
     }
 
-    .nosotros-elegant-bio {
-        font-size: 14px;
-        line-height: 1.7;
-    }
-
-    .elegant-action-btn {
-        width: 100%;
-        text-align: center;
+    .nosotros-gallery-grid {
+        grid-template-columns: 1fr;
     }
 }

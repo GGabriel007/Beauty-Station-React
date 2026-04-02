@@ -502,7 +502,7 @@
     .home-cards-grid {
         grid-template-columns: repeat(3, 1fr);
         gap: 14px;
-        max-width: 700px;
+
     }
 
     .home-split {

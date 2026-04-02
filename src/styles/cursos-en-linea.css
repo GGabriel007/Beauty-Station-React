@@ -1,0 +1,294 @@
+/* src/styles/cursos-en-linea.css */
+
+.cel-page {
+    background-color: #F0E2E9;
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+    padding-bottom: 120px;
+}
+
+/* ── Hero ── */
+.cel-hero {
+    text-align: center;
+    padding: 90px 20px 80px;
+    background-color: #cd929d;
+    background-size: cover;
+    background-position: center 30%;
+    background-repeat: no-repeat;
+}
+
+.cel-hero-tagline {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0 0 18px 0;
+}
+
+.cel-hero-title {
+    font-size: 3rem;
+    font-weight: 300;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin: 0 0 20px 0;
+}
+
+.cel-hero-subtitle {
+    font-family: 'Lato', sans-serif;
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.82);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.85;
+}
+
+/* ── Main content section ── */
+.cel-content {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 60px 40px 20px;
+}
+
+.cel-columns {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 55px;
+}
+
+/* ── Left: images ── */
+.cel-image-col {
+    flex: 0 0 46%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.cel-img-main {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+    background-color: #e0c8d4;
+}
+
+.cel-img-row {
+    display: flex;
+    gap: 12px;
+}
+
+.cel-img-thumb {
+    flex: 1;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+    background-color: #e0c8d4;
+}
+
+/* ── Right: course info ── */
+.cel-info-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.cel-badge {
+    display: inline-block;
+    background-color: #ed93b4;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 50px;
+    margin-bottom: 18px;
+    width: fit-content;
+}
+
+.cel-course-title {
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #2A2A2A;
+    margin: 0 0 24px 0;
+}
+
+/* ── Price block ── */
+.cel-price-block {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 10px rgba(200, 140, 170, 0.08);
+}
+
+.cel-price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cel-price-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.cel-price-value {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #2A2A2A;
+    font-style: italic;
+}
+
+/* ── Divider + section labels ── */
+.cel-divider {
+    height: 1px;
+    background-color: #e8cdd6;
+    margin: 20px 0;
+}
+
+.cel-section-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #ed93b4;
+    margin: 0 0 12px 0;
+}
+
+.cel-description {
+    font-size: 0.88rem;
+    line-height: 1.9;
+    color: #555;
+    margin: 0;
+}
+
+/* ── Includes list ── */
+.cel-includes-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 28px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cel-includes-list li {
+    font-size: 0.85rem;
+    color: #777;
+    font-style: italic;
+    padding-left: 16px;
+    position: relative;
+}
+
+.cel-includes-list li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: #ed93b4;
+}
+
+/* ── CTA button ── */
+.cel-cta-btn {
+    display: block;
+    text-align: center;
+    background-color: #ed93b4;
+    color: #fff;
+    border: none;
+    padding: 16px 20px;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.25s ease, box-shadow 0.25s ease;
+    margin-top: auto;
+}
+
+.cel-cta-btn:hover {
+    background-color: #f1b2c9;
+    box-shadow: 0 6px 20px rgba(237, 147, 180, 0.35);
+}
+
+/* ── Bottom gallery ── */
+.cel-gallery {
+    max-width: 1160px;
+    margin: 50px auto 0;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.cel-gallery-img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+    background-color: #e0c8d4;
+    transition: transform 0.3s ease;
+}
+
+.cel-gallery-img:hover {
+    transform: scale(1.02);
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+    .cel-content {
+        padding: 40px 24px 20px;
+    }
+
+    .cel-columns {
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    .cel-image-col {
+        flex: none;
+        width: 100%;
+    }
+
+    .cel-hero-title {
+        font-size: 2.2rem;
+        letter-spacing: 4px;
+    }
+
+    .cel-gallery {
+        padding: 0 24px;
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .cel-hero {
+        padding: 60px 20px 55px;
+    }
+
+    .cel-hero-title {
+        font-size: 1.8rem;
+        letter-spacing: 3px;
+    }
+
+    .cel-content {
+        padding: 32px 16px 20px;
+    }
+
+    .cel-gallery {
+        padding: 0 16px;
+        grid-template-columns: 1fr;
+    }
+}

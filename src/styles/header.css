@@ -312,8 +312,11 @@ a {
         background-color: #7D4E61;
     }
 
-    /* Mobile dropdown — same light rose, seamless */
+    /* Mobile dropdown — floats over page content */
     .right-header-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
         flex-direction: column;
         align-items: flex-start;
         gap: 0;
@@ -327,7 +330,7 @@ a {
         margin: 0;
         background-color: #F0E2E9;
         border-top: 1px solid #E8CBD4;
-        position: relative;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
         z-index: 999;
     }
 

@@ -524,6 +524,186 @@ input:focus {
     box-shadow: 0 0 0 3px rgba(241, 178, 201, 0.2);
 }
 
+/* ── Online course: account required warning ── */
+.cp-online-warning {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 28px 28px 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(200, 140, 170, 0.08);
+}
+
+.cp-online-warning-icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #ed93b4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    flex-shrink: 0;
+}
+
+.cp-online-warning-icon {
+    color: #fff;
+    font-size: 1.3rem;
+}
+
+.cp-online-warning-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #ed93b4;
+    margin: 0 0 16px 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f3dce6;
+    width: 100%;
+}
+
+.cp-online-warning-body {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #444;
+    line-height: 1.7;
+    margin: 0 0 22px 0;
+}
+
+.cp-online-warning-body strong {
+    color: #ed93b4;
+}
+
+/* ── Guest account prompt banner ── */
+.cp-guest-banner {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 28px 28px 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(200, 140, 170, 0.08);
+}
+
+.cp-guest-icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #ed93b4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    flex-shrink: 0;
+}
+
+.cp-guest-icon {
+    color: #fff;
+    font-size: 1.4rem;
+}
+
+.cp-guest-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #ed93b4;
+    margin: 0 0 16px 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f3dce6;
+    width: 100%;
+}
+
+.cp-guest-subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #444;
+    margin: 0 0 12px 0;
+    text-align: left;
+    width: 100%;
+}
+
+.cp-guest-benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 22px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+}
+
+.cp-guest-benefits li {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #444;
+}
+
+.cp-guest-check {
+    color: #ed93b4;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.cp-guest-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.cp-guest-btn-primary {
+    width: 100%;
+    background-color: #ed93b4;
+    color: #fff;
+    border: none;
+    padding: 16px 20px;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.cp-guest-btn-primary:hover {
+    background-color: #f1b2c9;
+    box-shadow: 0 6px 20px rgba(237, 147, 180, 0.35);
+}
+
+.cp-guest-btn-secondary {
+    background: none;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #888;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s ease;
+    padding: 4px;
+}
+
+.cp-guest-btn-secondary:hover {
+    color: #ed93b4;
+}
+
 /* ── Responsive: tablet ── */
 @media (max-width: 900px) {
     .cp-columns {

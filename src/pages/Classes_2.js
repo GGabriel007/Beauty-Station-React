@@ -14,7 +14,10 @@ const Classes2 = () => {
     <div className="information-class">
 
       {/* ── Hero — mirrors home & cursos style ── */}
-      <div className="top-information-class">
+      <div
+        className="top-information-class"
+        style={{ backgroundImage: `linear-gradient(rgba(205, 146, 157, 0.72), rgba(205, 146, 157, 0.72)), url('${process.env.PUBLIC_URL}/images/beauty-station-hero.jpeg')` }}
+      >
         <p className="classes-tagline">Categoría</p>
         <h2 className="header-information-class">Cursos de Maquillaje 2026</h2>
         <p className="subheader-information-class">

@@ -11,7 +11,6 @@
 /* ── Page wrapper ── */
 .information-class {
     background-color: #F0E2E9;
-    min-height: 100vh;
 }
 
 /* ===================================================
@@ -21,6 +20,9 @@
     text-align: center;
     padding: 80px 20px 70px;
     background-color: #cd929d;
+    background-size: cover;
+    background-position: center 30%;
+    background-repeat: no-repeat;
 }
 
 .classes-tagline {
@@ -141,7 +143,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 7px 40px;
+    padding: 7px 35px;
     background-color: #F0E2E9;
     color: #cd929d;
     border: 1px solid #E8CBD4;
@@ -222,7 +224,7 @@
 @media (max-width: 500px) {
     .course-grid {
         grid-template-columns: 1fr;
-        max-width: 340px;
+        max-width: 246px;
         gap: 18px;
         margin: 40px auto 60px;
         padding: 0 20px;

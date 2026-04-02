@@ -40,7 +40,7 @@ html, body {
 /* src/styles/App.css */
 .cart-button {
   position: fixed;
-  bottom: 85px;
+  bottom: 24px;
   right: 20px;
   background-color: #ffffff;
   color: #ed93b4;
@@ -71,7 +71,7 @@ html, body {
 @media (max-width: 1019px) {
   /*Cart*/
   .cart-button {
-    bottom: 85px;
+    bottom: 24px;
     right: 20px;
   }
   

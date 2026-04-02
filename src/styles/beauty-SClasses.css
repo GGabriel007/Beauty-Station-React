@@ -9,7 +9,7 @@
 
 .classes-page {
     background-color: #F0E2E9;
-    min-height: 100vh;
+
 }
 
 /* ===================================================
@@ -19,6 +19,9 @@
     text-align: center;
     padding: 90px 20px 80px;
     background-color: #cd929d;
+    background-size: cover;
+    background-position: center 30%;
+    background-repeat: no-repeat;
 }
 
 .classes-hero-tagline {
@@ -57,7 +60,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 36px;
-    max-width: 860px;
+    max-width: 714px;
     margin: 70px auto 90px;
     padding: 0 40px;
 }
@@ -154,7 +157,7 @@
         grid-template-columns: 1fr;
         max-width: 420px;
         gap: 28px;
-        padding: 0 24px;
+        padding: 0 74px;
         margin: 50px auto 70px;
     }
 

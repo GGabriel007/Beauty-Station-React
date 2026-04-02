@@ -16,7 +16,7 @@ import BeautySContacto from './pages/BeautySContacto';
 import Classes1 from './pages/Classes_1';
 import Classes2 from './pages/Classes_2';
 import CourseDetails from './components/CourseDetails';
-import CartPage from './pages/CartPage'; // Adjust the import path if necessary
+import CartPage from './pages/CartPage';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import { CartProvider, CartContext } from './context/CartContext';
@@ -130,25 +130,10 @@ const AuthRouteWatcher = () => {
 
 const CartButton = () => {
   const { cartItems } = useContext(CartContext);
-  const { authStatus } = useAuthenticator((context) => [context.authStatus]);
   const navigate = useNavigate();
 
-  const handleClick = (e) => {
-    e.preventDefault();
-    if (authStatus !== 'authenticated') {
-      sessionStorage.setItem('loginRedirect', '/classes');
-      toast.warn('¡Inicia sesión para ver tu carrito!', {
-        onClick: () => navigate('/login'),
-        style: { cursor: 'pointer' },
-      });
-      navigate('/login');
-      return;
-    }
-    navigate('/cart');
-  };
-
   return (
-    <a href="/cart" className="cart-button" onClick={handleClick}>
+    <a href="/cart" className="cart-button" onClick={(e) => { e.preventDefault(); navigate('/cart'); }}>
       🛒 {cartItems.length > 0 && <span>{cartItems.length}</span>}
     </a>
   );

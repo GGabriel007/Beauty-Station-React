@@ -58,7 +58,7 @@ const BeautyStation = () => {
             </div>
           </Link>
 
-          <a href="https://api.whatsapp.com/send?phone=50250177803&text=Quisiera%20m%C3%A1s%20informaci%C3%B3n%20sobre%20cursos%20en%20l%C3%ADnea" target="_blank" rel="noopener noreferrer" className="home-card home-card--link">
+          <Link to="/classes/course/curso-en-linea" className="home-card home-card--link">
             <div className="home-card-img-wrap">
               <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Makeup/imagen_module_1Mkup.jpeg`} alt="Cursos en Línea" className="home-card-img" />
             </div>
@@ -66,7 +66,7 @@ const BeautyStation = () => {
               <p className="home-card-name">CURSOS EN LÍNEA</p>
               <span className="home-card-btn">MÁS INFORMACIÓN </span>
             </div>
-          </a>
+          </Link>
 
           <Link to="/servicio-a-domicilio" className="home-card home-card--link">
             <div className="home-card-img-wrap">
