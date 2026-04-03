@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { toast } from 'react-toastify';
 import '../styles/header.css';
 
 const Header = () => {
@@ -39,15 +38,6 @@ const Header = () => {
 
   const handleCartClick = (e) => {
     e.preventDefault();
-    if (authStatus !== 'authenticated') {
-      sessionStorage.setItem('loginRedirect', '/classes');
-      toast.warn('¡Inicia sesión para ver tu carrito!', {
-        onClick: () => navigate('/login'),
-        style: { cursor: 'pointer' },
-      });
-      navigate('/login');
-      return;
-    }
     navigate('/cart');
     setMenuOpen(false);
   };
