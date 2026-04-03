@@ -44,6 +44,21 @@ const BeautySClasses = () => {
           </div>
         </Link>
 
+        <Link to="/classes/course/curso-en-linea" className="classes-card">
+          <div className="classes-card-media">
+            <img
+              src={`${process.env.PUBLIC_URL}/images/cursos_graduadas.jpg`}
+              alt="Cursos en Línea"
+              className="classes-card-img"
+            />
+            <div className="classes-card-label">Cursos en Línea</div>
+          </div>
+          <div className="classes-card-footer">
+            <span className="classes-card-title">Cursos en Línea</span>
+            <span className="classes-card-arrow">→</span>
+          </div>
+        </Link>
+
         <Link to="/classes/classes-1" className="classes-card">
           <div className="classes-card-media">
             <img
