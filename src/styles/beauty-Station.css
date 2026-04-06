@@ -89,7 +89,7 @@
    =================================================== */
 
 .home-cards-section {
-    padding: 56px 40px 52px;
+    padding: 56px 10px 52px;
     background-color: #F7EEF3;
     text-align: center;
 }
@@ -117,8 +117,8 @@
 .home-cards-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    max-width: 860px;
+    gap: 50px;
+    max-width: 80%;
     margin: 0 auto 40px;
 }
 
