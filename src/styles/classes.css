@@ -55,15 +55,72 @@
 }
 
 /* ===================================================
-   Course grid — 4 columns, reference layout
+   Course grid wrapper + arrows
+   =================================================== */
+.course-grid-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 20px 0 0;
+}
+
+.course-arrow {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    background: #FFFFFF;
+    border: 1px solid #E8CBD4;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    font-size: 18px;
+    color: #cd929d;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 10px rgba(160, 100, 122, 0.2);
+    flex-shrink: 0;
+}
+
+.course-arrow:hover {
+    background: #cd929d;
+    color: #FFFFFF;
+    border-color: #cd929d;
+    transform: translateY(-50%) scale(1.08);
+}
+
+.course-arrow--left  { left: 12px; }
+.course-arrow--right { right: 12px; }
+
+/* ===================================================
+   Course grid — horizontal scroll row
    =================================================== */
 .course-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 26px;
-    max-width: 1080px;
-    margin: 60px auto 80px;
-    padding: 0 40px;
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    gap: 28px;
+    padding: 40px 0 50px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+.course-grid::-webkit-scrollbar {
+    height: 14px;
+}
+
+.course-grid::-webkit-scrollbar-track {
+    background: #EDD8DE;
+    border-radius: 10px;
+}
+
+.course-grid::-webkit-scrollbar-thumb {
+    background: #cd929d;
+    border-radius: 10px;
+    border: 2px solid #EDD8DE;
 }
 
 /* ===================================================
@@ -77,6 +134,8 @@
     overflow: hidden;
     box-shadow: 0 3px 16px rgba(160, 100, 122, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 22vw;
+    flex-shrink: 0;
 }
 
 .course-grid-card:hover {
@@ -84,10 +143,20 @@
     box-shadow: 0 14px 34px rgba(160, 100, 122, 0.22);
 }
 
+.course-grid-card:first-child {
+    margin-left: 5%;
+}
+
+.course-grid-card:last-child {
+    margin-right: 5%;
+}
+
 /* ── Image ── */
 .course-grid-img-wrap {
+    position: relative;
     overflow: hidden;
-    height: 240px;
+    width: 100%;
+    aspect-ratio: 3 / 4;
     flex-shrink: 0;
 }
 
@@ -123,18 +192,32 @@
     line-height: 1.5;
 }
 
-/* ── "1 Día" badge ── */
+/* ── "1 Día" ribbon — overlays top-left of card image ── */
 .one-day-badge {
-    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
     background-color: #cd929d;
     color: #FFFFFF;
     font-family: 'Montserrat', sans-serif;
     font-size: 9px;
     font-weight: 700;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    padding: 4px 10px;
-    width: fit-content;
+    padding: 8px 14px;
+    z-index: 2;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.one-day-badge::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    border-left: 8px solid #b57390;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #b57390;
+    border-bottom: 8px solid transparent;
 }
 
 /* ── Date pill — hover reveals CTA ── */
@@ -193,21 +276,9 @@
 }
 
 /* ===================================================
-   Tablet — max-width 900px  →  2 columns
+   Tablet — max-width 900px
    =================================================== */
 @media (max-width: 900px) {
-    .course-grid {
-        grid-template-columns: repeat(2, 1fr);
-        max-width: 600px;
-        gap: 22px;
-        margin: 50px auto 70px;
-        padding: 0 30px;
-    }
-
-    .course-grid-img-wrap {
-        height: 220px;
-    }
-
     .header-information-class {
         font-size: 2.2rem;
         letter-spacing: 3px;
@@ -219,19 +290,15 @@
 }
 
 /* ===================================================
-   Mobile — max-width 500px  →  1 column
+   Mobile — max-width 500px
    =================================================== */
 @media (max-width: 500px) {
-    .course-grid {
-        grid-template-columns: 1fr;
-        max-width: 246px;
-        gap: 18px;
-        margin: 40px auto 60px;
-        padding: 0 20px;
+    .course-grid-card {
+        width: 55vw;
     }
 
-    .course-grid-img-wrap {
-        height: 200px;
+    .course-arrow {
+        display: none;
     }
 
     .header-information-class {

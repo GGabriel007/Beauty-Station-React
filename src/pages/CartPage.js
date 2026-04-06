@@ -1,5 +1,5 @@
 // src/pages/CartPage.js
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { CartContext } from '../context/CartContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthenticator } from '@aws-amplify/ui-react';
@@ -22,6 +22,41 @@ const CartPage = () => {
   const [recaptchaToken, setRecaptchaToken] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [countryOpen, setCountryOpen] = useState(false);
+  const countryRef = useRef(null);
+
+  const COUNTRIES = [
+    { code: '+502', label: '🇬🇹 Guatemala +502' },
+    { code: '+1',   label: '🇺🇸 EE.UU. / Canadá +1' },
+    { code: '+52',  label: '🇲🇽 México +52' },
+    { code: '+503', label: '🇸🇻 El Salvador +503' },
+    { code: '+504', label: '🇭🇳 Honduras +504' },
+    { code: '+505', label: '🇳🇮 Nicaragua +505' },
+    { code: '+506', label: '🇨🇷 Costa Rica +506' },
+    { code: '+507', label: '🇵🇦 Panamá +507' },
+    { code: '+57',  label: '🇨🇴 Colombia +57' },
+    { code: '+58',  label: '🇻🇪 Venezuela +58' },
+    { code: '+51',  label: '🇵🇪 Perú +51' },
+    { code: '+56',  label: '🇨🇱 Chile +56' },
+    { code: '+54',  label: '🇦🇷 Argentina +54' },
+    { code: '+55',  label: '🇧🇷 Brasil +55' },
+    { code: '+593', label: '🇪🇨 Ecuador +593' },
+    { code: '+591', label: '🇧🇴 Bolivia +591' },
+    { code: '+595', label: '🇵🇾 Paraguay +595' },
+    { code: '+598', label: '🇺🇾 Uruguay +598' },
+    { code: '+34',  label: '🇪🇸 España +34' },
+    { code: '+44',  label: '🇬🇧 Reino Unido +44' },
+  ];
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (countryRef.current && !countryRef.current.contains(e.target)) {
+        setCountryOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleCaptchaSuccess = (token) => {
     setIsCaptchaValid(true);
@@ -37,6 +72,7 @@ const CartPage = () => {
     'entry.1580443907': '',
     'entry.1295397219': '',
     'entry.1830117511': '',
+    phoneCountry: '+502',
     cardNumber: '',
     expiryDate: '',
     cvv: '',
@@ -110,7 +146,7 @@ const CartPage = () => {
             Name: DOMPurify.sanitize(formData.name),
             userName: DOMPurify.sanitize(formData['entry.1580443907']),
             DPI: DOMPurify.sanitize(formData['entry.1295397219']),
-            phoneNumber: DOMPurify.sanitize(formData['entry.1830117511']),
+            phoneNumber: DOMPurify.sanitize(`${formData.phoneCountry} ${formData['entry.1830117511']}`),
             cartItems: cartItems,
             IncludeKit: includeKit,
             TotalPrice: getTotalPrice(),
@@ -368,11 +404,39 @@ const CartPage = () => {
               />
 
               <label className="cp-label" htmlFor="whatsapp">Número de Teléfono:*</label>
-              <input
-                type="tel" id="whatsapp" name="entry.1830117511"
-                value={formData['entry.1830117511']}
-                onChange={handleChange} placeholder="XXXX-XXXX" required
-              />
+              <div className="cp-phone-row">
+                <div className="cp-country-select" ref={countryRef}>
+                  <button
+                    type="button"
+                    className="cp-country-btn"
+                    onClick={() => setCountryOpen(o => !o)}
+                  >
+                    <span>{formData.phoneCountry}</span>
+                    <span className="cp-country-chevron">{countryOpen ? '▴' : '▾'}</span>
+                  </button>
+                  {countryOpen && (
+                    <ul className="cp-country-list">
+                      {COUNTRIES.map(c => (
+                        <li
+                          key={c.code}
+                          className={`cp-country-item${formData.phoneCountry === c.code ? ' cp-country-item--active' : ''}`}
+                          onClick={() => {
+                            setFormData(prev => ({ ...prev, phoneCountry: c.code }));
+                            setCountryOpen(false);
+                          }}
+                        >
+                          {c.label}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+                <input
+                  type="tel" id="whatsapp" name="entry.1830117511"
+                  value={formData['entry.1830117511']}
+                  onChange={handleChange} placeholder="XXXX-XXXX" required
+                />
+              </div>
 
               <label className="cp-label" htmlFor="nit">
                 Datos de facturación NIT:*
@@ -482,8 +546,17 @@ const CartPage = () => {
             {/* Course items */}
             {cartItems.map((item, index) => (
               <div key={index} className="cp-summary-item">
-                <img src={item.image} alt={item.name} className="cp-summary-img" />
-                <span className="cp-summary-name">{item.name}</span>
+                {item.courseId ? (
+                  <Link to={`/classes/course/${item.courseId}`} className="cp-summary-link">
+                    <img src={item.image} alt={item.name} className="cp-summary-img" />
+                    <span className="cp-summary-name">{item.name}</span>
+                  </Link>
+                ) : (
+                  <>
+                    <img src={item.image} alt={item.name} className="cp-summary-img" />
+                    <span className="cp-summary-name">{item.name}</span>
+                  </>
+                )}
                 <span className="cp-summary-price">Q {item.price.toLocaleString('en-US')}.00</span>
                 <button
                   className="cp-summary-remove"

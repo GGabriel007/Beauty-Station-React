@@ -89,7 +89,7 @@ const CourseDetails = () => {
     const isMakeupCourse = MAKEUP_COURSES.includes(courseId);
 
     const [availableSeats, setAvailableSeats] = useState(null);
-    const [selectedScheduleIndex, setSelectedScheduleIndex] = useState(0);
+    const [selectedScheduleIndex, setSelectedScheduleIndex] = useState(null);
     const [allDbItems, setAllDbItems] = useState([]);
 
     const activeDbKey = DB_KEY_MAP[`${courseId}-${selectedScheduleIndex}`];
@@ -326,16 +326,18 @@ const CourseDetails = () => {
                         {/* Schedule selector */}
                         <div className="course-schedule-container">
                             <label className="course-schedule-label">Elige tu Horario de Inscripción:</label>
-                            <br />
-                            <select
-                                value={selectedScheduleIndex}
-                                onChange={(e) => setSelectedScheduleIndex(Number(e.target.value))}
-                                className="course-schedule-select"
-                            >
+                            <div className="course-schedule-buttons">
                                 {courseData.scheduleOptions.map((opt, idx) => (
-                                    <option key={idx} value={idx}>{opt}</option>
+                                    <button
+                                        key={idx}
+                                        type="button"
+                                        className={`course-schedule-btn ${selectedScheduleIndex === idx ? 'course-schedule-btn--active' : ''}`}
+                                        onClick={() => setSelectedScheduleIndex(idx)}
+                                    >
+                                        {opt}
+                                    </button>
                                 ))}
-                            </select>
+                            </div>
                         </div>
 
                         {isMakeupCourse && (
@@ -353,7 +355,8 @@ const CourseDetails = () => {
                         )}
 
                         <button
-                            className="course-add-cart-btn"
+                            className={`course-add-cart-btn${selectedScheduleIndex === null ? ' course-add-cart-btn--disabled' : ''}`}
+                            disabled={selectedScheduleIndex === null}
                             onClick={() => {
                                 if (availableSeats !== null && availableSeats === 0) {
                                     toast.error('Lo sentimos, no hay cupos disponibles para este horario.', { autoClose: 5000 });
@@ -416,7 +419,8 @@ const CourseDetails = () => {
                                     name: cartItemName,
                                     price: priceInt,
                                     image: thumbnails[0],
-                                    online: courseData.online || false
+                                    online: courseData.online || false,
+                                    courseId: courseId
                                 });
 
                                 toast(

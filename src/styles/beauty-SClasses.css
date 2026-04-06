@@ -59,10 +59,9 @@
 .classes-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 36px;
-    max-width: 1100px;
+    gap: 50px;
+    max-width: 80%;
     margin: 70px auto 90px;
-    padding: 0 40px;
 }
 
 /* ===================================================
@@ -87,7 +86,8 @@
 .classes-card-media {
     position: relative;
     overflow: hidden;
-    height: 320px;
+    width: 100%;
+    aspect-ratio: 4 / 5;
     flex-shrink: 0;
 }
 
@@ -157,12 +157,7 @@
         grid-template-columns: 1fr;
         max-width: 345px;
         gap: 28px;
-        padding: 0 40px;
         margin: 50px auto 70px;
-    }
-
-    .classes-card-media {
-        height: 280px;
     }
 
     .classes-hero-title {
@@ -192,11 +187,7 @@
     }
 
     .classes-grid {
-        max-width: 87%;
-        margin: 40px auto 60px;
+        margin: 40px 13% 60px;
     }
 
-    .classes-card-media {
-        height: 240px;
-    }
 }

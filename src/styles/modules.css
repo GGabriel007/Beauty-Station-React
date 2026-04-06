@@ -212,7 +212,7 @@
     display: flex;
     flex-direction: row;
     gap: 8px;
-    padding: 0 4%;
+    padding: 0% 142% 4% 4%;
   }
 
   .carousel-img-wrap {
@@ -230,6 +230,7 @@
     max-width: unset;
     margin: 0;
   }
+
 
   .carousel-img-wrap:not(.active) .image-zoom-icon {
     display: none !important;
@@ -469,33 +470,37 @@ ul {
   color: #555;
 }
 
-.course-schedule-select {
-  padding: 12px 15px;
-  margin-top: 10px;
-  width: 100%;
-  max-width: 370px;
-  font-size: 1rem;
-  font-family: 'Montserrat', sans-serif;
-  border: 1px solid #d4b8c3;
-  border-radius: 8px;
-  background-color: white;
-  cursor: pointer;
-  color: #333;
-  outline: none;
-  transition: all 0.3s ease;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 15px center;
-  background-size: 16px;
+.course-schedule-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  margin-top: 12px;
+  flex-wrap: wrap;
 }
 
-.course-schedule-select:focus,
-.course-schedule-select:hover {
-  border-color: #ed93b4;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05), 0 0 6px rgba(237, 147, 180, 0.4);
+.course-schedule-btn {
+  flex: 1;
+  padding: 11px 16px;
+  border: 1.5px solid #cd929d;
+  background: #FFFFFF;
+  color: #cd929d;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  opacity: 0.55;
+  white-space: nowrap;
+}
+
+.course-schedule-btn--active {
+  background: #cd929d;
+  color: #FFFFFF;
+  opacity: 1;
+  box-shadow: 0 3px 10px rgba(205, 146, 157, 0.4);
 }
 
 /* Seat availability badges */
@@ -539,6 +544,15 @@ ul {
 }
 
 /* ── Add to cart button ── */
+.course-add-cart-btn--disabled,
+.course-add-cart-btn:disabled {
+  background-color: #ddd;
+  color: #aaa;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
 .course-add-cart-btn {
   background-color: #ed93b4;
   color: white;
@@ -940,7 +954,7 @@ ul {
 /* Mobile */
 @media (max-width: 600px) {
   .information-module {
-    padding: 0 0 80px;
+    padding: 24px 0 80px;
   }
 
   .text-module {
@@ -1002,9 +1016,9 @@ ul {
     letter-spacing: 1.5px;
   }
 
-  .course-schedule-select {
-    font-size: 0.9rem;
-    max-width: 100%;
+  .course-schedule-btn {
+    font-size: 9px;
+    padding: 10px 12px;
   }
 
   .modal-image {

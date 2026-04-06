@@ -1,14 +1,21 @@
 // src/pages/Classes_2.js
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import '../styles/classes.css';
 import { Link, useLocation } from 'react-router-dom';
 
 const Classes2 = () => {
   const location = useLocation();
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
+
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: direction === 'left' ? -280 : 280, behavior: 'smooth' });
+    }
+  };
 
   return (
     <div className="information-class">
@@ -27,7 +34,9 @@ const Classes2 = () => {
       </div>
 
       {/* ── Course grid ── */}
-      <div className="course-grid">
+      <div className="course-grid-wrapper">
+        <button className="course-arrow course-arrow--left" onClick={() => scroll('left')}>&#10094;</button>
+        <div className="course-grid" ref={scrollRef}>
 
         <Link to="/classes/course/pieles-perfectas" className="course-grid-card">
           <div className="course-grid-img-wrap">
@@ -81,7 +90,10 @@ const Classes2 = () => {
           </div>
         </Link>
 
+        </div>
+        <button className="course-arrow course-arrow--right" onClick={() => scroll('right')}>&#10095;</button>
       </div>
+
     </div>
   );
 };

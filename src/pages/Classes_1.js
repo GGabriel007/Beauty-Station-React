@@ -1,14 +1,21 @@
 // src/pages/Classes_1.js
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import '../styles/classes.css';
 import { Link, useLocation } from 'react-router-dom';
 
 const Classes1 = () => {
   const location = useLocation();
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
+
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: direction === 'left' ? -280 : 280, behavior: 'smooth' });
+    }
+  };
 
   return (
     <div className="information-class">
@@ -27,15 +34,17 @@ const Classes1 = () => {
       </div>
 
       {/* ── Course grid ── */}
-      <div className="course-grid">
+      <div className="course-grid-wrapper">
+        <button className="course-arrow course-arrow--left" onClick={() => scroll('left')}>&#10094;</button>
+        <div className="course-grid" ref={scrollRef}>
 
         <Link to="/classes/course/master-waves-intensivo" className="course-grid-card">
           <div className="course-grid-img-wrap">
             <img className="course-grid-img" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_Day/imagen_module_H.jpeg`} alt="Master en Waves Intensivo" />
+            <div className="one-day-badge">1 Día</div>
           </div>
           <div className="course-grid-info">
             <p className="course-grid-name">Master en Waves Intensivo</p>
-            <div className="one-day-badge">1 Día</div>
             <div className="course-grid-date">
               <span className="default-text">Bajo Cita</span>
               <span className="hover-text">Más Información →</span>
@@ -95,7 +104,10 @@ const Classes1 = () => {
           </div>
         </Link>
 
+        </div>
+        <button className="course-arrow course-arrow--right" onClick={() => scroll('right')}>&#10095;</button>
       </div>
+
     </div>
   );
 };

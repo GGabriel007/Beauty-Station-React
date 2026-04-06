@@ -138,6 +138,104 @@
     opacity: 1;
 }
 
+/* ── Phone country + number row ── */
+.cp-phone-row {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: stretch;
+}
+
+.cp-country-select {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.cp-country-btn {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1.5px solid #e0c8d5;
+    border-radius: 10px;
+    background: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.92em;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    white-space: nowrap;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cp-country-btn:focus,
+.cp-country-btn:active {
+    outline: none;
+    border-color: #ed93b4;
+    box-shadow: 0 0 0 3px rgba(237, 147, 180, 0.15);
+}
+
+.cp-country-chevron {
+    font-size: 10px;
+    color: #aaa;
+}
+
+.cp-country-list {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    min-width: 200px;
+    max-height: 200px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1.5px solid #e0c8d5;
+    border-radius: 10px;
+    z-index: 200;
+    list-style: none;
+    padding: 4px 0;
+    margin: 0;
+    box-shadow: 0 6px 20px rgba(205, 146, 157, 0.18);
+}
+
+.cp-country-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.cp-country-list::-webkit-scrollbar-track {
+    background: #f9f0f4;
+    border-radius: 10px;
+}
+
+.cp-country-list::-webkit-scrollbar-thumb {
+    background: #cd929d;
+    border-radius: 10px;
+}
+
+.cp-country-item {
+    padding: 9px 16px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82em;
+    color: #333;
+    transition: background 0.15s ease;
+}
+
+.cp-country-item:hover {
+    background: #fdf0f5;
+}
+
+.cp-country-item--active {
+    background: #f5e8ec;
+    color: #cd929d;
+    font-weight: 600;
+}
+
+.cp-phone-row input {
+    flex: 1;
+    margin: 0;
+}
+
 /* ── Expiry / CVV side-by-side ── */
 .cp-card-row {
     display: flex;
@@ -271,6 +369,24 @@
     margin: 0 0 18px 0;
     padding-bottom: 10px;
     border-bottom: 1px solid #f3dce6;
+}
+
+/* ── Summary item link ── */
+.cp-summary-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1 1 auto;
+    text-decoration: none;
+    min-width: 0;
+}
+
+.cp-summary-link:hover .cp-summary-img {
+    opacity: 0.85;
+}
+
+.cp-summary-link:hover .cp-summary-name {
+    color: #cd929d;
 }
 
 /* ── Summary items ── */

@@ -376,54 +376,370 @@
 }
 
 /* ===================================================
-   Scrolling gallery — white cards pop off light pink
+   Review cards carousel
    =================================================== */
-.gallery-container-wrapper {
+.home-reviews-carousel-wrapper {
     position: relative;
     width: 100%;
+    margin-bottom: 50px;
 }
 
-.scrolling-wrapper-home {
+.home-reviews-carousel {
     display: flex;
-    overflow-x: scroll;
-    padding: 10px 8% 50px;
-    scroll-snap-type: x mandatory;
-    gap: 24px;
+    align-items: flex-start;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 10px 6% 24px;
     scroll-behavior: smooth;
-    background-color: #F0E2E9;
+    -webkit-overflow-scrolling: touch;
 }
 
-.scrolling-wrapper-home::-webkit-scrollbar {
-    height: 3px;
+.home-reviews-carousel::-webkit-scrollbar {
+    height: 10px;
 }
 
-.scrolling-wrapper-home::-webkit-scrollbar-track {
+.home-reviews-carousel::-webkit-scrollbar-track {
     background: #EDD8DE;
-}
-
-.scrolling-wrapper-home::-webkit-scrollbar-thumb {
-    background: #cd929d;
     border-radius: 10px;
 }
 
-/* White image cards pop against the light pink bg */
-.scrolling-image {
-    width: 70vw;
-    max-width: 620px;
-    height: 580px;
-    object-fit: contain;
-    background-color: #FFFFFF;
-    padding: 10px;
-    flex-shrink: 0;
-    cursor: pointer;
-    transition: transform 0.35s ease, box-shadow 0.35s ease;
-    scroll-snap-align: center;
-    box-shadow: 0 4px 18px rgba(160, 100, 122, 0.12);
+.home-reviews-carousel::-webkit-scrollbar-thumb {
+    background: #cd929d;
+    border-radius: 10px;
+    border: 2px solid #EDD8DE;
 }
 
-.scrolling-image:hover {
+/* ── Individual review card ── */
+.home-review-card {
+    background: #FFFFFF;
+    border-radius: 14px;
+    padding: 28px 24px 22px;
+    min-width: 280px;
+    max-width: 320px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: 0 4px 18px rgba(160, 100, 122, 0.10);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    text-align: left;
+}
+
+.home-review-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(160, 100, 122, 0.22);
+    box-shadow: 0 10px 28px rgba(160, 100, 122, 0.18);
+}
+
+/* ── Stars ── */
+.home-stars {
+    display: flex;
+    gap: 3px;
+}
+
+.home-star {
+    font-size: 20px;
+    color: #ddd;
+    line-height: 1;
+}
+
+.home-star--filled {
+    color: #cd929d;
+}
+
+/* ── Review text ── */
+.home-review-text {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.7;
+    flex: 1;
+    margin: 0;
+}
+
+/* ── Card footer: avatar + name + date ── */
+.home-review-images {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.home-review-img {
+    width: calc(33.33% - 4px);
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.home-review-img:hover {
+    opacity: 0.85;
+}
+
+/* ── Review image lightbox ── */
+.review-lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+.review-lightbox-img {
+    max-width: 90vw;
+    max-height: 88vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    cursor: default;
+}
+
+.review-lightbox-close {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    background: #FFFFFF;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    transition: background 0.2s ease;
+    z-index: 1001;
+}
+
+.review-lightbox-close:hover {
+    background: #f0f0f0;
+}
+
+.home-review-services {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.home-review-services-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #aaa;
+}
+
+.home-review-services-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.home-review-service-tag {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #cd929d;
+    background: #fdf0f5;
+    border: 1px solid #f0d8e2;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.home-review-toggle {
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #cd929d;
+    cursor: pointer;
+    text-transform: uppercase;
+    align-self: flex-start;
+}
+
+.home-review-toggle:hover {
+    color: #b57390;
+}
+
+.home-review-footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.home-review-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: #cd929d;
+    color: #FFFFFF;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.home-review-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+}
+
+.home-review-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.home-review-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #2A2A2A;
+}
+
+.home-review-date {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    color: #aaa;
+    text-transform: capitalize;
+}
+
+.home-review-google-badge {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid #e0c8d5;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #cd929d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* ===================================================
+   Submit review area
+   =================================================== */
+.home-review-submit-area {
+    padding: 0 6% 20px;
+}
+
+.home-review-form {
+    background: #FFFFFF;
+    border-radius: 14px;
+    padding: 28px;
+    max-width: 500px;
+    margin: 0 auto;
+    box-shadow: 0 4px 18px rgba(160, 100, 122, 0.10);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    text-align: left;
+}
+
+.home-review-form-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #2A2A2A;
+    margin: 0;
+}
+
+.home-review-textarea {
+    width: 100%;
+    border: 1.5px solid #e0c8d5;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.92rem;
+    color: #333;
+    resize: none;
+    outline: none;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+}
+
+.home-review-textarea:focus {
+    border-color: #cd929d;
+}
+
+.home-review-submit-btn {
+    align-self: flex-start;
+    background-color: #cd929d;
+    color: #FFFFFF;
+    border: none;
+    padding: 11px 28px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.home-review-submit-btn:hover:not(:disabled) {
+    background-color: #b57390;
+}
+
+.home-review-submit-btn:disabled {
+    background-color: #ddd;
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+.home-review-thanks {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #cd929d;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.home-review-login-prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 0;
+}
+
+.home-review-login-text {
+    font-family: 'Lato', sans-serif;
+    font-size: 1rem;
+    color: #888;
+    margin: 0;
+}
+
+.home-cta-btn--dark {
+    color: #cd929d;
+    border-color: #cd929d;
 }
 
 .gallery-arrow {
@@ -543,10 +859,8 @@
         padding: 70px 0 40px;
     }
 
-    .scrolling-image {
-        width: 80vw;
-        max-width: 80vw;
-        height: 460px;
+    .home-review-card {
+        min-width: 240px;
     }
 }
 
@@ -578,7 +892,6 @@
 
     .home-cards-grid {
         grid-template-columns: 1fr;
-        max-width: 360px;
         margin-left: auto;
         margin-right: auto;
         gap: 16px;
@@ -608,19 +921,17 @@
         font-size: 1.3rem;
     }
 
-    .scrolling-image {
-        width: 88vw;
-        max-width: 88vw;
-        height: 300px;
-    }
-
     .gallery-arrow {
         width: 38px;
         height: 38px;
         font-size: 15px;
     }
 
-    .modal-image {
-        max-width: 92vw;
+    .home-review-card {
+        min-width: 75vw;
+    }
+
+    .home-review-form {
+        padding: 20px 16px;
     }
 }
