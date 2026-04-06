@@ -32,7 +32,12 @@
       "Bash(python -c \"import pdf2image; print\\(''pdf2image ok''\\)\")",
       "Bash(python -c \"from PIL import Image; print\\(''pillow ok''\\)\")",
       "Bash(C:/Users/gagra/AppData/Local/Programs/Python/Python313/python.exe -m pip install pymupdf -q)",
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "Bash(cp \"C:/Users/gagra/Desktop/Nena info/Beauty Station style change/reivews/unnamed \\(1\\).webp\" \"C:/Users/gagra/Desktop/Projects/Beauty-Station-React/public/images/reviews/lotte-1.webp\")",
+      "Bash(cp \"C:/Users/gagra/Desktop/Nena info/Beauty Station style change/reivews/unnamed \\(2\\).webp\" \"C:/Users/gagra/Desktop/Projects/Beauty-Station-React/public/images/reviews/lotte-2.webp\")",
+      "Bash(cp \"C:/Users/gagra/Desktop/Nena info/Beauty Station style change/reivews/unnamed.webp\" \"C:/Users/gagra/Desktop/Projects/Beauty-Station-React/public/images/reviews/lotte-3.webp\")",
+      "Bash(cp \"C:/Users/gagra/Desktop/Nena info/Beauty Station style change/reivews/unnamed \\(3\\).webp\" \"C:/Users/gagra/Desktop/Projects/Beauty-Station-React/public/images/reviews/adriana-1.webp\")",
+      "Bash(cp \"C:/Users/gagra/Desktop/Nena info/Beauty Station style change/reivews/unnamed \\(4\\).webp\" \"C:/Users/gagra/Desktop/Projects/Beauty-Station-React/public/images/reviews/adriana-2.webp\")"
     ]
   }
 }
