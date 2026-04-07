@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 const { DynamoDBDocumentClient, PutCommand, GetCommand, UpdateCommand, ScanCommand } = require('@aws-sdk/lib-dynamodb');
+const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
 const crypto = require('crypto');
 const { Resend } = require('resend');
 
@@ -22,6 +23,9 @@ app.use(function (req, res, next) {
 
 const client = new DynamoDBClient({ region: process.env.REGION || 'us-east-1' });
 const ddbDocClient = DynamoDBDocumentClient.from(client);
+const sesClient = new SESClient({ region: process.env.REGION || 'us-east-1' });
+
+const OWNER_EMAIL = process.env.OWNER_EMAIL || 'g.a.gramirez007@gmail.com';
 
 // Master Course ID Mapping for Database Seat Operations
 const moduleIds = {
@@ -259,6 +263,41 @@ app.post('/checkout', async function (req, res) {
       }
     } catch (emailErr) {
       console.error("Critical failure parsing Resend Email:", emailErr);
+    }
+
+    // 5. OWNER NOTIFICATION: Send enrollment alert to business owner via AWS SES
+    try {
+      await sesClient.send(new SendEmailCommand({
+        Source: OWNER_EMAIL,
+        Destination: { ToAddresses: [OWNER_EMAIL] },
+        Message: {
+          Subject: { Data: `Nueva Inscripción - ${paymentData.Items}`, Charset: 'UTF-8' },
+          Body: {
+            Html: {
+              Charset: 'UTF-8',
+              Data: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #ddd; border-radius: 8px;">
+                  <h2 style="color: #000; border-bottom: 2px solid #f1b2c9; padding-bottom: 10px;">Nueva Inscripción Recibida</h2>
+                  <table style="width: 100%; font-size: 14px; border-collapse: collapse;">
+                    <tr><td style="padding: 8px 0; color: #555; width: 40%;"><strong>Nombre:</strong></td><td style="padding: 8px 0;">${paymentData.Name}</td></tr>
+                    <tr><td style="padding: 8px 0; color: #555;"><strong>Email:</strong></td><td style="padding: 8px 0;">${paymentData.email}</td></tr>
+                    <tr><td style="padding: 8px 0; color: #555;"><strong>Teléfono:</strong></td><td style="padding: 8px 0;">${paymentData.phoneNumber || 'No proporcionado'}</td></tr>
+                    <tr><td style="padding: 8px 0; color: #555;"><strong>DPI/Pasaporte:</strong></td><td style="padding: 8px 0;">${paymentData.DPI || 'No proporcionado'}</td></tr>
+                    <tr><td style="padding: 8px 0; color: #555;"><strong>Curso(s):</strong></td><td style="padding: 8px 0;">${paymentData.Items}</td></tr>
+                    <tr><td style="padding: 8px 0; color: #555;"><strong>Total Pagado:</strong></td><td style="padding: 8px 0;"><strong>Q ${paymentData.TotalPrice}.00</strong></td></tr>
+                    <tr><td style="padding: 8px 0; color: #555;"><strong>Fecha:</strong></td><td style="padding: 8px 0;">${new Date(paymentData.Timestamp).toLocaleDateString('es-GT', { year: 'numeric', month: 'long', day: 'numeric' })}</td></tr>
+                    <tr><td style="padding: 8px 0; color: #555;"><strong>No. Recibo:</strong></td><td style="padding: 8px 0;">${paymentData.id.split('-')[0].toUpperCase()}</td></tr>
+                  </table>
+                  <p style="margin-top: 20px; font-size: 12px; color: #999;">Este mensaje fue generado automáticamente por el sistema de Beauty Station.</p>
+                </div>
+              `
+            }
+          }
+        }
+      }));
+      console.log("SES owner notification sent successfully.");
+    } catch (sesErr) {
+      console.error("SES owner notification failed:", sesErr);
     }
 
     // Send confident success signal back to the React UI

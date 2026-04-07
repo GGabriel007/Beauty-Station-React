@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
+import ReactDOM from 'react-dom';
 import '../styles/modules.css';
 import { useParams, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import useWhatsAppForm from '../hook/useWhatsAppForm';
@@ -270,7 +271,7 @@ const CourseDetails = () => {
                             )}
                         </div>
 
-                        {isModalOpen && (
+                        {isModalOpen && ReactDOM.createPortal(
                             <div className="modal" onClick={toggleModal}>
                                 <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                                     <button className="modal-close-btn" onClick={toggleModal}>
@@ -278,7 +279,8 @@ const CourseDetails = () => {
                                     </button>
                                     <img className="modal-image" src={selectedImage} alt="Expanded view" />
                                 </div>
-                            </div>
+                            </div>,
+                            document.body
                         )}
                     </div>
 
