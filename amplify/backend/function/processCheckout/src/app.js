@@ -74,7 +74,7 @@ const ONLINE_COURSES = {
         id: 'lesson-1',
         title: 'Lección 1: Introducción al Curso',
         description: 'Bienvenida al curso en línea de Beauty Station. Conocerás los materiales, el flujo del curso y todo lo que aprenderás a lo largo de las próximas lecciones.',
-        youtubeId: 'PLACEHOLDER_VIDEO_ID',
+        youtubeId: 'B_4eEIxmTNc',
         duration: '00:00'
       }
       // Add more lessons here once each video is uploaded to YouTube
