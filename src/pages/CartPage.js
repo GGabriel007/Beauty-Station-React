@@ -165,13 +165,16 @@ const CartPage = () => {
       let errorMsg = error.message;
       try {
         if (error.response) {
-          const errObj = await error.response.body.json();
-          if (errObj.error) errorMsg = errObj.error;
+          const body = error.response.body;
+          const errObj = typeof body === 'string' ? JSON.parse(body) : await body.json();
+          if (errObj && errObj.error) errorMsg = errObj.error;
         }
       } catch (e) { }
-      setNotificationError(DOMPurify.sanitize("Hubo un error al procesar tu compra con AWS: " + errorMsg));
-      setNotification("");
       const isSeatsError = errorMsg && errorMsg.includes('No hay más asientos disponibles');
+      setNotificationError(DOMPurify.sanitize(
+        isSeatsError ? errorMsg : "Hubo un error al procesar tu compra con AWS: " + errorMsg
+      ));
+      setNotification("");
       toast.error(
         isSeatsError
           ? errorMsg
