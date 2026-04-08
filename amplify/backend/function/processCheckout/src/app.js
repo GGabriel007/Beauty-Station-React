@@ -63,6 +63,25 @@ const courseWhatsappInfo = {
   'Curso Completo Maquillaje 6PM a 8PM':           { displayName: 'Curso Completo Maquillaje',           link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
 };
 
+// Online course catalog — video IDs live here (backend only, never in the React bundle)
+const ONLINE_COURSES = {
+  'curso-en-linea': {
+    courseName: 'Curso en Línea',
+    cartName: 'Curso en Línea',
+    sheetTab: 'Curso en Línea',
+    lessons: [
+      {
+        id: 'lesson-1',
+        title: 'Lección 1: Introducción al Curso',
+        description: 'Bienvenida al curso en línea de Beauty Station. Conocerás los materiales, el flujo del curso y todo lo que aprenderás a lo largo de las próximas lecciones.',
+        youtubeId: 'PLACEHOLDER_VIDEO_ID',
+        duration: '00:00'
+      }
+      // Add more lessons here once each video is uploaded to YouTube
+    ]
+  }
+};
+
 // Master Course ID Mapping for Database Seat Operations
 const moduleIds = {
   'Master Waves 2PM a 4PM': '1Qk3ZTR8Mu9cvxdGGVYER',
@@ -253,6 +272,29 @@ app.post('/checkout', async function (req, res) {
           }
         });
       }
+      // Log online course enrollments to their own sheet tab
+      for (const item of cartItems) {
+        if (!item.online) continue;
+        const onlineCourse = Object.values(ONLINE_COURSES).find(c => c.cartName === item.name);
+        if (!onlineCourse) continue;
+        await sheets.spreadsheets.values.append({
+          spreadsheetId: SHEETS_ID,
+          range: `'${onlineCourse.sheetTab}'!A:G`,
+          valueInputOption: 'RAW',
+          requestBody: {
+            values: [[
+              dateStr,
+              receiptId,
+              paymentData.Name,
+              paymentData.email,
+              paymentData.phoneNumber || '',
+              paymentData.DPI || '',
+              `Q${paymentData.TotalPrice}.00`
+            ]]
+          }
+        });
+      }
+
       console.log("Google Sheets: enrollment logged successfully.");
     } catch (sheetsErr) {
       console.error("Google Sheets logging failed:", sheetsErr);
@@ -328,6 +370,16 @@ app.post('/checkout', async function (req, res) {
         </div>
         ` : ''}
 
+        ${cartItems.some(i => i.online) ? `
+        <div style="margin: 30px 0; background-color: #fdf4ff; border: 1px solid #e9d5ff; border-radius: 8px; padding: 20px; text-align: center;">
+          <h3 style="font-size: 14px; text-transform: uppercase; color: #000; letter-spacing: 1px; margin-top: 0; margin-bottom: 8px;">Tu Curso en Línea</h3>
+          <p style="font-size: 14px; color: #555; margin: 0 0 16px 0;">Inicia sesión en Beauty Station con tu cuenta registrada para acceder a tu curso en línea.</p>
+          <a href="https://main.d2n97l8l3u9ifl.amplifyapp.com/dashboard" style="display: inline-block; background-color: #000; color: #ffffff; padding: 12px 28px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 14px; letter-spacing: 0.5px;">
+            Ir a Mis Cursos →
+          </a>
+        </div>
+        ` : ''}
+
         <div style="text-align: right; margin-top: 20px; background-color: #000; color: #fff; padding: 15px; border-radius: 4px;">
           <h2 style="font-size: 20px; font-weight: bold; margin: 0; letter-spacing: 1px;">TOTAL CANCELADO: Q ${paymentData.TotalPrice || 0}.00</h2>
         </div>
@@ -398,6 +450,81 @@ app.post('/checkout', async function (req, res) {
   } catch (error) {
     console.error("Checkout Error:", error);
     res.status(500).json({ error: error.message, message: 'Hubo un error al procesar el carrito directamente en el servidor AWS.' });
+  }
+});
+
+// COURSE LESSONS: Returns lesson list + video IDs only after verifying the user has purchased
+app.get('/course-lessons/:courseId', async function (req, res) {
+  try {
+    const { courseId } = req.params;
+    const { email } = req.query;
+    if (!email) return res.status(400).json({ error: 'Email requerido.' });
+
+    const course = ONLINE_COURSES[courseId];
+    if (!course) return res.status(404).json({ error: 'Curso no encontrado.' });
+
+    const data = await ddbDocClient.send(new ScanCommand({
+      TableName: 'Payments',
+      FilterExpression: 'email = :email',
+      ExpressionAttributeValues: { ':email': email }
+    }));
+
+    const hasPurchased = (data.Items || []).some(order =>
+      order.Items && order.Items.toLowerCase().includes(course.cartName.toLowerCase())
+    );
+
+    if (!hasPurchased) {
+      return res.status(403).json({ error: 'No tienes acceso a este curso. Adquiérelo para comenzar.' });
+    }
+
+    res.json({ courseName: course.courseName, lessons: course.lessons });
+  } catch (error) {
+    console.error('Error fetching course lessons:', error);
+    res.status(500).json({ error: 'Error al cargar las lecciones del curso.' });
+  }
+});
+
+// GET PROGRESS: Returns the user's completed lessons for an online course
+app.get('/course-progress/:courseId', async function (req, res) {
+  try {
+    const { courseId } = req.params;
+    const { email } = req.query;
+    if (!email) return res.status(400).json({ error: 'Email requerido.' });
+
+    const data = await ddbDocClient.send(new GetCommand({
+      TableName: 'CourseProgress',
+      Key: { email, courseId }
+    }));
+
+    res.json(data.Item || { email, courseId, completedLessons: [], lastWatched: null });
+  } catch (error) {
+    console.error('Error fetching course progress:', error);
+    res.status(500).json({ error: 'Error al cargar el progreso del curso.' });
+  }
+});
+
+// SAVE PROGRESS: Saves the user's lesson completion state for an online course
+app.post('/course-progress/:courseId', async function (req, res) {
+  try {
+    const { courseId } = req.params;
+    const { email, completedLessons, lastWatched } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email requerido.' });
+
+    await ddbDocClient.send(new PutCommand({
+      TableName: 'CourseProgress',
+      Item: {
+        email,
+        courseId,
+        completedLessons: completedLessons || [],
+        lastWatched: lastWatched || null,
+        updatedAt: Date.now()
+      }
+    }));
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error saving course progress:', error);
+    res.status(500).json({ error: 'Error al guardar el progreso.' });
   }
 });
 

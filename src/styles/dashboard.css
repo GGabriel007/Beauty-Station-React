@@ -260,6 +260,13 @@
     color: #d67a9a;
 }
 
+.dashboard-module-link--online {
+    color: #9b59b6;
+}
+.dashboard-module-link--online:hover {
+    color: #7d3c98;
+}
+
 /* ─── Order footer / total ───────────────────────────────────────────────── */
 
 .dashboard-order-footer {

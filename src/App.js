@@ -19,6 +19,7 @@ import CourseDetails from './components/CourseDetails';
 import CartPage from './pages/CartPage';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import CoursePlayer from './pages/CoursePlayer';
 import { CartProvider, CartContext } from './context/CartContext';
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
             {/* Added Auth Routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/mis-cursos/:courseId" element={<CoursePlayer />} />
 
             <Route path="/cart" element={<CartPage />} />
           </Routes>

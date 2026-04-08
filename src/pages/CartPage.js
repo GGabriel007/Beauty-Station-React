@@ -157,7 +157,13 @@ const CartPage = () => {
       const response = await restOperation.response;
       const responseBody = await response.body.json();
       console.log('Secure AWS Checkout successful!', responseBody);
+      const onlineItem = cartItems.find(item => item.online);
       clearCart();
+      if (onlineItem) {
+        toast.success('¡Compra completada! Redirigiendo a tu curso...', { autoClose: 3000 });
+        setTimeout(() => navigate(`/mis-cursos/${onlineItem.courseId}`), 1500);
+        return;
+      }
       setPurchaseSuccess(true);
       setNotification(DOMPurify.sanitize("¡Compra completada exitosamente!"));
       toast.success('¡Compra completada! Recibirás un correo con los detalles de tu registro.', { autoClose: 7000 });

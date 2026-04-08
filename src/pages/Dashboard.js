@@ -164,29 +164,48 @@ const Dashboard = () => {
                   <ul className="dashboard-modules-list">
                     {typeof order.Items === 'string' ? order.Items.split(',').map((mod, i) => {
                       const cleanName = mod.trim();
+                      const lower = cleanName.toLowerCase();
                       let courseSlug = null;
+                      let onlineCourseId = null;
 
-                      if (cleanName.toLowerCase().includes('kit')) courseSlug = null;
-                      else if (cleanName.toLowerCase().includes('peinados para eventos') || cleanName.toLowerCase().includes('peinado para eventos')) courseSlug = 'peinado-eventos';
-                      else if (cleanName.toLowerCase().includes('master waves intensivo')) courseSlug = 'master-waves-intensivo';
-                      else if (cleanName.toLowerCase().includes('master waves')) courseSlug = 'master-waves';
-                      else if (cleanName.toLowerCase().includes('curso completo peinado')) courseSlug = 'curso-completo-peinado';
-                      else if (cleanName.toLowerCase().includes('pieles perfectas')) courseSlug = 'pieles-perfectas';
-                      else if (cleanName.toLowerCase().includes('maquillaje social')) courseSlug = 'maquillaje-social';
-                      else if (cleanName.toLowerCase().includes('maestría en novias') && cleanName.toLowerCase().includes('makeup')) courseSlug = 'maestria-novias-makeup';
-                      else if (cleanName.toLowerCase().includes('maestría en novias') || cleanName.toLowerCase().includes('maestrías en novias')) courseSlug = 'maestria-novias';
-                      else if (cleanName.toLowerCase().includes('curso completo maquillaje')) courseSlug = 'curso-completo-maquillaje';
+                      if (lower.includes('curso en línea') || lower.includes('curso en linea')) {
+                        onlineCourseId = 'curso-en-linea';
+                      } else if (lower.includes('kit')) {
+                        courseSlug = null;
+                      } else if (lower.includes('peinados para eventos') || lower.includes('peinado para eventos')) {
+                        courseSlug = 'peinado-eventos';
+                      } else if (lower.includes('master waves intensivo')) {
+                        courseSlug = 'master-waves-intensivo';
+                      } else if (lower.includes('master waves')) {
+                        courseSlug = 'master-waves';
+                      } else if (lower.includes('curso completo peinado')) {
+                        courseSlug = 'curso-completo-peinado';
+                      } else if (lower.includes('pieles perfectas')) {
+                        courseSlug = 'pieles-perfectas';
+                      } else if (lower.includes('maquillaje social')) {
+                        courseSlug = 'maquillaje-social';
+                      } else if (lower.includes('maestría en novias') && lower.includes('makeup')) {
+                        courseSlug = 'maestria-novias-makeup';
+                      } else if (lower.includes('maestría en novias') || lower.includes('maestrías en novias')) {
+                        courseSlug = 'maestria-novias';
+                      } else if (lower.includes('curso completo maquillaje')) {
+                        courseSlug = 'curso-completo-maquillaje';
+                      }
 
                       return (
                         <li key={i} className="dashboard-module-item">
                           <span className="dashboard-module-dot" />
                           <div className="dashboard-module-body">
                             <span className="dashboard-module-name">{cleanName}</span>
-                            {courseSlug && (
+                            {onlineCourseId ? (
+                              <Link to={`/mis-cursos/${onlineCourseId}`} className="dashboard-module-link dashboard-module-link--online">
+                                Ir a mi curso →
+                              </Link>
+                            ) : courseSlug ? (
                               <Link to={`/classes/course/${courseSlug}`} className="dashboard-module-link">
                                 Ver curso →
                               </Link>
-                            )}
+                            ) : null}
                           </div>
                         </li>
                       );
