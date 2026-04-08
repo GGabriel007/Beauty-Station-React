@@ -137,12 +137,15 @@ const CoursePlayer = () => {
 
   return (
     <div className="cp-wrapper">
-      {/* ── Top bar ── */}
-      <div className="cp-header">
-        <button className="cp-back-btn" onClick={() => navigate('/dashboard')}>
-          <FiArrowLeft /> Volver a mi perfil
-        </button>
-        <span className="cp-course-title-bar">{courseName}</span>
+      <button className="cp-back-btn" onClick={() => navigate('/dashboard')}>
+        <FiArrowLeft /> Volver a mi perfil
+      </button>
+
+      <h1 className="cp-page-title">{courseName}</h1>
+      <p className="cp-page-subtitle">Curso en Línea</p>
+
+      <div className="cp-progress-header">
+        <span />
         <span className="cp-progress-badge">{progressPct}% completado</span>
       </div>
 
@@ -192,15 +195,17 @@ const CoursePlayer = () => {
         <main className="cp-main">
           {currentLesson ? (
             <>
-              <div className="cp-video-wrapper">
-                <iframe
-                  key={currentLesson.youtubeId}
-                  src={`https://www.youtube-nocookie.com/embed/${currentLesson.youtubeId}?rel=0&modestbranding=1`}
-                  title={currentLesson.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                  className="cp-iframe"
-                />
+              <div className="cp-video-card">
+                <div className="cp-video-wrapper">
+                  <iframe
+                    key={currentLesson.youtubeId}
+                    src={`https://www.youtube-nocookie.com/embed/${currentLesson.youtubeId}?rel=0&modestbranding=1`}
+                    title={currentLesson.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    className="cp-iframe"
+                  />
+                </div>
               </div>
 
               <div className="cp-lesson-detail">
