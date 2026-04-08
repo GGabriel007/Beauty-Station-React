@@ -182,7 +182,8 @@
               "Resource": [
                 "arn:aws:dynamodb:*:*:table/Payments",
                 "arn:aws:dynamodb:*:*:table/Modulos",
-                "arn:aws:dynamodb:*:*:table/Carts"
+                "arn:aws:dynamodb:*:*:table/Carts",
+                "arn:aws:dynamodb:*:*:table/CourseProgress"
               ],
               "Effect": "Allow"
             }
