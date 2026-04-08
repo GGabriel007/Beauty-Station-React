@@ -357,13 +357,9 @@ const CourseDetails = () => {
                         )}
 
                         <button
-                            className={`course-add-cart-btn${selectedScheduleIndex === null ? ' course-add-cart-btn--disabled' : ''}`}
-                            disabled={selectedScheduleIndex === null}
+                            className={`course-add-cart-btn${(selectedScheduleIndex === null || availableSeats === 0) ? ' course-add-cart-btn--disabled' : ''}`}
+                            disabled={selectedScheduleIndex === null || availableSeats === 0}
                             onClick={() => {
-                                if (availableSeats !== null && availableSeats === 0) {
-                                    toast.error('Lo sentimos, no hay cupos disponibles para este horario.', { autoClose: 5000 });
-                                    return;
-                                }
 
                                 const priceRaw = courseData.price ? courseData.price.replace(/\D/g, '') : "0";
                                 const priceInt = parseInt(priceRaw, 10) || 0;
@@ -443,7 +439,7 @@ const CourseDetails = () => {
                                 );
                             }}
                         >
-                            Añadir al Carrito
+                            {availableSeats === 0 ? 'Sin Cupos Disponibles' : 'Añadir al Carrito'}
                         </button>
 
                         {/* ── Course Details ── */}

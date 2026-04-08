@@ -171,7 +171,13 @@ const CartPage = () => {
       } catch (e) { }
       setNotificationError(DOMPurify.sanitize("Hubo un error al procesar tu compra con AWS: " + errorMsg));
       setNotification("");
-      toast.error('Error al procesar el pago. Por favor, verifica tus datos e intenta nuevamente.', { autoClose: 5000 });
+      const isSeatsError = errorMsg && errorMsg.includes('No hay más asientos disponibles');
+      toast.error(
+        isSeatsError
+          ? errorMsg
+          : 'Error al procesar el pago. Por favor, verifica tus datos e intenta nuevamente.',
+        { autoClose: 6000 }
+      );
     } finally {
       setIsSubmitting(false);
     }
