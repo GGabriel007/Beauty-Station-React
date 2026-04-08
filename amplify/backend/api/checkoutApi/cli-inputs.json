@@ -56,6 +56,28 @@
           "delete"
         ]
       }
+    },
+    "/course-lessons/{courseId}": {
+      "name": "/course-lessons/{courseId}",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read"
+        ]
+      }
+    },
+    "/course-progress/{courseId}": {
+      "name": "/course-progress/{courseId}",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update"
+        ]
+      }
     }
   }
 }
