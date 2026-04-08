@@ -1,6 +1,7 @@
 export const coursesInfo = {
     // Hair Modules
     "master-waves": {
+        whatsappLink: "https://chat.whatsapp.com/KasPTeI9ag0DJiRAzUXjoN",
         courseName: "Master Waves",
         title: "MASTER EN WAVES",
         level: "Principiante/Intermedio",
@@ -28,6 +29,7 @@ export const coursesInfo = {
         }
     },
     "peinado-eventos": {
+        whatsappLink: "https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn",
         courseName: "Peinado para eventos",
         title: "PEINADO PARA EVENTOS",
         level: "Intermedio",
@@ -57,6 +59,7 @@ export const coursesInfo = {
         }
     },
     "maestria-novias": {
+        whatsappLink: "https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn",
         courseName: "Maestrías en novias y tendencias",
         title: "MAESTRÍAS EN NOVIAS Y TENDENCIAS",
         level: "Avanzado, Actualización",
@@ -83,6 +86,7 @@ export const coursesInfo = {
         },
     },
     "master-waves-intensivo": {
+        whatsappLink: "https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn",
         courseName: "Master Waves Intensivo 1 Día",
         title: "MASTER EN WAVES",
         subtitle: "INTENSIVO",
@@ -115,6 +119,7 @@ export const coursesInfo = {
         }
     },
     "curso-completo-peinado": {
+        whatsappLink: "https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn",
         courseName: "Curso Completo Peinado",
         title: "CURSO COMPLETO",
         level: "Principiante a Avanzado",
@@ -181,6 +186,7 @@ export const coursesInfo = {
 
     // Makeup Modules
     "pieles-perfectas": {
+        whatsappLink: "https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn",
         courseName: "Pieles Perfectas",
         title: "PIELES PERFECTAS",
         level: "Principiante/Intermedio",
@@ -209,6 +215,7 @@ export const coursesInfo = {
         }
     },
     "maquillaje-social": {
+        whatsappLink: "https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn",
         courseName: "Maquillaje Social",
         title: "MAQUILLAJE SOCIAL",
         level: "Intermedio",
@@ -238,6 +245,7 @@ export const coursesInfo = {
         }
     },
     "maestria-novias-makeup": {
+        whatsappLink: "https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn",
         courseName: "Maestría en Novias y Tendencias",
         title: "MAESTRÍA EN NOVIAS Y TENDENCIAS",
         level: "Avanzado/Actualización",
@@ -265,6 +273,7 @@ export const coursesInfo = {
         }
     },
     "curso-completo-maquillaje": {
+        whatsappLink: "https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn",
         courseName: "Curso Completo Maquillaje",
         title: "CURSO COMPLETO",
         level: "Principiante a Avanzado",

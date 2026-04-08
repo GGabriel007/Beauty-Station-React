@@ -6,6 +6,22 @@ const { DynamoDBDocumentClient, PutCommand, GetCommand, UpdateCommand, ScanComma
 const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
 const crypto = require('crypto');
 const { Resend } = require('resend');
+const { google } = require('googleapis');
+
+const SHEETS_ID = process.env.GOOGLE_SHEETS_ID || '113N1OhuKeVIR9mKy4LBbkEUOn1z6fJ6g6v_RWSHefKA';
+
+// Lazy singleton — reuses the authenticated client across warm Lambda invocations
+let _sheetsClient = null;
+function getSheetsClient() {
+  if (_sheetsClient) return _sheetsClient;
+  const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
+  const auth = new google.auth.GoogleAuth({
+    credentials,
+    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+  });
+  _sheetsClient = google.sheets({ version: 'v4', auth });
+  return _sheetsClient;
+}
 
 // Automatically loads key from AWS Env Vars, or falls back to your local environment file value
 const resend = new Resend(process.env.RESEND_API_KEY || 're_2SaxmUUK_ChhdB66Nqsqd6r3yVVt7JExC');
@@ -26,6 +42,26 @@ const ddbDocClient = DynamoDBDocumentClient.from(client);
 const sesClient = new SESClient({ region: process.env.REGION || 'us-east-1' });
 
 const OWNER_EMAIL = process.env.OWNER_EMAIL || 'g.a.gramirez007@gmail.com';
+
+// WhatsApp group info per course (displayName for email button, link for the group)
+const courseWhatsappInfo = {
+  'Master Waves 2PM a 4PM':                        { displayName: 'Master Waves',                        link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
+  'Master Waves 6PM a 8PM':                        { displayName: 'Master Waves',                        link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
+  'Peinados Para Eventos 2PM a 4PM':               { displayName: 'Peinado Para Eventos',                link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
+  'Peinados Para Eventos 6PM a 8PM':               { displayName: 'Peinado Para Eventos',                link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
+  'Maestrías en Novias y Tendencias 2PM a 4PM':    { displayName: 'Maestrías en Novias y Tendencias',    link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
+  'Maestrías en Novias y Tendencias 6PM a 8PM':    { displayName: 'Maestrías en Novias y Tendencias',    link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
+  'Curso Completo Peinado 2PM a 4PM':              { displayName: 'Curso Completo Peinado',              link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
+  'Curso Completo Peinado 6PM a 8PM':              { displayName: 'Curso Completo Peinado',              link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
+  'Pieles Perfectas 2PM a 4PM':                    { displayName: 'Pieles Perfectas',                    link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
+  'Pieles Perfectas 6PM a 8PM':                    { displayName: 'Pieles Perfectas',                    link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
+  'Maquillaje Social 2PM a 4PM':                   { displayName: 'Maquillaje Social',                   link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
+  'Maquillaje Social 6PM a 8PM':                   { displayName: 'Maquillaje Social',                   link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
+  'Maestría en Novias y Tendencias 2PM a 4PM':     { displayName: 'Maestría en Novias y Tendencias',     link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
+  'Maestría en Novias y Tendencias 6PM a 8PM':     { displayName: 'Maestría en Novias y Tendencias',     link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
+  'Curso Completo Maquillaje 2PM a 4PM':           { displayName: 'Curso Completo Maquillaje',           link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
+  'Curso Completo Maquillaje 6PM a 8PM':           { displayName: 'Curso Completo Maquillaje',           link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
+};
 
 // Master Course ID Mapping for Database Seat Operations
 const moduleIds = {
@@ -189,8 +225,52 @@ app.post('/checkout', async function (req, res) {
 
     await ddbDocClient.send(new PutCommand({ TableName: 'Payments', Item: paymentData }));
 
-    // 4. DISPATCH EMAIL: Send automated receipt natively via Resend SDK
+    // 4. GOOGLE SHEETS: Log each purchased course into its own sheet tab
+    try {
+      const sheets = getSheetsClient();
+      const dateStr = new Date(paymentData.Timestamp).toLocaleDateString('es-GT', { year: 'numeric', month: 'long', day: 'numeric' });
+      const receiptId = paymentData.id.split('-')[0].toUpperCase();
+
+      for (const item of cartItems) {
+        const info = courseWhatsappInfo[item.name];
+        if (!info) continue; // skip items with no course mapping (e.g. kit)
+
+        await sheets.spreadsheets.values.append({
+          spreadsheetId: SHEETS_ID,
+          range: `'${info.displayName}'!A:H`,
+          valueInputOption: 'RAW',
+          requestBody: {
+            values: [[
+              dateStr,
+              receiptId,
+              paymentData.Name,
+              paymentData.email,
+              paymentData.phoneNumber || '',
+              paymentData.DPI || '',
+              item.name,
+              `Q${paymentData.TotalPrice}.00`
+            ]]
+          }
+        });
+      }
+      console.log("Google Sheets: enrollment logged successfully.");
+    } catch (sheetsErr) {
+      console.error("Google Sheets logging failed:", sheetsErr);
+    }
+
+    // 5. DISPATCH EMAIL: Send automated receipt natively via Resend SDK
     const itemsArray = typeof paymentData.Items === 'string' ? paymentData.Items.split(",") : [];
+
+    // Build one WhatsApp entry per purchased course (deduplicated by course name)
+    const seenCourses = new Set();
+    const whatsappEntries = [];
+    for (const item of cartItems) {
+      const info = courseWhatsappInfo[item.name];
+      if (info && !seenCourses.has(info.displayName)) {
+        seenCourses.add(info.displayName);
+        whatsappEntries.push(info);
+      }
+    }
 
     const customerHtml = `
       <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e0e0e0; border-radius: 8px; color: #111;">
@@ -236,6 +316,18 @@ app.post('/checkout', async function (req, res) {
           </ul>
         </div>
 
+        ${whatsappEntries.length > 0 ? `
+        <div style="margin: 30px 0; background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px; text-align: center;">
+          <h3 style="font-size: 14px; text-transform: uppercase; color: #000; letter-spacing: 1px; margin-top: 0; margin-bottom: 8px;">Grupo de WhatsApp</h3>
+          <p style="font-size: 14px; color: #555; margin: 0 0 16px 0;">Únete al grupo de WhatsApp de tu curso para recibir avisos, materiales y novedades.</p>
+          ${whatsappEntries.map(({ displayName, link }) => `
+            <a href="${link}" style="display: inline-block; background-color: #25D366; color: #ffffff; padding: 12px 28px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 14px; margin: 5px; letter-spacing: 0.5px;">
+              Unirme — ${displayName}
+            </a>
+          `).join('')}
+        </div>
+        ` : ''}
+
         <div style="text-align: right; margin-top: 20px; background-color: #000; color: #fff; padding: 15px; border-radius: 4px;">
           <h2 style="font-size: 20px; font-weight: bold; margin: 0; letter-spacing: 1px;">TOTAL CANCELADO: Q ${paymentData.TotalPrice || 0}.00</h2>
         </div>
@@ -265,7 +357,7 @@ app.post('/checkout', async function (req, res) {
       console.error("Critical failure parsing Resend Email:", emailErr);
     }
 
-    // 5. OWNER NOTIFICATION: Send enrollment alert to business owner via AWS SES
+    // 6. OWNER NOTIFICATION: Send enrollment alert to business owner via AWS SES
     try {
       await sesClient.send(new SendEmailCommand({
         Source: OWNER_EMAIL,
