@@ -17,6 +17,8 @@ const CoursePlayer = () => {
   const [courseName, setCourseName] = useState('');
   const [completedLessons, setCompletedLessons] = useState([]);
   const [currentLessonId, setCurrentLessonId] = useState(null);
+  const [videoUrl, setVideoUrl] = useState('');
+  const [videoLoading, setVideoLoading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [accessDenied, setAccessDenied] = useState(false);
   const [savingProgress, setSavingProgress] = useState(false);
@@ -76,6 +78,34 @@ const CoursePlayer = () => {
 
     fetchData();
   }, [userEmail, courseId]);
+
+  // Fetch a fresh CloudFront signed URL whenever the selected lesson changes
+  useEffect(() => {
+    if (!currentLessonId || !userEmail) return;
+    let cancelled = false;
+
+    const fetchVideoUrl = async () => {
+      setVideoUrl('');
+      setVideoLoading(true);
+      try {
+        const op = get({
+          apiName: 'checkoutApi',
+          path: `/course-video-url/${courseId}/${currentLessonId}?email=${encodeURIComponent(userEmail)}`
+        });
+        const res = await op.response;
+        const data = await res.body.json();
+        if (!cancelled) setVideoUrl(data.videoUrl || '');
+      } catch (err) {
+        console.error('Error fetching signed video URL:', err);
+        if (!cancelled) toast.error('Error al cargar el video. Intenta de nuevo.', { autoClose: 5000 });
+      } finally {
+        if (!cancelled) setVideoLoading(false);
+      }
+    };
+
+    fetchVideoUrl();
+    return () => { cancelled = true; };
+  }, [currentLessonId, userEmail, courseId]);
 
   const saveProgress = useCallback(async (newCompleted, newLastWatched) => {
     if (!userEmail) return;
@@ -197,14 +227,22 @@ const CoursePlayer = () => {
             <>
               <div className="cp-video-card">
                 <div className="cp-video-wrapper">
-                  <iframe
-                    key={currentLesson.youtubeId}
-                    src={`https://www.youtube-nocookie.com/embed/${currentLesson.youtubeId}?rel=0&modestbranding=1`}
-                    title={currentLesson.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                    className="cp-iframe"
-                  />
+                  {videoLoading && (
+                    <div className="cp-video-loading">
+                      <div className="cp-spinner" />
+                    </div>
+                  )}
+                  {!videoLoading && videoUrl && (
+                    <video
+                      key={videoUrl}
+                      src={videoUrl}
+                      controls
+                      controlsList="nodownload"
+                      disablePictureInPicture
+                      onContextMenu={e => e.preventDefault()}
+                      className="cp-video"
+                    />
+                  )}
                 </div>
               </div>
 

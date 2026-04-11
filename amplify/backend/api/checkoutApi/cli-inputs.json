@@ -78,6 +78,16 @@
           "update"
         ]
       }
+    },
+    "/course-video-url/{courseId}/{lessonId}": {
+      "name": "/course-video-url/{courseId}/{lessonId}",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "read"
+        ]
+      }
     }
   }
 }

@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import '../styles/modules.css';
-import { useParams, useLocation, Navigate, useNavigate } from 'react-router-dom';
+import { useParams, useLocation, Navigate, useNavigate, Link } from 'react-router-dom';
 import useWhatsAppForm from '../hook/useWhatsAppForm';
 import { coursesInfo } from '../config/courseData';
 import { CartContext } from '../context/CartContext';
+import { useAuthenticator } from '@aws-amplify/ui-react';
+import { fetchUserAttributes } from 'aws-amplify/auth';
 import { get } from 'aws-amplify/api';
 import { toast } from 'react-toastify';
 import { FiZoomIn, FiX, FiChevronDown, FiChevronLeft, FiChevronRight, FiCheckCircle } from 'react-icons/fi';
@@ -86,12 +88,14 @@ const CourseDetails = () => {
     const navigate = useNavigate();
     const courseData = coursesInfo[courseId];
     const { addToCart, cartItems, includeKit, setIncludeKit } = useContext(CartContext);
+    const { user, authStatus } = useAuthenticator(context => [context.user, context.authStatus]);
 
     const isMakeupCourse = MAKEUP_COURSES.includes(courseId);
 
     const [availableSeats, setAvailableSeats] = useState(null);
     const [selectedScheduleIndex, setSelectedScheduleIndex] = useState(null);
     const [allDbItems, setAllDbItems] = useState([]);
+    const [alreadyOwned, setAlreadyOwned] = useState(false);
 
     const activeDbKey = DB_KEY_MAP[`${courseId}-${selectedScheduleIndex}`];
 
@@ -126,6 +130,37 @@ const CourseDetails = () => {
             setAvailableSeats(null);
         }
     }, [allDbItems, activeDbKey]);
+
+    // Check if the authenticated user already purchased this online course
+    useEffect(() => {
+        if (!courseData?.online) return;
+        if (authStatus !== 'authenticated') return;
+
+        async function checkOwnership() {
+            try {
+                const attrs = await fetchUserAttributes();
+                const email = attrs.email || user?.signInDetails?.loginId || '';
+                if (!email) return;
+
+                const restOperation = get({
+                    apiName: 'checkoutApi',
+                    path: '/my-orders',
+                    options: { queryParams: { email } }
+                });
+                const response = await restOperation.response;
+                const orders = await response.body.json();
+
+                const owned = (orders || []).some(order =>
+                    order.Items && order.Items.toLowerCase().includes('curso en línea')
+                );
+                setAlreadyOwned(owned);
+            } catch (err) {
+                console.error('Error checking online course ownership:', err);
+            }
+        }
+
+        checkOwnership();
+    }, [courseData, authStatus, user]);
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedImage, setSelectedImage] = useState('');
@@ -356,9 +391,23 @@ const CourseDetails = () => {
                             </label>
                         )}
 
+                        {courseData.online && alreadyOwned && (
+                            <div className="course-owned-banner">
+                                <FiCheckCircle className="course-owned-icon" />
+                                <div>
+                                    <p className="course-owned-title">Ya tienes este curso en tu cuenta</p>
+                                    <p className="course-owned-body">
+                                        Ve a{' '}
+                                        <Link to="/dashboard" className="course-owned-link">Mi Perfil →</Link>
+                                        {' '}para continuar viéndolo.
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+
                         <button
-                            className={`course-add-cart-btn${(selectedScheduleIndex === null || availableSeats === 0) ? ' course-add-cart-btn--disabled' : ''}`}
-                            disabled={selectedScheduleIndex === null || availableSeats === 0}
+                            className={`course-add-cart-btn${(selectedScheduleIndex === null || availableSeats === 0 || alreadyOwned) ? ' course-add-cart-btn--disabled' : ''}`}
+                            disabled={selectedScheduleIndex === null || availableSeats === 0 || alreadyOwned}
                             onClick={() => {
 
                                 const priceRaw = courseData.price ? courseData.price.replace(/\D/g, '') : "0";
@@ -439,7 +488,7 @@ const CourseDetails = () => {
                                 );
                             }}
                         >
-                            {availableSeats === 0 ? 'Sin Cupos Disponibles' : 'Añadir al Carrito'}
+                            {alreadyOwned ? 'Curso ya adquirido' : availableSeats === 0 ? 'Sin Cupos Disponibles' : 'Añadir al Carrito'}
                         </button>
 
                         {/* ── Course Details ── */}

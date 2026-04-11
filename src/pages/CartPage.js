@@ -4,7 +4,7 @@ import { CartContext } from '../context/CartContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { fetchUserAttributes, fetchAuthSession } from 'aws-amplify/auth';
-import { post } from 'aws-amplify/api';
+import { post, get } from 'aws-amplify/api';
 import '../styles/CartPage.css';
 import { Link } from 'react-router-dom';
 import MyComponent from '../context/MyComponent';
@@ -109,6 +109,36 @@ const CartPage = () => {
       });
       navigate('/login');
       return;
+    }
+
+    if (hasOnlineItem && authStatus === 'authenticated') {
+      try {
+        const email = formData['emailAddress'];
+        if (email) {
+          const ordersOp = get({
+            apiName: 'checkoutApi',
+            path: '/my-orders',
+            options: { queryParams: { email } }
+          });
+          const ordersResp = await ordersOp.response;
+          const existingOrders = await ordersResp.body.json();
+          const onlineCartItems = cartItems.filter(item => item.online);
+          for (const onlineItem of onlineCartItems) {
+            const alreadyOwned = (existingOrders || []).some(order =>
+              order.Items && order.Items.toLowerCase().includes(onlineItem.name.toLowerCase())
+            );
+            if (alreadyOwned) {
+              toast.error(
+                `Ya tienes "${onlineItem.name}" en tu cuenta. Ve a "Mi Perfil" para continuar tu curso.`,
+                { autoClose: 7000 }
+              );
+              return;
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Error checking online course ownership at checkout:', err);
+      }
     }
 
     if (!validateCardNumber(formData.cardNumber)) {

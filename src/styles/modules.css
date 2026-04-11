@@ -579,6 +579,49 @@ ul {
   box-shadow: 0 10px 22px rgba(237, 147, 180, 0.55);
 }
 
+/* ── Already-owned banner ── */
+.course-owned-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background-color: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-top: 22px;
+}
+
+.course-owned-icon {
+  color: #16a34a;
+  font-size: 22px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.course-owned-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: #15803d;
+  margin: 0 0 4px 0;
+}
+
+.course-owned-body {
+  font-size: 13px;
+  color: #374151;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.course-owned-link {
+  color: #ed93b4;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.course-owned-link:hover {
+  text-decoration: underline;
+}
+
 /* Course schedule dynamic blocks */
 .course-session-demo {
   margin-right: 5px;

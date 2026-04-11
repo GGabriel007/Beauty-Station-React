@@ -4,17 +4,37 @@ const awsServerlessExpressMiddleware = require('aws-serverless-express/middlewar
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 const { DynamoDBDocumentClient, PutCommand, GetCommand, UpdateCommand, ScanCommand } = require('@aws-sdk/lib-dynamodb');
 const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
+const { SSMClient, GetParameterCommand } = require('@aws-sdk/client-ssm');
+const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
+const { getSignedUrl: getS3SignedUrl } = require('@aws-sdk/s3-request-presigner');
 const crypto = require('crypto');
 const { Resend } = require('resend');
 const { google } = require('googleapis');
 
 const SHEETS_ID = process.env.GOOGLE_SHEETS_ID || '113N1OhuKeVIR9mKy4LBbkEUOn1z6fJ6g6v_RWSHefKA';
+const ssmClient = new SSMClient({ region: process.env.REGION || 'us-east-1' });
 
-// Lazy singleton — reuses the authenticated client across warm Lambda invocations
+// Lazy SSM secret fetchers — cached per warm Lambda instance to avoid repeated SSM calls
+let _googleServiceAccountJson = null;
+let _cloudfrontPrivateKey = null;
+
+async function getGoogleServiceAccountJson() {
+  if (_googleServiceAccountJson) return _googleServiceAccountJson;
+  const result = await ssmClient.send(new GetParameterCommand({
+    Name: '/beauty-station/google-service-account-json',
+    WithDecryption: true
+  }));
+  _googleServiceAccountJson = result.Parameter.Value;
+  return _googleServiceAccountJson;
+}
+
+
+// Lazy singleton — reuses the authenticated Sheets client across warm Lambda invocations
 let _sheetsClient = null;
-function getSheetsClient() {
+async function getSheetsClient() {
   if (_sheetsClient) return _sheetsClient;
-  const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
+  const json = await getGoogleServiceAccountJson();
+  const credentials = JSON.parse(json);
   const auth = new google.auth.GoogleAuth({
     credentials,
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
@@ -40,6 +60,8 @@ app.use(function (req, res, next) {
 const client = new DynamoDBClient({ region: process.env.REGION || 'us-east-1' });
 const ddbDocClient = DynamoDBDocumentClient.from(client);
 const sesClient = new SESClient({ region: process.env.REGION || 'us-east-1' });
+const s3Client = new S3Client({ region: process.env.REGION || 'us-east-1' });
+const S3_BUCKET = process.env.S3_BUCKET_NAME || 'beauty-station-videos';
 
 const OWNER_EMAIL = process.env.OWNER_EMAIL || 'g.a.gramirez007@gmail.com';
 
@@ -63,7 +85,8 @@ const courseWhatsappInfo = {
   'Curso Completo Maquillaje 6PM a 8PM':           { displayName: 'Curso Completo Maquillaje',           link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
 };
 
-// Online course catalog — video IDs live here (backend only, never in the React bundle)
+// Online course catalog — s3Keys live here (backend only, never exposed to the React bundle)
+// s3Key is the file path inside the S3 bucket (e.g. "lessons/lesson-1.mp4")
 const ONLINE_COURSES = {
   'curso-en-linea': {
     courseName: 'Curso en Línea',
@@ -74,10 +97,11 @@ const ONLINE_COURSES = {
         id: 'lesson-1',
         title: 'Lección 1: Introducción al Curso',
         description: 'Bienvenida al curso en línea de Beauty Station. Conocerás los materiales, el flujo del curso y todo lo que aprenderás a lo largo de las próximas lecciones.',
-        youtubeId: 'B_4eEIxmTNc',
+        s3Key: 'Como_moments_Helldivers.mp4',
         duration: '00:00'
       }
-      // Add more lessons here once each video is uploaded to YouTube
+      // Add more lessons here once each video is uploaded to S3
+      // { id: 'lesson-2', title: '...', description: '...', s3Key: 'lessons/lesson-2.mp4', duration: '00:00' }
     ]
   }
 };
@@ -183,7 +207,27 @@ app.post('/checkout', async function (req, res) {
   try {
     const { email, Name, userName, DPI, phoneNumber, cartItems, IncludeKit, TotalPrice } = req.body;
 
-    // 1. PRE-CHECK INVENTORY: Verify seats exist in DynamoDB 'Modulos' before processing payment
+    // 1a. PRE-CHECK ONLINE OWNERSHIP: Prevent duplicate purchase of online courses
+    const onlineItems = cartItems.filter(item => item.online);
+    if (onlineItems.length > 0) {
+      const existingData = await ddbDocClient.send(new ScanCommand({
+        TableName: 'Payments',
+        FilterExpression: 'email = :email',
+        ExpressionAttributeValues: { ':email': email }
+      }));
+      for (const item of onlineItems) {
+        const alreadyOwned = (existingData.Items || []).some(order =>
+          order.Items && order.Items.toLowerCase().includes(item.name.toLowerCase())
+        );
+        if (alreadyOwned) {
+          return res.status(409).json({
+            error: `Ya tienes "${item.name}" en tu cuenta. Ve a "Mi Perfil" para continuar tu curso.`
+          });
+        }
+      }
+    }
+
+    // 1b. PRE-CHECK INVENTORY: Verify seats exist in DynamoDB 'Modulos' before processing payment
     for (const item of cartItems) {
       const moduleId = moduleIds[item.name];
       if (moduleId) {
@@ -246,7 +290,7 @@ app.post('/checkout', async function (req, res) {
 
     // 4. GOOGLE SHEETS: Log each purchased course into its own sheet tab
     try {
-      const sheets = getSheetsClient();
+      const sheets = await getSheetsClient();
       const dateStr = new Date(paymentData.Timestamp).toLocaleDateString('es-GT', { year: 'numeric', month: 'long', day: 'numeric' });
       const receiptId = paymentData.id.split('-')[0].toUpperCase();
 
@@ -477,10 +521,53 @@ app.get('/course-lessons/:courseId', async function (req, res) {
       return res.status(403).json({ error: 'No tienes acceso a este curso. Adquiérelo para comenzar.' });
     }
 
-    res.json({ courseName: course.courseName, lessons: course.lessons });
+    // Strip s3Key — never expose internal bucket paths to the frontend
+    const safeLessons = course.lessons.map(({ id, title, description, duration }) => ({ id, title, description, duration }));
+    res.json({ courseName: course.courseName, lessons: safeLessons });
   } catch (error) {
     console.error('Error fetching course lessons:', error);
     res.status(500).json({ error: 'Error al cargar las lecciones del curso.' });
+  }
+});
+
+// COURSE VIDEO URL: Generates a time-limited CloudFront signed URL for a specific lesson
+// The s3Key is never sent to the browser — only the signed URL is
+app.get('/course-video-url/:courseId/:lessonId', async function (req, res) {
+  try {
+    const { courseId, lessonId } = req.params;
+    const { email } = req.query;
+    if (!email) return res.status(400).json({ error: 'Email requerido.' });
+
+    const course = ONLINE_COURSES[courseId];
+    if (!course) return res.status(404).json({ error: 'Curso no encontrado.' });
+
+    const lesson = course.lessons.find(l => l.id === lessonId);
+    if (!lesson) return res.status(404).json({ error: 'Lección no encontrada.' });
+
+    // Verify purchase
+    const data = await ddbDocClient.send(new ScanCommand({
+      TableName: 'Payments',
+      FilterExpression: 'email = :email',
+      ExpressionAttributeValues: { ':email': email }
+    }));
+    const hasPurchased = (data.Items || []).some(order =>
+      order.Items && order.Items.toLowerCase().includes(course.cartName.toLowerCase())
+    );
+    if (!hasPurchased) {
+      return res.status(403).json({ error: 'No tienes acceso a este curso.' });
+    }
+
+    // Generate a time-limited S3 pre-signed URL (valid for 4 hours)
+    const signedUrl = await getS3SignedUrl(
+      s3Client,
+      new GetObjectCommand({ Bucket: S3_BUCKET, Key: lesson.s3Key }),
+      { expiresIn: 14400 }
+    );
+
+    res.json({ videoUrl: signedUrl });
+  } catch (error) {
+    console.error('Error generating video URL:', error);
+    res.status(500).json({ error: 'Error al generar el enlace del video.' });
   }
 });
 
