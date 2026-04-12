@@ -5,36 +5,52 @@
 //
 // Phase 2 will replace the placeholder body with the full admin dashboard UI.
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuthenticator } from '@aws-amplify/ui-react';
-
-// Reads the Cognito groups from the access-token payload embedded in the
-// Amplify session object. Works for both email and Google OAuth sign-ins.
-function useIsAdmin() {
-  const { user } = useAuthenticator(ctx => [ctx.user]);
-  if (!user) return false;
-  const payload =
-    user?.signInUserSession?.accessToken?.payload ||
-    user?.signInDetails?.loginId
-      ? user?.signInUserSession?.accessToken?.payload
-      : {};
-  const groups = payload?.['cognito:groups'] || [];
-  return Array.isArray(groups)
-    ? groups.includes('admin')
-    : String(groups).split(',').map(g => g.trim()).includes('admin');
-}
+import { fetchAuthSession } from 'aws-amplify/auth';
 
 export default function AdminPage() {
   const { authStatus } = useAuthenticator(ctx => [ctx.authStatus]);
-  const isAdmin = useIsAdmin();
+  const [isAdmin, setIsAdmin]   = useState(false);
+  const [checking, setChecking] = useState(true);
 
-  // Not logged in → send to /login
+  // Use fetchAuthSession() — the correct Amplify v6 way to read JWT claims.
+  // This is the same pattern used in Dashboard.js and CartPage.js.
+  useEffect(() => {
+    if (authStatus !== 'authenticated') {
+      setChecking(false);
+      return;
+    }
+    fetchAuthSession()
+      .then(session => {
+        // cognito:groups lives in the access token payload
+        const payload = session?.tokens?.accessToken?.payload || {};
+        const rawGroups = payload['cognito:groups'] || [];
+        const groups = Array.isArray(rawGroups)
+          ? rawGroups
+          : String(rawGroups).split(',').map(g => g.trim()).filter(Boolean);
+        setIsAdmin(groups.includes('admin'));
+      })
+      .catch(() => setIsAdmin(false))
+      .finally(() => setChecking(false));
+  }, [authStatus]);
+
+  // Not logged in → redirect to /login
   if (authStatus !== 'authenticated') {
     return <Navigate to="/login" replace />;
   }
 
-  // Logged in but not admin → show access denied
+  // Still reading the JWT — show a brief loading state
+  if (checking) {
+    return (
+      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p style={{ color: '#aaa', fontFamily: "'Montserrat', sans-serif" }}>Verificando permisos…</p>
+      </div>
+    );
+  }
+
+  // Authenticated but not in the admin group
   if (!isAdmin) {
     return (
       <div style={{
@@ -58,13 +74,9 @@ export default function AdminPage() {
     );
   }
 
-  // Admin authenticated → placeholder body (Phase 2 will replace this)
+  // ── Admin authenticated ── Phase 2 will replace this placeholder ─────────
   return (
-    <div style={{
-      minHeight: '60vh',
-      fontFamily: "'Montserrat', sans-serif",
-      padding: '40px',
-    }}>
+    <div style={{ minHeight: '60vh', fontFamily: "'Montserrat', sans-serif", padding: '40px' }}>
       <h1 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '8px', letterSpacing: '2px' }}>
         PANEL DE ADMINISTRACIÓN
       </h1>
@@ -100,7 +112,7 @@ export default function AdminPage() {
       </div>
 
       <p style={{ marginTop: '40px', color: '#bbb', fontSize: '0.8rem' }}>
-        Panel de administración — Fase 1 completada. La interfaz completa estará disponible en la Fase 2.
+        Fase 1 completada. La interfaz completa estará disponible en la Fase 2.
       </p>
     </div>
   );

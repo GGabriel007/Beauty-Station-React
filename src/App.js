@@ -28,41 +28,43 @@ function App() {
   return (
     <CartProvider>
       <CourseDataProvider>
-      <Router>
-        <div className="App">
-          <Header />
-          <Routes basename="/Beauty-Station-React">
-            <Route path="/" element={<BeautyStation />} />
-            <Route path="/classes" element={<BeautySClasses />} />
-            <Route path="/servicio-a-domicilio" element={<BeautySDomicilio />} />
-            <Route path="/nosotros" element={<BeautySContacto />} />
-            <Route path="/classes/classes-1" element={<Classes1 />} />
-            <Route path="/classes/classes-2" element={<Classes2 />} />
-            <Route path="/classes/course/:courseId" element={<CourseDetails />} />
+        <Router>
+          <div className="App">
+            <Header />
+            <Routes basename="/Beauty-Station-React">
+              <Route path="/" element={<BeautyStation />} />
+              <Route path="/classes" element={<BeautySClasses />} />
+              <Route path="/servicio-a-domicilio" element={<BeautySDomicilio />} />
+              <Route path="/nosotros" element={<BeautySContacto />} />
+              <Route path="/classes/classes-1" element={<Classes1 />} />
+              <Route path="/classes/classes-2" element={<Classes2 />} />
+              <Route path="/classes/course/:courseId" element={<CourseDetails />} />
 
-            {/* Added Auth Routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/mis-cursos/:courseId" element={<CoursePlayer />} />
-            <Route path="/admin" element={<AdminPage />} />
+              {/* Auth routes */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/mis-cursos/:courseId" element={<CoursePlayer />} />
 
-            <Route path="/cart" element={<CartPage />} />
-          </Routes>
-          <AuthRedirectHandler />
-          <AuthRouteWatcher />
-          <CartButton />
-          <Footer />
-          <ToastContainer
-            position="top-center"
-            autoClose={4000}
-            hideProgressBar={false}
-            closeOnClick
-            pauseOnHover
-            draggable
-            theme="light"
-          />
-        </div>
-      </Router>
+              {/* Admin panel — protected by AdminPage */}
+              <Route path="/admin" element={<AdminPage />} />
+
+              <Route path="/cart" element={<CartPage />} />
+            </Routes>
+            <AuthRedirectHandler />
+            <AuthRouteWatcher />
+            <CartButton />
+            <Footer />
+            <ToastContainer
+              position="top-center"
+              autoClose={4000}
+              hideProgressBar={false}
+              closeOnClick
+              pauseOnHover
+              draggable
+              theme="light"
+            />
+          </div>
+        </Router>
       </CourseDataProvider>
     </CartProvider>
   );
