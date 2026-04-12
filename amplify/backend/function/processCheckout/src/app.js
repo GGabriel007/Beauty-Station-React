@@ -415,11 +415,16 @@ app.post('/checkout', async function (req, res) {
         ` : ''}
 
         ${cartItems.some(i => i.online) ? `
-        <div style="margin: 30px 0; background-color: #fdf4ff; border: 1px solid #e9d5ff; border-radius: 8px; padding: 20px; text-align: center;">
-          <h3 style="font-size: 14px; text-transform: uppercase; color: #000; letter-spacing: 1px; margin-top: 0; margin-bottom: 8px;">Tu Curso en Línea</h3>
-          <p style="font-size: 14px; color: #555; margin: 0 0 16px 0;">Inicia sesión en Beauty Station con tu cuenta registrada para acceder a tu curso en línea.</p>
-          <a href="https://main.d2n97l8l3u9ifl.amplifyapp.com/dashboard" style="display: inline-block; background-color: #000; color: #ffffff; padding: 12px 28px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 14px; letter-spacing: 0.5px;">
-            Ir a Mis Cursos →
+        <div style="margin: 30px 0; background-color: #fdf4ff; border: 1px solid #e9d5ff; border-radius: 8px; padding: 24px; text-align: center;">
+          <h3 style="font-size: 15px; text-transform: uppercase; color: #000; letter-spacing: 1px; margin-top: 0; margin-bottom: 12px;">¿Cómo acceder a tu Curso en Línea?</h3>
+          <ol style="text-align: left; display: inline-block; font-size: 14px; color: #444; margin: 0 0 20px 0; padding-left: 20px; line-height: 2;">
+            <li>Ingresa a <strong>Beauty Station</strong> con la cuenta que usaste al comprar.</li>
+            <li>Ve a <strong>Mi Perfil</strong> en el menú superior.</li>
+            <li>Selecciona el botón <strong>"Curso en Línea"</strong> para comenzar a ver tus lecciones.</li>
+          </ol>
+          <p style="font-size: 13px; color: #777; margin: 0 0 20px 0;">También puedes acceder directamente desde el siguiente enlace:</p>
+          <a href="https://master.d121neu4gkwbak.amplifyapp.com/mis-cursos/curso-en-linea" style="display: inline-block; background-color: #000; color: #ffffff; padding: 12px 28px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 14px; letter-spacing: 0.5px;">
+            Ver mi Curso en Línea →
           </a>
         </div>
         ` : ''}
