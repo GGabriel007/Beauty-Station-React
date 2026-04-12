@@ -5,6 +5,7 @@ import '../styles/beauty-Station.css';
 import { Link } from 'react-router-dom';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { fetchUserAttributes } from 'aws-amplify/auth';
+import { get } from 'aws-amplify/api';
 
 /* ── Hardcoded Google reviews ── */
 const GOOGLE_REVIEWS = [
@@ -215,6 +216,8 @@ const BeautyStation = () => {
     try { return JSON.parse(localStorage.getItem('bs_reviews') || '[]'); }
     catch { return []; }
   });
+  // Starts with hardcoded reviews; replaced by DB data once the fetch succeeds
+  const [googleReviews, setGoogleReviews] = useState(GOOGLE_REVIEWS);
   const [reviewForm, setReviewForm] = useState({ rating: 0, text: '' });
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
 
@@ -226,7 +229,31 @@ const BeautyStation = () => {
     }
   }, [authStatus]);
 
-  const allReviews = [...GOOGLE_REVIEWS, ...userReviews];
+  // Fetch reviews from DynamoDB; silently fall back to hardcoded if unavailable
+  useEffect(() => {
+    async function fetchReviews() {
+      try {
+        const restOp = get({ apiName: 'checkoutApi', path: '/reviews' });
+        const { body } = await restOp.response;
+        const data = await body.json();
+        if (Array.isArray(data) && data.length > 0) {
+          // Normalize DB image paths to include PUBLIC_URL prefix
+          const normalized = data.map(r => ({
+            ...r,
+            images: (r.images || []).map(img =>
+              img.startsWith('http') ? img : `${process.env.PUBLIC_URL}${img}`
+            ),
+          }));
+          setGoogleReviews(normalized);
+        }
+      } catch (_) {
+        // Table not seeded yet — hardcoded fallback stays in place
+      }
+    }
+    fetchReviews();
+  }, []);
+
+  const allReviews = [...googleReviews, ...userReviews];
 
   const handleReviewSubmit = (e) => {
     e.preventDefault();

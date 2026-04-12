@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { DynamoDBDocumentClient, PutCommand, GetCommand, UpdateCommand, ScanCommand } = require('@aws-sdk/lib-dynamodb');
+const { DynamoDBDocumentClient, PutCommand, GetCommand, UpdateCommand, ScanCommand, DeleteCommand } = require('@aws-sdk/lib-dynamodb');
 const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
 const { SSMClient, GetParameterCommand } = require('@aws-sdk/client-ssm');
 const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
@@ -96,7 +96,7 @@ const ONLINE_COURSES = {
       {
         id: 'lesson-1',
         title: 'Lección 1: Introducción al Curso',
-        description: 'Bienvenida al curso en línea de Beauty Station. Conocerás los materiales, el flujo del curso y todo lo que aprenderás a lo largo de las próximas lecciones.',
+        description: 'Bienvenido/a al curso en línea de Beauty Station. Conocerás los materiales, el flujo del curso y todo lo que aprenderás a lo largo de las próximas lecciones.',
         s3Key: 'Como_moments_Helldivers.mp4',
         duration: '00:00'
       }
@@ -126,6 +126,45 @@ const moduleIds = {
   'Curso Completo Maquillaje 6PM a 8PM': '991XsOABf2lp5CdSMm21YR3',
   'Kit de pieles perfectas': '992U9kQfUcpxR0FpY9l4mDI',
 };
+
+// Maps cart item names (course + schedule) back to their base courseId in CourseSettings
+const cartNameToCourseId = {
+  'Master Waves 2PM a 4PM': 'master-waves',
+  'Master Waves 6PM a 8PM': 'master-waves',
+  'Peinados Para Eventos 2PM a 4PM': 'peinado-eventos',
+  'Peinados Para Eventos 6PM a 8PM': 'peinado-eventos',
+  'Maestrías en Novias y Tendencias 2PM a 4PM': 'maestria-novias',
+  'Maestrías en Novias y Tendencias 6PM a 8PM': 'maestria-novias',
+  'Curso Completo Peinado 2PM a 4PM': 'curso-completo-peinado',
+  'Curso Completo Peinado 6PM a 8PM': 'curso-completo-peinado',
+  'Pieles Perfectas 2PM a 4PM': 'pieles-perfectas',
+  'Pieles Perfectas 6PM a 8PM': 'pieles-perfectas',
+  'Maquillaje Social 2PM a 4PM': 'maquillaje-social',
+  'Maquillaje Social 6PM a 8PM': 'maquillaje-social',
+  'Maestría en Novias y Tendencias 2PM a 4PM': 'maestria-novias-makeup',
+  'Maestría en Novias y Tendencias 6PM a 8PM': 'maestria-novias-makeup',
+  'Curso Completo Maquillaje 2PM a 4PM': 'curso-completo-maquillaje',
+  'Curso Completo Maquillaje 6PM a 8PM': 'curso-completo-maquillaje',
+  'Curso en Línea': 'curso-en-linea',
+};
+
+// Admin-only middleware — verifies the caller belongs to the Cognito "admin" group
+function requireAdmin(req, res, next) {
+  try {
+    const claims = req.apiGateway?.event?.requestContext?.authorizer?.claims || {};
+    const rawGroups = claims['cognito:groups'] || '';
+    const groups = Array.isArray(rawGroups)
+      ? rawGroups
+      : rawGroups.split(',').map(g => g.trim()).filter(Boolean);
+    if (!groups.includes('admin')) {
+      return res.status(403).json({ error: 'Acceso denegado. Se requieren permisos de administrador.' });
+    }
+    req.adminEmail = claims.email || claims.sub || 'unknown';
+    next();
+  } catch (err) {
+    return res.status(403).json({ error: 'No autorizado.' });
+  }
+}
 
 // PUBLIC SEAT INVENTORY: Fetches DynamoDB seat counts safely for Public Browsers
 app.get('/modulos', async function (req, res) {
@@ -225,6 +264,34 @@ app.post('/checkout', async function (req, res) {
           });
         }
       }
+    }
+
+    // 1aa. SOFT PRICE AUDIT: Verify the client-sent price against CourseSettings (Phase 1 — logs only; Phase 3 will hard-reject)
+    try {
+      let expectedTotal = 0;
+      for (const item of cartItems) {
+        const courseId = cartNameToCourseId[item.name];
+        if (courseId) {
+          const courseData = await ddbDocClient.send(new GetCommand({ TableName: 'CourseSettings', Key: { courseId } }));
+          if (courseData.Item && courseData.Item.price != null) {
+            expectedTotal += Number(courseData.Item.price);
+          }
+        }
+      }
+      if (IncludeKit) {
+        const kitSettings = await ddbDocClient.send(new GetCommand({ TableName: 'SiteSettings', Key: { settingKey: 'kitPrice' } }));
+        if (kitSettings.Item) expectedTotal += Number(kitSettings.Item.value);
+      }
+      const enrollmentSettings = await ddbDocClient.send(new GetCommand({ TableName: 'SiteSettings', Key: { settingKey: 'enrollmentFee' } }));
+      const enrollmentFee = enrollmentSettings.Item ? Number(enrollmentSettings.Item.value) : 200;
+      expectedTotal += enrollmentFee;
+
+      if (expectedTotal > 0 && Math.abs(Number(TotalPrice) - expectedTotal) > 1) {
+        console.warn(`PRICE AUDIT: Client sent Q${TotalPrice}, expected Q${expectedTotal} for order by ${email}. (Soft check — not rejected in Phase 1)`);
+      }
+    } catch (auditErr) {
+      // CourseSettings table may not exist yet — silently continue
+      console.info('Price audit skipped (CourseSettings not available):', auditErr.message);
     }
 
     // 1b. PRE-CHECK INVENTORY: Verify seats exist in DynamoDB 'Modulos' before processing payment
@@ -502,51 +569,81 @@ app.post('/checkout', async function (req, res) {
   }
 });
 
-// COURSE LESSONS: Returns lesson list + video IDs only after verifying the user has purchased
+// COURSE LESSONS: Returns lesson list after verifying the user has purchased.
+// Prefers CourseSettings DynamoDB record; falls back to hardcoded ONLINE_COURSES.
 app.get('/course-lessons/:courseId', async function (req, res) {
   try {
     const { courseId } = req.params;
     const { email } = req.query;
     if (!email) return res.status(400).json({ error: 'Email requerido.' });
 
-    const course = ONLINE_COURSES[courseId];
-    if (!course) return res.status(404).json({ error: 'Curso no encontrado.' });
+    // Try DB first, fall back to hardcoded
+    let courseName, cartName, lessons;
+    try {
+      const dbItem = await ddbDocClient.send(new GetCommand({ TableName: 'CourseSettings', Key: { courseId } }));
+      if (dbItem.Item && dbItem.Item.lessons) {
+        courseName = dbItem.Item.courseName;
+        cartName   = dbItem.Item.cartName || dbItem.Item.courseName;
+        lessons    = dbItem.Item.lessons;
+      }
+    } catch (_) { /* table not seeded yet */ }
+
+    if (!lessons) {
+      const fallback = ONLINE_COURSES[courseId];
+      if (!fallback) return res.status(404).json({ error: 'Curso no encontrado.' });
+      courseName = fallback.courseName;
+      cartName   = fallback.cartName;
+      lessons    = fallback.lessons;
+    }
 
     const data = await ddbDocClient.send(new ScanCommand({
       TableName: 'Payments',
       FilterExpression: 'email = :email',
       ExpressionAttributeValues: { ':email': email }
     }));
-
     const hasPurchased = (data.Items || []).some(order =>
-      order.Items && order.Items.toLowerCase().includes(course.cartName.toLowerCase())
+      order.Items && order.Items.toLowerCase().includes(cartName.toLowerCase())
     );
-
     if (!hasPurchased) {
       return res.status(403).json({ error: 'No tienes acceso a este curso. Adquiérelo para comenzar.' });
     }
 
     // Strip s3Key — never expose internal bucket paths to the frontend
-    const safeLessons = course.lessons.map(({ id, title, description, duration }) => ({ id, title, description, duration }));
-    res.json({ courseName: course.courseName, lessons: safeLessons });
+    const safeLessons = lessons.map(({ id, title, description, duration }) => ({ id, title, description, duration }));
+    res.json({ courseName, lessons: safeLessons });
   } catch (error) {
     console.error('Error fetching course lessons:', error);
     res.status(500).json({ error: 'Error al cargar las lecciones del curso.' });
   }
 });
 
-// COURSE VIDEO URL: Generates a time-limited CloudFront signed URL for a specific lesson
-// The s3Key is never sent to the browser — only the signed URL is
+// COURSE VIDEO URL: Generates a time-limited S3 pre-signed URL for a specific lesson.
+// Prefers CourseSettings DynamoDB record; falls back to hardcoded ONLINE_COURSES.
+// The s3Key is never sent to the browser — only the signed URL is.
 app.get('/course-video-url/:courseId/:lessonId', async function (req, res) {
   try {
     const { courseId, lessonId } = req.params;
     const { email } = req.query;
     if (!email) return res.status(400).json({ error: 'Email requerido.' });
 
-    const course = ONLINE_COURSES[courseId];
-    if (!course) return res.status(404).json({ error: 'Curso no encontrado.' });
+    // Try DB first, fall back to hardcoded
+    let cartName, lessons;
+    try {
+      const dbItem = await ddbDocClient.send(new GetCommand({ TableName: 'CourseSettings', Key: { courseId } }));
+      if (dbItem.Item && dbItem.Item.lessons) {
+        cartName = dbItem.Item.cartName || dbItem.Item.courseName;
+        lessons  = dbItem.Item.lessons;
+      }
+    } catch (_) { /* table not seeded yet */ }
 
-    const lesson = course.lessons.find(l => l.id === lessonId);
+    if (!lessons) {
+      const fallback = ONLINE_COURSES[courseId];
+      if (!fallback) return res.status(404).json({ error: 'Curso no encontrado.' });
+      cartName = fallback.cartName;
+      lessons  = fallback.lessons;
+    }
+
+    const lesson = lessons.find(l => l.id === lessonId);
     if (!lesson) return res.status(404).json({ error: 'Lección no encontrada.' });
 
     // Verify purchase
@@ -556,7 +653,7 @@ app.get('/course-video-url/:courseId/:lessonId', async function (req, res) {
       ExpressionAttributeValues: { ':email': email }
     }));
     const hasPurchased = (data.Items || []).some(order =>
-      order.Items && order.Items.toLowerCase().includes(course.cartName.toLowerCase())
+      order.Items && order.Items.toLowerCase().includes(cartName.toLowerCase())
     );
     if (!hasPurchased) {
       return res.status(403).json({ error: 'No tienes acceso a este curso.' });
@@ -617,6 +714,271 @@ app.post('/course-progress/:courseId', async function (req, res) {
   } catch (error) {
     console.error('Error saving course progress:', error);
     res.status(500).json({ error: 'Error al guardar el progreso.' });
+  }
+});
+
+// ─── PUBLIC ENDPOINTS (no auth required) ────────────────────────────────────
+
+// PUBLIC COURSES: Returns all visible courses from CourseSettings table.
+// Falls back to an empty object if the table hasn't been seeded yet.
+app.get('/courses', async function (req, res) {
+  try {
+    const data = await ddbDocClient.send(new ScanCommand({ TableName: 'CourseSettings' }));
+    const items = data.Items || [];
+    // Convert array to courseId-keyed map matching the shape of courseData.js
+    const courseMap = {};
+    for (const item of items) {
+      if (item.isVisible !== false) {
+        // Strip admin-only fields before sending to public
+        const { courseId, lastUpdatedBy, ...publicFields } = item;
+        courseMap[courseId] = publicFields;
+      }
+    }
+    res.json(courseMap);
+  } catch (error) {
+    console.error('Error fetching courses:', error);
+    // Return empty so the frontend falls back to hardcoded data
+    res.json({});
+  }
+});
+
+// PUBLIC REVIEWS: Returns all visible reviews for the homepage.
+app.get('/reviews', async function (req, res) {
+  try {
+    const data = await ddbDocClient.send(new ScanCommand({
+      TableName: 'Reviews',
+      FilterExpression: 'isVisible = :v',
+      ExpressionAttributeValues: { ':v': true }
+    }));
+    res.json(data.Items || []);
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    res.json([]);
+  }
+});
+
+// ─── ADMIN ENDPOINTS (requireAdmin middleware enforces Cognito "admin" group) ─
+
+// LIST ALL COURSES (including hidden)
+app.get('/admin/courses', requireAdmin, async function (req, res) {
+  try {
+    const data = await ddbDocClient.send(new ScanCommand({ TableName: 'CourseSettings' }));
+    res.json(data.Items || []);
+  } catch (error) {
+    console.error('Admin: error listing courses:', error);
+    res.status(500).json({ error: 'Error al listar cursos.' });
+  }
+});
+
+// UPDATE A COURSE
+app.put('/admin/courses/:courseId', requireAdmin, async function (req, res) {
+  try {
+    const { courseId } = req.params;
+    const updates = req.body;
+    if (!courseId) return res.status(400).json({ error: 'courseId requerido.' });
+
+    // Build a dynamic UpdateExpression from whatever fields were sent
+    const names  = {};
+    const values = { ':ts': Date.now(), ':by': req.adminEmail };
+    const parts  = ['#lastUpdatedAt = :ts', '#lastUpdatedBy = :by'];
+    names['#lastUpdatedAt']  = 'lastUpdatedAt';
+    names['#lastUpdatedBy']  = 'lastUpdatedBy';
+
+    const forbidden = ['courseId'];
+    for (const [key, val] of Object.entries(updates)) {
+      if (forbidden.includes(key)) continue;
+      const placeholder = `#f_${key}`;
+      const valHolder   = `:v_${key}`;
+      names[placeholder]  = key;
+      values[valHolder]   = val;
+      parts.push(`${placeholder} = ${valHolder}`);
+    }
+
+    await ddbDocClient.send(new UpdateCommand({
+      TableName: 'CourseSettings',
+      Key: { courseId },
+      UpdateExpression: `SET ${parts.join(', ')}`,
+      ExpressionAttributeNames:  names,
+      ExpressionAttributeValues: values
+    }));
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Admin: error updating course:', error);
+    res.status(500).json({ error: 'Error al actualizar el curso.' });
+  }
+});
+
+// LIST ALL REVIEWS (including hidden ones)
+app.get('/admin/reviews', requireAdmin, async function (req, res) {
+  try {
+    const data = await ddbDocClient.send(new ScanCommand({ TableName: 'Reviews' }));
+    res.json(data.Items || []);
+  } catch (error) {
+    console.error('Admin: error listing reviews:', error);
+    res.status(500).json({ error: 'Error al listar reseñas.' });
+  }
+});
+
+// SOFT-DELETE A REVIEW (sets isVisible=false so it can be restored)
+app.delete('/admin/reviews/:reviewId', requireAdmin, async function (req, res) {
+  try {
+    const { reviewId } = req.params;
+    await ddbDocClient.send(new UpdateCommand({
+      TableName: 'Reviews',
+      Key: { reviewId },
+      UpdateExpression: 'SET isVisible = :f, #deletedBy = :by, #deletedAt = :ts',
+      ExpressionAttributeNames: { '#deletedBy': 'deletedBy', '#deletedAt': 'deletedAt' },
+      ExpressionAttributeValues: { ':f': false, ':by': req.adminEmail, ':ts': Date.now() }
+    }));
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Admin: error deleting review:', error);
+    res.status(500).json({ error: 'Error al eliminar la reseña.' });
+  }
+});
+
+// RESTORE A REVIEW (sets isVisible=true)
+app.put('/admin/reviews/:reviewId', requireAdmin, async function (req, res) {
+  try {
+    const { reviewId } = req.params;
+    await ddbDocClient.send(new UpdateCommand({
+      TableName: 'Reviews',
+      Key: { reviewId },
+      UpdateExpression: 'SET isVisible = :t',
+      ExpressionAttributeValues: { ':t': true }
+    }));
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Admin: error restoring review:', error);
+    res.status(500).json({ error: 'Error al restaurar la reseña.' });
+  }
+});
+
+// GET ALL SITE SETTINGS
+app.get('/admin/site-settings', requireAdmin, async function (req, res) {
+  try {
+    const data = await ddbDocClient.send(new ScanCommand({ TableName: 'SiteSettings' }));
+    res.json(data.Items || []);
+  } catch (error) {
+    console.error('Admin: error fetching site settings:', error);
+    res.status(500).json({ error: 'Error al obtener configuración del sitio.' });
+  }
+});
+
+// UPDATE A SITE SETTING
+app.put('/admin/site-settings/:key', requireAdmin, async function (req, res) {
+  try {
+    const { key } = req.params;
+    const { value } = req.body;
+    if (value === undefined) return res.status(400).json({ error: 'value requerido.' });
+
+    await ddbDocClient.send(new UpdateCommand({
+      TableName: 'SiteSettings',
+      Key: { settingKey: key },
+      UpdateExpression: 'SET #val = :v, lastUpdatedBy = :by, lastUpdatedAt = :ts',
+      ExpressionAttributeNames: { '#val': 'value' },
+      ExpressionAttributeValues: { ':v': value, ':by': req.adminEmail, ':ts': Date.now() }
+    }));
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Admin: error updating site setting:', error);
+    res.status(500).json({ error: 'Error al actualizar configuración.' });
+  }
+});
+
+// LIST ALL REGISTRATIONS (all Payments rows, sorted newest first)
+app.get('/admin/registrations', requireAdmin, async function (req, res) {
+  try {
+    const data = await ddbDocClient.send(new ScanCommand({ TableName: 'Payments' }));
+    const sorted = (data.Items || []).sort((a, b) => (b.Timestamp || 0) - (a.Timestamp || 0));
+    res.json(sorted);
+  } catch (error) {
+    console.error('Admin: error listing registrations:', error);
+    res.status(500).json({ error: 'Error al listar inscripciones.' });
+  }
+});
+
+// LIST ALL SEAT COUNTS (raw Modulos rows)
+app.get('/admin/seats', requireAdmin, async function (req, res) {
+  try {
+    const data = await ddbDocClient.send(new ScanCommand({ TableName: 'Modulos' }));
+    res.json(data.Items || []);
+  } catch (error) {
+    console.error('Admin: error listing seats:', error);
+    res.status(500).json({ error: 'Error al listar asientos.' });
+  }
+});
+
+// UPDATE SEAT COUNT FOR ONE MODULE (admin manually adjusts availability)
+app.put('/admin/seats/:moduleId', requireAdmin, async function (req, res) {
+  try {
+    const { moduleId } = req.params;
+    const { courseName, seats } = req.body;
+    if (!courseName || seats === undefined) {
+      return res.status(400).json({ error: 'courseName y seats son requeridos.' });
+    }
+    await ddbDocClient.send(new UpdateCommand({
+      TableName: 'Modulos',
+      Key: { id: moduleId },
+      UpdateExpression: 'SET #cn = :seats',
+      ExpressionAttributeNames: { '#cn': courseName },
+      ExpressionAttributeValues: { ':seats': Number(seats) }
+    }));
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Admin: error updating seats:', error);
+    res.status(500).json({ error: 'Error al actualizar asientos.' });
+  }
+});
+
+// GET LESSONS FOR AN ONLINE COURSE (includes s3Key for admin use)
+app.get('/admin/lessons/:courseId', requireAdmin, async function (req, res) {
+  try {
+    const { courseId } = req.params;
+    let lessons, courseName;
+
+    try {
+      const dbItem = await ddbDocClient.send(new GetCommand({ TableName: 'CourseSettings', Key: { courseId } }));
+      if (dbItem.Item) {
+        lessons    = dbItem.Item.lessons || [];
+        courseName = dbItem.Item.courseName;
+      }
+    } catch (_) { /* table not seeded yet */ }
+
+    if (!lessons) {
+      const fallback = ONLINE_COURSES[courseId];
+      if (!fallback) return res.status(404).json({ error: 'Curso no encontrado.' });
+      lessons    = fallback.lessons;
+      courseName = fallback.courseName;
+    }
+
+    res.json({ courseId, courseName, lessons });
+  } catch (error) {
+    console.error('Admin: error fetching lessons:', error);
+    res.status(500).json({ error: 'Error al obtener lecciones.' });
+  }
+});
+
+// UPDATE LESSON LIST FOR AN ONLINE COURSE (full replacement of the lessons array)
+app.put('/admin/lessons/:courseId', requireAdmin, async function (req, res) {
+  try {
+    const { courseId } = req.params;
+    const { lessons } = req.body;
+    if (!Array.isArray(lessons)) return res.status(400).json({ error: 'lessons debe ser un arreglo.' });
+
+    await ddbDocClient.send(new UpdateCommand({
+      TableName: 'CourseSettings',
+      Key: { courseId },
+      UpdateExpression: 'SET lessons = :l, lastUpdatedBy = :by, lastUpdatedAt = :ts',
+      ExpressionAttributeValues: { ':l': lessons, ':by': req.adminEmail, ':ts': Date.now() }
+    }));
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Admin: error updating lessons:', error);
+    res.status(500).json({ error: 'Error al actualizar lecciones.' });
   }
 });
 

@@ -21,10 +21,13 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import CoursePlayer from './pages/CoursePlayer';
 import { CartProvider, CartContext } from './context/CartContext';
+import { CourseDataProvider } from './context/CourseDataContext';
+import AdminPage from './pages/AdminPage';
 
 function App() {
   return (
     <CartProvider>
+      <CourseDataProvider>
       <Router>
         <div className="App">
           <Header />
@@ -41,6 +44,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/mis-cursos/:courseId" element={<CoursePlayer />} />
+            <Route path="/admin" element={<AdminPage />} />
 
             <Route path="/cart" element={<CartPage />} />
           </Routes>
@@ -59,6 +63,7 @@ function App() {
           />
         </div>
       </Router>
+      </CourseDataProvider>
     </CartProvider>
   );
 }

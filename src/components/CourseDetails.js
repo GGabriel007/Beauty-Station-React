@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import '../styles/modules.css';
 import { useParams, useLocation, Navigate, useNavigate, Link } from 'react-router-dom';
 import useWhatsAppForm from '../hook/useWhatsAppForm';
-import { coursesInfo } from '../config/courseData';
+import { useCourseData } from '../context/CourseDataContext';
 import { CartContext } from '../context/CartContext';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { fetchUserAttributes } from 'aws-amplify/auth';
@@ -86,6 +86,7 @@ const CourseDetails = () => {
     const { courseId } = useParams();
     const location = useLocation();
     const navigate = useNavigate();
+    const coursesInfo = useCourseData();
     const courseData = coursesInfo[courseId];
     const { addToCart, cartItems, includeKit, setIncludeKit } = useContext(CartContext);
     const { user, authStatus } = useAuthenticator(context => [context.user, context.authStatus]);

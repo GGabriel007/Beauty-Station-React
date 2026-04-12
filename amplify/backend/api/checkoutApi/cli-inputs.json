@@ -88,6 +88,104 @@
           "read"
         ]
       }
+    },
+    "/courses": {
+      "name": "/courses",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "protected",
+        "auth": ["read"],
+        "guest": ["read"]
+      }
+    },
+    "/reviews": {
+      "name": "/reviews",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "protected",
+        "auth": ["read"],
+        "guest": ["read"]
+      }
+    },
+    "/admin/courses": {
+      "name": "/admin/courses",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "private",
+        "auth": ["read", "create", "update", "delete"]
+      }
+    },
+    "/admin/courses/{courseId}": {
+      "name": "/admin/courses/{courseId}",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "private",
+        "auth": ["read", "create", "update", "delete"]
+      }
+    },
+    "/admin/reviews": {
+      "name": "/admin/reviews",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "private",
+        "auth": ["read", "create", "update", "delete"]
+      }
+    },
+    "/admin/reviews/{reviewId}": {
+      "name": "/admin/reviews/{reviewId}",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "private",
+        "auth": ["read", "create", "update", "delete"]
+      }
+    },
+    "/admin/site-settings": {
+      "name": "/admin/site-settings",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "private",
+        "auth": ["read", "create", "update", "delete"]
+      }
+    },
+    "/admin/site-settings/{key}": {
+      "name": "/admin/site-settings/{key}",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "private",
+        "auth": ["read", "create", "update", "delete"]
+      }
+    },
+    "/admin/registrations": {
+      "name": "/admin/registrations",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "private",
+        "auth": ["read"]
+      }
+    },
+    "/admin/seats": {
+      "name": "/admin/seats",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "private",
+        "auth": ["read", "update"]
+      }
+    },
+    "/admin/seats/{moduleId}": {
+      "name": "/admin/seats/{moduleId}",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "private",
+        "auth": ["read", "update"]
+      }
+    },
+    "/admin/lessons/{courseId}": {
+      "name": "/admin/lessons/{courseId}",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "private",
+        "auth": ["read", "create", "update", "delete"]
+      }
     }
   }
 }
