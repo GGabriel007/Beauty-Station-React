@@ -14,12 +14,13 @@
     },
     "categories": {
       "auth": {
-        "beautystationreact0ba4967a": {}
+        "beautystationreact0ba4967a": {},
+        "userPoolGroups": {}
       },
       "function": {
         "processCheckout": {
           "deploymentBucketName": "amplify-beautystationreact-dev-450db-deployment",
-          "s3Key": "amplify-builds/processCheckout-3065557933666b723143-build.zip"
+          "s3Key": "amplify-builds/processCheckout-7a6c72746357574d5043-build.zip"
         }
       },
       "api": {

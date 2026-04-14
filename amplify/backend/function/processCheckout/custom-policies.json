@@ -1,11 +1,14 @@
 [
   {
-    "Action": ["dynamodb:PutItem", "dynamodb:GetItem", "dynamodb:UpdateItem", "dynamodb:Scan"],
+    "Action": ["dynamodb:PutItem", "dynamodb:GetItem", "dynamodb:UpdateItem", "dynamodb:DeleteItem", "dynamodb:Scan"],
     "Resource": [
       "arn:aws:dynamodb:*:*:table/Payments",
       "arn:aws:dynamodb:*:*:table/Modulos",
       "arn:aws:dynamodb:*:*:table/Carts",
-      "arn:aws:dynamodb:*:*:table/CourseProgress"
+      "arn:aws:dynamodb:*:*:table/CourseProgress",
+      "arn:aws:dynamodb:*:*:table/CourseSettings",
+      "arn:aws:dynamodb:*:*:table/Reviews",
+      "arn:aws:dynamodb:*:*:table/SiteSettings"
     ]
   }
 ]

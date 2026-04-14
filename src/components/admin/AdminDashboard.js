@@ -1,0 +1,162 @@
+// src/components/admin/AdminDashboard.js
+// 2.2 — Summary screen: revenue, enrollments, low-seat warnings,
+//        recently deleted reviews, and course update log.
+
+import React, { useState, useEffect } from 'react';
+import { get } from 'aws-amplify/api';
+
+async function apiFetch(path) {
+  const op = get({ apiName: 'checkoutApi', path });
+  const { body } = await op.response;
+  return body.json();
+}
+
+export default function AdminDashboard() {
+  const [stats,   setStats]   = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error,   setError]   = useState(null);
+
+  useEffect(() => {
+    Promise.all([
+      apiFetch('/admin/registrations'),
+      apiFetch('/admin/seats'),
+      apiFetch('/admin/reviews'),
+      apiFetch('/admin/courses'),
+    ])
+      .then(([registrations, seats, reviews, courses]) => {
+        // Revenue + enrollment count
+        const totalRevenue     = registrations.reduce((sum, r) => sum + Number(r.TotalPrice || 0), 0);
+        const totalEnrollments = registrations.length;
+
+        // Seats near full (fewer than 3 remaining)
+        const nearFull = [];
+        for (const item of seats) {
+          for (const key of Object.keys(item)) {
+            if (key === 'id') continue;
+            const count = Number(item[key]);
+            if (count < 3) nearFull.push({ name: key, count });
+          }
+        }
+        nearFull.sort((a, b) => a.count - b.count);
+
+        // Recently deleted reviews
+        const deletedReviews = reviews
+          .filter(r => !r.isVisible)
+          .sort((a, b) => (b.deletedAt || 0) - (a.deletedAt || 0))
+          .slice(0, 5);
+
+        // Course update log (most recently edited)
+        const courseUpdates = courses
+          .filter(c => c.lastUpdatedAt)
+          .sort((a, b) => (b.lastUpdatedAt || 0) - (a.lastUpdatedAt || 0))
+          .slice(0, 5);
+
+        setStats({ totalRevenue, totalEnrollments, nearFull, deletedReviews, courseUpdates });
+      })
+      .catch(() => setError('Error al cargar el dashboard. Verifica que las tablas estén sembradas.'))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <Spinner text="Cargando dashboard…" />;
+  if (error)   return <p style={{ color: '#c62828', fontFamily: FONT }}>{error}</p>;
+
+  const fmtQ    = n  => `Q${Number(n).toLocaleString('es-GT', { minimumFractionDigits: 2 })}`;
+  const fmtDate = ts => ts ? new Date(ts).toLocaleDateString('es-GT', { year: 'numeric', month: 'short', day: 'numeric' }) : '—';
+
+  return (
+    <div>
+      <PageTitle>Dashboard</PageTitle>
+
+      {/* Summary cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '14px', marginBottom: '28px' }}>
+        <StatCard icon="💰" label="Ingresos Totales"       value={fmtQ(stats.totalRevenue)} />
+        <StatCard icon="👤" label="Inscripciones Totales"  value={stats.totalEnrollments} />
+        <StatCard icon="⚠️" label="Cursos con Pocos Cupos" value={stats.nearFull.length} accent={stats.nearFull.length > 0} />
+        <StatCard icon="🗑️" label="Reseñas Eliminadas"     value={stats.deletedReviews.length} />
+      </div>
+
+      {/* Low-seat warning */}
+      {stats.nearFull.length > 0 && (
+        <Section title="⚠️ Cupos Casi Agotados">
+          {stats.nearFull.map(s => (
+            <Row key={s.name} left={s.name} right={`${s.count} cupo${s.count !== 1 ? 's' : ''} restante${s.count !== 1 ? 's' : ''}`} accent />
+          ))}
+        </Section>
+      )}
+
+      {/* Recently deleted reviews */}
+      <Section title="🗑️ Últimas Reseñas Eliminadas">
+        {stats.deletedReviews.length === 0
+          ? <Empty text="Ninguna reseña eliminada recientemente." />
+          : stats.deletedReviews.map(r => (
+            <Row key={r.reviewId} left={r.name} right={`${fmtDate(r.deletedAt)} · por ${r.deletedBy || '?'}`} />
+          ))
+        }
+      </Section>
+
+      {/* Course update log */}
+      <Section title="📝 Últimas Actualizaciones de Cursos">
+        {stats.courseUpdates.length === 0
+          ? <Empty text="Ningún curso ha sido editado aún." />
+          : stats.courseUpdates.map(c => (
+            <Row key={c.courseId} left={c.courseName} right={`${fmtDate(c.lastUpdatedAt)} · por ${c.lastUpdatedBy || '?'}`} />
+          ))
+        }
+      </Section>
+    </div>
+  );
+}
+
+// ── Sub-components ──────────────────────────────────────────────────────────
+
+function StatCard({ icon, label, value, accent }) {
+  return (
+    <div style={{
+      background: accent ? '#fff8e1' : '#fff',
+      border: `1px solid ${accent ? '#ffc107' : '#e0e0e0'}`,
+      borderRadius: '8px', padding: '18px', textAlign: 'center',
+    }}>
+      <div style={{ fontSize: '1.6rem', marginBottom: '6px' }}>{icon}</div>
+      <div style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '4px', fontFamily: FONT }}>{value}</div>
+      <div style={{ fontSize: '0.72rem', color: '#888', fontFamily: FONT }}>{label}</div>
+    </div>
+  );
+}
+
+function Section({ title, children }) {
+  return (
+    <div style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '8px', padding: '18px 20px', marginBottom: '18px' }}>
+      <h2 style={{ fontSize: '0.88rem', fontWeight: 700, marginBottom: '12px', letterSpacing: '0.5px', fontFamily: FONT }}>{title}</h2>
+      {children}
+    </div>
+  );
+}
+
+function Row({ left, right, accent }) {
+  return (
+    <div style={{
+      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+      padding: '8px 0', borderBottom: '1px solid #f0f0f0',
+      fontSize: '0.83rem', fontFamily: FONT,
+    }}>
+      <span style={{ color: accent ? '#e65100' : '#333' }}>{left}</span>
+      <span style={{ color: '#aaa', fontSize: '0.78rem' }}>{right}</span>
+    </div>
+  );
+}
+
+function Empty({ text }) {
+  return <p style={{ fontSize: '0.82rem', color: '#bbb', fontFamily: FONT, margin: 0 }}>{text}</p>;
+}
+
+function Spinner({ text }) {
+  return <p style={{ color: '#aaa', fontFamily: FONT }}>{text}</p>;
+}
+
+function PageTitle({ children }) {
+  return (
+    <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '20px', letterSpacing: '1px', fontFamily: FONT }}>{children}</h1>
+  );
+}
+
+const FONT = "'Montserrat', sans-serif";
