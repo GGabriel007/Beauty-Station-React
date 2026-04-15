@@ -1,7 +1,7 @@
 // src/components/admin/AdminCourses.js
-// 2.3 — Course cards with inline edit forms.
+// 2.3 + 3.4 — Course cards with inline edit forms and direct S3 image upload.
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { get, put } from 'aws-amplify/api';
 
 async function apiFetch(path) {
@@ -215,32 +215,26 @@ function CourseEditForm({ course, onSave, onClose }) {
 
       {/* ── Image URLs ── */}
       <SectionDivider label="Imágenes" />
-      <Field label="URLs de Imágenes">
+      <Field label="Imágenes del Curso">
         <p style={{ margin: '0 0 8px', fontSize: '0.75rem', color: '#999', fontFamily: FONT }}>
-          Pega una URL o una ruta S3 por imagen. Las imágenes se mostrarán en el orden ingresado.
+          Sube una imagen desde tu computadora o pega una URL manualmente. Las imágenes se muestran en el orden ingresado.
         </p>
         {form.imageUrls.length === 0 && (
           <p style={{ fontSize: '0.8rem', color: '#ccc', fontStyle: 'italic', margin: '0 0 8px', fontFamily: FONT }}>
-            Sin imágenes configuradas — se usarán las imágenes predeterminadas del curso.
+            Sin imágenes — se usarán las imágenes predeterminadas del curso.
           </p>
         )}
         {form.imageUrls.map((url, i) => (
-          <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '6px', alignItems: 'center' }}>
-            <span style={{ fontSize: '0.7rem', color: '#bbb', fontFamily: FONT, minWidth: '18px', textAlign: 'right' }}>{i + 1}.</span>
-            <input
-              value={url}
-              onChange={e => updateImageUrl(i, e.target.value)}
-              style={{ ...inputStyle, flex: 1, fontFamily: 'monospace', fontSize: '0.78rem' }}
-              placeholder="https://… o s3://bucket/path/imagen.jpg"
-            />
-            <button
-              onClick={() => removeImageUrl(i)}
-              title="Eliminar imagen"
-              style={removeBtn}
-            >✕</button>
-          </div>
+          <ImageUploadRow
+            key={i}
+            index={i}
+            url={url}
+            courseId={course.courseId}
+            onUpdate={v => updateImageUrl(i, v)}
+            onRemove={() => removeImageUrl(i)}
+          />
         ))}
-        <button onClick={addImageUrl} style={{ ...ghostBtn, marginTop: '4px', fontSize: '0.78rem' }}>+ Agregar URL de imagen</button>
+        <button onClick={addImageUrl} style={{ ...ghostBtn, marginTop: '4px', fontSize: '0.78rem' }}>+ Agregar imagen</button>
       </Field>
 
       {/* ── Promo & visibility ── */}
@@ -297,6 +291,127 @@ function CourseEditForm({ course, onSave, onClose }) {
           </p>
         )}
       </div>
+    </div>
+  );
+}
+
+// ── Image upload row (3.4) ───────────────────────────────────────────────────
+// Wraps a URL text input with a "Subir" button that:
+//   1. Opens a file picker (images only)
+//   2. Calls GET /admin/presigned-upload-url to get a short-lived S3 PUT URL
+//   3. PUTs the file directly to S3 from the browser (no server memory used)
+//   4. Auto-fills the URL input with the permanent public S3 URL
+
+function ImageUploadRow({ index, url, courseId, onUpdate, onRemove }) {
+  const fileInputRef = useRef(null);
+  const [uploading,   setUploading]   = useState(false);
+  const [uploadError, setUploadError] = useState(null);
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    e.target.value = ''; // reset so the same file can be re-selected
+
+    setUploading(true);
+    setUploadError(null);
+    try {
+      // Step 1 — ask Lambda for a presigned PUT URL
+      const op = get({
+        apiName: 'checkoutApi',
+        path: '/admin/presigned-upload-url',
+        options: {
+          queryParams: {
+            fileName:    file.name,
+            contentType: file.type,
+            courseId:    courseId || 'general',
+          },
+        },
+      });
+      const { body } = await op.response;
+      const { uploadUrl, publicUrl } = await body.json();
+
+      // Step 2 — upload directly to S3 using the presigned URL
+      const s3Res = await fetch(uploadUrl, {
+        method:  'PUT',
+        body:    file,
+        headers: { 'Content-Type': file.type },
+      });
+      if (!s3Res.ok) throw new Error(`S3 responded with ${s3Res.status}`);
+
+      // Step 3 — auto-fill the URL field
+      onUpdate(publicUrl);
+    } catch (err) {
+      console.error('Image upload failed:', err);
+      setUploadError('Error al subir. Verifica que el bucket beauty-station-images existe y tiene CORS habilitado.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div>
+      <div style={{ display: 'flex', gap: '8px', marginBottom: uploadError ? '2px' : '6px', alignItems: 'center' }}>
+        <span style={{ fontSize: '0.7rem', color: '#bbb', fontFamily: FONT, minWidth: '18px', textAlign: 'right' }}>
+          {index + 1}.
+        </span>
+
+        {uploading ? (
+          <div style={{ flex: 1, padding: '7px 10px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '0.78rem', fontFamily: FONT, color: '#aaa', background: '#fafafa' }}>
+            Subiendo imagen…
+          </div>
+        ) : (
+          <input
+            value={url}
+            onChange={e => onUpdate(e.target.value)}
+            style={{ ...inputStyle, flex: 1, fontFamily: 'monospace', fontSize: '0.78rem' }}
+            placeholder="https://… o haz clic en Subir"
+          />
+        )}
+
+        {/* Hidden native file picker — accepts images only */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          style={{ display: 'none' }}
+          onChange={handleFileChange}
+        />
+
+        {/* Upload trigger */}
+        <button
+          onClick={() => { setUploadError(null); fileInputRef.current?.click(); }}
+          disabled={uploading}
+          title="Subir imagen desde tu computadora"
+          style={{
+            background: '#fff', border: '1px solid #7D4E61', color: '#7D4E61',
+            borderRadius: '4px', padding: '0 12px', cursor: uploading ? 'default' : 'pointer',
+            fontSize: '0.75rem', fontFamily: FONT, fontWeight: 600,
+            height: '36px', flexShrink: 0, opacity: uploading ? 0.5 : 1,
+          }}
+        >
+          {uploading ? '…' : 'Subir'}
+        </button>
+
+        <button onClick={onRemove} title="Eliminar imagen" style={removeBtn} disabled={uploading}>✕</button>
+      </div>
+
+      {/* Inline preview of uploaded image */}
+      {!uploading && url && url.startsWith('http') && (
+        <div style={{ marginLeft: '28px', marginBottom: '6px' }}>
+          <img
+            src={url}
+            alt={`Imagen ${index + 1}`}
+            style={{ height: '60px', borderRadius: '4px', border: '1px solid #eee', objectFit: 'cover' }}
+            onError={e => { e.target.style.display = 'none'; }}
+          />
+        </div>
+      )}
+
+      {uploadError && (
+        <p style={{ margin: '0 0 6px 28px', fontSize: '0.7rem', color: '#c62828', fontFamily: FONT }}>
+          {uploadError}
+        </p>
+      )}
     </div>
   );
 }

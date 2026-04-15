@@ -171,6 +171,14 @@
         "setting": "private",
         "auth": ["read"]
       }
+    },
+    "/admin/presigned-upload-url": {
+      "name": "/admin/presigned-upload-url",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "private",
+        "auth": ["read"]
+      }
     }
   }
 }

@@ -5,7 +5,7 @@ const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 const { DynamoDBDocumentClient, PutCommand, GetCommand, UpdateCommand, ScanCommand, DeleteCommand } = require('@aws-sdk/lib-dynamodb');
 const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
 const { SSMClient, GetParameterCommand } = require('@aws-sdk/client-ssm');
-const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client, GetObjectCommand, PutObjectCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl: getS3SignedUrl } = require('@aws-sdk/s3-request-presigner');
 const crypto = require('crypto');
 const { Resend } = require('resend');
@@ -61,7 +61,8 @@ const client = new DynamoDBClient({ region: process.env.REGION || 'us-east-1' })
 const ddbDocClient = DynamoDBDocumentClient.from(client);
 const sesClient = new SESClient({ region: process.env.REGION || 'us-east-1' });
 const s3Client = new S3Client({ region: process.env.REGION || 'us-east-1' });
-const S3_BUCKET = process.env.S3_BUCKET_NAME || 'beauty-station-videos';
+const S3_BUCKET        = process.env.S3_BUCKET_NAME        || 'beauty-station-videos';
+const IMAGES_BUCKET    = process.env.IMAGES_BUCKET_NAME    || 'beauty-station-images';
 
 const OWNER_EMAIL = process.env.OWNER_EMAIL || 'g.a.gramirez007@gmail.com';
 
@@ -1145,6 +1146,43 @@ app.put('/admin/lessons/:courseId', requireAdmin, async function (req, res) {
   } catch (error) {
     console.error('Admin: error updating lessons:', error);
     res.status(500).json({ error: 'Error al actualizar lecciones.' });
+  }
+});
+
+// GENERATE PRESIGNED UPLOAD URL FOR COURSE IMAGES
+// Returns a short-lived S3 PUT URL the browser uses to upload directly to S3,
+// plus the permanent public URL that gets saved in CourseSettings.imageUrls.
+// Requires the beauty-station-images bucket to:
+//   1. Exist in the same AWS account/region
+//   2. Have Block Public Access OFF and a bucket policy granting s3:GetObject to *
+//   3. Have a CORS rule allowing PUT from the app origin
+app.get('/admin/presigned-upload-url', requireAdmin, async function (req, res) {
+  try {
+    const { fileName, contentType, courseId } = req.query;
+    if (!fileName || !contentType) {
+      return res.status(400).json({ error: 'fileName y contentType son requeridos.' });
+    }
+    if (!contentType.startsWith('image/')) {
+      return res.status(400).json({ error: 'Solo se permiten archivos de imagen.' });
+    }
+
+    // Build a safe S3 key: course-images/<courseId>/<timestamp>.<ext>
+    const ext       = (fileName.split('.').pop() || 'jpg').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+    const safeId    = (courseId || 'general').replace(/[^a-zA-Z0-9-]/g, '_').slice(0, 80);
+    const key       = `course-images/${safeId}/${Date.now()}.${ext}`;
+    const region    = process.env.REGION || 'us-east-1';
+
+    const uploadUrl = await getS3SignedUrl(
+      s3Client,
+      new PutObjectCommand({ Bucket: IMAGES_BUCKET, Key: key, ContentType: contentType }),
+      { expiresIn: 300 } // 5 minutes to complete the upload
+    );
+
+    const publicUrl = `https://${IMAGES_BUCKET}.s3.${region}.amazonaws.com/${key}`;
+    res.json({ uploadUrl, publicUrl, key });
+  } catch (error) {
+    console.error('Admin: error generating presigned upload URL:', error);
+    res.status(500).json({ error: 'Error al generar URL de subida. Verifica que el bucket beauty-station-images existe en AWS.' });
   }
 });
 
