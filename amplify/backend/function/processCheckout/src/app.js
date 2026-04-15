@@ -395,8 +395,8 @@ app.post('/checkout', async function (req, res) {
               Source: OWNER_EMAIL,
               Destination: { ToAddresses: [OWNER_EMAIL] },
               Message: {
-                Subject: { Data: `⚠️ Pocos lugares disponibles: ${item.name}` },
-                Body: { Text: { Data: `Solo quedan ${remaining} lugar(es) disponible(s) para "${item.name}".\n\nUn estudiante acaba de inscribirse. Considera abrir más cupos o cerrar el registro.\n\n— Beauty Station` } }
+                Subject: { Data: `Pocos lugares disponibles: ${item.name}`, Charset: 'UTF-8' },
+                Body: { Text: { Data: `Solo quedan ${remaining} lugar(es) disponible(s) para "${item.name}".\n\nUn estudiante acaba de inscribirse. Considera abrir mas cupos o cerrar el registro.\n\n- Beauty Station`, Charset: 'UTF-8' } }
               }
             }));
           }
@@ -424,8 +424,8 @@ app.post('/checkout', async function (req, res) {
             Source: OWNER_EMAIL,
             Destination: { ToAddresses: [OWNER_EMAIL] },
             Message: {
-              Subject: { Data: `⚠️ Pocos kits disponibles: Kit de pieles perfectas` },
-              Body: { Text: { Data: `Solo quedan ${remaining} kit(s) disponible(s).\n\nUn estudiante acaba de comprar un kit. Considera reponer inventario.\n\n— Beauty Station` } }
+              Subject: { Data: `Pocos kits disponibles: Kit de pieles perfectas`, Charset: 'UTF-8' },
+              Body: { Text: { Data: `Solo quedan ${remaining} kit(s) disponible(s).\n\nUn estudiante acaba de comprar un kit. Considera reponer inventario.\n\n- Beauty Station`, Charset: 'UTF-8' } }
             }
           }));
         }
