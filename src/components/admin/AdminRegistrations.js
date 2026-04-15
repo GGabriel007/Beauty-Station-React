@@ -13,6 +13,36 @@ async function apiFetch(path) {
   return body.json();
 }
 
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+// Splits a single item string like "Pieles Perfectas 2PM a 4PM" into
+// { course: "Pieles Perfectas", schedule: "2PM a 4PM" }.
+// Items without a time slot (e.g. "Curso en Línea", "Kit de pieles perfectas")
+// return schedule: "—".
+function parseItem(itemStr) {
+  const s = (itemStr || '').trim();
+  const timeMatch = s.match(/(\d+\s*[AP]M\s*a\s*\d+\s*[AP]M)/i);
+  if (timeMatch) {
+    return {
+      course:   s.replace(timeMatch[0], '').trim().replace(/,\s*$/, ''),
+      schedule: timeMatch[1].replace(/\s+/g, ' '),
+    };
+  }
+  return { course: s, schedule: '—' };
+}
+
+// Returns { courses, schedules } display strings for a registration's Items field.
+function parseItems(itemsStr) {
+  if (!itemsStr) return { courses: '—', schedules: '—' };
+  const parts   = itemsStr.split(',').map(s => s.trim()).filter(Boolean);
+  const parsed  = parts.map(parseItem);
+  const courses   = parsed.map(p => p.course).join('\n');
+  const schedules = parsed.map(p => p.schedule).join('\n');
+  return { courses, schedules };
+}
+
+// ── Component ─────────────────────────────────────────────────────────────────
+
 export default function AdminRegistrations() {
   const [registrations, setRegistrations] = useState([]);
   const [loading,       setLoading]       = useState(true);
@@ -30,22 +60,34 @@ export default function AdminRegistrations() {
       .finally(() => setLoading(false));
   }, []);
 
-  // All unique course names that appear in any registration's Items string
+  // Unique base course names (without schedule) for the filter dropdown
   const allCourses = useMemo(() => {
     const names = new Set();
     for (const r of registrations) {
-      if (r.Items) r.Items.split(', ').forEach(c => names.add(c.trim()));
+      if (r.Items) {
+        r.Items.split(',').map(s => s.trim()).filter(Boolean).forEach(item => {
+          names.add(parseItem(item).course);
+        });
+      }
     }
     return Array.from(names).sort();
   }, [registrations]);
 
   const filtered = useMemo(() => {
     const q      = search.toLowerCase();
-    const fromTs = dateFrom ? new Date(dateFrom).getTime() : null;
+    const fromTs = dateFrom ? new Date(dateFrom).getTime()            : null;
     const toTs   = dateTo   ? new Date(dateTo + 'T23:59:59').getTime() : null;
+
     return registrations.filter(r => {
       if (q && !r.Name?.toLowerCase().includes(q) && !r.email?.toLowerCase().includes(q)) return false;
-      if (filterCourse && !r.Items?.includes(filterCourse)) return false;
+
+      if (filterCourse) {
+        const hasMatch = (r.Items || '')
+          .split(',').map(s => s.trim()).filter(Boolean)
+          .some(item => parseItem(item).course === filterCourse);
+        if (!hasMatch) return false;
+      }
+
       if (fromTs && (r.Timestamp || 0) < fromTs) return false;
       if (toTs   && (r.Timestamp || 0) > toTs)   return false;
       return true;
@@ -59,15 +101,19 @@ export default function AdminRegistrations() {
   const hasFilters   = search || filterCourse || dateFrom || dateTo;
 
   const exportCSV = () => {
-    const headers = ['Nombre', 'Email', 'Teléfono', 'Curso(s)', 'Total (Q)', 'Fecha'];
-    const rows    = filtered.map(r => [
-      r.Name        || '',
-      r.email       || '',
-      r.phoneNumber || '',
-      r.Items       || '',
-      r.TotalPrice  || '',
-      r.Timestamp ? new Date(r.Timestamp).toLocaleDateString('es-GT') : '',
-    ]);
+    const headers = ['Nombre', 'Email', 'Teléfono', 'Curso(s)', 'Horario', 'Total (Q)', 'Fecha'];
+    const rows    = filtered.map(r => {
+      const { courses, schedules } = parseItems(r.Items);
+      return [
+        r.Name        || '',
+        r.email       || '',
+        r.phoneNumber || '',
+        courses.replace(/\n/g, ' | '),
+        schedules.replace(/\n/g, ' | '),
+        r.TotalPrice  || '',
+        r.Timestamp ? new Date(r.Timestamp).toLocaleDateString('es-GT') : '',
+      ];
+    });
     const csv  = [headers, ...rows]
       .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
       .join('\n');
@@ -99,11 +145,20 @@ export default function AdminRegistrations() {
       <div style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '8px', padding: '14px 16px', marginBottom: '14px', display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'flex-end' }}>
         <div>
           <label style={labelStyle}>Buscar</label>
-          <input value={search} onChange={e => { setSearch(e.target.value); setPage(1); }} placeholder="Nombre o email" style={{ ...inputStyle, width: '190px' }} />
+          <input
+            value={search}
+            onChange={e => { setSearch(e.target.value); setPage(1); }}
+            placeholder="Nombre o email"
+            style={{ ...inputStyle, width: '190px' }}
+          />
         </div>
         <div>
           <label style={labelStyle}>Curso</label>
-          <select value={filterCourse} onChange={e => { setFilterCourse(e.target.value); setPage(1); }} style={{ ...inputStyle, width: '220px' }}>
+          <select
+            value={filterCourse}
+            onChange={e => { setFilterCourse(e.target.value); setPage(1); }}
+            style={{ ...inputStyle, width: '220px' }}
+          >
             <option value="">Todos los cursos</option>
             {allCourses.map(c => <option key={c} value={c}>{c}</option>)}
           </select>
@@ -132,24 +187,40 @@ export default function AdminRegistrations() {
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.8rem', fontFamily: FONT }}>
           <thead>
             <tr style={{ background: '#f5f5f5', borderBottom: '2px solid #e0e0e0' }}>
-              {['Nombre', 'Email', 'Teléfono', 'Curso(s)', 'Total', 'Fecha'].map(h => (
-                <th key={h} style={{ padding: '10px 12px', textAlign: 'left', fontWeight: 700, fontSize: '0.68rem', color: '#666', textTransform: 'uppercase', letterSpacing: '0.5px', whiteSpace: 'nowrap' }}>{h}</th>
+              {['Nombre', 'Email', 'Teléfono', 'Curso(s)', 'Horario', 'Total', 'Fecha'].map(h => (
+                <th key={h} style={th}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {paginated.length === 0 ? (
-              <tr><td colSpan={6} style={{ padding: '28px', textAlign: 'center', color: '#bbb', fontFamily: FONT }}>Sin resultados para los filtros aplicados.</td></tr>
-            ) : paginated.map((r, i) => (
-              <tr key={r.id || i} style={{ borderBottom: '1px solid #f5f5f5' }}>
-                <td style={td}>{r.Name       || '—'}</td>
-                <td style={td}>{r.email      || '—'}</td>
-                <td style={td}>{r.phoneNumber|| '—'}</td>
-                <td style={{ ...td, maxWidth: '240px', wordBreak: 'break-word', lineHeight: '1.4' }}>{r.Items || '—'}</td>
-                <td style={{ ...td, whiteSpace: 'nowrap' }}>Q{r.TotalPrice || 0}</td>
-                <td style={{ ...td, whiteSpace: 'nowrap', color: '#888' }}>{fmtDate(r.Timestamp)}</td>
+              <tr>
+                <td colSpan={7} style={{ padding: '28px', textAlign: 'center', color: '#bbb', fontFamily: FONT }}>
+                  Sin resultados para los filtros aplicados.
+                </td>
               </tr>
-            ))}
+            ) : paginated.map((r, i) => {
+              const { courses, schedules } = parseItems(r.Items);
+              return (
+                <tr key={r.id || i} style={{ borderBottom: '1px solid #f5f5f5' }}>
+                  <td style={td}>{r.Name        || '—'}</td>
+                  <td style={td}>{r.email       || '—'}</td>
+                  <td style={{ ...td, whiteSpace: 'nowrap' }}>{r.phoneNumber || '—'}</td>
+                  <td style={{ ...td, maxWidth: '200px' }}>
+                    {courses.split('\n').map((c, idx) => (
+                      <div key={idx}>{c || '—'}</div>
+                    ))}
+                  </td>
+                  <td style={{ ...td, whiteSpace: 'nowrap' }}>
+                    {schedules.split('\n').map((s, idx) => (
+                      <div key={idx} style={{ color: s === '—' ? '#ccc' : '#555' }}>{s}</div>
+                    ))}
+                  </td>
+                  <td style={{ ...td, whiteSpace: 'nowrap' }}>Q{r.TotalPrice || 0}</td>
+                  <td style={{ ...td, whiteSpace: 'nowrap', color: '#888' }}>{fmtDate(r.Timestamp)}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -157,9 +228,17 @@ export default function AdminRegistrations() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', alignItems: 'center', marginTop: '16px' }}>
-          <button onClick={() => setPage(p => Math.max(1, p - 1))}            disabled={page === 1}          style={{ ...ghostBtn, padding: '7px 14px' }}>← Anterior</button>
+          <button
+            onClick={() => setPage(p => Math.max(1, p - 1))}
+            disabled={page === 1}
+            style={{ ...ghostBtn, padding: '7px 14px', opacity: page === 1 ? 0.4 : 1 }}
+          >← Anterior</button>
           <span style={{ fontSize: '0.82rem', color: '#666', fontFamily: FONT }}>Página {page} / {totalPages}</span>
-          <button onClick={() => setPage(p => Math.min(totalPages, p + 1))}   disabled={page === totalPages} style={{ ...ghostBtn, padding: '7px 14px' }}>Siguiente →</button>
+          <button
+            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+            disabled={page === totalPages}
+            style={{ ...ghostBtn, padding: '7px 14px', opacity: page === totalPages ? 0.4 : 1 }}
+          >Siguiente →</button>
         </div>
       )}
     </div>
@@ -171,5 +250,6 @@ const inputStyle   = { padding: '7px 10px', border: '1px solid #ddd', borderRadi
 const labelStyle   = { display: 'block', fontSize: '0.68rem', fontWeight: 700, marginBottom: '4px', color: '#666', textTransform: 'uppercase', letterSpacing: '0.5px', fontFamily: FONT };
 const primaryBtn   = { background: '#111', color: '#fff', border: 'none', borderRadius: '4px', padding: '9px 18px', cursor: 'pointer', fontSize: '0.82rem', fontFamily: FONT, fontWeight: 600 };
 const ghostBtn     = { background: '#fff', color: '#333', border: '1px solid #ddd', borderRadius: '4px', padding: '9px 14px', cursor: 'pointer', fontSize: '0.82rem', fontFamily: FONT };
-const td           = { padding: '10px 12px', color: '#333', fontFamily: FONT };
+const th           = { padding: '10px 12px', textAlign: 'left', fontWeight: 700, fontSize: '0.68rem', color: '#666', textTransform: 'uppercase', letterSpacing: '0.5px', whiteSpace: 'nowrap', fontFamily: FONT };
+const td           = { padding: '10px 12px', color: '#333', fontFamily: FONT, verticalAlign: 'top' };
 const pageTitleStyle = { fontSize: '1.5rem', fontWeight: 700, margin: 0, letterSpacing: '1px', fontFamily: FONT };

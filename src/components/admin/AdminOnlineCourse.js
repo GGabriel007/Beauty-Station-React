@@ -1,7 +1,7 @@
 // src/components/admin/AdminOnlineCourse.js
 // 2.4 — Online course lesson manager: reorder, edit titles/S3 keys, add, delete.
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { get, put } from 'aws-amplify/api';
 
 const COURSE_ID = 'curso-en-linea';
@@ -24,11 +24,19 @@ export default function AdminOnlineCourse() {
   const [saving,        setSaving]        = useState(false);
   const [error,         setError]         = useState(null);
   const [successMsg,    setSuccessMsg]    = useState(null);
-  const [deleteConfirm, setDeleteConfirm] = useState(null); // index pending confirmation
+  const [deleteConfirm, setDeleteConfirm] = useState(null); // lesson id pending confirmation
+
+  // Snapshot of the last-saved lessons used to detect unsaved changes
+  const savedSnapshot = useRef('[]');
+  const isDirty = JSON.stringify(lessons) !== savedSnapshot.current;
 
   useEffect(() => {
     apiFetch(`/admin/lessons/${COURSE_ID}`)
-      .then(data => setLessons(data.lessons || []))
+      .then(data => {
+        const loaded = data.lessons || [];
+        setLessons(loaded);
+        savedSnapshot.current = JSON.stringify(loaded);
+      })
       .catch(() => setError('Error al cargar las lecciones.'))
       .finally(() => setLoading(false));
   }, []);
@@ -59,10 +67,12 @@ export default function AdminOnlineCourse() {
     setLessons(prev => [...prev, { id: newId, title: '', description: '', s3Key: '', duration: '00:00' }]);
   };
 
-  const confirmDelete = i => setDeleteConfirm(i);
-  const cancelDelete  = () => setDeleteConfirm(null);
-  const doDelete      = i => {
-    setLessons(prev => prev.filter((_, idx) => idx !== i));
+  // Use lesson.id (not array index) so reordering between click and confirm
+  // doesn't delete the wrong lesson.
+  const confirmDelete = id => setDeleteConfirm(id);
+  const cancelDelete  = ()  => setDeleteConfirm(null);
+  const doDelete      = id  => {
+    setLessons(prev => prev.filter(l => l.id !== id));
     setDeleteConfirm(null);
   };
 
@@ -72,6 +82,7 @@ export default function AdminOnlineCourse() {
     setSuccessMsg(null);
     try {
       await apiPut(`/admin/lessons/${COURSE_ID}`, { lessons });
+      savedSnapshot.current = JSON.stringify(lessons); // mark as clean
       setSuccessMsg('Lecciones guardadas exitosamente.');
       setTimeout(() => setSuccessMsg(null), 4000);
     } catch {
@@ -88,9 +99,18 @@ export default function AdminOnlineCourse() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
         <h1 style={pageTitleStyle}>Curso en Línea — Lecciones</h1>
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <button onClick={addLesson} style={ghostBtn}>+ Nueva Lección</button>
-          <button onClick={handleSave} disabled={saving} style={{ ...primaryBtn, opacity: saving ? 0.6 : 1 }}>
+          <button
+            onClick={handleSave}
+            disabled={!isDirty || saving}
+            style={{
+              ...primaryBtn,
+              opacity:    (!isDirty || saving) ? 0.4 : 1,
+              cursor:     (!isDirty || saving) ? 'default' : 'pointer',
+              transition: 'opacity 0.2s',
+            }}
+          >
             {saving ? 'Guardando…' : 'Guardar Cambios'}
           </button>
         </div>
@@ -109,17 +129,27 @@ export default function AdminOnlineCourse() {
             {/* Row controls */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
               <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#bbb', fontFamily: FONT, width: '22px' }}>#{i + 1}</span>
-              <button onClick={() => moveUp(i)}   disabled={i === 0}                  style={arrowBtn} title="Subir">▲</button>
-              <button onClick={() => moveDown(i)} disabled={i === lessons.length - 1} style={arrowBtn} title="Bajar">▼</button>
+              <button
+                onClick={() => moveUp(i)}
+                disabled={i === 0}
+                style={{ ...arrowBtn, opacity: i === 0 ? 0.35 : 1, cursor: i === 0 ? 'default' : 'pointer' }}
+                title="Subir"
+              >▲</button>
+              <button
+                onClick={() => moveDown(i)}
+                disabled={i === lessons.length - 1}
+                style={{ ...arrowBtn, opacity: i === lessons.length - 1 ? 0.35 : 1, cursor: i === lessons.length - 1 ? 'default' : 'pointer' }}
+                title="Bajar"
+              >▼</button>
               <div style={{ flex: 1 }} />
-              {deleteConfirm === i ? (
+              {deleteConfirm === lesson.id ? (
                 <span style={{ fontSize: '0.8rem', fontFamily: FONT }}>
                   <span style={{ color: '#c62828' }}>¿Eliminar esta lección?</span>{' '}
-                  <button onClick={() => doDelete(i)}  style={{ ...inlineBtn, color: '#c62828', fontWeight: 700 }}>Sí</button>{' '}
-                  <button onClick={cancelDelete}        style={{ ...inlineBtn, color: '#666' }}>No</button>
+                  <button onClick={() => doDelete(lesson.id)} style={{ ...inlineBtn, color: '#c62828', fontWeight: 700 }}>Sí</button>{' '}
+                  <button onClick={cancelDelete}               style={{ ...inlineBtn, color: '#666' }}>No</button>
                 </span>
               ) : (
-                <button onClick={() => confirmDelete(i)} style={{ background: 'none', border: '1px solid #c62828', color: '#c62828', borderRadius: '4px', padding: '4px 10px', cursor: 'pointer', fontSize: '0.75rem', fontFamily: FONT }}>Eliminar</button>
+                <button onClick={() => confirmDelete(lesson.id)} style={{ background: 'none', border: '1px solid #c62828', color: '#c62828', borderRadius: '4px', padding: '4px 10px', cursor: 'pointer', fontSize: '0.75rem', fontFamily: FONT }}>Eliminar</button>
               )}
             </div>
 
@@ -142,13 +172,6 @@ export default function AdminOnlineCourse() {
         ))}
       </div>
 
-      {lessons.length > 0 && (
-        <div style={{ textAlign: 'right', marginTop: '18px' }}>
-          <button onClick={handleSave} disabled={saving} style={{ ...primaryBtn, opacity: saving ? 0.6 : 1 }}>
-            {saving ? 'Guardando…' : 'Guardar Cambios'}
-          </button>
-        </div>
-      )}
     </div>
   );
 }

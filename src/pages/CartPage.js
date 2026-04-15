@@ -23,6 +23,8 @@ const CartPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [kitAvailable, setKitAvailable] = useState(true);
+  const [enrollmentFee, setEnrollmentFee] = useState(200);
+  const [kitPrice, setKitPrice] = useState(5900);
   const [countryOpen, setCountryOpen] = useState(false);
   const countryRef = useRef(null);
 
@@ -75,6 +77,22 @@ const CartPage = () => {
       }
     };
     checkKit();
+  }, []);
+
+  // Load live enrollment fee and kit price from admin settings
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const op = get({ apiName: 'checkoutApi', path: '/site-settings' });
+        const { body } = await op.response;
+        const data = await body.json();
+        if (data.enrollmentFee !== undefined) setEnrollmentFee(Number(data.enrollmentFee));
+        if (data.kitPrice !== undefined) setKitPrice(Number(data.kitPrice));
+      } catch (err) {
+        console.error('Error fetching site settings:', err);
+      }
+    };
+    fetchSettings();
   }, []);
 
   const handleCaptchaSuccess = (token) => {
@@ -234,12 +252,14 @@ const CartPage = () => {
         }
       } catch (e) { }
       const isSeatsError = errorMsg && errorMsg.includes('No hay más asientos disponibles');
+      const isPriceError = errorMsg && errorMsg.includes('no coincide con el precio');
+      const isKnownError = isSeatsError || isPriceError;
       setNotificationError(DOMPurify.sanitize(
-        isSeatsError ? errorMsg : "Hubo un error al procesar tu compra con AWS: " + errorMsg
+        isKnownError ? errorMsg : "Hubo un error al procesar tu compra con AWS: " + errorMsg
       ));
       setNotification("");
       toast.error(
-        isSeatsError
+        isKnownError
           ? errorMsg
           : 'Error al procesar el pago. Por favor, verifica tus datos e intenta nuevamente.',
         { autoClose: 6000 }
@@ -332,7 +352,7 @@ const CartPage = () => {
 
   const getTotalPrice = () => {
     const total = cartItems.reduce((total, item) => total + item.price, 0);
-    return includeKit ? total + 5900 + 200 : total + 200;
+    return includeKit ? total + kitPrice + enrollmentFee : total + enrollmentFee;
   };
 
   const handleRemoveKit = () => {
@@ -654,7 +674,7 @@ const CartPage = () => {
                     </p>
                   )}
                 </div>
-                <span className="cp-summary-price">Q 5,900.00</span>
+                <span className="cp-summary-price">Q {kitPrice.toLocaleString('en-US')}.00</span>
                 <button className="cp-summary-remove" onClick={handleRemoveKit}>×</button>
               </div>
             )}
@@ -662,7 +682,7 @@ const CartPage = () => {
             {/* Inscription fee */}
             <div className="cp-summary-item cp-summary-fee">
               <span className="cp-summary-name">Inscripción</span>
-              <span className="cp-summary-price">Q 200.00</span>
+              <span className="cp-summary-price">Q {enrollmentFee.toLocaleString('en-US')}.00</span>
             </div>
 
             {/* Divider + Total */}

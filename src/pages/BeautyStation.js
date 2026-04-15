@@ -5,7 +5,7 @@ import '../styles/beauty-Station.css';
 import { Link } from 'react-router-dom';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { fetchUserAttributes } from 'aws-amplify/auth';
-import { get } from 'aws-amplify/api';
+import { get, post } from 'aws-amplify/api';
 
 /* ── Hardcoded Google reviews ── */
 const GOOGLE_REVIEWS = [
@@ -255,22 +255,40 @@ const BeautyStation = () => {
 
   const allReviews = [...googleReviews, ...userReviews];
 
-  const handleReviewSubmit = (e) => {
+  const handleReviewSubmit = async (e) => {
     e.preventDefault();
     if (reviewForm.rating === 0 || !reviewForm.text.trim()) return;
+
     const newReview = {
-      id: `u_${Date.now()}`,
-      name: userName || 'Usuario',
+      id:     `u_${Date.now()}`,
+      name:   userName || 'Usuario',
       rating: reviewForm.rating,
-      date: new Date().toLocaleDateString('es-GT', { month: 'long', year: 'numeric' }),
-      text: reviewForm.text.trim(),
+      date:   new Date().toLocaleDateString('es-GT', { month: 'long', year: 'numeric' }),
+      text:   reviewForm.text.trim(),
       source: 'user',
     };
+
+    // Optimistic UI — show the review immediately in the carousel
     const updated = [...userReviews, newReview];
     setUserReviews(updated);
     localStorage.setItem('bs_reviews', JSON.stringify(updated));
     setReviewForm({ rating: 0, text: '' });
     setReviewSubmitted(true);
+
+    // Persist to DynamoDB so the admin panel and all other users can see it
+    try {
+      const op = post({
+        apiName: 'checkoutApi',
+        path: '/reviews',
+        options: { body: { name: newReview.name, rating: newReview.rating, text: newReview.text, date: newReview.date } },
+      });
+      await op.response;
+      // Clear the localStorage cache so the next page load fetches fresh DB data
+      localStorage.removeItem('bs_reviews');
+    } catch (err) {
+      // Non-fatal: review already shows locally; DB write failed silently
+      console.error('Error saving review to DB:', err);
+    }
   };
 
   const scroll = (direction) => {

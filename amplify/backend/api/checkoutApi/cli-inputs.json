@@ -107,6 +107,15 @@
         "guest": ["read"]
       }
     },
+    "/site-settings": {
+      "name": "/site-settings",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "protected",
+        "auth": ["read"],
+        "guest": ["read"]
+      }
+    },
     "/admin/courses": {
       "name": "/admin/courses",
       "lambdaFunction": "processCheckout",
@@ -153,6 +162,14 @@
       "permissions": {
         "setting": "private",
         "auth": ["read", "create", "update", "delete"]
+      }
+    },
+    "/admin/activity-log": {
+      "name": "/admin/activity-log",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "private",
+        "auth": ["read"]
       }
     }
   }

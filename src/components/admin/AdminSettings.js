@@ -1,7 +1,5 @@
 // src/components/admin/AdminSettings.js
-// 2.7 — Three sections: Inventory (kit + per-course seats),
-//        Global Pricing (enrollment fee, kit price),
-//        Site Notice (banner text + visibility toggle).
+// 2.7 + 3.2 — Three sections: Inventory, Global Pricing, Site Notice, Activity Log.
 
 import React, { useState, useEffect } from 'react';
 import { get, put } from 'aws-amplify/api';
@@ -99,6 +97,11 @@ export default function AdminSettings() {
             settings.siteNoticeActive?.value === 'true'
           }
         />
+      </Section>
+
+      {/* ── Activity log ── */}
+      <Section title="Registro de Actividad">
+        <ActivityLog />
       </Section>
     </div>
   );
@@ -216,18 +219,102 @@ function SiteNoticeRow({ initialText, initialActive }) {
         />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.84rem', fontFamily: FONT }}>
-          <input
-            type="checkbox"
-            checked={active}
-            onChange={e => setActive(e.target.checked)}
-            style={{ width: '16px', height: '16px', cursor: 'pointer' }}
-          />
+        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.84rem', fontFamily: FONT, userSelect: 'none' }}>
+          <div
+            onClick={() => setActive(v => !v)}
+            style={{
+              width: '38px', height: '20px', borderRadius: '10px',
+              background: active ? '#7D4E61' : '#ccc',
+              position: 'relative', transition: 'background 0.2s', cursor: 'pointer', flexShrink: 0,
+            }}
+          >
+            <div style={{
+              width: '14px', height: '14px', borderRadius: '50%', background: '#fff',
+              position: 'absolute', top: '3px',
+              left: active ? '21px' : '3px',
+              transition: 'left 0.2s',
+            }} />
+          </div>
           Mostrar aviso en el sitio público
         </label>
         <SaveButton saving={saving} saved={saved} onClick={handleSave} wide />
         {err && <span style={errStyle}>{err}</span>}
       </div>
+    </div>
+  );
+}
+
+// ── Activity Log ─────────────────────────────────────────────────────────────
+
+function ActivityLog() {
+  const [entries,  setEntries]  = useState([]);
+  const [loading,  setLoading]  = useState(true);
+  const [error,    setError]    = useState(null);
+
+  const load = () => {
+    setLoading(true);
+    setError(null);
+    apiFetch('/admin/activity-log')
+      .then(data => setEntries(Array.isArray(data) ? data : []))
+      .catch(() => setError('Error al cargar el registro. Asegúrate de que la tabla AdminLog existe en DynamoDB.'))
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => { load(); }, []);
+
+  const fmtTs = ts => ts
+    ? new Date(ts).toLocaleString('es-GT', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+    : '—';
+
+  return (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+        <p style={{ margin: 0, fontSize: '0.8rem', color: '#999', fontFamily: FONT }}>
+          Últimas 100 acciones de administración.
+        </p>
+        <button
+          onClick={load}
+          disabled={loading}
+          style={{ background: '#fff', border: '1px solid #ddd', borderRadius: '4px', padding: '5px 12px', cursor: loading ? 'default' : 'pointer', fontSize: '0.75rem', fontFamily: FONT, opacity: loading ? 0.6 : 1 }}
+        >
+          {loading ? 'Cargando…' : 'Actualizar'}
+        </button>
+      </div>
+
+      {error && <p style={{ color: '#c62828', fontSize: '0.82rem', fontFamily: FONT }}>{error}</p>}
+
+      {!loading && !error && entries.length === 0 && (
+        <p style={{ color: '#bbb', fontSize: '0.82rem', fontFamily: FONT }}>
+          No hay entradas aún. Las acciones del panel (guardar cursos, editar precios, etc.) aparecerán aquí.
+        </p>
+      )}
+
+      {entries.length > 0 && (
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.78rem', fontFamily: FONT }}>
+            <thead>
+              <tr style={{ borderBottom: '2px solid #f0f0f0' }}>
+                <th style={thStyle}>Fecha</th>
+                <th style={thStyle}>Usuario</th>
+                <th style={thStyle}>Acción</th>
+                <th style={thStyle}>Valor anterior</th>
+                <th style={thStyle}>Nuevo valor</th>
+              </tr>
+            </thead>
+            <tbody>
+              {entries.map((e, i) => (
+                <tr key={e.actionId || i} style={{ borderBottom: '1px solid #f5f5f5', background: i % 2 === 0 ? '#fafafa' : '#fff' }}>
+                  <td style={tdStyle}>{fmtTs(e.timestamp)}</td>
+                  <td style={tdStyle}>{e.staffEmail || '—'}</td>
+                  <td style={tdStyle}>{e.action || '—'}</td>
+                  <td style={{ ...tdStyle, color: '#c62828', maxWidth: '180px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{e.oldValue ?? '—'}</td>
+                  <td style={{ ...tdStyle, color: '#2e7d32', maxWidth: '180px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{e.newValue ?? '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
@@ -271,3 +358,5 @@ const rowStyle     = { display: 'flex', alignItems: 'center', gap: '12px', paddi
 const numInput     = { width: '90px', padding: '6px 8px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '0.85rem', fontFamily: FONT, outline: 'none', textAlign: 'right' };
 const errStyle     = { fontSize: '0.72rem', color: '#c62828', fontFamily: FONT };
 const emptyStyle   = { fontSize: '0.82rem', color: '#bbb', fontFamily: FONT, margin: 0 };
+const thStyle      = { textAlign: 'left', padding: '6px 10px', fontWeight: 700, color: '#666', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.5px', whiteSpace: 'nowrap' };
+const tdStyle      = { padding: '7px 10px', color: '#444', verticalAlign: 'top' };

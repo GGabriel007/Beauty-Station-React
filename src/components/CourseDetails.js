@@ -243,6 +243,17 @@ const CourseDetails = () => {
             );
           })();
 
+    // Formats a price value regardless of whether it came from hardcoded data
+    // (already a string like "Q2,200") or the admin panel (a bare number like 2200).
+    const fmtPrice = (val) => {
+        if (val == null || val === '') return '—';
+        const str = String(val).trim();
+        // Already formatted (starts with Q) or a non-numeric label ("Por confirmar")
+        if (str.startsWith('Q') || isNaN(Number(str.replace(/,/g, '')))) return str;
+        // Bare number from admin panel → add Q and comma-format
+        return `Q${Number(str).toLocaleString('es-GT')}`;
+    };
+
     const handleThumbnailClick = (src) => {
         setSelectedImage(src);
     };
@@ -369,11 +380,11 @@ const CourseDetails = () => {
                         <div className="course-price-block">
                             <div className="course-price-row">
                                 <span className="course-price-label">Precio por persona</span>
-                                <span className="course-price-value">{courseData.price}</span>
+                                <span className="course-price-value">{fmtPrice(courseData.price)}</span>
                             </div>
                             <div className="course-price-row">
                                 <span className="course-price-label">Inscripción</span>
-                                <span className="course-price-value">{courseData.enrollment}</span>
+                                <span className="course-price-value">{fmtPrice(courseData.enrollment ?? courseData.enrollmentFee)}</span>
                             </div>
                         </div>
 

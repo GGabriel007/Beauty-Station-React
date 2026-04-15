@@ -1,8 +1,9 @@
 // src/App.js
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { Hub } from 'aws-amplify/utils';
+import { get } from 'aws-amplify/api';
 import { toast } from 'react-toastify';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -45,6 +46,7 @@ function AppLayout() {
   return (
     <div className="App">
       {!isAdmin && <Header />}
+      {!isAdmin && <SiteNoticeBanner />}
       <Routes basename="/Beauty-Station-React">
         <Route path="/" element={<BeautyStation />} />
         <Route path="/classes" element={<BeautySClasses />} />
@@ -146,6 +148,55 @@ const AuthRouteWatcher = () => {
   }, [route]);
 
   return null;
+};
+
+// ─── Site notice banner ────────────────────────────────────────────────────────
+// Fetches /site-settings once and shows a dismissible top-of-page banner
+// when siteNoticeActive is true. Silently hidden if the fetch fails.
+const SiteNoticeBanner = () => {
+  const [notice,    setNotice]    = useState(null);
+  const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const op = get({ apiName: 'checkoutApi', path: '/site-settings' });
+        const { body } = await op.response;
+        const data = await body.json();
+        if (data.siteNoticeActive === true || data.siteNoticeActive === 'true') {
+          setNotice(data.siteNotice || '');
+        }
+      } catch {
+        // non-critical — fail silently
+      }
+    };
+    load();
+  }, []);
+
+  if (!notice || dismissed) return null;
+
+  return (
+    <div style={{
+      background: '#7D4E61', color: '#fff',
+      padding: '10px 48px 10px 20px',
+      textAlign: 'center',
+      fontSize: '0.88rem',
+      fontFamily: "'Montserrat', sans-serif",
+      position: 'relative',
+      lineHeight: 1.5,
+    }}>
+      {notice}
+      <button
+        onClick={() => setDismissed(true)}
+        aria-label="Cerrar aviso"
+        style={{
+          position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)',
+          background: 'none', border: 'none', color: '#fff', cursor: 'pointer',
+          fontSize: '1.2rem', lineHeight: 1, padding: '2px 6px', opacity: 0.8,
+        }}
+      >×</button>
+    </div>
+  );
 };
 
 const CartButton = () => {

@@ -65,6 +65,29 @@ const S3_BUCKET = process.env.S3_BUCKET_NAME || 'beauty-station-videos';
 
 const OWNER_EMAIL = process.env.OWNER_EMAIL || 'g.a.gramirez007@gmail.com';
 
+// ─── Admin Activity Log helper ────────────────────────────────────────────────
+// Writes a log entry to the AdminLog DynamoDB table.
+// Non-fatal: if the table doesn't exist or the write fails the operation continues.
+// Table: AdminLog — partition key: actionId (String)
+async function writeActivityLog(staffEmail, action, oldValue, newValue) {
+  try {
+    const actionId = `log_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    await ddbDocClient.send(new PutCommand({
+      TableName: 'AdminLog',
+      Item: {
+        actionId,
+        staffEmail: staffEmail || 'unknown',
+        action,
+        oldValue:  oldValue  !== undefined ? String(oldValue)  : null,
+        newValue:  newValue  !== undefined ? String(newValue)  : null,
+        timestamp: Date.now(),
+      }
+    }));
+  } catch (err) {
+    console.warn('AdminLog write failed (table may not exist yet):', err.message);
+  }
+}
+
 // WhatsApp group info per course (displayName for email button, link for the group)
 const courseWhatsappInfo = {
   'Master Waves 2PM a 4PM':                        { displayName: 'Master Waves',                        link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
@@ -296,16 +319,21 @@ app.post('/checkout', async function (req, res) {
       }
     }
 
-    // 1aa. SOFT PRICE AUDIT: Verify the client-sent price against CourseSettings (Phase 1 — logs only; Phase 3 will hard-reject)
+    // 1aa. PRICE VALIDATION: Verify client-sent total against CourseSettings (Phase 3 — hard reject on mismatch)
     try {
       let expectedTotal = 0;
+      let allPricesFound = true;
       for (const item of cartItems) {
         const courseId = cartNameToCourseId[item.name];
         if (courseId) {
           const courseData = await ddbDocClient.send(new GetCommand({ TableName: 'CourseSettings', Key: { courseId } }));
           if (courseData.Item && courseData.Item.price != null) {
             expectedTotal += Number(courseData.Item.price);
+          } else {
+            allPricesFound = false; // price not in DB yet — skip hard-reject for this item
           }
+        } else {
+          allPricesFound = false; // item not in the courseId map — cannot validate, skip hard-reject
         }
       }
       if (IncludeKit) {
@@ -316,12 +344,15 @@ app.post('/checkout', async function (req, res) {
       const enrollmentFee = enrollmentSettings.Item ? Number(enrollmentSettings.Item.value) : 200;
       expectedTotal += enrollmentFee;
 
-      if (expectedTotal > 0 && Math.abs(Number(TotalPrice) - expectedTotal) > 1) {
-        console.warn(`PRICE AUDIT: Client sent Q${TotalPrice}, expected Q${expectedTotal} for order by ${email}. (Soft check — not rejected in Phase 1)`);
+      if (allPricesFound && expectedTotal > 0 && Math.abs(Number(TotalPrice) - expectedTotal) > 1) {
+        console.warn(`PRICE MISMATCH: Client sent Q${TotalPrice}, expected Q${expectedTotal} for order by ${email}. Rejecting.`);
+        return res.status(400).json({
+          error: `El precio enviado (Q${TotalPrice}) no coincide con el precio actual (Q${expectedTotal}). Por favor, recarga la página y vuelve a intentarlo.`
+        });
       }
     } catch (auditErr) {
-      // CourseSettings table may not exist yet — silently continue
-      console.info('Price audit skipped (CourseSettings not available):', auditErr.message);
+      // CourseSettings table not seeded yet — skip validation
+      console.info('Price validation skipped (CourseSettings not available):', auditErr.message);
     }
 
     // 1b. PRE-CHECK INVENTORY: Verify seats exist in DynamoDB 'Modulos' before processing payment
@@ -355,6 +386,23 @@ app.post('/checkout', async function (req, res) {
           ExpressionAttributeNames: { '#name': item.name },
           ExpressionAttributeValues: { ':inc': 1 }
         }));
+        // 3.3 — Low-seat alert: notify owner when remaining seats reach 2 or fewer
+        try {
+          const afterDeduct = await ddbDocClient.send(new GetCommand({ TableName: 'Modulos', Key: { id: moduleId } }));
+          const remaining = afterDeduct.Item ? Number(afterDeduct.Item[item.name]) : null;
+          if (remaining !== null && remaining <= 2) {
+            await sesClient.send(new SendEmailCommand({
+              Source: OWNER_EMAIL,
+              Destination: { ToAddresses: [OWNER_EMAIL] },
+              Message: {
+                Subject: { Data: `⚠️ Pocos lugares disponibles: ${item.name}` },
+                Body: { Text: { Data: `Solo quedan ${remaining} lugar(es) disponible(s) para "${item.name}".\n\nUn estudiante acaba de inscribirse. Considera abrir más cupos o cerrar el registro.\n\n— Beauty Station` } }
+              }
+            }));
+          }
+        } catch (alertErr) {
+          console.warn('Low-seat alert failed:', alertErr.message);
+        }
       }
     }
 
@@ -367,6 +415,23 @@ app.post('/checkout', async function (req, res) {
         ExpressionAttributeNames: { '#name': 'Kit de pieles perfectas' },
         ExpressionAttributeValues: { ':inc': 1 }
       }));
+      // Low-seat alert for kit inventory
+      try {
+        const afterDeduct = await ddbDocClient.send(new GetCommand({ TableName: 'Modulos', Key: { id: kitId } }));
+        const remaining = afterDeduct.Item ? Number(afterDeduct.Item['Kit de pieles perfectas']) : null;
+        if (remaining !== null && remaining <= 2) {
+          await sesClient.send(new SendEmailCommand({
+            Source: OWNER_EMAIL,
+            Destination: { ToAddresses: [OWNER_EMAIL] },
+            Message: {
+              Subject: { Data: `⚠️ Pocos kits disponibles: Kit de pieles perfectas` },
+              Body: { Text: { Data: `Solo quedan ${remaining} kit(s) disponible(s).\n\nUn estudiante acaba de comprar un kit. Considera reponer inventario.\n\n— Beauty Station` } }
+            }
+          }));
+        }
+      } catch (alertErr) {
+        console.warn('Low-kit alert failed:', alertErr.message);
+      }
     }
 
     // 3. PERSIST PAYMENT: Save to Payments Table
@@ -772,6 +837,25 @@ app.get('/courses', async function (req, res) {
   }
 });
 
+// PUBLIC SITE SETTINGS: Returns public-facing settings (fees, kit price, site notice).
+// Strips any admin-only fields before sending to the browser.
+app.get('/site-settings', async function (req, res) {
+  try {
+    const data = await ddbDocClient.send(new ScanCommand({ TableName: 'SiteSettings' }));
+    const allowed = ['enrollmentFee', 'kitPrice', 'siteNotice', 'siteNoticeActive'];
+    const settings = {};
+    for (const item of (data.Items || [])) {
+      if (allowed.includes(item.settingKey)) {
+        settings[item.settingKey] = item.value;
+      }
+    }
+    res.json(settings);
+  } catch (error) {
+    console.error('Error fetching site settings:', error);
+    res.json({});
+  }
+});
+
 // PUBLIC REVIEWS: Returns all visible reviews for the homepage.
 app.get('/reviews', async function (req, res) {
   try {
@@ -784,6 +868,33 @@ app.get('/reviews', async function (req, res) {
   } catch (error) {
     console.error('Error fetching reviews:', error);
     res.json([]);
+  }
+});
+
+// SUBMIT A NEW REVIEW (public — no auth required)
+app.post('/reviews', async function (req, res) {
+  try {
+    const { name, rating, text, date } = req.body || {};
+    if (!text || !text.trim()) return res.status(400).json({ error: 'El texto de la reseña es requerido.' });
+
+    const reviewId = `u_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    await ddbDocClient.send(new PutCommand({
+      TableName: 'Reviews',
+      Item: {
+        reviewId,
+        name:      (name  || 'Usuario').trim().slice(0, 80),
+        rating:    Math.min(5, Math.max(1, Number(rating) || 5)),
+        text:      text.trim().slice(0, 2000),
+        date:      date || new Date().toLocaleDateString('es-GT', { month: 'long', year: 'numeric' }),
+        source:    'user',
+        isVisible: true,
+        createdAt: Date.now(),
+      },
+    }));
+    res.json({ success: true, reviewId });
+  } catch (error) {
+    console.error('Error submitting review:', error);
+    res.status(500).json({ error: 'Error al guardar la reseña.' });
   }
 });
 
@@ -832,6 +943,8 @@ app.put('/admin/courses/:courseId', requireAdmin, async function (req, res) {
       ExpressionAttributeValues: values
     }));
 
+    await writeActivityLog(req.adminEmail, `Updated course: ${courseId}`, null, JSON.stringify(updates));
+
     res.json({ success: true });
   } catch (error) {
     console.error('Admin: error updating course:', error);
@@ -861,6 +974,7 @@ app.delete('/admin/reviews/:reviewId', requireAdmin, async function (req, res) {
       ExpressionAttributeNames: { '#deletedBy': 'deletedBy', '#deletedAt': 'deletedAt' },
       ExpressionAttributeValues: { ':f': false, ':by': req.adminEmail, ':ts': Date.now() }
     }));
+    await writeActivityLog(req.adminEmail, `Deleted review: ${reviewId}`, 'visible', 'hidden');
     res.json({ success: true });
   } catch (error) {
     console.error('Admin: error deleting review:', error);
@@ -878,6 +992,7 @@ app.put('/admin/reviews/:reviewId', requireAdmin, async function (req, res) {
       UpdateExpression: 'SET isVisible = :t',
       ExpressionAttributeValues: { ':t': true }
     }));
+    await writeActivityLog(req.adminEmail, `Restored review: ${reviewId}`, 'hidden', 'visible');
     res.json({ success: true });
   } catch (error) {
     console.error('Admin: error restoring review:', error);
@@ -903,6 +1018,13 @@ app.put('/admin/site-settings/:key', requireAdmin, async function (req, res) {
     const { value } = req.body;
     if (value === undefined) return res.status(400).json({ error: 'value requerido.' });
 
+    // Capture old value for the activity log before overwriting
+    let oldVal = null;
+    try {
+      const existing = await ddbDocClient.send(new GetCommand({ TableName: 'SiteSettings', Key: { settingKey: key } }));
+      if (existing.Item) oldVal = existing.Item.value;
+    } catch (_) {}
+
     await ddbDocClient.send(new UpdateCommand({
       TableName: 'SiteSettings',
       Key: { settingKey: key },
@@ -910,6 +1032,8 @@ app.put('/admin/site-settings/:key', requireAdmin, async function (req, res) {
       ExpressionAttributeNames: { '#val': 'value' },
       ExpressionAttributeValues: { ':v': value, ':by': req.adminEmail, ':ts': Date.now() }
     }));
+
+    await writeActivityLog(req.adminEmail, `Updated setting: ${key}`, oldVal, value);
 
     res.json({ success: true });
   } catch (error) {
@@ -949,6 +1073,13 @@ app.put('/admin/seats/:moduleId', requireAdmin, async function (req, res) {
     if (!courseName || seats === undefined) {
       return res.status(400).json({ error: 'courseName y seats son requeridos.' });
     }
+    // Capture old seat count for activity log
+    let oldSeats = null;
+    try {
+      const existing = await ddbDocClient.send(new GetCommand({ TableName: 'Modulos', Key: { id: moduleId } }));
+      if (existing.Item && existing.Item[courseName] !== undefined) oldSeats = existing.Item[courseName];
+    } catch (_) {}
+
     await ddbDocClient.send(new UpdateCommand({
       TableName: 'Modulos',
       Key: { id: moduleId },
@@ -956,6 +1087,9 @@ app.put('/admin/seats/:moduleId', requireAdmin, async function (req, res) {
       ExpressionAttributeNames: { '#cn': courseName },
       ExpressionAttributeValues: { ':seats': Number(seats) }
     }));
+
+    await writeActivityLog(req.adminEmail, `Updated seats: ${courseName}`, oldSeats, Number(seats));
+
     res.json({ success: true });
   } catch (error) {
     console.error('Admin: error updating seats:', error);
@@ -1005,10 +1139,25 @@ app.put('/admin/lessons/:courseId', requireAdmin, async function (req, res) {
       ExpressionAttributeValues: { ':l': lessons, ':by': req.adminEmail, ':ts': Date.now() }
     }));
 
+    await writeActivityLog(req.adminEmail, `Updated lessons: ${courseId}`, null, `${lessons.length} lecciones`);
+
     res.json({ success: true });
   } catch (error) {
     console.error('Admin: error updating lessons:', error);
     res.status(500).json({ error: 'Error al actualizar lecciones.' });
+  }
+});
+
+// GET ADMIN ACTIVITY LOG (last 100 entries, newest first)
+// Requires AdminLog DynamoDB table: partition key = actionId (String)
+app.get('/admin/activity-log', requireAdmin, async function (req, res) {
+  try {
+    const data = await ddbDocClient.send(new ScanCommand({ TableName: 'AdminLog' }));
+    const sorted = (data.Items || []).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+    res.json(sorted.slice(0, 100));
+  } catch (error) {
+    console.error('Admin: error fetching activity log:', error);
+    res.status(500).json({ error: 'Error al obtener el registro de actividad. Asegúrate de que la tabla AdminLog existe en DynamoDB.' });
   }
 });
 
