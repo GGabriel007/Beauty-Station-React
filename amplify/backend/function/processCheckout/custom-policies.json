@@ -1,14 +1,30 @@
 [
   {
-    "Action": ["dynamodb:PutItem", "dynamodb:GetItem", "dynamodb:UpdateItem", "dynamodb:DeleteItem", "dynamodb:Scan"],
+    "Action": [
+      "s3:PutObject"
+    ],
     "Resource": [
-      "arn:aws:dynamodb:*:*:table/Payments",
-      "arn:aws:dynamodb:*:*:table/Modulos",
-      "arn:aws:dynamodb:*:*:table/Carts",
-      "arn:aws:dynamodb:*:*:table/CourseProgress",
-      "arn:aws:dynamodb:*:*:table/CourseSettings",
-      "arn:aws:dynamodb:*:*:table/Reviews",
-      "arn:aws:dynamodb:*:*:table/SiteSettings"
+      "arn:aws:s3:::beauty-station-images/*"
+    ]
+  },
+  {
+    "Action": [
+      "s3:GetObject"
+    ],
+    "Resource": [
+      "arn:aws:s3:::beauty-station-videos/*"
+    ]
+  },
+  {
+    "Action": [
+      "dynamodb:PutItem",
+      "dynamodb:GetItem",
+      "dynamodb:UpdateItem",
+      "dynamodb:DeleteItem",
+      "dynamodb:Scan"
+    ],
+    "Resource": [
+      "arn:aws:dynamodb:*:*:table/AdminLog"
     ]
   }
 ]
