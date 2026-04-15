@@ -1,6 +1,25 @@
 [
   {
     "Action": [
+      "dynamodb:PutItem",
+      "dynamodb:GetItem",
+      "dynamodb:UpdateItem",
+      "dynamodb:DeleteItem",
+      "dynamodb:Scan"
+    ],
+    "Resource": [
+      "arn:aws:dynamodb:*:*:table/Payments",
+      "arn:aws:dynamodb:*:*:table/Modulos",
+      "arn:aws:dynamodb:*:*:table/Carts",
+      "arn:aws:dynamodb:*:*:table/CourseProgress",
+      "arn:aws:dynamodb:*:*:table/CourseSettings",
+      "arn:aws:dynamodb:*:*:table/Reviews",
+      "arn:aws:dynamodb:*:*:table/SiteSettings",
+      "arn:aws:dynamodb:*:*:table/AdminLog"
+    ]
+  },
+  {
+    "Action": [
       "s3:PutObject"
     ],
     "Resource": [
@@ -17,14 +36,19 @@
   },
   {
     "Action": [
-      "dynamodb:PutItem",
-      "dynamodb:GetItem",
-      "dynamodb:UpdateItem",
-      "dynamodb:DeleteItem",
-      "dynamodb:Scan"
+      "ses:SendEmail",
+      "ses:SendRawEmail"
     ],
     "Resource": [
-      "arn:aws:dynamodb:*:*:table/AdminLog"
+      "*"
+    ]
+  },
+  {
+    "Action": [
+      "ssm:GetParameter"
+    ],
+    "Resource": [
+      "arn:aws:ssm:*:*:parameter/beauty-station/*"
     ]
   }
 ]

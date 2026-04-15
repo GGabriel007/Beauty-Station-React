@@ -187,7 +187,45 @@
                 "arn:aws:dynamodb:*:*:table/CourseProgress",
                 "arn:aws:dynamodb:*:*:table/CourseSettings",
                 "arn:aws:dynamodb:*:*:table/Reviews",
-                "arn:aws:dynamodb:*:*:table/SiteSettings"
+                "arn:aws:dynamodb:*:*:table/SiteSettings",
+                "arn:aws:dynamodb:*:*:table/AdminLog"
+              ],
+              "Effect": "Allow"
+            },
+            {
+              "Action": [
+                "s3:PutObject"
+              ],
+              "Resource": [
+                "arn:aws:s3:::beauty-station-images/*"
+              ],
+              "Effect": "Allow"
+            },
+            {
+              "Action": [
+                "s3:GetObject"
+              ],
+              "Resource": [
+                "arn:aws:s3:::beauty-station-videos/*"
+              ],
+              "Effect": "Allow"
+            },
+            {
+              "Action": [
+                "ses:SendEmail",
+                "ses:SendRawEmail"
+              ],
+              "Resource": [
+                "*"
+              ],
+              "Effect": "Allow"
+            },
+            {
+              "Action": [
+                "ssm:GetParameter"
+              ],
+              "Resource": [
+                "arn:aws:ssm:*:*:parameter/beauty-station/*"
               ],
               "Effect": "Allow"
             }

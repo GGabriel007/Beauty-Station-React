@@ -41,7 +41,12 @@
       "Bash(xargs wc:*)",
       "Bash(npm --version)",
       "Bash(npm ls:*)",
-      "Bash(npx react-scripts:*)"
+      "Bash(npx react-scripts:*)",
+      "Bash(amplify publish:*)",
+      "Bash(amplify status:*)",
+      "Bash(aws logs:*)",
+      "Bash(MSYS_NO_PATHCONV=1 aws logs describe-log-groups --log-group-name-prefix '/aws/lambda/processCheckout' --region us-east-1)",
+      "Bash(curl:*)"
     ]
   }
 }
