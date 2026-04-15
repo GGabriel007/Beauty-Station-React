@@ -148,19 +148,49 @@ const cartNameToCourseId = {
   'Curso en Línea': 'curso-en-linea',
 };
 
-// Admin-only middleware — verifies the caller belongs to the Cognito "admin" group
+// Admin-only middleware — verifies the caller belongs to the Cognito "admin" group.
+//
+// Two auth paths are supported:
+//   1. Cognito User Pools authorizer — reads cognito:groups from JWT claims
+//      (requestContext.authorizer.claims — populated when a Cognito authorizer is attached)
+//   2. IAM auth via Cognito Identity Pool — reads the caller's IAM role ARN
+//      (requestContext.identity.userArn — Amplify "private" endpoints use this path)
+//      Admin group members receive the adminGroupRole from the Identity Pool,
+//      so the ARN contains "adminGroupRole" as proof of group membership.
 function requireAdmin(req, res, next) {
   try {
-    const claims = req.apiGateway?.event?.requestContext?.authorizer?.claims || {};
+    const event    = req.apiGateway?.event || {};
+    const reqCtx   = event.requestContext || {};
+    const identity = reqCtx.identity || {};
+
+    // ── Path 1: Cognito User Pools JWT claims ──────────────────────────────
+    const claims    = reqCtx.authorizer?.claims || {};
     const rawGroups = claims['cognito:groups'] || '';
-    const groups = Array.isArray(rawGroups)
+    const jwtGroups = Array.isArray(rawGroups)
       ? rawGroups
       : rawGroups.split(',').map(g => g.trim()).filter(Boolean);
-    if (!groups.includes('admin')) {
-      return res.status(403).json({ error: 'Acceso denegado. Se requieren permisos de administrador.' });
+
+    if (jwtGroups.includes('admin')) {
+      req.adminEmail = claims.email || claims.sub || 'unknown';
+      return next();
     }
-    req.adminEmail = claims.email || claims.sub || 'unknown';
-    next();
+
+    // ── Path 2: IAM role ARN check for Cognito Identity Pool admin role ────
+    // When a user is in the Cognito "admin" group the Identity Pool assigns
+    // them the adminGroupRole. The role ARN is available in identity.userArn
+    // and always contains the string "adminGroupRole".
+    const callerArn = identity.userArn || identity.caller || '';
+    if (callerArn.includes('adminGroupRole')) {
+      // Extract user sub from the authentication provider for audit logging
+      const provider = identity.cognitoAuthenticationProvider || '';
+      const sub = provider.includes(':CognitoSignIn:')
+        ? provider.split(':CognitoSignIn:').pop()
+        : 'admin';
+      req.adminEmail = sub;
+      return next();
+    }
+
+    return res.status(403).json({ error: 'Acceso denegado. Se requieren permisos de administrador.' });
   } catch (err) {
     return res.status(403).json({ error: 'No autorizado.' });
   }

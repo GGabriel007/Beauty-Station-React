@@ -24,8 +24,14 @@ export function CourseDataProvider({ children }) {
 
         // Only replace if we got a non-empty valid object back
         if (data && typeof data === 'object' && !data.error && Object.keys(data).length > 0) {
-          // Merge: DB data wins over hardcoded, but hardcoded fills any gaps
-          setCoursesData({ ...hardcodedCourses, ...data });
+          // Deep merge per course: hardcoded is the base for each course,
+          // DB fields override field-by-field so hardcoded fills any gaps
+          // (e.g. images.folder/count/instructor stay even if admin only saved price).
+          const merged = { ...hardcodedCourses };
+          for (const [id, dbCourse] of Object.entries(data)) {
+            merged[id] = { ...(hardcodedCourses[id] || {}), ...dbCourse };
+          }
+          setCoursesData(merged);
         }
       } catch (err) {
         // Table not seeded yet or network error — silently keep hardcoded data

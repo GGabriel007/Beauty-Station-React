@@ -97,6 +97,7 @@ const CourseDetails = () => {
     const [selectedScheduleIndex, setSelectedScheduleIndex] = useState(null);
     const [allDbItems, setAllDbItems] = useState([]);
     const [alreadyOwned, setAlreadyOwned] = useState(false);
+    const [kitAvailable, setKitAvailable] = useState(true);
 
     const activeDbKey = DB_KEY_MAP[`${courseId}-${selectedScheduleIndex}`];
 
@@ -131,6 +132,17 @@ const CourseDetails = () => {
             setAvailableSeats(null);
         }
     }, [allDbItems, activeDbKey]);
+
+    // Derive kit availability from the same /modulos data
+    useEffect(() => {
+        if (allDbItems.length === 0) return;
+        const kitRecord = allDbItems.find(item => item['Kit de pieles perfectas'] !== undefined);
+        if (kitRecord) {
+            const count = Number(kitRecord['Kit de pieles perfectas']);
+            setKitAvailable(count > 0);
+            if (count === 0 && includeKit) setIncludeKit(false);
+        }
+    }, [allDbItems]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // Check if the authenticated user already purchased this online course
     useEffect(() => {
@@ -176,7 +188,11 @@ const CourseDetails = () => {
     } = useWhatsAppForm(courseData?.courseName || "");
 
     const carouselRef = useRef(null);
-    const thumbnailsCount = courseData?.images?.count || 0;
+    // Count is derived from whichever image source will be active:
+    // admin-configured imageUrls take priority over the generated images.count.
+    const thumbnailsCount = Array.isArray(courseData?.imageUrls) && courseData.imageUrls.some(u => u && u.trim())
+        ? courseData.imageUrls.filter(u => u && u.trim() !== '').length
+        : courseData?.images?.count || 0;
 
     useEffect(() => {
         const handleScroll = () => {
@@ -214,10 +230,18 @@ const CourseDetails = () => {
         return <Navigate to="/classes" />;
     }
 
-    const ext = courseData.images.extension || "Hair";
-    const thumbnails = Array.from({ length: courseData.images.count }, (_, i) =>
-        `${process.env.PUBLIC_URL}/images/${courseData.images.folder}/imagen_module_${i + 1}${ext}.jpeg`
-    );
+    // Prefer admin-configured imageUrls (stored in DynamoDB) when available.
+    // Fall back to the generated path pattern from hardcoded course config.
+    const thumbnails = Array.isArray(courseData.imageUrls) && courseData.imageUrls.some(u => u && u.trim())
+        ? courseData.imageUrls.filter(u => u && u.trim() !== '')
+        : (() => {
+            const ext    = courseData.images?.extension || 'Hair';
+            const count  = courseData.images?.count     || 0;
+            const folder = courseData.images?.folder    || '';
+            return Array.from({ length: count }, (_, i) =>
+                `${process.env.PUBLIC_URL}/images/${folder}/imagen_module_${i + 1}${ext}.jpeg`
+            );
+          })();
 
     const handleThumbnailClick = (src) => {
         setSelectedImage(src);
@@ -379,15 +403,27 @@ const CourseDetails = () => {
                         </div>
 
                         {isMakeupCourse && (
-                            <label className="kit-checkbox-container" htmlFor="kit-checkbox">
+                            <label
+                                className="kit-checkbox-container"
+                                htmlFor="kit-checkbox"
+                                onClick={!kitAvailable ? (e) => {
+                                    e.preventDefault();
+                                    toast.warn('El Kit de Pieles Perfectas no está disponible en este momento.', { autoClose: 4000 });
+                                } : undefined}
+                                style={!kitAvailable ? { cursor: 'default', opacity: 0.55 } : undefined}
+                            >
                                 <input
                                     type="checkbox"
                                     id="kit-checkbox"
                                     checked={includeKit}
+                                    disabled={!kitAvailable}
                                     onChange={(e) => setIncludeKit(e.target.checked)}
                                 />
                                 <span className="kit-checkbox-label">
-                                    Incluir "Kit de Pieles Perfectas" Q. 5,900.00
+                                    {kitAvailable
+                                        ? 'Incluir "Kit de Pieles Perfectas" Q. 5,900.00'
+                                        : 'Kit de Pieles Perfectas — Sin stock disponible'
+                                    }
                                 </span>
                             </label>
                         )}
@@ -411,7 +447,7 @@ const CourseDetails = () => {
                             disabled={selectedScheduleIndex === null || availableSeats === 0 || alreadyOwned}
                             onClick={() => {
 
-                                const priceRaw = courseData.price ? courseData.price.replace(/\D/g, '') : "0";
+                                const priceRaw = courseData.price != null ? String(courseData.price).replace(/\D/g, '') : "0";
                                 const priceInt = parseInt(priceRaw, 10) || 0;
 
                                 const cartItemName = activeDbKey || `${courseData.title} ${courseData.scheduleOptions[selectedScheduleIndex]}`;

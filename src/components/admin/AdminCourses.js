@@ -31,8 +31,9 @@ export default function AdminCourses() {
 
   const handleSaved = (courseId, updates) => {
     setCourses(prev => prev.map(c => c.courseId === courseId ? { ...c, ...updates } : c));
-    setEditingId(null);
   };
+
+  const handleClose = () => setEditingId(null);
 
   if (loading) return <p style={{ color: '#aaa', fontFamily: FONT }}>Cargando cursos…</p>;
   if (error)   return <p style={{ color: '#c62828', fontFamily: FONT }}>{error}</p>;
@@ -45,9 +46,9 @@ export default function AdminCourses() {
           editingId === course.courseId
             ? <CourseEditForm
                 key={course.courseId}
-                course={course}
+                course={courses.find(c => c.courseId === course.courseId)}
                 onSave={updates => handleSaved(course.courseId, updates)}
-                onCancel={() => setEditingId(null)}
+                onClose={handleClose}
               />
             : <CourseCard
                 key={course.courseId}
@@ -91,19 +92,28 @@ function CourseCard({ course, onEdit }) {
 
 // ── Inline edit form ────────────────────────────────────────────────────────
 
-function CourseEditForm({ course, onSave, onCancel }) {
+function CourseEditForm({ course, onSave, onClose }) {
   const [form, setForm] = useState({
     description:     course.description     || '',
     price:           course.price           ?? '',
     enrollmentFee:   course.enrollmentFee   ?? '',
     dates:           course.dates           || '',
     scheduleOptions: Array.isArray(course.scheduleOptions) ? [...course.scheduleOptions] : [],
+    imageUrls:       Array.isArray(course.imageUrls)       ? [...course.imageUrls]       : [],
     promoText:       course.promoText       || '',
     promoActive:     !!course.promoActive,
     isVisible:       course.isVisible !== false,
   });
+
+  // Tracks the persisted state shown in the footer; updates after each successful save
+  const [savedMeta, setSavedMeta] = useState({
+    lastUpdatedAt: course.lastUpdatedAt  || null,
+    lastUpdatedBy: course.lastUpdatedBy  || null,
+  });
+
   const [saving,    setSaving]    = useState(false);
   const [saveError, setSaveError] = useState(null);
+  const [justSaved, setJustSaved] = useState(false);
 
   const set = (key, val) => setForm(f => ({ ...f, [key]: val }));
 
@@ -112,17 +122,31 @@ function CourseEditForm({ course, onSave, onCancel }) {
   const removeSchedule = i       => set('scheduleOptions', form.scheduleOptions.filter((_, idx) => idx !== i));
   const updateSchedule = (i, v) => set('scheduleOptions', form.scheduleOptions.map((s, idx) => idx === i ? v : s));
 
+  // Image URL helpers
+  const addImageUrl    = ()      => set('imageUrls', [...form.imageUrls, '']);
+  const removeImageUrl = i       => set('imageUrls', form.imageUrls.filter((_, idx) => idx !== i));
+  const updateImageUrl = (i, v) => set('imageUrls', form.imageUrls.map((u, idx) => idx === i ? v : u));
+
   const handleSave = async () => {
     setSaving(true);
     setSaveError(null);
+    setJustSaved(false);
     try {
       const payload = {
         ...form,
-        price:         Number(form.price),
-        enrollmentFee: Number(form.enrollmentFee),
+        price:         form.price         !== '' ? Number(form.price)         : null,
+        enrollmentFee: form.enrollmentFee !== '' ? Number(form.enrollmentFee) : null,
+        // Strip empty strings from arrays
+        scheduleOptions: form.scheduleOptions.filter(s => s.trim() !== ''),
+        imageUrls:       form.imageUrls.filter(u => u.trim() !== ''),
       };
       await apiPut(`/admin/courses/${course.courseId}`, payload);
-      onSave(payload);
+
+      const nowTs = Date.now();
+      setSavedMeta({ lastUpdatedAt: nowTs, lastUpdatedBy: null }); // Lambda sets exact value; we show local approximation
+      setJustSaved(true);
+      onSave({ ...payload, lastUpdatedAt: nowTs });
+      setTimeout(() => setJustSaved(false), 4000);
     } catch {
       setSaveError('Error al guardar. Inténtalo de nuevo.');
     } finally {
@@ -130,64 +154,163 @@ function CourseEditForm({ course, onSave, onCancel }) {
     }
   };
 
+  const fmtDate = ts => ts
+    ? new Date(ts).toLocaleDateString('es-GT', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+    : null;
+
   return (
     <div style={{ background: '#fff', border: '2px solid #111', borderRadius: '8px', padding: '22px 24px' }}>
-      {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, fontFamily: FONT }}>Editando: {course.courseName}</h3>
-        <button onClick={onCancel} style={ghostBtn}>Cancelar</button>
+
+      {/* Header: course name (read-only) + close */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px', gap: '12px' }}>
+        <div>
+          <p style={{ margin: '0 0 2px', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#aaa', fontFamily: FONT }}>Editando curso</p>
+          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, fontFamily: FONT }}>{course.courseName}</h3>
+        </div>
+        <button onClick={onClose} style={ghostBtn}>Cerrar</button>
       </div>
 
-      {/* Price row */}
+      {/* ── Pricing ── */}
+      <SectionDivider label="Precios" />
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
         <Field label="Precio (Q)">
-          <input type="number" value={form.price} onChange={e => set('price', e.target.value)} style={inputStyle} min="0" />
+          <input type="number" value={form.price} onChange={e => set('price', e.target.value)} style={inputStyle} min="0" placeholder="2200" />
         </Field>
         <Field label="Cuota de Inscripción (Q)">
-          <input type="number" value={form.enrollmentFee} onChange={e => set('enrollmentFee', e.target.value)} style={inputStyle} min="0" />
+          <input type="number" value={form.enrollmentFee} onChange={e => set('enrollmentFee', e.target.value)} style={inputStyle} min="0" placeholder="Usa precio global si vacío" />
         </Field>
       </div>
 
-      <Field label="Fechas del Curso">
-        <input value={form.dates} onChange={e => set('dates', e.target.value)} style={inputStyle} placeholder="Ej: 27 DE ENERO - 17 DE FEBRERO" />
-      </Field>
+      {/* ── Content ── */}
+      <SectionDivider label="Contenido" />
 
       <Field label="Descripción">
-        <textarea value={form.description} onChange={e => set('description', e.target.value)} rows={4} style={{ ...inputStyle, resize: 'vertical' }} />
+        <textarea value={form.description} onChange={e => set('description', e.target.value)} rows={4} style={{ ...inputStyle, resize: 'vertical' }} placeholder="Descripción detallada del módulo…" />
       </Field>
 
+      <Field label="Fechas del Curso">
+        <input value={form.dates} onChange={e => set('dates', e.target.value)} style={inputStyle} placeholder="Ej: 27 DE ENERO – 17 DE FEBRERO" />
+      </Field>
+
+      {/* ── Schedule options ── */}
+      <SectionDivider label="Horarios" />
       <Field label="Opciones de Horario">
         {form.scheduleOptions.map((s, i) => (
           <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '6px' }}>
-            <input value={s} onChange={e => updateSchedule(i, e.target.value)} style={{ ...inputStyle, flex: 1 }} />
-            <button onClick={() => removeSchedule(i)} style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '4px', padding: '0 10px', cursor: 'pointer', color: '#c62828', fontSize: '1rem', fontFamily: FONT }}>✕</button>
+            <input
+              value={s}
+              onChange={e => updateSchedule(i, e.target.value)}
+              style={{ ...inputStyle, flex: 1 }}
+              placeholder="Ej: Lunes y miércoles 2PM a 4PM"
+            />
+            <button
+              onClick={() => removeSchedule(i)}
+              title="Eliminar horario"
+              style={removeBtn}
+            >✕</button>
           </div>
         ))}
         <button onClick={addSchedule} style={{ ...ghostBtn, marginTop: '4px', fontSize: '0.78rem' }}>+ Agregar horario</button>
       </Field>
 
+      {/* ── Image URLs ── */}
+      <SectionDivider label="Imágenes" />
+      <Field label="URLs de Imágenes">
+        <p style={{ margin: '0 0 8px', fontSize: '0.75rem', color: '#999', fontFamily: FONT }}>
+          Pega una URL o una ruta S3 por imagen. Las imágenes se mostrarán en el orden ingresado.
+        </p>
+        {form.imageUrls.length === 0 && (
+          <p style={{ fontSize: '0.8rem', color: '#ccc', fontStyle: 'italic', margin: '0 0 8px', fontFamily: FONT }}>
+            Sin imágenes configuradas — se usarán las imágenes predeterminadas del curso.
+          </p>
+        )}
+        {form.imageUrls.map((url, i) => (
+          <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '6px', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.7rem', color: '#bbb', fontFamily: FONT, minWidth: '18px', textAlign: 'right' }}>{i + 1}.</span>
+            <input
+              value={url}
+              onChange={e => updateImageUrl(i, e.target.value)}
+              style={{ ...inputStyle, flex: 1, fontFamily: 'monospace', fontSize: '0.78rem' }}
+              placeholder="https://… o s3://bucket/path/imagen.jpg"
+            />
+            <button
+              onClick={() => removeImageUrl(i)}
+              title="Eliminar imagen"
+              style={removeBtn}
+            >✕</button>
+          </div>
+        ))}
+        <button onClick={addImageUrl} style={{ ...ghostBtn, marginTop: '4px', fontSize: '0.78rem' }}>+ Agregar URL de imagen</button>
+      </Field>
+
+      {/* ── Promo & visibility ── */}
+      <SectionDivider label="Promoción y Visibilidad" />
+
       <Field label="Texto Promocional">
-        <input value={form.promoText} onChange={e => set('promoText', e.target.value)} style={inputStyle} placeholder="Ej: *Inscripción gratis hasta el 15 de julio" />
+        <input
+          value={form.promoText}
+          onChange={e => set('promoText', e.target.value)}
+          style={inputStyle}
+          placeholder="Ej: ¡Inscripción gratis hasta el 15 de julio!"
+        />
       </Field>
 
       <div style={{ display: 'flex', gap: '28px', marginBottom: '18px', flexWrap: 'wrap' }}>
-        <Toggle label="Promo activa"       checked={form.promoActive} onChange={v => set('promoActive', v)} />
-        <Toggle label="Visible en el sitio" checked={form.isVisible}  onChange={v => set('isVisible',  v)} />
+        <Toggle label="Promo activa"        checked={form.promoActive} onChange={v => set('promoActive', v)} />
+        <Toggle label="Visible en el sitio" checked={form.isVisible}   onChange={v => set('isVisible',  v)} />
       </div>
 
-      {saveError && <p style={{ color: '#c62828', fontSize: '0.82rem', marginBottom: '12px', fontFamily: FONT }}>{saveError}</p>}
+      {/* ── Save / error ── */}
+      {saveError && (
+        <p style={{ color: '#c62828', fontSize: '0.82rem', marginBottom: '12px', fontFamily: FONT }}>
+          {saveError}
+        </p>
+      )}
 
-      <div style={{ display: 'flex', gap: '10px' }}>
-        <button onClick={handleSave} disabled={saving} style={{ ...primaryBtn, opacity: saving ? 0.6 : 1 }}>
+      {justSaved && (
+        <p style={{ color: '#2e7d32', fontSize: '0.82rem', marginBottom: '12px', fontFamily: FONT, fontWeight: 600 }}>
+          Cambios guardados correctamente.
+        </p>
+      )}
+
+      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          style={{ ...primaryBtn, opacity: saving ? 0.6 : 1, minWidth: '140px' }}
+        >
           {saving ? 'Guardando…' : 'Guardar Cambios'}
         </button>
-        <button onClick={onCancel} style={ghostBtn}>Cancelar</button>
+        <button onClick={onClose} style={ghostBtn}>Cerrar</button>
+      </div>
+
+      {/* ── Last saved metadata ── */}
+      <div style={{ borderTop: '1px solid #f0f0f0', paddingTop: '12px' }}>
+        {savedMeta.lastUpdatedAt ? (
+          <p style={{ margin: 0, fontSize: '0.72rem', color: '#bbb', fontFamily: FONT }}>
+            Último guardado: {fmtDate(savedMeta.lastUpdatedAt)}
+            {savedMeta.lastUpdatedBy && ` · por ${savedMeta.lastUpdatedBy}`}
+          </p>
+        ) : (
+          <p style={{ margin: 0, fontSize: '0.72rem', color: '#ddd', fontFamily: FONT, fontStyle: 'italic' }}>
+            Este curso aún no ha sido editado desde el panel de administración.
+          </p>
+        )}
       </div>
     </div>
   );
 }
 
 // ── Shared primitives ───────────────────────────────────────────────────────
+
+function SectionDivider({ label }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px', marginTop: '4px' }}>
+      <span style={{ fontSize: '0.62rem', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#aaa', fontFamily: FONT, whiteSpace: 'nowrap' }}>{label}</span>
+      <div style={{ flex: 1, height: '1px', background: '#f0f0f0' }} />
+    </div>
+  );
+}
 
 function Field({ label, children }) {
   return (
@@ -223,7 +346,9 @@ function Toggle({ label, checked, onChange }) {
 
 function Badge({ text, color = '#555' }) {
   return (
-    <span style={{ background: '#f5f5f5', border: `1px solid #ddd`, borderRadius: '4px', padding: '2px 7px', fontSize: '0.68rem', color, fontFamily: FONT, fontWeight: 600 }}>{text}</span>
+    <span style={{ background: '#f5f5f5', border: '1px solid #ddd', borderRadius: '4px', padding: '2px 7px', fontSize: '0.68rem', color, fontFamily: FONT, fontWeight: 600 }}>
+      {text}
+    </span>
   );
 }
 
@@ -232,4 +357,5 @@ const inputStyle = { width: '100%', padding: '8px 10px', border: '1px solid #ddd
 const labelStyle = { display: 'block', fontSize: '0.7rem', fontWeight: 700, marginBottom: '5px', color: '#666', textTransform: 'uppercase', letterSpacing: '0.5px', fontFamily: FONT };
 const primaryBtn = { background: '#111', color: '#fff', border: 'none', borderRadius: '4px', padding: '9px 18px', cursor: 'pointer', fontSize: '0.82rem', fontFamily: FONT, fontWeight: 600 };
 const ghostBtn   = { background: '#fff', color: '#333', border: '1px solid #ddd', borderRadius: '4px', padding: '9px 14px', cursor: 'pointer', fontSize: '0.82rem', fontFamily: FONT };
+const removeBtn  = { background: '#fff', border: '1px solid #e0e0e0', borderRadius: '4px', padding: '0 10px', cursor: 'pointer', color: '#c62828', fontSize: '1rem', fontFamily: FONT, height: '36px', flexShrink: 0 };
 const pageTitleStyle = { fontSize: '1.5rem', fontWeight: 700, marginBottom: '20px', letterSpacing: '1px', fontFamily: FONT };

@@ -22,6 +22,7 @@ const CartPage = () => {
   const [recaptchaToken, setRecaptchaToken] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [kitAvailable, setKitAvailable] = useState(true);
   const [countryOpen, setCountryOpen] = useState(false);
   const countryRef = useRef(null);
 
@@ -56,6 +57,24 @@ const CartPage = () => {
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Check kit inventory so we can warn & block checkout when stock is 0
+  useEffect(() => {
+    const checkKit = async () => {
+      try {
+        const op = get({ apiName: 'checkoutApi', path: '/modulos' });
+        const { body } = await op.response;
+        const items = await body.json();
+        const kitRecord = items.find(item => item['Kit de pieles perfectas'] !== undefined);
+        if (kitRecord) {
+          setKitAvailable(Number(kitRecord['Kit de pieles perfectas']) > 0);
+        }
+      } catch (err) {
+        console.error('Error checking kit availability in cart:', err);
+      }
+    };
+    checkKit();
   }, []);
 
   const handleCaptchaSuccess = (token) => {
@@ -100,6 +119,14 @@ const CartPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+    // Block checkout if the kit is in the cart but has no stock
+    if (includeKit && !kitAvailable) {
+      const msg = 'El Kit de Pieles Perfectas no está disponible. Por favor, retíralo del carrito para continuar.';
+      setNotificationError(msg);
+      toast.error(msg, { autoClose: 6000 });
+      return;
+    }
 
     const hasOnlineItem = cartItems.some(item => item.online);
     if (hasOnlineItem && authStatus !== 'authenticated') {
@@ -617,9 +644,16 @@ const CartPage = () => {
 
             {/* Kit */}
             {includeKit && (
-              <div className="cp-summary-item">
+              <div className="cp-summary-item" style={!kitAvailable ? { background: '#fff5f5', border: '1px solid #f5c6cb', borderRadius: '6px', padding: '6px' } : undefined}>
                 <img src={`${process.env.PUBLIC_URL}/images/Kit-Maquillaje.png`} alt="Kit de maquillaje" className="cp-summary-img" />
-                <span className="cp-summary-name">Kit de Pieles Perfectas</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <span className="cp-summary-name">Kit de Pieles Perfectas</span>
+                  {!kitAvailable && (
+                    <p style={{ margin: '3px 0 0', fontSize: '0.72rem', color: '#c62828', fontWeight: 600 }}>
+                      Sin stock — retira del carrito para continuar
+                    </p>
+                  )}
+                </div>
                 <span className="cp-summary-price">Q 5,900.00</span>
                 <button className="cp-summary-remove" onClick={handleRemoveKit}>×</button>
               </div>

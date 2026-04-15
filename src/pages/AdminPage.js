@@ -28,12 +28,12 @@ const C = {
 const FONT = "'Montserrat', sans-serif";
 
 const TABS = [
-  { id: 'dashboard',      label: 'Dashboard',      icon: '📊' },
-  { id: 'courses',        label: 'Cursos',          icon: '📚' },
-  { id: 'online-course',  label: 'Curso en Línea',  icon: '🎬' },
-  { id: 'registrations',  label: 'Inscripciones',   icon: '📋' },
-  { id: 'reviews',        label: 'Reseñas',         icon: '⭐' },
-  { id: 'settings',       label: 'Configuración',   icon: '⚙️' },
+  { id: 'dashboard',      label: 'Dashboard'      },
+  { id: 'courses',        label: 'Cursos'          },
+  { id: 'online-course',  label: 'Curso en Línea'  },
+  { id: 'registrations',  label: 'Inscripciones'   },
+  { id: 'reviews',        label: 'Reseñas'         },
+  { id: 'settings',       label: 'Configuración'   },
 ];
 
 export default function AdminPage() {
@@ -79,7 +79,18 @@ export default function AdminPage() {
   };
 
   // ── Guards ─────────────────────────────────────────────────────────────────
-  if (authStatus !== 'authenticated') return <Navigate to="/login" replace />;
+  // 'configuring' = Amplify is still resolving the session — wait, don't redirect yet.
+  if (authStatus === 'configuring') return (
+    <div style={centerFlex}>
+      <p style={{ color: C.muted, fontFamily: FONT, letterSpacing: '1px', fontSize: '0.85rem' }}>Cargando…</p>
+    </div>
+  );
+
+  // Truly not logged in — save /admin so the post-login redirect lands here, not /classes.
+  if (authStatus !== 'authenticated') {
+    sessionStorage.setItem('loginRedirect', '/admin');
+    return <Navigate to="/login" replace />;
+  }
 
   if (checking) return (
     <div style={centerFlex}>
@@ -91,7 +102,6 @@ export default function AdminPage() {
 
   if (!isAdmin) return (
     <div style={{ ...centerFlex, flexDirection: 'column', padding: '40px', textAlign: 'center' }}>
-      <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>🔒</div>
       <h2 style={{ fontSize: '1.4rem', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', fontFamily: FONT, color: C.text, marginBottom: '12px' }}>
         Acceso Denegado
       </h2>
@@ -185,8 +195,10 @@ export default function AdminPage() {
                   onMouseEnter={e => { if (!active) e.currentTarget.style.color = C.roseDeep; }}
                   onMouseLeave={e => { if (!active) e.currentTarget.style.color = C.muted; }}
                 >
-                  <span style={{ fontSize: '1rem', flexShrink: 0 }}>{tab.icon}</span>
-                  {!collapsed && <span style={{ whiteSpace: 'nowrap' }}>{tab.label}</span>}
+                  {collapsed
+                    ? <span style={{ fontSize: '0.6rem', fontWeight: 700 }}>{tab.label.slice(0, 3).toUpperCase()}</span>
+                    : <span style={{ whiteSpace: 'nowrap' }}>{tab.label}</span>
+                  }
                 </button>
               );
             })}
@@ -276,7 +288,6 @@ export default function AdminPage() {
                     fontFamily: FONT, letterSpacing: '0.8px', textTransform: 'uppercase',
                   }}
                 >
-                  <span style={{ fontSize: '1.1rem' }}>{tab.icon}</span>
                   {tab.label}
                 </button>
               ))}

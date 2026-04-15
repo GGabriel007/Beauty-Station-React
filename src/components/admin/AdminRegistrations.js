@@ -92,7 +92,7 @@ export default function AdminRegistrations() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
         <h1 style={pageTitleStyle}>Inscripciones</h1>
-        <button onClick={exportCSV} style={primaryBtn}>⬇ Exportar CSV</button>
+        <button onClick={exportCSV} style={primaryBtn}>Exportar CSV</button>
       </div>
 
       {/* Filters */}

@@ -28,28 +28,33 @@ export default function AdminDashboard() {
         const totalRevenue     = registrations.reduce((sum, r) => sum + Number(r.TotalPrice || 0), 0);
         const totalEnrollments = registrations.length;
 
-        // Seats near full (fewer than 3 remaining)
+        // Seats near full (fewer than 3 remaining) — exclude kit inventory row
         const nearFull = [];
         for (const item of seats) {
           for (const key of Object.keys(item)) {
             if (key === 'id') continue;
+            if (key === 'Kit de pieles perfectas') continue;
             const count = Number(item[key]);
             if (count < 3) nearFull.push({ name: key, count });
           }
         }
         nearFull.sort((a, b) => a.count - b.count);
 
-        // Recently deleted reviews
+        // Recently deleted reviews — only rows explicitly deleted by an admin
+        // (reviews hidden at creation won't have a deletedAt timestamp)
         const deletedReviews = reviews
-          .filter(r => !r.isVisible)
+          .filter(r => !r.isVisible && r.deletedAt)
           .sort((a, b) => (b.deletedAt || 0) - (a.deletedAt || 0))
           .slice(0, 5);
 
-        // Course update log (most recently edited)
-        const courseUpdates = courses
-          .filter(c => c.lastUpdatedAt)
-          .sort((a, b) => (b.lastUpdatedAt || 0) - (a.lastUpdatedAt || 0))
-          .slice(0, 5);
+        // Course update log — ALL courses, sorted so recently edited appear first,
+        // never-edited courses (no lastUpdatedAt) fall to the bottom.
+        const courseUpdates = [...courses].sort((a, b) => {
+          if (a.lastUpdatedAt && b.lastUpdatedAt) return (b.lastUpdatedAt || 0) - (a.lastUpdatedAt || 0);
+          if (a.lastUpdatedAt) return -1;
+          if (b.lastUpdatedAt) return 1;
+          return (a.courseName || '').localeCompare(b.courseName || '');
+        });
 
         setStats({ totalRevenue, totalEnrollments, nearFull, deletedReviews, courseUpdates });
       })
@@ -69,15 +74,15 @@ export default function AdminDashboard() {
 
       {/* Summary cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '14px', marginBottom: '28px' }}>
-        <StatCard icon="💰" label="Ingresos Totales"       value={fmtQ(stats.totalRevenue)} />
-        <StatCard icon="👤" label="Inscripciones Totales"  value={stats.totalEnrollments} />
-        <StatCard icon="⚠️" label="Cursos con Pocos Cupos" value={stats.nearFull.length} accent={stats.nearFull.length > 0} />
-        <StatCard icon="🗑️" label="Reseñas Eliminadas"     value={stats.deletedReviews.length} />
+        <StatCard label="Ingresos Totales"       value={fmtQ(stats.totalRevenue)} />
+        <StatCard label="Inscripciones Totales"  value={stats.totalEnrollments} />
+        <StatCard label="Cursos con Pocos Cupos" value={stats.nearFull.length} accent={stats.nearFull.length > 0} />
+        <StatCard label="Reseñas Eliminadas (últ. 5)" value={stats.deletedReviews.length} />
       </div>
 
       {/* Low-seat warning */}
       {stats.nearFull.length > 0 && (
-        <Section title="⚠️ Cupos Casi Agotados">
+        <Section title="Cupos Casi Agotados">
           {stats.nearFull.map(s => (
             <Row key={s.name} left={s.name} right={`${s.count} cupo${s.count !== 1 ? 's' : ''} restante${s.count !== 1 ? 's' : ''}`} accent />
           ))}
@@ -85,7 +90,7 @@ export default function AdminDashboard() {
       )}
 
       {/* Recently deleted reviews */}
-      <Section title="🗑️ Últimas Reseñas Eliminadas">
+      <Section title="Últimas Reseñas Eliminadas">
         {stats.deletedReviews.length === 0
           ? <Empty text="Ninguna reseña eliminada recientemente." />
           : stats.deletedReviews.map(r => (
@@ -95,11 +100,19 @@ export default function AdminDashboard() {
       </Section>
 
       {/* Course update log */}
-      <Section title="📝 Últimas Actualizaciones de Cursos">
+      <Section title="Última Actualización por Curso">
         {stats.courseUpdates.length === 0
-          ? <Empty text="Ningún curso ha sido editado aún." />
+          ? <Empty text="No se encontraron cursos en la base de datos." />
           : stats.courseUpdates.map(c => (
-            <Row key={c.courseId} left={c.courseName} right={`${fmtDate(c.lastUpdatedAt)} · por ${c.lastUpdatedBy || '?'}`} />
+            <Row
+              key={c.courseId}
+              left={c.courseName || c.courseId}
+              right={c.lastUpdatedAt
+                ? `${fmtDate(c.lastUpdatedAt)} · por ${c.lastUpdatedBy || '?'}`
+                : 'Sin editar'
+              }
+              muted={!c.lastUpdatedAt}
+            />
           ))
         }
       </Section>
@@ -109,16 +122,15 @@ export default function AdminDashboard() {
 
 // ── Sub-components ──────────────────────────────────────────────────────────
 
-function StatCard({ icon, label, value, accent }) {
+function StatCard({ label, value, accent }) {
   return (
     <div style={{
-      background: accent ? '#fff8e1' : '#fff',
-      border: `1px solid ${accent ? '#ffc107' : '#e0e0e0'}`,
+      background: accent ? '#fdf0f0' : '#fff',
+      border: `1px solid ${accent ? '#cd929d' : '#E8CBD4'}`,
       borderRadius: '8px', padding: '18px', textAlign: 'center',
     }}>
-      <div style={{ fontSize: '1.6rem', marginBottom: '6px' }}>{icon}</div>
-      <div style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '4px', fontFamily: FONT }}>{value}</div>
-      <div style={{ fontSize: '0.72rem', color: '#888', fontFamily: FONT }}>{label}</div>
+      <div style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '4px', fontFamily: FONT, color: accent ? '#7D4E61' : '#2A2A2A' }}>{value}</div>
+      <div style={{ fontSize: '0.72rem', color: '#888', fontFamily: FONT, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{label}</div>
     </div>
   );
 }
@@ -132,15 +144,15 @@ function Section({ title, children }) {
   );
 }
 
-function Row({ left, right, accent }) {
+function Row({ left, right, accent, muted }) {
   return (
     <div style={{
       display: 'flex', justifyContent: 'space-between', alignItems: 'center',
       padding: '8px 0', borderBottom: '1px solid #f0f0f0',
       fontSize: '0.83rem', fontFamily: FONT,
     }}>
-      <span style={{ color: accent ? '#e65100' : '#333' }}>{left}</span>
-      <span style={{ color: '#aaa', fontSize: '0.78rem' }}>{right}</span>
+      <span style={{ color: accent ? '#e65100' : muted ? '#bbb' : '#333' }}>{left}</span>
+      <span style={{ color: muted ? '#ddd' : '#aaa', fontSize: '0.78rem', fontStyle: muted ? 'italic' : 'normal' }}>{right}</span>
     </div>
   );
 }
