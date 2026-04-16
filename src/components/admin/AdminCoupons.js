@@ -167,7 +167,7 @@ export default function AdminCoupons() {
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h1 style={pageTitleStyle}>Cupones ({coupons.length})</h1>
+        <h1 style={pageTitleStyle}>Cupones</h1>
         <button onClick={openCreate} style={primaryBtn}>+ Nuevo Cupón</button>
       </div>
 
