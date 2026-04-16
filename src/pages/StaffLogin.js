@@ -28,6 +28,10 @@ const validatePassword = (value) => {
   if (!value || value.length < 8) return 'La contraseña debe tener al menos 8 caracteres.';
   if (XSS_PATTERN.test(value) || CONTROL_CHAR_PATTERN.test(value))
     return 'La contraseña contiene caracteres no permitidos.';
+  if (!/[A-Z]/.test(value)) return 'Debe incluir al menos una letra mayúscula.';
+  if (!/[a-z]/.test(value)) return 'Debe incluir al menos una letra minúscula.';
+  if (!/[0-9]/.test(value)) return 'Debe incluir al menos un número.';
+  if (!/[^A-Za-z0-9]/.test(value)) return 'Debe incluir al menos un carácter especial (ej. @, #, !).';
 };
 
 // ─── Inner component (must be inside Authenticator.Provider) ──────────────────
@@ -44,6 +48,7 @@ function StaffLoginInner() {
   // Tell AuthRedirectHandler in App.js to stay out of the way while we
   // handle the redirect ourselves.
   useEffect(() => {
+    window.scrollTo(0, 0);
     sessionStorage.setItem('staffLogin', 'true');
     return () => sessionStorage.removeItem('staffLogin');
   }, []);
@@ -138,6 +143,12 @@ function StaffLoginInner() {
           formFields={{
             signIn: {
               username: { validate: validateEmail },
+              password: { validate: validatePassword },
+            },
+            confirmResetPassword: {
+              password: { validate: validatePassword },
+            },
+            forceNewPassword: {
               password: { validate: validatePassword },
             },
           }}

@@ -1,0 +1,608 @@
+/* ===================================================
+   Admin Courses — Dedicated Stylesheet
+   Clean, mobile-first form design for the course
+   editor panel.
+   =================================================== */
+
+/* ── Status text ── */
+.ac-status-text { color: #aaa; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; }
+.ac-status-error { color: #c62828; }
+
+/* ── Course list ── */
+.ac-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Course card (collapsed view) ── */
+.ac-card {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  padding: 16px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  transition: box-shadow 0.2s ease;
+}
+
+.ac-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+}
+
+.ac-card-info { flex: 1; min-width: 0; }
+
+.ac-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.ac-card-name {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
+  color: #111;
+}
+
+.ac-card-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.ac-badge {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 0;
+  border: 1px solid;
+}
+
+.ac-badge--hidden { color: #555; border-color: #ddd; background: #f5f5f5; }
+.ac-badge--promo  { color: #e65100; border-color: #ffcc80; background: #fff3e0; }
+
+.ac-card-price {
+  margin: 0 0 4px;
+  font-size: 0.82rem;
+  color: #555;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.ac-card-meta {
+  margin: 0;
+  font-size: 0.7rem;
+  color: #bbb;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* ── Edit form wrapper ── */
+.ac-form {
+  background: #fff;
+  border: 2px solid #111;
+  padding: 24px 20px 20px;
+}
+
+/* ── Form header ── */
+.ac-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.ac-form-header-label {
+  margin: 0 0 2px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #aaa;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.ac-form-header-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
+  color: #111;
+}
+
+/* ── Section divider ── */
+.ac-section-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 24px 0 16px;
+}
+
+.ac-section-divider-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #555;
+  font-family: 'Montserrat', sans-serif;
+  white-space: nowrap;
+  background: #f7f7f7;
+  padding: 4px 10px;
+  border: 1px solid #ebebeb;
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ac-section-divider-line {
+  flex: 1;
+  min-width: 12px;
+  height: 1px;
+  background: #ebebeb;
+}
+
+/* ── Two-column grid (collapses on mobile) ── */
+.ac-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* ── Field ── */
+.ac-field {
+  margin-bottom: 16px;
+}
+
+.ac-field-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.ac-field-hint {
+  margin: 0 0 6px;
+  font-size: 0.72rem;
+  color: #aaa;
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.4;
+}
+
+/* ── Input / Textarea ── */
+.ac-input {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 0;
+  font-size: 0.85rem;
+  font-family: 'Montserrat', sans-serif;
+  box-sizing: border-box;
+  outline: none;
+  background: #fff;
+  color: #111;
+  transition: border-color 0.15s ease;
+}
+
+.ac-input:focus {
+  border-color: #7D4E61;
+}
+
+.ac-textarea { resize: vertical; min-height: 90px; }
+.ac-input--bold { font-weight: 600; }
+.ac-input--mono { font-family: monospace; font-size: 0.78rem; }
+.ac-input--italic { font-style: italic; }
+
+/* ── Schedule blocks ── */
+.ac-schedule-block {
+  background: #fafafa;
+  border: 1.5px solid #ebebeb;
+  padding: 14px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ac-schedule-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ac-schedule-num {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #7D4E61;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* ── Class rows ── */
+.ac-class-row { margin-bottom: 8px; }
+
+.ac-class-row-inner {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.ac-class-row-inner--cols {
+  flex-wrap: wrap;
+}
+
+.ac-class-num {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #bbb;
+  font-family: 'Montserrat', sans-serif;
+  min-width: 20px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.ac-class-break-tag {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #aaa;
+  font-family: 'Montserrat', sans-serif;
+  min-width: 56px;
+  flex-shrink: 0;
+}
+
+.ac-class-name-input   { width: 90px; flex-shrink: 0; }
+.ac-class-date-input   { flex: 0 0 150px; }
+.ac-class-topics-input { flex: 1; min-width: 100px; }
+
+/* ── Complex module blocks ── */
+.ac-complex-block {
+  border: 1.5px solid #ebebeb;
+  padding: 14px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ac-complex-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ac-complex-num {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #7D4E61;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.ac-complex-sessions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 16px;
+  border-left: 2px solid #ebebeb;
+  margin-top: 4px;
+}
+
+.ac-complex-session-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ac-complex-session-dot {
+  font-size: 1rem;
+  color: #cd929d;
+  flex-shrink: 0;
+  width: 14px;
+}
+
+/* ── Image rows ── */
+.ac-image-row {
+  margin-bottom: 10px;
+}
+
+.ac-image-row-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.ac-image-num {
+  font-size: 0.7rem;
+  color: #bbb;
+  font-family: 'Montserrat', sans-serif;
+  min-width: 20px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.ac-image-uploading {
+  flex: 1;
+  padding: 9px 12px;
+  border: 1.5px solid #e0e0e0;
+  font-size: 0.78rem;
+  font-family: 'Montserrat', sans-serif;
+  color: #aaa;
+  background: #fafafa;
+}
+
+.ac-image-preview-wrap {
+  padding-left: 28px;
+}
+
+.ac-image-preview {
+  height: 64px;
+  border: 1.5px solid #ebebeb;
+  object-fit: cover;
+  display: block;
+}
+
+.ac-image-error {
+  margin: 0 0 4px 28px;
+  font-size: 0.7rem;
+  color: #c62828;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* ── Toggles ── */
+.ac-toggles {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.ac-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.ac-toggle-track {
+  width: 40px;
+  height: 22px;
+  border-radius: 11px;
+  background: #ccc;
+  position: relative;
+  transition: background 0.2s;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.ac-toggle-track--on { background: #7D4E61; }
+
+.ac-toggle-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: left 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.ac-toggle-track--on .ac-toggle-thumb { left: 21px; }
+
+.ac-toggle-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.84rem;
+  color: #333;
+  user-select: none;
+}
+
+/* ── Buttons ── */
+.ac-btn {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: 0;
+  cursor: pointer;
+  border: none;
+  transition: background 0.18s ease, opacity 0.18s ease;
+}
+
+.ac-btn--primary {
+  background: #111;
+  color: #fff;
+}
+
+.ac-btn--primary:hover:not(:disabled) {
+  background: #333;
+}
+
+.ac-btn--ghost {
+  background: #fff;
+  color: #444;
+  border: 1.5px solid #ddd;
+}
+
+.ac-btn--ghost:hover {
+  border-color: #aaa;
+  color: #111;
+}
+
+.ac-btn--add {
+  background: #fff;
+  color: #7D4E61;
+  border: 1.5px dashed #cd929d;
+  font-size: 0.78rem;
+  padding: 7px 14px;
+  margin-top: 2px;
+}
+
+.ac-btn--add:hover {
+  background: #fdf0f5;
+}
+
+.ac-btn--indent { margin-left: 0; }
+
+.ac-btn--upload {
+  background: #fff;
+  color: #7D4E61;
+  border: 1.5px solid #7D4E61;
+  border-radius: 0;
+  padding: 0 12px;
+  height: 38px;
+  font-size: 0.75rem;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.18s ease;
+}
+
+.ac-btn--upload:hover:not(:disabled) {
+  background: #fdf0f5;
+}
+
+.ac-btn--upload:disabled { opacity: 0.5; cursor: default; }
+
+.ac-btn--save { min-width: 150px; }
+.ac-btn--saving { opacity: 0.6; cursor: not-allowed; }
+
+.ac-btn-remove {
+  background: #fff;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 0;
+  padding: 0 10px;
+  cursor: pointer;
+  color: #c62828;
+  font-size: 0.9rem;
+  height: 38px;
+  flex-shrink: 0;
+  font-family: 'Montserrat', sans-serif;
+  transition: background 0.15s ease;
+}
+
+.ac-btn-remove:hover:not(:disabled) {
+  background: #fdecea;
+}
+
+/* ── Button row ── */
+.ac-btn-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+/* ── Form footer ── */
+.ac-form-footer {
+  border-top: 1.5px solid #f0f0f0;
+  padding-top: 20px;
+  margin-top: 8px;
+}
+
+.ac-save-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.ac-feedback {
+  margin: 0 0 12px;
+  font-size: 0.84rem;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+}
+
+.ac-feedback--error   { color: #c62828; }
+.ac-feedback--success { color: #2e7d32; }
+
+.ac-last-saved {
+  font-size: 0.72rem;
+  color: #bbb;
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
+}
+
+/* ── Helper text ── */
+.ac-hint-text {
+  margin: 0 0 12px;
+  font-size: 0.76rem;
+  color: #999;
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.5;
+}
+
+.ac-empty-text {
+  margin: 0 0 10px;
+  font-size: 0.8rem;
+  color: #ccc;
+  font-style: italic;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* ===================================================
+   Mobile — max-width 600px
+   =================================================== */
+@media (max-width: 600px) {
+  .ac-form {
+    padding: 18px 14px 16px;
+  }
+
+  /* Stack 2-col grids into single column */
+  .ac-grid-2 {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  /* Class rows: wrap so inputs stack */
+  .ac-class-row-inner--cols {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .ac-class-name-input  { width: 80px; }
+  .ac-class-date-input  { flex: 1 0 130px; }
+  .ac-class-topics-input { flex: 1 0 100%; }
+
+  .ac-form-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .ac-form-header .ac-btn--ghost {
+    align-self: flex-start;
+  }
+
+  .ac-section-divider-label {
+    font-size: 0.68rem;
+  }
+
+  .ac-save-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ac-btn--save {
+    width: 100%;
+    text-align: center;
+  }
+
+  .ac-toggles {
+    flex-direction: column;
+    gap: 14px;
+  }
+}

@@ -2,7 +2,9 @@
 // 2.7 + 3.2 — Three sections: Inventory, Global Pricing, Site Notice, Activity Log.
 
 import React, { useState, useEffect } from 'react';
+import '../../styles/classes.css';
 import { get, put } from 'aws-amplify/api';
+import SecurityPinModal from './SecurityPinModal';
 
 async function apiFetch(path) {
   const op = get({ apiName: 'checkoutApi', path });
@@ -56,7 +58,7 @@ export default function AdminSettings() {
 
   return (
     <div>
-      <h1 style={pageTitleStyle}>Configuración</h1>
+      <h1 className="admin-page-title">Configuración</h1>
 
       {/* ── Inventory: Kit ── */}
       <Section title="Inventario — Kit de Maquillaje">
@@ -86,6 +88,11 @@ export default function AdminSettings() {
       <Section title="Precios Globales">
         <SettingRow label="Cuota de Inscripción (Q)"    settingKey="enrollmentFee" initial={settings.enrollmentFee?.value    ?? ''} type="number" />
         <SettingRow label="Precio del Kit de Pieles (Q)" settingKey="kitPrice"      initial={settings.kitPrice?.value          ?? ''} type="number" />
+      </Section>
+
+      {/* ── Security ── */}
+      <Section title="Seguridad">
+        <SettingRow label="PIN de Seguridad (Finanzas)" settingKey="adminPin" initial={settings.adminPin?.value ?? '1234'} type="password" />
       </Section>
 
       {/* ── Site notice ── */}
@@ -147,11 +154,14 @@ function SeatRow({ label, moduleId, courseName, initialSeats }) {
 
 // ── Site setting row ──────────────────────────────────────────────────────────
 
+const PRICE_SETTINGS = ['enrollmentFee', 'kitPrice', 'adminPin'];
+
 function SettingRow({ label, settingKey, initial, type = 'text' }) {
-  const [value,  setValue]  = useState(initial);
-  const [saving, setSaving] = useState(false);
-  const [saved,  setSaved]  = useState(false);
-  const [err,    setErr]    = useState(null);
+  const [value,     setValue]     = useState(initial);
+  const [saving,    setSaving]    = useState(false);
+  const [saved,     setSaved]     = useState(false);
+  const [err,       setErr]       = useState(null);
+  const [pinAction, setPinAction] = useState(null);
 
   const handleSave = async () => {
     setSaving(true); setErr(null); setSaved(false);
@@ -166,6 +176,14 @@ function SettingRow({ label, settingKey, initial, type = 'text' }) {
     }
   };
 
+  const triggerSave = () => {
+    if (PRICE_SETTINGS.includes(settingKey)) {
+      setPinAction(() => handleSave);
+    } else {
+      handleSave();
+    }
+  };
+
   return (
     <div style={rowStyle}>
       <span style={{ flex: 1, fontSize: '0.84rem', fontFamily: FONT }}>{label}</span>
@@ -175,8 +193,14 @@ function SettingRow({ label, settingKey, initial, type = 'text' }) {
         onChange={e => setValue(e.target.value)}
         style={{ ...numInput, width: '130px' }}
       />
-      <SaveButton saving={saving} saved={saved} onClick={handleSave} />
+      <SaveButton saving={saving} saved={saved} onClick={triggerSave} />
       {err && <span style={errStyle}>{err}</span>}
+      <SecurityPinModal
+        isOpen={!!pinAction}
+        onSuccess={() => { const ac = pinAction; setPinAction(null); if (ac) ac(); }}
+        onClose={() => setPinAction(null)}
+        message="Estás modificando un precio o configuración sensible. Ingresa el PIN de seguridad."
+      />
     </div>
   );
 }
@@ -215,7 +239,7 @@ function SiteNoticeRow({ initialText, initialActive }) {
           onChange={e => setText(e.target.value)}
           rows={3}
           placeholder="Ej: Registro abierto — próximo módulo comienza el lunes"
-          style={{ width: '100%', padding: '8px 10px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '0.85rem', fontFamily: FONT, boxSizing: 'border-box', resize: 'vertical', outline: 'none' }}
+          style={{ width: '100%', padding: '8px 10px', border: '1px solid #ddd', borderRadius: '0', fontSize: '0.85rem', fontFamily: FONT, boxSizing: 'border-box', resize: 'vertical', outline: 'none' }}
         />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
@@ -275,7 +299,7 @@ function ActivityLog() {
         <button
           onClick={load}
           disabled={loading}
-          style={{ background: '#fff', border: '1px solid #ddd', borderRadius: '4px', padding: '5px 12px', cursor: loading ? 'default' : 'pointer', fontSize: '0.75rem', fontFamily: FONT, opacity: loading ? 0.6 : 1 }}
+          style={{ background: '#fff', border: '1px solid #ddd', borderRadius: '0', padding: '5px 12px', cursor: loading ? 'default' : 'pointer', fontSize: '0.75rem', fontFamily: FONT, opacity: loading ? 0.6 : 1 }}
         >
           {loading ? 'Cargando…' : 'Actualizar'}
         </button>
@@ -323,7 +347,7 @@ function ActivityLog() {
 
 function Section({ title, children }) {
   return (
-    <div style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '8px', padding: '18px 20px', marginBottom: '18px' }}>
+    <div style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '0', padding: '18px 20px', marginBottom: '18px' }}>
       <h2 style={{ fontSize: '0.82rem', fontWeight: 700, marginBottom: '14px', letterSpacing: '0.5px', textTransform: 'uppercase', color: '#666', fontFamily: FONT }}>{title}</h2>
       {children}
     </div>
@@ -337,7 +361,7 @@ function SaveButton({ saving, saved, onClick, wide }) {
       disabled={saving}
       style={{
         background: saved ? '#2e7d32' : '#111',
-        color: '#fff', border: 'none', borderRadius: '4px',
+        color: '#fff', border: 'none', borderRadius: '0',
         padding: wide ? '8px 18px' : '7px 14px',
         cursor: saving ? 'default' : 'pointer',
         fontSize: '0.78rem', fontFamily: FONT, fontWeight: 600,
@@ -352,10 +376,10 @@ function SaveButton({ saving, saved, onClick, wide }) {
 }
 
 const FONT         = "'Montserrat', sans-serif";
-const pageTitleStyle = { fontSize: '1.5rem', fontWeight: 700, marginBottom: '20px', letterSpacing: '1px', fontFamily: FONT };
+const pageTitleStyle = { fontFamily: "'Montserrat', sans-serif", fontSize: '2.8rem', fontWeight: 300, letterSpacing: '5px', textTransform: 'uppercase', color: '#000000', margin: '0 0 22px 0' };
 const labelStyle   = { display: 'block', fontSize: '0.7rem', fontWeight: 700, marginBottom: '5px', color: '#666', textTransform: 'uppercase', letterSpacing: '0.5px', fontFamily: FONT };
 const rowStyle     = { display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: '1px solid #f5f5f5', flexWrap: 'wrap' };
-const numInput     = { width: '90px', padding: '6px 8px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '0.85rem', fontFamily: FONT, outline: 'none', textAlign: 'right' };
+const numInput     = { width: '90px', padding: '6px 8px', border: '1px solid #ddd', borderRadius: '0', fontSize: '0.85rem', fontFamily: FONT, outline: 'none', textAlign: 'right' };
 const errStyle     = { fontSize: '0.72rem', color: '#c62828', fontFamily: FONT };
 const emptyStyle   = { fontSize: '0.82rem', color: '#bbb', fontFamily: FONT, margin: 0 };
 const thStyle      = { textAlign: 'left', padding: '6px 10px', fontWeight: 700, color: '#666', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.5px', whiteSpace: 'nowrap' };

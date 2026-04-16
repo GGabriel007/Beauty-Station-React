@@ -3,6 +3,7 @@
 //        recently deleted reviews, and course update log.
 
 import React, { useState, useEffect } from 'react';
+import '../../styles/classes.css';
 import { get } from 'aws-amplify/api';
 
 async function apiFetch(path) {
@@ -84,7 +85,6 @@ export default function AdminDashboard() {
 
       {/* Summary cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '14px', marginBottom: '28px' }}>
-        <StatCard label="Ingresos Totales"            value={fmtQ(stats.totalRevenue)} />
         <StatCard label="Inscripciones Totales"       value={stats.totalEnrollments} />
         <StatCard label="Cursos con Pocos Cupos"      value={stats.nearFull.length} accent={stats.nearFull.length > 0} />
         <StatCard label="Reseñas Eliminadas (últ. 5)" value={stats.deletedReviews.length} />
@@ -166,7 +166,7 @@ function StatCard({ label, value, accent }) {
     <div style={{
       background: accent ? '#fdf0f0' : '#fff',
       border: `1px solid ${accent ? '#cd929d' : '#E8CBD4'}`,
-      borderRadius: '8px', padding: '18px', textAlign: 'center',
+      borderRadius: '0', padding: '18px', textAlign: 'center',
     }}>
       <div style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '4px', fontFamily: FONT, color: accent ? '#7D4E61' : '#2A2A2A' }}>{value}</div>
       <div style={{ fontSize: '0.72rem', color: '#888', fontFamily: FONT, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{label}</div>
@@ -176,7 +176,7 @@ function StatCard({ label, value, accent }) {
 
 function Section({ title, children }) {
   return (
-    <div style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '8px', padding: '18px 20px', marginBottom: '18px' }}>
+    <div style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '0', padding: '18px 20px', marginBottom: '18px' }}>
       <h2 style={{ fontSize: '0.88rem', fontWeight: 700, marginBottom: '12px', letterSpacing: '0.5px', fontFamily: FONT }}>{title}</h2>
       {children}
     </div>
@@ -206,7 +206,7 @@ function Spinner({ text }) {
 
 function PageTitle({ children }) {
   return (
-    <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '20px', letterSpacing: '1px', fontFamily: FONT }}>{children}</h1>
+    <h1 style={{ fontFamily: "'Montserrat', sans-serif", fontSize: '2.8rem', fontWeight: 300, letterSpacing: '5px', textTransform: 'uppercase', color: '#000000', margin: '0 0 22px 0' }}>{children}</h1>
   );
 }
 

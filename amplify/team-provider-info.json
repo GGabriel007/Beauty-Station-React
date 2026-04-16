@@ -20,7 +20,7 @@
       "function": {
         "processCheckout": {
           "deploymentBucketName": "amplify-beautystationreact-dev-450db-deployment",
-          "s3Key": "amplify-builds/processCheckout-2b2b5954584848706533-build.zip"
+          "s3Key": "amplify-builds/processCheckout-77423551784e574f4c70-build.zip"
         }
       },
       "api": {

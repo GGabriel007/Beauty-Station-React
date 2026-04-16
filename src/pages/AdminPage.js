@@ -22,7 +22,7 @@ const C = {
   roseTint  : '#E8CBD4',   // borders / separators
   rose      : '#cd929d',   // primary accent
   roseDeep  : '#7D4E61',   // active / strong accent
-  text      : '#2A2A2A',   // body text
+  text      : '#000000',   // body text
   muted     : '#888',
   white     : '#ffffff',
 };
@@ -53,6 +53,23 @@ export default function AdminPage() {
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
+
+  // On mobile, set the body/html background to match the sticky navbar colour
+  // so overscrolling at the top doesn't show a mismatched background.
+  useEffect(() => {
+    if (isMobile) {
+      document.documentElement.style.backgroundColor = C.white;
+      document.body.style.backgroundColor = C.white;
+    } else {
+      document.documentElement.style.backgroundColor = '';
+      document.body.style.backgroundColor = '';
+    }
+    // Reset when the admin page unmounts
+    return () => {
+      document.documentElement.style.backgroundColor = '';
+      document.body.style.backgroundColor = '';
+    };
+  }, [isMobile]);
 
   // Verify admin group membership from JWT
   useEffect(() => {
@@ -214,7 +231,7 @@ export default function AdminPage() {
                   width: '100%',
                   background: 'transparent',
                   border: `1.5px solid ${C.roseTint}`,
-                  borderRadius: '50px',
+                  borderRadius: '0',
                   padding: '9px 14px',
                   color: C.rose,
                   cursor: 'pointer',
@@ -262,17 +279,10 @@ export default function AdminPage() {
             borderBottom: `1px solid ${C.roseTint}`,
             zIndex: 50,
             boxShadow: '0 8px 20px rgba(125,78,97,0.12)',
-            padding: '12px 0',
+            padding: '72px 0 12px 0',
             transform: mobileOpen ? 'translateY(0)' : 'translateY(-110%)',
             transition: 'transform 0.35s ease-in-out',
           }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 16px 12px', borderBottom: `1px solid ${C.roseTint}` }}>
-              <div>
-                <p style={{ margin: 0, fontSize: '0.62rem', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', color: C.rose }}>Beauty Station</p>
-                <p style={{ margin: 0, fontSize: '0.58rem', letterSpacing: '1px', color: C.muted }}>Panel de Administración</p>
-              </div>
-              <button onClick={() => setMobileOpen(false)} style={{ background: 'none', border: 'none', fontSize: '1.2rem', cursor: 'pointer', color: C.rose, lineHeight: 1 }}>✕</button>
-            </div>
             {TABS.map(tab => (
               <button
                 key={tab.id}
@@ -295,7 +305,7 @@ export default function AdminPage() {
             <div style={{ padding: '14px 20px 2px', borderTop: `1px solid ${C.roseTint}`, marginTop: '4px' }}>
               <p style={{ fontSize: '0.67rem', color: C.muted, margin: '0 0 10px' }}>{userEmail}</p>
               <button onClick={handleLogout} style={{
-                background: 'transparent', border: `1.5px solid ${C.roseTint}`, borderRadius: '50px',
+                background: 'transparent', border: `1.5px solid ${C.roseTint}`, borderRadius: '0',
                 padding: '9px 20px', color: C.rose, cursor: 'pointer', fontSize: '0.72rem',
                 fontFamily: FONT, fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase',
               }}>
@@ -309,11 +319,16 @@ export default function AdminPage() {
       {/* ════════════════════════════════════════════════════════════════════
           MAIN CONTENT
           ════════════════════════════════════════════════════════════════════ */}
-      <main style={{ flex: 1, overflowY: 'auto', padding: isMobile ? '16px' : '28px 32px', minWidth: 0 }}>
+      <main style={{ flex: 1, padding: isMobile ? '0 16px 16px' : '28px 32px', minWidth: 0, position: 'relative' }}>
 
         {/* Mobile: compact top bar inside content area */}
         {isMobile && (
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', paddingBottom: '14px', borderBottom: `1px solid ${C.roseTint}` }}>
+          <div style={{ 
+            position: 'sticky', top: 0, zIndex: 60, background: C.white,
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center', 
+            margin: '0 -16px 16px -16px', padding: '16px 16px 14px 16px', 
+            borderBottom: `1px solid ${C.roseTint}`
+          }}>
             <div>
               <p style={{ margin: 0, fontSize: '0.58rem', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', color: C.rose }}>Beauty Station Admin</p>
               <p style={{ margin: 0, fontSize: '0.72rem', fontWeight: 700, color: C.text, textTransform: 'uppercase', letterSpacing: '0.8px' }}>{activeLabel}</p>

@@ -1,7 +1,39 @@
 // src/pages/Classes_2.js
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../styles/classes.css';
 import { Link, useLocation } from 'react-router-dom';
+import { useCourseData } from '../context/CourseDataContext';
+
+const CourseCard = ({ to, id, title, defaultPrimary, defaultHover, dateText, overrideBadge }) => {
+  const coursesData = useCourseData();
+  const data = coursesData[id];
+
+  let primary = defaultPrimary;
+  let secondary = defaultHover;
+
+  if (data && Array.isArray(data.imageUrls) && data.imageUrls.some(u => u && u.trim())) {
+    const validUrls = data.imageUrls.filter(u => u && u.trim());
+    primary = validUrls[0];
+    secondary = validUrls.length > 1 ? validUrls[1] : validUrls[0];
+  }
+
+  return (
+    <Link to={to} className="course-grid-card">
+      <div className="course-grid-img-wrap">
+        <img className="course-grid-img course-grid-img--primary" src={primary} alt={title} />
+        <img className="course-grid-img course-grid-img--secondary" src={secondary} alt={`${title} Hover`} />
+        {overrideBadge && <div className="one-day-badge">{overrideBadge}</div>}
+      </div>
+      <div className="course-grid-info">
+        <p className="course-grid-name">{title}</p>
+        <div className="course-grid-date">
+          <span className="default-text">{dateText}</span>
+          <span className="hover-text">Más Información →</span>
+        </div>
+      </div>
+    </Link>
+  );
+};
 
 const Classes2 = () => {
   const location = useLocation();
@@ -10,6 +42,24 @@ const Classes2 = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
+
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth);
+    }
+  };
+
+  useEffect(() => {
+    // Initial check requires a small delay to ensure DOM is fully painted
+    setTimeout(checkScroll, 100);
+    window.addEventListener('resize', checkScroll);
+    return () => window.removeEventListener('resize', checkScroll);
+  }, []);
 
   const scroll = (direction) => {
     if (scrollRef.current) {
@@ -35,63 +85,51 @@ const Classes2 = () => {
 
       {/* ── Course grid ── */}
       <div className="course-grid-wrapper">
-        <button className="course-arrow course-arrow--left" onClick={() => scroll('left')}>&#10094;</button>
-        <div className="course-grid" ref={scrollRef}>
+        {canScrollLeft && (
+          <button className="course-arrow course-arrow--left" onClick={() => scroll('left')}>&#10094;</button>
+        )}
+        <div className="course-grid" ref={scrollRef} onScroll={checkScroll}>
 
-        <Link to="/classes/course/pieles-perfectas" className="course-grid-card">
-          <div className="course-grid-img-wrap">
-            <img className="course-grid-img" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_Mkup.jpeg`} alt="Pieles Perfectas" />
-          </div>
-          <div className="course-grid-info">
-            <p className="course-grid-name">Pieles Perfectas</p>
-            <div className="course-grid-date">
-              <span className="default-text">28 Ene — 25 Feb</span>
-              <span className="hover-text">Más Información →</span>
-            </div>
-          </div>
-        </Link>
+        <CourseCard
+          to="/classes/course/pieles-perfectas"
+          id="pieles-perfectas"
+          title="Pieles Perfectas"
+          defaultPrimary={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_Mkup.jpeg`}
+          defaultHover={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Makeup/imagen_module_2Mkup.jpeg`}
+          dateText="28 Ene — 25 Feb"
+        />
 
-        <Link to="/classes/course/maquillaje-social" className="course-grid-card">
-          <div className="course-grid-img-wrap">
-            <img className="course-grid-img" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_Mkup.jpeg`} alt="Maquillaje Social" />
-          </div>
-          <div className="course-grid-info">
-            <p className="course-grid-name">Maquillaje Social</p>
-            <div className="course-grid-date">
-              <span className="default-text">4 Mar — 8 Abr</span>
-              <span className="hover-text">Más Información →</span>
-            </div>
-          </div>
-        </Link>
+        <CourseCard
+          to="/classes/course/maquillaje-social"
+          id="maquillaje-social"
+          title="Maquillaje Social"
+          defaultPrimary={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_Mkup.jpeg`}
+          defaultHover={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/Makeup/imagen_module_2Mkup.jpeg`}
+          dateText="4 Mar — 8 Abr"
+        />
 
-        <Link to="/classes/course/maestria-novias-makeup" className="course-grid-card">
-          <div className="course-grid-img-wrap">
-            <img className="course-grid-img" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_Mkup.jpeg`} alt="Maestría en Novias y Tendencias" />
-          </div>
-          <div className="course-grid-info">
-            <p className="course-grid-name">Maestría en Novias y Tendencias</p>
-            <div className="course-grid-date">
-              <span className="default-text">15 Abr — 7 May</span>
-              <span className="hover-text">Más Información →</span>
-            </div>
-          </div>
-        </Link>
+        <CourseCard
+          to="/classes/course/maestria-novias-makeup"
+          id="maestria-novias-makeup"
+          title="Maestría en Novias y Tendencias"
+          defaultPrimary={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_Mkup.jpeg`}
+          defaultHover={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/Makeup/imagen_module_2Mkup.jpeg`}
+          dateText="15 Abr — 7 May"
+        />
 
-        <Link to="/classes/course/curso-completo-maquillaje" className="course-grid-card">
-          <div className="course-grid-img-wrap">
-            <img className="course-grid-img" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_Mkup.jpeg`} alt="Curso Completo Maquillaje" />
-          </div>
-          <div className="course-grid-info">
-            <p className="course-grid-name">Curso Completo Maquillaje</p>
-            <div className="course-grid-date">
-              <span className="default-text">28 Ene — 7 May</span>
-              <span className="hover-text">Más Información →</span>
-            </div>
-          </div>
-        </Link>
+        <CourseCard
+          to="/classes/course/curso-completo-maquillaje"
+          id="curso-completo-maquillaje"
+          title="Curso Completo Maquillaje"
+          defaultPrimary={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_Mkup.jpeg`}
+          defaultHover={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Makeup/imagen_module_2Mkup.jpeg`}
+          dateText="28 Ene — 7 May"
+        />
 
         </div>
-        <button className="course-arrow course-arrow--right" onClick={() => scroll('right')}>&#10095;</button>
+        {canScrollRight && (
+          <button className="course-arrow course-arrow--right" onClick={() => scroll('right')}>&#10095;</button>
+        )}
       </div>
 
     </div>

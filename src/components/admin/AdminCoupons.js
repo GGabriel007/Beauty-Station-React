@@ -2,7 +2,9 @@
 // Full coupon management: create, edit, toggle active, delete.
 
 import React, { useState, useEffect } from 'react';
+import '../../styles/classes.css';
 import { get, post, put, del } from 'aws-amplify/api';
+import SecurityPinModal from './SecurityPinModal';
 
 const FONT = "'Montserrat', sans-serif";
 const C = {
@@ -57,6 +59,7 @@ export default function AdminCoupons() {
   const [form,        setForm]        = useState(EMPTY_FORM);
   const [saving,      setSaving]      = useState(false);
   const [saveError,   setSaveError]   = useState(null);
+  const [pinAction,   setPinAction]   = useState(null);
 
   const load = () => {
     setLoading(true);
@@ -167,7 +170,7 @@ export default function AdminCoupons() {
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h1 style={pageTitleStyle}>Cupones</h1>
+        <h1 className="admin-page-title">Cupones</h1>
         <button onClick={openCreate} style={primaryBtn}>+ Nuevo Cupón</button>
       </div>
 
@@ -208,7 +211,7 @@ export default function AdminCoupons() {
                     key={type}
                     onClick={() => setF('discountType', type)}
                     style={{
-                      flex: 1, padding: '8px 10px', borderRadius: '4px', cursor: 'pointer',
+                      flex: 1, padding: '8px 10px', borderRadius: '0', cursor: 'pointer',
                       fontFamily: FONT, fontSize: '0.78rem', fontWeight: 600,
                       border: form.discountType === type ? `2px solid ${C.roseDeep}` : `1px solid ${C.roseTint}`,
                       background: form.discountType === type ? C.roseLight : C.white,
@@ -294,7 +297,7 @@ export default function AdminCoupons() {
           {saveError && <p style={{ color: '#c62828', fontSize: '0.82rem', marginTop: '14px', fontFamily: FONT }}>{saveError}</p>}
 
           <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
-            <button onClick={handleSave} disabled={saving} style={{ ...primaryBtn, opacity: saving ? 0.6 : 1, minWidth: '160px' }}>
+            <button onClick={() => setPinAction(() => handleSave)} disabled={saving} style={{ ...primaryBtn, opacity: saving ? 0.6 : 1, minWidth: '160px' }}>
               {saving ? 'Guardando…' : editingCode ? 'Guardar Cambios' : 'Crear Cupón'}
             </button>
             <button onClick={closeForm} style={ghostBtn}>Cancelar</button>
@@ -304,7 +307,7 @@ export default function AdminCoupons() {
 
       {/* ── Coupon list ── */}
       {coupons.length === 0 ? (
-        <div style={{ background: C.white, border: `1px solid ${C.roseTint}`, borderRadius: '8px', padding: '40px', textAlign: 'center' }}>
+        <div style={{ background: C.white, border: `1px solid ${C.roseTint}`, borderRadius: '0', padding: '40px', textAlign: 'center' }}>
           <p style={{ color: C.muted, fontFamily: FONT, fontSize: '0.88rem' }}>No hay cupones creados aún.</p>
           <p style={{ color: C.rose, fontFamily: FONT, fontSize: '0.78rem' }}>Haz clic en "+ Nuevo Cupón" para empezar.</p>
         </div>
@@ -321,7 +324,7 @@ export default function AdminCoupons() {
                 style={{
                   background: C.white,
                   border: editingCode === coupon.couponCode ? `2px solid ${C.roseDeep}` : `1px solid ${C.roseTint}`,
-                  borderRadius: '8px',
+                  borderRadius: '0',
                   padding: '16px 20px',
                   display: 'flex',
                   alignItems: 'center',
@@ -334,7 +337,7 @@ export default function AdminCoupons() {
                 <div style={{
                   background: C.roseLight,
                   border: `1px solid ${C.roseTint}`,
-                  borderRadius: '6px',
+                  borderRadius: '0',
                   padding: '6px 14px',
                   fontFamily: 'monospace',
                   fontWeight: 700,
@@ -371,7 +374,7 @@ export default function AdminCoupons() {
                 {/* Actions */}
                 <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
                   <button
-                    onClick={() => handleToggleActive(coupon)}
+                    onClick={() => setPinAction(() => () => handleToggleActive(coupon))}
                     title={coupon.isActive ? 'Desactivar' : 'Activar'}
                     style={{
                       ...ghostBtn,
@@ -402,17 +405,23 @@ export default function AdminCoupons() {
       {/* ── Delete confirmation ── */}
       {deleteCode && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
-          <div style={{ background: C.white, borderRadius: '12px', padding: '32px', maxWidth: '360px', width: '90%', textAlign: 'center', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}>
+          <div style={{ background: C.white, borderRadius: '0', padding: '32px', maxWidth: '360px', width: '90%', textAlign: 'center', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}>
             <p style={{ margin: '0 0 8px', fontFamily: FONT, fontWeight: 700, fontSize: '1rem', color: C.text }}>¿Eliminar cupón?</p>
             <p style={{ margin: '0 0 24px', fontFamily: 'monospace', fontWeight: 700, fontSize: '1.1rem', color: C.roseDeep, letterSpacing: '1px' }}>{deleteCode}</p>
             <p style={{ margin: '0 0 24px', fontFamily: FONT, fontSize: '0.82rem', color: C.muted }}>Esta acción es permanente y no se puede deshacer.</p>
             <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
               <button onClick={() => setDeleteCode(null)} style={{ ...ghostBtn, flex: 1 }}>Cancelar</button>
-              <button onClick={handleDelete} style={{ ...primaryBtn, flex: 1, background: '#c62828', borderColor: '#c62828' }}>Eliminar</button>
+              <button onClick={() => setPinAction(() => handleDelete)} style={{ ...primaryBtn, flex: 1, background: '#c62828', borderColor: '#c62828' }}>Eliminar</button>
             </div>
           </div>
         </div>
       )}
+      <SecurityPinModal 
+        isOpen={!!pinAction} 
+        onSuccess={() => { const ac = pinAction; setPinAction(null); if(ac) ac(); }} 
+        onClose={() => setPinAction(null)}
+        message="Esta acción modifica los cupones. Por seguridad, ingresa el PIN administrativo."
+      />
     </div>
   );
 }
@@ -461,9 +470,9 @@ function Stat({ label, value, accent, color }) {
 }
 
 const FONT_VAL    = "'Montserrat', sans-serif";
-const inputStyle  = { width: '100%', padding: '8px 10px', border: `1px solid ${C.roseTint}`, borderRadius: '4px', fontSize: '0.85rem', fontFamily: FONT_VAL, boxSizing: 'border-box', outline: 'none' };
+const inputStyle  = { width: '100%', padding: '8px 10px', border: `1px solid ${C.roseTint}`, borderRadius: '0', fontSize: '0.85rem', fontFamily: FONT_VAL, boxSizing: 'border-box', outline: 'none' };
 const labelStyle  = { display: 'block', fontSize: '0.68rem', fontWeight: 700, marginBottom: '5px', color: '#666', textTransform: 'uppercase', letterSpacing: '0.5px', fontFamily: FONT_VAL };
-const primaryBtn  = { background: C.roseDeep, color: '#fff', border: 'none', borderRadius: '6px', padding: '10px 20px', cursor: 'pointer', fontSize: '0.82rem', fontFamily: FONT_VAL, fontWeight: 700, letterSpacing: '0.5px' };
-const ghostBtn    = { background: C.white, color: '#333', border: `1px solid ${C.roseTint}`, borderRadius: '6px', padding: '10px 16px', cursor: 'pointer', fontSize: '0.82rem', fontFamily: FONT_VAL };
-const pageTitleStyle = { fontSize: '1.5rem', fontWeight: 700, marginBottom: '0', letterSpacing: '1px', fontFamily: FONT_VAL };
+const primaryBtn  = { background: C.roseDeep, color: '#fff', border: 'none', borderRadius: '0', padding: '10px 20px', cursor: 'pointer', fontSize: '0.82rem', fontFamily: FONT_VAL, fontWeight: 700, letterSpacing: '0.5px' };
+const ghostBtn    = { background: C.white, color: '#333', border: `1px solid ${C.roseTint}`, borderRadius: '0', padding: '10px 16px', cursor: 'pointer', fontSize: '0.82rem', fontFamily: FONT_VAL };
+const pageTitleStyle = { fontFamily: "'Montserrat', sans-serif", fontSize: '2.8rem', fontWeight: 300, letterSpacing: '5px', textTransform: 'uppercase', color: '#000000', margin: '0 0 22px 0' };
 const miniLabel   = { margin: '0 0 2px', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#aaa', fontFamily: FONT_VAL };

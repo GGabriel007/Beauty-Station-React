@@ -84,6 +84,10 @@ const authenticatorComponents = {
 const Login = () => {
   const { authStatus } = useAuthenticator(context => [context.authStatus]);
 
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // If the user navigates directly to /login while already authenticated,
   // send them away. AuthRedirectHandler in App.js handles the real sign-in redirect.
   if (authStatus === 'authenticated') {
@@ -128,6 +132,16 @@ const Login = () => {
             signIn: {
               username: {
                 validate: validateEmail,
+              },
+            },
+            confirmResetPassword: {
+              password: {
+                validate: validatePassword,
+              },
+            },
+            forceNewPassword: {
+              password: {
+                validate: validatePassword,
               },
             },
           }}

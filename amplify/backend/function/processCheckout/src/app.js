@@ -185,6 +185,26 @@ const cartNameToCourseId = {
   'Curso en Línea': 'curso-en-linea',
 };
 
+const cartItemNameToScheduleIndex = {
+  'Master Waves 2PM a 4PM': 0,
+  'Master Waves 6PM a 8PM': 1,
+  'Peinados Para Eventos 2PM a 4PM': 0,
+  'Peinados Para Eventos 6PM a 8PM': 1,
+  'Maestrías en Novias y Tendencias 2PM a 4PM': 0,
+  'Maestrías en Novias y Tendencias 6PM a 8PM': 1,
+  'Curso Completo Peinado 2PM a 4PM': 0,
+  'Curso Completo Peinado 6PM a 8PM': 1,
+  'Pieles Perfectas 2PM a 4PM': 0,
+  'Pieles Perfectas 6PM a 8PM': 1,
+  'Maquillaje Social 2PM a 4PM': 0,
+  'Maquillaje Social 6PM a 8PM': 1,
+  'Maestría en Novias y Tendencias 2PM a 4PM': 0,
+  'Maestría en Novias y Tendencias 6PM a 8PM': 1,
+  'Curso Completo Maquillaje 2PM a 4PM': 0,
+  'Curso Completo Maquillaje 6PM a 8PM': 1,
+  'Curso en Línea': 0
+};
+
 // Admin-only middleware — verifies the caller belongs to the Cognito "admin" group.
 //
 // Two auth paths are supported:
@@ -346,16 +366,23 @@ app.post('/checkout', async function (req, res) {
       }
     }
 
+    const cachedCourseSettings = {}; // cache DB results for later email extraction
+
     // 1aa. PRICE VALIDATION: Verify client-sent total against CourseSettings (Phase 3 — hard reject on mismatch)
     try {
       let expectedTotal = 0;
       let allPricesFound = true;
       for (const item of safeItems) {
-        const courseId = cartNameToCourseId[item.name];
+        // use item.courseId passed from frontend, fallback to cartNameToCourseId map
+        const courseId = item.courseId || cartNameToCourseId[item.name];
         if (courseId) {
-          const courseData = await ddbDocClient.send(new GetCommand({ TableName: 'CourseSettings', Key: { courseId } }));
-          if (courseData.Item && courseData.Item.price != null) {
-            expectedTotal += Number(courseData.Item.price);
+          if (!cachedCourseSettings[courseId]) {
+            const dbRes = await ddbDocClient.send(new GetCommand({ TableName: 'CourseSettings', Key: { courseId } }));
+            if (dbRes.Item) cachedCourseSettings[courseId] = dbRes.Item;
+          }
+          const courseData = cachedCourseSettings[courseId];
+          if (courseData && courseData.price != null) {
+            expectedTotal += Number(courseData.price);
           } else {
             allPricesFound = false; // price not in DB yet — skip hard-reject for this item
           }
@@ -571,14 +598,35 @@ app.post('/checkout', async function (req, res) {
     // 5. DISPATCH EMAIL: Send automated receipt natively via Resend SDK
     const itemsArray = typeof paymentData.Items === 'string' ? paymentData.Items.split(",") : [];
 
-    // Build one WhatsApp entry per purchased course (deduplicated by course name)
+    // Build one WhatsApp entry per purchased course schedule (deduplicated by course + schedule explicitly)
     const seenCourses = new Set();
     const whatsappEntries = [];
     for (const item of safeItems) {
-      const info = courseWhatsappInfo[item.name];
-      if (info && !seenCourses.has(info.displayName)) {
-        seenCourses.add(info.displayName);
-        whatsappEntries.push(info);
+      const courseId = item.courseId || cartNameToCourseId[item.name];
+      const dbCourse = courseId ? cachedCourseSettings[courseId] : null;
+      
+      let link = null;
+      let displayName = item.name; // Ej: "Master Waves 2PM a 4PM"
+      
+      let finalScheduleIndex = item.scheduleIndex;
+      if (finalScheduleIndex == null && cartItemNameToScheduleIndex[item.name] != null) {
+          finalScheduleIndex = cartItemNameToScheduleIndex[item.name];
+      }
+      
+      // Attempt dynamic load from DB via scheduleIndex
+      if (dbCourse && finalScheduleIndex != null && Array.isArray(dbCourse.whatsappLinks)) {
+         link = dbCourse.whatsappLinks[finalScheduleIndex];
+      }
+      
+      // Fallback to static mapping
+      if (!link) {
+         const hardcoded = courseWhatsappInfo[item.name];
+         if (hardcoded) link = hardcoded.link;
+      }
+
+      if (link && !seenCourses.has(displayName)) {
+        seenCourses.add(displayName);
+        whatsappEntries.push({ displayName, link });
       }
     }
 
@@ -936,7 +984,7 @@ app.get('/reviews', async function (req, res) {
 // SUBMIT A NEW REVIEW (public — no auth required)
 app.post('/reviews', async function (req, res) {
   try {
-    const { name, rating, text } = req.body || {};
+    const { name, rating, text, services } = req.body || {};
     if (!text || !text.trim()) return res.status(400).json({ error: 'El texto de la reseña es requerido.' });
 
     const reviewId = `u_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
@@ -951,6 +999,7 @@ app.post('/reviews', async function (req, res) {
         source:    'user',
         isVisible: true,
         createdAt: Date.now(),
+        services:  Array.isArray(services) ? services.slice(0, 10) : [],
       },
     }));
     res.json({ success: true, reviewId });
@@ -1026,9 +1075,24 @@ app.get('/admin/reviews', requireAdmin, async function (req, res) {
 });
 
 // SOFT-DELETE A REVIEW (sets isVisible=false so it can be restored)
+// Pass ?permanent=true to hard-delete the record entirely from DynamoDB.
 app.delete('/admin/reviews/:reviewId', requireAdmin, async function (req, res) {
   try {
     const { reviewId } = req.params;
+    const permanent = req.query.permanent === 'true';
+
+    if (permanent) {
+      // Phase 3: Hard-delete — remove the DynamoDB record entirely
+      const { DeleteCommand } = require('@aws-sdk/lib-dynamodb');
+      await ddbDocClient.send(new DeleteCommand({
+        TableName: 'Reviews',
+        Key: { reviewId },
+      }));
+      await writeActivityLog(req.adminEmail, `Permanently deleted review: ${reviewId}`, 'hidden', 'deleted');
+      return res.json({ success: true, permanent: true });
+    }
+
+    // Phase 2: Soft-delete — mark as not visible (can be restored)
     await ddbDocClient.send(new UpdateCommand({
       TableName: 'Reviews',
       Key: { reviewId },
@@ -1036,8 +1100,8 @@ app.delete('/admin/reviews/:reviewId', requireAdmin, async function (req, res) {
       ExpressionAttributeNames: { '#deletedBy': 'deletedBy', '#deletedAt': 'deletedAt' },
       ExpressionAttributeValues: { ':f': false, ':by': req.adminEmail, ':ts': Date.now() }
     }));
-    await writeActivityLog(req.adminEmail, `Deleted review: ${reviewId}`, 'visible', 'hidden');
-    res.json({ success: true });
+    await writeActivityLog(req.adminEmail, `Hid review: ${reviewId}`, 'visible', 'hidden');
+    res.json({ success: true, permanent: false });
   } catch (error) {
     console.error('Admin: error deleting review:', error);
     res.status(500).json({ error: 'Error al eliminar la reseña.' });

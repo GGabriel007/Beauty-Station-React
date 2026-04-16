@@ -2,6 +2,7 @@
 // 2.4 — Online course lesson manager: reorder, edit titles/S3 keys, add, delete.
 
 import React, { useState, useEffect, useRef } from 'react';
+import '../../styles/classes.css';
 import { get, put } from 'aws-amplify/api';
 
 const COURSE_ID = 'curso-en-linea';
@@ -98,7 +99,7 @@ export default function AdminOnlineCourse() {
     <div>
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
-        <h1 style={pageTitleStyle}>Curso en Línea — Lecciones</h1>
+        <h1 className="admin-page-title">Curso en Línea — Lecciones</h1>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <button onClick={addLesson} style={ghostBtn}>+ Nueva Lección</button>
           <button
@@ -125,7 +126,7 @@ export default function AdminOnlineCourse() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {lessons.map((lesson, i) => (
-          <div key={lesson.id} style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '8px', padding: '16px 18px' }}>
+          <div key={lesson.id} style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '0', padding: '16px 18px' }}>
             {/* Row controls */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
               <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#bbb', fontFamily: FONT, width: '22px' }}>#{i + 1}</span>
@@ -149,7 +150,7 @@ export default function AdminOnlineCourse() {
                   <button onClick={cancelDelete}               style={{ ...inlineBtn, color: '#666' }}>No</button>
                 </span>
               ) : (
-                <button onClick={() => confirmDelete(lesson.id)} style={{ background: 'none', border: '1px solid #c62828', color: '#c62828', borderRadius: '4px', padding: '4px 10px', cursor: 'pointer', fontSize: '0.75rem', fontFamily: FONT }}>Eliminar</button>
+                <button onClick={() => confirmDelete(lesson.id)} style={{ background: 'none', border: '1px solid #c62828', color: '#c62828', borderRadius: '0', padding: '4px 10px', cursor: 'pointer', fontSize: '0.75rem', fontFamily: FONT }}>Eliminar</button>
               )}
             </div>
 
@@ -177,10 +178,10 @@ export default function AdminOnlineCourse() {
 }
 
 const FONT         = "'Montserrat', sans-serif";
-const inputStyle   = { width: '100%', padding: '7px 10px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '0.85rem', fontFamily: FONT, boxSizing: 'border-box', outline: 'none' };
+const inputStyle   = { width: '100%', padding: '7px 10px', border: '1px solid #ddd', borderRadius: '0', fontSize: '0.85rem', fontFamily: FONT, boxSizing: 'border-box', outline: 'none' };
 const labelStyle   = { display: 'block', fontSize: '0.7rem', fontWeight: 700, marginBottom: '4px', color: '#666', textTransform: 'uppercase', letterSpacing: '0.5px', fontFamily: FONT };
-const primaryBtn   = { background: '#111', color: '#fff', border: 'none', borderRadius: '4px', padding: '9px 18px', cursor: 'pointer', fontSize: '0.82rem', fontFamily: FONT, fontWeight: 600 };
-const ghostBtn     = { background: '#fff', color: '#333', border: '1px solid #ddd', borderRadius: '4px', padding: '9px 14px', cursor: 'pointer', fontSize: '0.82rem', fontFamily: FONT };
-const arrowBtn     = { background: '#f5f5f5', border: '1px solid #ddd', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer', fontSize: '0.72rem', fontFamily: FONT };
+const primaryBtn   = { background: '#111', color: '#fff', border: 'none', borderRadius: '0', padding: '9px 18px', cursor: 'pointer', fontSize: '0.82rem', fontFamily: FONT, fontWeight: 600 };
+const ghostBtn     = { background: '#fff', color: '#333', border: '1px solid #ddd', borderRadius: '0', padding: '9px 14px', cursor: 'pointer', fontSize: '0.82rem', fontFamily: FONT };
+const arrowBtn     = { background: '#f5f5f5', border: '1px solid #ddd', borderRadius: '0', padding: '4px 8px', cursor: 'pointer', fontSize: '0.72rem', fontFamily: FONT };
 const inlineBtn    = { background: 'none', border: 'none', cursor: 'pointer', fontFamily: FONT, fontSize: '0.8rem', textDecoration: 'underline', padding: 0 };
-const pageTitleStyle = { fontSize: '1.5rem', fontWeight: 700, margin: 0, letterSpacing: '1px', fontFamily: FONT };
+const pageTitleStyle = { fontFamily: "'Montserrat', sans-serif", fontSize: '2.8rem', fontWeight: 300, letterSpacing: '5px', textTransform: 'uppercase', color: '#000000', margin: '0 0 22px 0' };

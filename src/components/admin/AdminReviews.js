@@ -1,8 +1,9 @@
 // src/components/admin/AdminReviews.js
-// 2.6 — Reviews grid with soft-delete and restore.
-//        Card visual style matches the public homepage exactly.
+// 2.6 — Reviews grid with three-phase lifecycle:
+//        Visible → Hidden (soft-delete) → Permanently Deleted (hard-delete)
 
 import React, { useState, useEffect } from 'react';
+import '../../styles/classes.css';
 import { get, put, del } from 'aws-amplify/api';
 // Import homepage styles so the card CSS classes are available on the admin route
 import '../../styles/beauty-Station.css';
@@ -25,12 +26,18 @@ async function apiDel(path) {
 }
 
 export default function AdminReviews() {
-  const [reviews,       setReviews]       = useState([]);
-  const [loading,       setLoading]       = useState(true);
-  const [error,         setError]         = useState(null);
-  const [showHidden,    setShowHidden]    = useState(false);
-  const [confirmDelete, setConfirmDelete] = useState(null); // reviewId
-  const [actionId,      setActionId]      = useState(null); // reviewId being actioned
+  const [reviews,            setReviews]            = useState([]);
+  const [loading,            setLoading]            = useState(true);
+  const [error,              setError]              = useState(null);
+
+  // 'visible' | 'hidden' — which list is displayed
+  const [activeTab,          setActiveTab]          = useState('visible');
+
+  // Soft-hide confirm
+  const [confirmHide,        setConfirmHide]        = useState(null); // reviewId
+  // Permanent-delete confirm
+  const [confirmPermanent,   setConfirmPermanent]   = useState(null); // reviewId
+  const [actionId,           setActionId]           = useState(null);
 
   useEffect(() => {
     apiFetch('/admin/reviews')
@@ -39,7 +46,8 @@ export default function AdminReviews() {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleDelete = async reviewId => {
+  // Phase 1→2: Visible → Hidden (soft-delete, existing API)
+  const handleHide = async reviewId => {
     setActionId(reviewId);
     try {
       await apiDel(`/admin/reviews/${reviewId}`);
@@ -48,14 +56,15 @@ export default function AdminReviews() {
           ? { ...r, isVisible: false, deletedAt: Date.now() }
           : r
       ));
-      setConfirmDelete(null);
+      setConfirmHide(null);
     } catch {
-      setError('Error al eliminar la reseña.');
+      setError('Error al ocultar la reseña.');
     } finally {
       setActionId(null);
     }
   };
 
+  // Phase 2→1: Hidden → Visible (restore)
   const handleRestore = async reviewId => {
     setActionId(reviewId);
     try {
@@ -72,9 +81,26 @@ export default function AdminReviews() {
     }
   };
 
+  // Phase 2→3: Hidden → Permanently Deleted (hard-delete)
+  // Uses the same DELETE endpoint but with a ?permanent=true flag so the
+  // Lambda can remove the item entirely instead of just marking isVisible=false.
+  const handlePermanentDelete = async reviewId => {
+    setActionId(reviewId);
+    try {
+      await apiDel(`/admin/reviews/${reviewId}?permanent=true`);
+      // Remove from local state entirely
+      setReviews(prev => prev.filter(r => r.reviewId !== reviewId));
+      setConfirmPermanent(null);
+    } catch {
+      setError('Error al eliminar permanentemente la reseña.');
+    } finally {
+      setActionId(null);
+    }
+  };
+
   const visible = reviews.filter(r =>  r.isVisible);
   const hidden  = reviews.filter(r => !r.isVisible);
-  const shown   = showHidden ? hidden : visible;
+  const shown   = activeTab === 'visible' ? visible : hidden;
 
   const fmtDate = ts => ts
     ? new Date(ts).toLocaleDateString('es-GT', { year: 'numeric', month: 'short', day: 'numeric' })
@@ -85,55 +111,74 @@ export default function AdminReviews() {
   return (
     <div>
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
-        <h1 style={pageTitleStyle}>
-          Reseñas{' '}
-          <span style={{ fontSize: '1rem', fontWeight: 400, color: '#888' }}>
-            ({visible.length} visible{visible.length !== 1 ? 's' : ''} · {hidden.length} oculta{hidden.length !== 1 ? 's' : ''})
-          </span>
-        </h1>
+      <h1 className="admin-page-title">Reseñas</h1>
 
-        {/* Show hidden toggle */}
-        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.84rem', fontFamily: FONT, userSelect: 'none' }}>
-          <div
-            onClick={() => setShowHidden(v => !v)}
+      {/* ── Phase tabs ── */}
+      <div style={{ display: 'flex', gap: '0', marginBottom: '24px', borderBottom: '2px solid #f0f0f0' }}>
+        {[
+          { id: 'visible', label: `Visibles (${visible.length})` },
+          { id: 'hidden',  label: `Ocultas (${hidden.length})` },
+        ].map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
             style={{
-              width: '38px', height: '20px', borderRadius: '10px',
-              background: showHidden ? '#7D4E61' : '#ccc',
-              position: 'relative', transition: 'background 0.2s', cursor: 'pointer', flexShrink: 0,
+              padding: '10px 22px',
+              border: 'none',
+              borderBottom: activeTab === tab.id ? '2px solid #7D4E61' : '2px solid transparent',
+              marginBottom: '-2px',
+              background: 'none',
+              fontFamily: FONT,
+              fontSize: '0.8rem',
+              fontWeight: 700,
+              letterSpacing: '1px',
+              textTransform: 'uppercase',
+              color: activeTab === tab.id ? '#7D4E61' : '#aaa',
+              cursor: 'pointer',
+              transition: 'color 0.2s',
             }}
           >
-            <div style={{
-              width: '14px', height: '14px', borderRadius: '50%', background: '#fff',
-              position: 'absolute', top: '3px',
-              left: showHidden ? '21px' : '3px',
-              transition: 'left 0.2s',
-            }} />
-          </div>
-          Mostrar reseñas ocultas
-        </label>
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Lifecycle guide */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
+        <PhaseChip color="#2e7d32" bg="#e8f5e9" label="① Visible" />
+        <span style={{ color: '#bbb', fontSize: '0.8rem' }}>→</span>
+        <PhaseChip color="#e65100" bg="#fff3e0" label="② Oculta" />
+        <span style={{ color: '#bbb', fontSize: '0.8rem' }}>→</span>
+        <PhaseChip color="#c62828" bg="#fdecea" label="③ Eliminada para siempre" />
+        <span style={{ color: '#bbb', fontSize: '0.72rem', marginLeft: '6px' }}>
+          Las reseñas ocultas ya no aparecen en el sitio público, pero siguen en la base de datos hasta que las elimines definitivamente.
+        </span>
       </div>
 
       {error && <p style={{ color: '#c62828', marginBottom: '12px', fontFamily: FONT }}>{error}</p>}
 
       {shown.length === 0 && (
         <p style={{ color: '#bbb', fontFamily: FONT }}>
-          {showHidden ? 'No hay reseñas eliminadas.' : 'No hay reseñas visibles.'}
+          {activeTab === 'visible' ? 'No hay reseñas visibles.' : 'No hay reseñas ocultas.'}
         </p>
       )}
 
-      {/* Review grid — same layout as public homepage */}
+      {/* Review grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(270px, 1fr))', gap: '16px' }}>
         {shown.map(review => (
           <ReviewCard
             key={review.reviewId}
             review={review}
-            confirmDelete={confirmDelete}
+            confirmHide={confirmHide}
+            confirmPermanent={confirmPermanent}
             actionId={actionId}
-            onRequestDelete={() => setConfirmDelete(review.reviewId)}
-            onCancelDelete={() => setConfirmDelete(null)}
-            onDelete={() => handleDelete(review.reviewId)}
+            onRequestHide={() => setConfirmHide(review.reviewId)}
+            onCancelHide={() => setConfirmHide(null)}
+            onHide={() => handleHide(review.reviewId)}
             onRestore={() => handleRestore(review.reviewId)}
+            onRequestPermanent={() => setConfirmPermanent(review.reviewId)}
+            onCancelPermanent={() => setConfirmPermanent(null)}
+            onPermanentDelete={() => handlePermanentDelete(review.reviewId)}
             fmtDate={fmtDate}
           />
         ))}
@@ -142,46 +187,62 @@ export default function AdminReviews() {
   );
 }
 
-// ── Review card: homepage visual + admin action strip at the bottom ────────────
+// ── Small phase chip label ────────────────────────────────────────────────────
+function PhaseChip({ label, color, bg }) {
+  return (
+    <span style={{
+      fontFamily: FONT, fontSize: '0.68rem', fontWeight: 700,
+      letterSpacing: '0.5px', color, background: bg,
+      border: `1px solid ${color}`, padding: '3px 10px', borderRadius: '0',
+    }}>
+      {label}
+    </span>
+  );
+}
 
-function ReviewCard({ review, confirmDelete, actionId, onRequestDelete, onCancelDelete, onDelete, onRestore, fmtDate }) {
-  const isBusy    = actionId === review.reviewId;
-  const isPending = confirmDelete === review.reviewId;
-  const stars     = Math.min(5, Math.max(0, Number(review.rating) || 5));
+// ── Review card ───────────────────────────────────────────────────────────────
+function ReviewCard({
+  review, confirmHide, confirmPermanent, actionId,
+  onRequestHide, onCancelHide, onHide,
+  onRestore,
+  onRequestPermanent, onCancelPermanent, onPermanentDelete,
+  fmtDate,
+}) {
+  const isBusy          = actionId === review.reviewId;
+  const isPendingHide   = confirmHide      === review.reviewId;
+  const isPendingPerm   = confirmPermanent === review.reviewId;
+  const stars           = Math.min(5, Math.max(0, Number(review.rating) || 5));
 
   return (
     <div
       className="home-review-card"
       style={{
-        // Override the card's box-shadow/border for hidden reviews so staff can
-        // visually distinguish them from live ones.
-        opacity:    review.isVisible ? 1 : 0.7,
-        border:     review.isVisible ? undefined : '1.5px dashed #f5c6c6',
-        background: review.isVisible ? '#fff' : '#fff8f8',
-        // Prevent the hover lift on hidden cards (staff shouldn't be distracted)
+        opacity:       review.isVisible ? 1 : 0.75,
+        border:        review.isVisible ? undefined : '1.5px dashed #f5c6c6',
+        background:    review.isVisible ? '#fff' : '#fff8f8',
         pointerEvents: isBusy ? 'none' : 'auto',
       }}
     >
-      {/* Hidden badge */}
+      {/* Phase badge */}
       {!review.isVisible && (
         <div style={{ marginBottom: '6px' }}>
-          <span style={{ fontSize: '0.62rem', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', color: '#c62828', background: '#fdecea', border: '1px solid #f5c6c6', borderRadius: '3px', padding: '2px 7px', fontFamily: FONT }}>
+          <span style={{ fontSize: '0.62rem', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', color: '#e65100', background: '#fff3e0', border: '1px solid #ffcc80', borderRadius: '0', padding: '2px 7px', fontFamily: FONT }}>
             Oculta
           </span>
         </div>
       )}
 
-      {/* ── Stars (homepage style) ── */}
+      {/* Stars */}
       <div className="home-stars" style={{ marginBottom: '6px' }}>
         {[1, 2, 3, 4, 5].map(i => (
           <span key={i} className={`home-star${i <= stars ? ' home-star--filled' : ''}`}>★</span>
         ))}
       </div>
 
-      {/* ── Review text ── */}
+      {/* Text */}
       <p className="home-review-text" style={{ marginBottom: '10px' }}>{review.text}</p>
 
-      {/* ── Service tags ── */}
+      {/* Service tags */}
       {Array.isArray(review.services) && review.services.length > 0 && (
         <div className="home-review-services" style={{ marginBottom: '10px' }}>
           <span className="home-review-services-label">Servicios</span>
@@ -193,7 +254,7 @@ function ReviewCard({ review, confirmDelete, actionId, onRequestDelete, onCancel
         </div>
       )}
 
-      {/* ── Footer: avatar + name/date + source badge (homepage style) ── */}
+      {/* Footer: avatar + name + date + source */}
       <div className="home-review-footer">
         <div className="home-review-avatar">
           {review.avatar
@@ -210,64 +271,87 @@ function ReviewCard({ review, confirmDelete, actionId, onRequestDelete, onCancel
         )}
       </div>
 
-      {/* ── Admin strip ── */}
+      {/* ── Admin action strip ── */}
       <div style={{ borderTop: '1px solid #f0f0f0', paddingTop: '10px', marginTop: '10px' }}>
 
         {/* Deletion metadata */}
         {!review.isVisible && review.deletedAt && (
-          <p style={{ margin: '0 0 8px', fontSize: '0.7rem', color: '#c62828', fontFamily: FONT }}>
-            Eliminada el {fmtDate(review.deletedAt)}
+          <p style={{ margin: '0 0 8px', fontSize: '0.7rem', color: '#e65100', fontFamily: FONT }}>
+            Ocultada el {fmtDate(review.deletedAt)}
             {review.deletedBy ? ` · por ${review.deletedBy}` : ''}
           </p>
         )}
 
         {review.isVisible ? (
-          isPending ? (
-            /* Confirmation step */
-            <div style={{ fontSize: '0.8rem', fontFamily: FONT, lineHeight: 1.6 }}>
-              <p style={{ margin: '0 0 6px', color: '#c62828', fontWeight: 600 }}>
-                ¿Estás seguro de que quieres eliminar esta reseña?
+          /* ── Phase 1: Visible ── */
+          isPendingHide ? (
+            <div style={{ fontSize: '0.8rem', fontFamily: FONT }}>
+              <p style={{ margin: '0 0 6px', color: '#e65100', fontWeight: 600 }}>
+                ¿Ocultar esta reseña del sitio público?
+              </p>
+              <p style={{ margin: '0 0 8px', fontSize: '0.72rem', color: '#888' }}>
+                La reseña seguirá en la base de datos y podrás restaurarla luego.
               </p>
               <div style={{ display: 'flex', gap: '8px' }}>
-                <button
-                  onClick={onDelete}
-                  disabled={isBusy}
-                  style={{ background: '#c62828', color: '#fff', border: 'none', borderRadius: '4px', padding: '6px 14px', cursor: 'pointer', fontSize: '0.78rem', fontFamily: FONT, fontWeight: 600, opacity: isBusy ? 0.6 : 1 }}
-                >
-                  {isBusy ? 'Eliminando…' : 'Sí, eliminar'}
+                <button onClick={onHide} disabled={isBusy} style={dangerBtn}>
+                  {isBusy ? 'Ocultando…' : 'Sí, ocultar'}
                 </button>
-                <button
-                  onClick={onCancelDelete}
-                  style={{ background: '#fff', color: '#555', border: '1px solid #ddd', borderRadius: '4px', padding: '6px 14px', cursor: 'pointer', fontSize: '0.78rem', fontFamily: FONT }}
-                >
-                  Cancelar
-                </button>
+                <button onClick={onCancelHide} style={cancelBtn}>Cancelar</button>
               </div>
             </div>
           ) : (
-            /* Default: red delete button */
-            <button
-              onClick={onRequestDelete}
-              disabled={isBusy}
-              style={{ background: 'none', border: '1px solid #c62828', color: '#c62828', borderRadius: '4px', padding: '5px 14px', cursor: 'pointer', fontSize: '0.75rem', fontFamily: FONT, fontWeight: 600, opacity: isBusy ? 0.5 : 1 }}
-            >
-              Eliminar
+            <button onClick={onRequestHide} disabled={isBusy} style={outlineOrangeBtn}>
+              Ocultar
             </button>
           )
         ) : (
-          /* Hidden review: restore button */
-          <button
-            onClick={onRestore}
-            disabled={isBusy}
-            style={{ background: '#111', color: '#fff', border: 'none', borderRadius: '4px', padding: '5px 14px', cursor: 'pointer', fontSize: '0.75rem', fontFamily: FONT, fontWeight: 600, opacity: isBusy ? 0.5 : 1 }}
-          >
-            {isBusy ? 'Restaurando…' : 'Restaurar'}
-          </button>
+          /* ── Phase 2: Hidden ── */
+          isPendingPerm ? (
+            <div style={{ fontSize: '0.8rem', fontFamily: FONT }}>
+              <p style={{ margin: '0 0 6px', color: '#c62828', fontWeight: 700 }}>
+                ⚠ Esta acción es IRREVERSIBLE
+              </p>
+              <p style={{ margin: '0 0 8px', fontSize: '0.72rem', color: '#888' }}>
+                La reseña se borrará permanentemente de la base de datos y no podrá recuperarse.
+              </p>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button onClick={onPermanentDelete} disabled={isBusy} style={{ ...dangerBtn, background: '#c62828' }}>
+                  {isBusy ? 'Eliminando…' : 'Eliminar para siempre'}
+                </button>
+                <button onClick={onCancelPermanent} style={cancelBtn}>Cancelar</button>
+              </div>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              <button onClick={onRestore} disabled={isBusy} style={restoreBtn}>
+                {isBusy ? 'Restaurando…' : 'Restaurar'}
+              </button>
+              <button onClick={onRequestPermanent} disabled={isBusy} style={outlineRedBtn}>
+                Eliminar definitivamente
+              </button>
+            </div>
+          )
         )}
       </div>
     </div>
   );
 }
 
-const FONT         = "'Montserrat', sans-serif";
-const pageTitleStyle = { fontSize: '1.5rem', fontWeight: 700, margin: 0, letterSpacing: '1px', fontFamily: FONT };
+// ── Shared button styles ──────────────────────────────────────────────────────
+const FONT = "'Montserrat', sans-serif";
+
+const base = {
+  border: 'none', borderRadius: '0', padding: '6px 14px',
+  cursor: 'pointer', fontSize: '0.75rem', fontFamily: FONT, fontWeight: 600,
+};
+
+const dangerBtn      = { ...base, background: '#e65100', color: '#fff' };
+const cancelBtn      = { ...base, background: '#fff', color: '#555', border: '1px solid #ddd' };
+const restoreBtn     = { ...base, background: '#111', color: '#fff' };
+const outlineOrangeBtn = { ...base, background: 'none', border: '1px solid #e65100', color: '#e65100' };
+const outlineRedBtn  = { ...base, background: 'none', border: '1px solid #c62828', color: '#c62828' };
+
+const pageTitleStyle = {
+  fontFamily: "'Montserrat', sans-serif", fontSize: '2.8rem', fontWeight: 300,
+  letterSpacing: '5px', textTransform: 'uppercase', color: '#000000', margin: '0 0 22px 0',
+};

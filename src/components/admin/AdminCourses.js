@@ -2,7 +2,10 @@
 // 2.3 + 3.4 — Course cards with inline edit forms and direct S3 image upload.
 
 import React, { useState, useEffect, useRef } from 'react';
+import '../../styles/classes.css';
+import '../../styles/admin-courses.css';
 import { get, put } from 'aws-amplify/api';
+import SecurityPinModal from './SecurityPinModal';
 
 async function apiFetch(path) {
   const op = get({ apiName: 'checkoutApi', path });
@@ -35,13 +38,13 @@ export default function AdminCourses() {
 
   const handleClose = () => setEditingId(null);
 
-  if (loading) return <p style={{ color: '#aaa', fontFamily: FONT }}>Cargando cursos…</p>;
-  if (error)   return <p style={{ color: '#c62828', fontFamily: FONT }}>{error}</p>;
+  if (loading) return <p className="ac-status-text">Cargando cursos…</p>;
+  if (error)   return <p className="ac-status-text ac-status-error">{error}</p>;
 
   return (
     <div>
-      <h1 style={pageTitleStyle}>Cursos</h1>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+      <h1 className="admin-page-title">Cursos</h1>
+      <div className="ac-list">
         {courses.map(course =>
           editingId === course.courseId
             ? <CourseEditForm
@@ -61,38 +64,49 @@ export default function AdminCourses() {
   );
 }
 
-// ── Course summary card ─────────────────────────────────────────────────────
+// ── Course summary card ──────────────────────────────────────────────────────
 
 function CourseCard({ course, onEdit }) {
   const fmtDate = ts => ts
     ? new Date(ts).toLocaleDateString('es-GT', { month: 'short', day: 'numeric', year: 'numeric' })
     : null;
   return (
-    <div style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '8px', padding: '18px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px' }}>
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px', flexWrap: 'wrap' }}>
-          <h3 style={{ margin: 0, fontSize: '0.98rem', fontWeight: 700, fontFamily: FONT }}>{course.courseName}</h3>
-          {!course.isVisible && <Badge text="Oculto" />}
-          {course.promoActive && <Badge text="Promo activa" color="#e65100" />}
+    <div className="ac-card">
+      <div className="ac-card-info">
+        <div className="ac-card-title-row">
+          <h3 className="ac-card-name">{course.courseName}</h3>
+          <div className="ac-card-badges">
+            {!course.isVisible  && <span className="ac-badge ac-badge--hidden">Oculto</span>}
+            {course.promoActive && <span className="ac-badge ac-badge--promo">Promo activa</span>}
+          </div>
         </div>
-        <p style={{ margin: '0 0 4px', fontSize: '0.8rem', color: '#555', fontFamily: FONT }}>
+        <p className="ac-card-price">
           Q{course.price ?? '—'}
           {course.enrollmentFee != null && ` · Inscripción Q${course.enrollmentFee}`}
         </p>
         {course.lastUpdatedAt && (
-          <p style={{ margin: 0, fontSize: '0.7rem', color: '#bbb', fontFamily: FONT }}>
+          <p className="ac-card-meta">
             Actualizado: {fmtDate(course.lastUpdatedAt)} · {course.lastUpdatedBy || '?'}
           </p>
         )}
       </div>
-      <button onClick={onEdit} style={primaryBtn}>Editar</button>
+      <button onClick={onEdit} className="ac-btn ac-btn--primary">Editar</button>
     </div>
   );
 }
 
-// ── Inline edit form ────────────────────────────────────────────────────────
+// ── Inline edit form ─────────────────────────────────────────────────────────
 
 function CourseEditForm({ course, onSave, onClose }) {
+  const formRef = useRef(null);
+
+  // Scroll the form into view as soon as it opens
+  useEffect(() => {
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, []);
+
   const [form, setForm] = useState({
     description:       course.description       || '',
     price:             course.price             ?? '',
@@ -104,6 +118,7 @@ function CourseEditForm({ course, onSave, onClose }) {
     installments:      course.installments      || '',
     promo:             course.promo             || '',
     scheduleOptions:   Array.isArray(course.scheduleOptions) ? [...course.scheduleOptions] : [],
+    whatsappLinks:     Array.isArray(course.whatsappLinks) ? [...course.whatsappLinks] : course.scheduleOptions ? new Array(course.scheduleOptions.length).fill('') : [],
     imageUrls:         Array.isArray(course.imageUrls)       ? [...course.imageUrls]       : [],
     classes:           Array.isArray(course.classes)
                          ? course.classes.map(c => ({ ...c }))
@@ -115,7 +130,6 @@ function CourseEditForm({ course, onSave, onClose }) {
     isVisible:         course.isVisible !== false,
   });
 
-  // Tracks the persisted state shown in the footer; updates after each successful save
   const [savedMeta, setSavedMeta] = useState({
     lastUpdatedAt: course.lastUpdatedAt  || null,
     lastUpdatedBy: course.lastUpdatedBy  || null,
@@ -124,52 +138,63 @@ function CourseEditForm({ course, onSave, onClose }) {
   const [saving,    setSaving]    = useState(false);
   const [saveError, setSaveError] = useState(null);
   const [justSaved, setJustSaved] = useState(false);
+  const [pinAction, setPinAction] = useState(null);
 
   const set = (key, val) => setForm(f => ({ ...f, [key]: val }));
 
   // Schedule helpers
-  const addSchedule    = ()      => set('scheduleOptions', [...form.scheduleOptions, '']);
-  const removeSchedule = i       => set('scheduleOptions', form.scheduleOptions.filter((_, idx) => idx !== i));
-  const updateSchedule = (i, v) => set('scheduleOptions', form.scheduleOptions.map((s, idx) => idx === i ? v : s));
+  const addSchedule    = ()      => setForm(f => ({ ...f, scheduleOptions: [...f.scheduleOptions, ''], whatsappLinks: [...f.whatsappLinks, ''] }));
+  const removeSchedule = i       => setForm(f => ({ ...f, scheduleOptions: f.scheduleOptions.filter((_, idx) => idx !== i), whatsappLinks: f.whatsappLinks.filter((_, idx) => idx !== i) }));
+  const updateSchedule = (i, v)  => set('scheduleOptions', form.scheduleOptions.map((s, idx) => idx === i ? v : s));
+  const updateWhatsapp = (i, v)  => set('whatsappLinks', form.whatsappLinks.map((w, idx) => idx === i ? v : w));
 
   // Image URL helpers
   const addImageUrl    = ()      => set('imageUrls', [...form.imageUrls, '']);
   const removeImageUrl = i       => set('imageUrls', form.imageUrls.filter((_, idx) => idx !== i));
-  const updateImageUrl = (i, v) => set('imageUrls', form.imageUrls.map((u, idx) => idx === i ? v : u));
+  const updateImageUrl = (i, v)  => set('imageUrls', form.imageUrls.map((u, idx) => idx === i ? v : u));
 
   // Classes helpers
-  const addClass         = ()         => set('classes', [...form.classes, { name: '', date: '', topics: '' }]);
-  const addBreak         = ()         => set('classes', [...form.classes, { isBreak: true, text: '' }]);
-  const removeClass      = i          => set('classes', form.classes.filter((_, idx) => idx !== i));
+  const addClass         = ()            => set('classes', [...form.classes, { name: '', date: '', topics: '' }]);
+  const addBreak         = ()            => set('classes', [...form.classes, { isBreak: true, text: '' }]);
+  const removeClass      = i             => set('classes', form.classes.filter((_, idx) => idx !== i));
   const updateClass      = (i, field, v) => set('classes', form.classes.map((c, idx) => idx === i ? { ...c, [field]: v } : c));
 
   // ComplexClasses helpers
-  const addComplexClass         = ()         => set('complexClasses', [...form.complexClasses, { title: '', sessions: [''] }]);
-  const removeComplexClass      = i          => set('complexClasses', form.complexClasses.filter((_, idx) => idx !== i));
-  const updateComplexTitle      = (i, v)     => set('complexClasses', form.complexClasses.map((cc, idx) => idx === i ? { ...cc, title: v } : cc));
-  const addComplexSession       = i          => set('complexClasses', form.complexClasses.map((cc, idx) => idx === i ? { ...cc, sessions: [...cc.sessions, ''] } : cc));
-  const removeComplexSession    = (i, si)    => set('complexClasses', form.complexClasses.map((cc, idx) => idx === i ? { ...cc, sessions: cc.sessions.filter((_, sidx) => sidx !== si) } : cc));
-  const updateComplexSession    = (i, si, v) => set('complexClasses', form.complexClasses.map((cc, idx) => idx === i ? { ...cc, sessions: cc.sessions.map((s, sidx) => sidx === si ? v : s) } : cc));
+  const addComplexClass      = ()         => set('complexClasses', [...form.complexClasses, { title: '', sessions: [''] }]);
+  const removeComplexClass   = i          => set('complexClasses', form.complexClasses.filter((_, idx) => idx !== i));
+  const updateComplexTitle   = (i, v)     => set('complexClasses', form.complexClasses.map((cc, idx) => idx === i ? { ...cc, title: v } : cc));
+  const addComplexSession    = i          => set('complexClasses', form.complexClasses.map((cc, idx) => idx === i ? { ...cc, sessions: [...cc.sessions, ''] } : cc));
+  const removeComplexSession = (i, si)    => set('complexClasses', form.complexClasses.map((cc, idx) => idx === i ? { ...cc, sessions: cc.sessions.filter((_, sidx) => sidx !== si) } : cc));
+  const updateComplexSession = (i, si, v) => set('complexClasses', form.complexClasses.map((cc, idx) => idx === i ? { ...cc, sessions: cc.sessions.map((s, sidx) => sidx === si ? v : s) } : cc));
+
+  const triggerSave = () => {
+    const priceChanged = String(form.price ?? '') !== String(course.price ?? '');
+    const feeChanged   = String(form.enrollmentFee ?? '') !== String(course.enrollmentFee ?? '');
+    if (priceChanged || feeChanged) {
+      setPinAction(() => handleSave);
+    } else {
+      handleSave();
+    }
+  };
 
   const handleSave = async () => {
     setSaving(true);
     setSaveError(null);
     setJustSaved(false);
     try {
+      const validScheduleIndices = form.scheduleOptions.map((s, i) => s.trim() !== '' ? i : -1).filter(i => i !== -1);
       const payload = {
         ...form,
         price:         form.price         !== '' ? Number(form.price)         : null,
         enrollmentFee: form.enrollmentFee !== '' ? Number(form.enrollmentFee) : null,
-        // Strip empty strings from arrays
-        scheduleOptions: form.scheduleOptions.filter(s => s.trim() !== ''),
+        scheduleOptions: validScheduleIndices.map(i => form.scheduleOptions[i].trim()),
+        whatsappLinks:   validScheduleIndices.map(i => (form.whatsappLinks[i] || '').trim()),
         imageUrls:       form.imageUrls.filter(u => u.trim() !== ''),
-        // Trim plain text fields
         instructor:        form.instructor.trim()        || null,
         level:             form.level.trim()             || null,
         materialsRequired: form.materialsRequired.trim() || null,
         installments:      form.installments.trim()      || null,
         promo:             form.promo.trim()             || null,
-        // Class lists — strip empty entries
         classes: form.classes
           .filter(c => c.isBreak ? c.text?.trim() : (c.name?.trim() || c.topics?.trim()))
           .map(c => c.isBreak
@@ -181,9 +206,8 @@ function CourseEditForm({ course, onSave, onClose }) {
           .map(cc => ({ title: cc.title.trim(), sessions: (cc.sessions || []).filter(s => s.trim()) })),
       };
       await apiPut(`/admin/courses/${course.courseId}`, payload);
-
       const nowTs = Date.now();
-      setSavedMeta({ lastUpdatedAt: nowTs, lastUpdatedBy: null }); // Lambda sets exact value; we show local approximation
+      setSavedMeta({ lastUpdatedAt: nowTs, lastUpdatedBy: null });
       setJustSaved(true);
       onSave({ ...payload, lastUpdatedAt: nowTs });
       setTimeout(() => setJustSaved(false), 4000);
@@ -199,246 +223,210 @@ function CourseEditForm({ course, onSave, onClose }) {
     : null;
 
   return (
-    <div style={{ background: '#fff', border: '2px solid #111', borderRadius: '8px', padding: '22px 24px' }}>
+    <div className="ac-form" ref={formRef}>
 
-      {/* Header: course name (read-only) + close */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px', gap: '12px' }}>
+      {/* ── Header ── */}
+      <div className="ac-form-header">
         <div>
-          <p style={{ margin: '0 0 2px', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#aaa', fontFamily: FONT }}>Editando curso</p>
-          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, fontFamily: FONT }}>{course.courseName}</h3>
+          <p className="ac-form-header-label">Editando curso</p>
+          <h3 className="ac-form-header-title">{course.courseName}</h3>
         </div>
-        <button onClick={onClose} style={ghostBtn}>Cerrar</button>
+        <button onClick={onClose} className="ac-btn ac-btn--ghost">✕ Cerrar</button>
       </div>
 
-      {/* ── Pricing ── */}
+      {/* ── PRECIOS ── */}
       <SectionDivider label="Precios" />
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
-        <Field label="Precio (Q)">
-          <input type="number" value={form.price} onChange={e => set('price', e.target.value)} style={inputStyle} min="0" placeholder="2200" />
+      <div className="ac-grid-2">
+        <Field label="Precio del Curso (Q)" hint="Precio principal que verán los estudiantes">
+          <input type="number" value={form.price} onChange={e => set('price', e.target.value)} className="ac-input" min="0" placeholder="2200" />
         </Field>
-        <Field label="Cuota de Inscripción (Q)">
-          <input type="number" value={form.enrollmentFee} onChange={e => set('enrollmentFee', e.target.value)} style={inputStyle} min="0" placeholder="Usa precio global si vacío" />
+        <Field label="Cuota de Inscripción (Q)" hint="Dejar vacío usa el valor global de configuración">
+          <input type="number" value={form.enrollmentFee} onChange={e => set('enrollmentFee', e.target.value)} className="ac-input" min="0" placeholder="200" />
         </Field>
       </div>
 
-      {/* ── Content ── */}
-      <SectionDivider label="Contenido" />
+      {/* ── CONTENIDO ── */}
+      <SectionDivider label="Contenido del Curso" />
 
-      <Field label="Impartido Por">
-        <input value={form.instructor} onChange={e => set('instructor', e.target.value)} style={inputStyle} placeholder="Ej: NUESTRO TEAM DE PROFESIONALES" />
+      <Field label="Instructor / Impartido por">
+        <input value={form.instructor} onChange={e => set('instructor', e.target.value)} className="ac-input" placeholder="Ej: NUESTRO TEAM DE PROFESIONALES" />
       </Field>
 
-      <Field label="Descripción">
-        <textarea value={form.description} onChange={e => set('description', e.target.value)} rows={4} style={{ ...inputStyle, resize: 'vertical' }} placeholder="Descripción detallada del módulo…" />
+      <Field label="Descripción del Curso">
+        <textarea value={form.description} onChange={e => set('description', e.target.value)} rows={4} className="ac-input ac-textarea" placeholder="Descripción detallada del módulo…" />
       </Field>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
-        <Field label="Nivel">
-          <input value={form.level} onChange={e => set('level', e.target.value)} style={inputStyle} placeholder="Ej: Principiante/Intermedio" />
+      <div className="ac-grid-2">
+        <Field label="Nivel" hint="Ej: Principiante / Intermedio / Avanzado">
+          <input value={form.level} onChange={e => set('level', e.target.value)} className="ac-input" placeholder="Principiante/Intermedio" />
         </Field>
         <Field label="Materiales Requeridos">
-          <input value={form.materialsRequired} onChange={e => set('materialsRequired', e.target.value)} style={inputStyle} placeholder="Ej: Plancha, tubo y cepillo" />
+          <input value={form.materialsRequired} onChange={e => set('materialsRequired', e.target.value)} className="ac-input" placeholder="Plancha, tubo y cepillo…" />
         </Field>
       </div>
 
       <Field label="Fechas del Curso">
-        <input value={form.dates} onChange={e => set('dates', e.target.value)} style={inputStyle} placeholder="Ej: 27 DE ENERO – 17 DE FEBRERO" />
+        <input value={form.dates} onChange={e => set('dates', e.target.value)} className="ac-input" placeholder="Ej: 27 DE ENERO – 17 DE FEBRERO" />
       </Field>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
+      <div className="ac-grid-2">
         <Field label="Cuotas / Pagos">
-          <input value={form.installments} onChange={e => set('installments', e.target.value)} style={inputStyle} placeholder="Ej: HASTA 3 CUOTAS SIN RECARGO" />
+          <input value={form.installments} onChange={e => set('installments', e.target.value)} className="ac-input" placeholder="HASTA 3 CUOTAS SIN RECARGO" />
         </Field>
-        <Field label="Texto de Promo (detalle del curso)">
-          <input value={form.promo} onChange={e => set('promo', e.target.value)} style={inputStyle} placeholder="Ej: *DEMO MAKEUP GRATIS" />
+        <Field label="Texto Promocional">
+          <input value={form.promo} onChange={e => set('promo', e.target.value)} className="ac-input" placeholder="*DEMO MAKEUP GRATIS" />
         </Field>
       </div>
 
-      {/* ── Schedule options ── */}
-      <SectionDivider label="Horarios" />
-      <Field label="Opciones de Horario">
-        {form.scheduleOptions.map((s, i) => (
-          <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '6px' }}>
-            <input
-              value={s}
-              onChange={e => updateSchedule(i, e.target.value)}
-              style={{ ...inputStyle, flex: 1 }}
-              placeholder="Ej: Lunes y miércoles 2PM a 4PM"
-            />
-            <button
-              onClick={() => removeSchedule(i)}
-              title="Eliminar horario"
-              style={removeBtn}
-            >✕</button>
+      {/* ── HORARIOS ── */}
+      <SectionDivider label="Horarios y WhatsApp" />
+      <p className="ac-hint-text">Cada opción de horario puede tener su propio enlace de grupo de WhatsApp.</p>
+      {form.scheduleOptions.map((s, i) => (
+        <div key={i} className="ac-schedule-block">
+          <div className="ac-schedule-block-header">
+            <span className="ac-schedule-num">Opción {i + 1}</span>
+            <button onClick={() => removeSchedule(i)} className="ac-btn-remove" title="Eliminar horario">✕</button>
           </div>
-        ))}
-        <button onClick={addSchedule} style={{ ...ghostBtn, marginTop: '4px', fontSize: '0.78rem' }}>+ Agregar horario</button>
-      </Field>
-
-      {/* ── Image URLs ── */}
-      <SectionDivider label="Imágenes" />
-      <Field label="Imágenes del Curso">
-        <p style={{ margin: '0 0 8px', fontSize: '0.75rem', color: '#999', fontFamily: FONT }}>
-          Sube una imagen desde tu computadora o pega una URL manualmente. Las imágenes se muestran en el orden ingresado.
-        </p>
-        {form.imageUrls.length === 0 && (
-          <p style={{ fontSize: '0.8rem', color: '#ccc', fontStyle: 'italic', margin: '0 0 8px', fontFamily: FONT }}>
-            Sin imágenes — se usarán las imágenes predeterminadas del curso.
-          </p>
-        )}
-        {form.imageUrls.map((url, i) => (
-          <ImageUploadRow
-            key={i}
-            index={i}
-            url={url}
-            courseId={course.courseId}
-            onUpdate={v => updateImageUrl(i, v)}
-            onRemove={() => removeImageUrl(i)}
+          <input
+            value={s}
+            onChange={e => updateSchedule(i, e.target.value)}
+            className="ac-input ac-input--bold"
+            placeholder="Ej: Lunes y Miércoles 2PM a 4PM"
           />
-        ))}
-        <button onClick={addImageUrl} style={{ ...ghostBtn, marginTop: '4px', fontSize: '0.78rem' }}>+ Agregar imagen</button>
-      </Field>
-
-      {/* ── Classes ── */}
-      <SectionDivider label="Clases" />
-      <Field label="Lista de Clases">
-        <p style={{ margin: '0 0 10px', fontSize: '0.75rem', color: '#999', fontFamily: FONT }}>
-          Cada fila es una clase. Usa "Agregar descanso" para semanas sin clase (ej: Semana Santa).
-        </p>
-        {form.classes.map((cls, i) => (
-          <div key={i} style={{ marginBottom: '8px' }}>
-            {cls.isBreak ? (
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#aaa', fontFamily: FONT, minWidth: '52px', textTransform: 'uppercase' }}>Descanso</span>
-                <input
-                  value={cls.text || ''}
-                  onChange={e => updateClass(i, 'text', e.target.value)}
-                  style={{ ...inputStyle, flex: 1, fontStyle: 'italic' }}
-                  placeholder="Ej: SEMANA SANTA (NO HAY CLASE)"
-                />
-                <button onClick={() => removeClass(i)} style={removeBtn} title="Eliminar">✕</button>
-              </div>
-            ) : (
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#bbb', fontFamily: FONT, minWidth: '18px', textAlign: 'right' }}>{i + 1}.</span>
-                <input
-                  value={cls.name || ''}
-                  onChange={e => updateClass(i, 'name', e.target.value)}
-                  style={{ ...inputStyle, width: '90px', flexShrink: 0 }}
-                  placeholder="Clase 1:"
-                />
-                <input
-                  value={cls.date || ''}
-                  onChange={e => updateClass(i, 'date', e.target.value)}
-                  style={{ ...inputStyle, width: '130px', flexShrink: 0 }}
-                  placeholder="Martes 27 de Enero"
-                />
-                <input
-                  value={cls.topics || ''}
-                  onChange={e => updateClass(i, 'topics', e.target.value)}
-                  style={{ ...inputStyle, flex: 1 }}
-                  placeholder="Tema de la clase"
-                />
-                <button onClick={() => removeClass(i)} style={removeBtn} title="Eliminar">✕</button>
-              </div>
-            )}
-          </div>
-        ))}
-        <div style={{ display: 'flex', gap: '8px', marginTop: '6px' }}>
-          <button onClick={addClass} style={{ ...ghostBtn, fontSize: '0.78rem' }}>+ Agregar clase</button>
-          <button onClick={addBreak}  style={{ ...ghostBtn, fontSize: '0.78rem' }}>+ Agregar descanso</button>
+          <input
+            value={form.whatsappLinks[i] || ''}
+            onChange={e => updateWhatsapp(i, e.target.value)}
+            className="ac-input ac-input--mono"
+            placeholder="https://chat.whatsapp.com/… (opcional)"
+          />
         </div>
-      </Field>
+      ))}
+      <button onClick={addSchedule} className="ac-btn ac-btn--add">+ Agregar horario</button>
 
-      {/* ── Complex Classes (Masterclass + Práctica pairs) ── */}
-      <SectionDivider label="Módulos Complejos (Masterclass / Práctica)" />
-      <Field label="Módulos con Sesiones">
-        <p style={{ margin: '0 0 10px', fontSize: '0.75rem', color: '#999', fontFamily: FONT }}>
-          Para módulos que tienen varias sesiones por tema (ej: Maestría con Masterclass + Práctica).
-        </p>
-        {form.complexClasses.map((cc, i) => (
-          <div key={i} style={{ border: '1px solid #f0f0f0', borderRadius: '6px', padding: '12px 14px', marginBottom: '10px' }}>
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'center' }}>
-              <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#bbb', fontFamily: FONT, minWidth: '22px' }}>#{i + 1}</span>
+      {/* ── IMÁGENES ── */}
+      <SectionDivider label="Imágenes del Curso" />
+      <p className="ac-hint-text">
+        Sube imágenes desde tu computadora o pega una URL. La primera imagen se muestra en la tarjeta del curso.
+      </p>
+      {form.imageUrls.length === 0 && (
+        <p className="ac-empty-text">Sin imágenes — se usarán las predeterminadas del curso.</p>
+      )}
+      {form.imageUrls.map((url, i) => (
+        <ImageUploadRow
+          key={i}
+          index={i}
+          url={url}
+          courseId={course.courseId}
+          onUpdate={v => updateImageUrl(i, v)}
+          onRemove={() => removeImageUrl(i)}
+        />
+      ))}
+      <button onClick={addImageUrl} className="ac-btn ac-btn--add">+ Agregar imagen</button>
+
+      {/* ── CLASES ── */}
+      <SectionDivider label="Lista de Clases" />
+      <p className="ac-hint-text">Cada fila es una clase. Usa "Agregar descanso" para semanas sin clase (ej: Semana Santa).</p>
+      {form.classes.map((cls, i) => (
+        <div key={i} className="ac-class-row">
+          {cls.isBreak ? (
+            <div className="ac-class-row-inner">
+              <span className="ac-class-break-tag">Descanso</span>
               <input
-                value={cc.title || ''}
-                onChange={e => updateComplexTitle(i, e.target.value)}
-                style={{ ...inputStyle, flex: 1, fontWeight: 600 }}
-                placeholder="Título del módulo (ej: Semirecogido con ondas retro)"
+                value={cls.text || ''}
+                onChange={e => updateClass(i, 'text', e.target.value)}
+                className="ac-input ac-input--italic"
+                placeholder="Ej: SEMANA SANTA (NO HAY CLASE)"
               />
-              <button onClick={() => removeComplexClass(i)} style={removeBtn} title="Eliminar módulo">✕</button>
+              <button onClick={() => removeClass(i)} className="ac-btn-remove" title="Eliminar">✕</button>
             </div>
+          ) : (
+            <div className="ac-class-row-inner ac-class-row-inner--cols">
+              <span className="ac-class-num">{i + 1}.</span>
+              <input value={cls.name || ''} onChange={e => updateClass(i, 'name', e.target.value)} className="ac-input ac-class-name-input" placeholder="Clase 1:" />
+              <input value={cls.date || ''} onChange={e => updateClass(i, 'date', e.target.value)} className="ac-input ac-class-date-input" placeholder="Martes 27 de Enero" />
+              <input value={cls.topics || ''} onChange={e => updateClass(i, 'topics', e.target.value)} className="ac-input ac-class-topics-input" placeholder="Tema de la clase" />
+              <button onClick={() => removeClass(i)} className="ac-btn-remove" title="Eliminar">✕</button>
+            </div>
+          )}
+        </div>
+      ))}
+      <div className="ac-btn-row">
+        <button onClick={addClass} className="ac-btn ac-btn--add">+ Agregar clase</button>
+        <button onClick={addBreak}  className="ac-btn ac-btn--add">+ Agregar descanso</button>
+      </div>
+
+      {/* ── MÓDULOS COMPLEJOS ── */}
+      <SectionDivider label="Módulos Complejos (Masterclass + Práctica)" />
+      <p className="ac-hint-text">Para módulos con múltiples sesiones por tema (ej: Maestría con Masterclass + Práctica).</p>
+      {form.complexClasses.map((cc, i) => (
+        <div key={i} className="ac-complex-block">
+          <div className="ac-complex-block-header">
+            <span className="ac-complex-num">Módulo {i + 1}</span>
+            <button onClick={() => removeComplexClass(i)} className="ac-btn-remove" title="Eliminar módulo">✕</button>
+          </div>
+          <input
+            value={cc.title || ''}
+            onChange={e => updateComplexTitle(i, e.target.value)}
+            className="ac-input ac-input--bold"
+            placeholder="Título del módulo (ej: Semirecogido con ondas retro)"
+          />
+          <div className="ac-complex-sessions">
             {(cc.sessions || []).map((session, si) => (
-              <div key={si} style={{ display: 'flex', gap: '8px', marginBottom: '6px', paddingLeft: '30px' }}>
+              <div key={si} className="ac-complex-session-row">
+                <span className="ac-complex-session-dot">›</span>
                 <input
                   value={session}
                   onChange={e => updateComplexSession(i, si, e.target.value)}
-                  style={{ ...inputStyle, flex: 1, fontSize: '0.78rem' }}
+                  className="ac-input"
                   placeholder="Ej: Clase 11: Masterclass Miércoles 15 de Abril"
                 />
-                <button onClick={() => removeComplexSession(i, si)} style={removeBtn} title="Eliminar sesión">✕</button>
+                <button onClick={() => removeComplexSession(i, si)} className="ac-btn-remove" title="Eliminar sesión">✕</button>
               </div>
             ))}
-            <button onClick={() => addComplexSession(i)} style={{ ...ghostBtn, marginLeft: '30px', marginTop: '2px', fontSize: '0.75rem' }}>+ Sesión</button>
+            <button onClick={() => addComplexSession(i)} className="ac-btn ac-btn--add ac-btn--indent">+ Agregar sesión</button>
           </div>
-        ))}
-        <button onClick={addComplexClass} style={{ ...ghostBtn, fontSize: '0.78rem' }}>+ Agregar módulo complejo</button>
-      </Field>
+        </div>
+      ))}
+      <button onClick={addComplexClass} className="ac-btn ac-btn--add">+ Agregar módulo complejo</button>
 
-      {/* ── Visibility ── */}
+      {/* ── VISIBILIDAD ── */}
       <SectionDivider label="Visibilidad" />
-      <div style={{ display: 'flex', gap: '28px', marginBottom: '18px', flexWrap: 'wrap' }}>
+      <div className="ac-toggles">
         <Toggle label="Promo activa"        checked={form.promoActive} onChange={v => set('promoActive', v)} />
         <Toggle label="Visible en el sitio" checked={form.isVisible}   onChange={v => set('isVisible',  v)} />
       </div>
 
-      {/* ── Save / error ── */}
-      {saveError && (
-        <p style={{ color: '#c62828', fontSize: '0.82rem', marginBottom: '12px', fontFamily: FONT }}>
-          {saveError}
-        </p>
-      )}
+      {/* ── Feedback & Save ── */}
+      <div className="ac-form-footer">
+        {saveError && <p className="ac-feedback ac-feedback--error">⚠ {saveError}</p>}
+        {justSaved && <p className="ac-feedback ac-feedback--success">✓ Cambios guardados correctamente.</p>}
 
-      {justSaved && (
-        <p style={{ color: '#2e7d32', fontSize: '0.82rem', marginBottom: '12px', fontFamily: FONT, fontWeight: 600 }}>
-          Cambios guardados correctamente.
-        </p>
-      )}
+        <div className="ac-save-row">
+          <button onClick={triggerSave} disabled={saving} className={`ac-btn ac-btn--primary ac-btn--save${saving ? ' ac-btn--saving' : ''}`}>
+            {saving ? 'Guardando…' : 'Guardar Cambios'}
+          </button>
+          <button onClick={onClose} className="ac-btn ac-btn--ghost">Cancelar</button>
+        </div>
 
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          style={{ ...primaryBtn, opacity: saving ? 0.6 : 1, minWidth: '140px' }}
-        >
-          {saving ? 'Guardando…' : 'Guardar Cambios'}
-        </button>
-        <button onClick={onClose} style={ghostBtn}>Cerrar</button>
+        <div className="ac-last-saved">
+          {savedMeta.lastUpdatedAt
+            ? `Último guardado: ${fmtDate(savedMeta.lastUpdatedAt)}${savedMeta.lastUpdatedBy ? ` · por ${savedMeta.lastUpdatedBy}` : ''}`
+            : 'Este curso aún no ha sido editado desde el panel de administración.'
+          }
+        </div>
       </div>
 
-      {/* ── Last saved metadata ── */}
-      <div style={{ borderTop: '1px solid #f0f0f0', paddingTop: '12px' }}>
-        {savedMeta.lastUpdatedAt ? (
-          <p style={{ margin: 0, fontSize: '0.72rem', color: '#bbb', fontFamily: FONT }}>
-            Último guardado: {fmtDate(savedMeta.lastUpdatedAt)}
-            {savedMeta.lastUpdatedBy && ` · por ${savedMeta.lastUpdatedBy}`}
-          </p>
-        ) : (
-          <p style={{ margin: 0, fontSize: '0.72rem', color: '#ddd', fontFamily: FONT, fontStyle: 'italic' }}>
-            Este curso aún no ha sido editado desde el panel de administración.
-          </p>
-        )}
-      </div>
+      <SecurityPinModal
+        isOpen={!!pinAction}
+        onSuccess={() => { const ac = pinAction; setPinAction(null); if (ac) ac(); }}
+        onClose={() => setPinAction(null)}
+        message="Estás modificando el precio de un curso. Ingresa el PIN de seguridad para continuar."
+      />
     </div>
   );
 }
 
-// ── Image upload row (3.4) ───────────────────────────────────────────────────
-// Wraps a URL text input with a "Subir" button that:
-//   1. Opens a file picker (images only)
-//   2. Calls GET /admin/presigned-upload-url to get a short-lived S3 PUT URL
-//   3. PUTs the file directly to S3 from the browser (no server memory used)
-//   4. Auto-fills the URL input with the permanent public S3 URL
+// ── Image upload row ─────────────────────────────────────────────────────────
 
 function ImageUploadRow({ index, url, courseId, onUpdate, onRemove }) {
   const fileInputRef = useRef(null);
@@ -448,127 +436,74 @@ function ImageUploadRow({ index, url, courseId, onUpdate, onRemove }) {
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    e.target.value = ''; // reset so the same file can be re-selected
-
+    e.target.value = '';
     setUploading(true);
     setUploadError(null);
     try {
-      // Step 1 — ask Lambda for a presigned PUT URL
       const op = get({
         apiName: 'checkoutApi',
         path: '/admin/presigned-upload-url',
-        options: {
-          queryParams: {
-            fileName:    file.name,
-            contentType: file.type,
-            courseId:    courseId || 'general',
-          },
-        },
+        options: { queryParams: { fileName: file.name, contentType: file.type, courseId: courseId || 'general' } },
       });
       const { body } = await op.response;
       const { uploadUrl, publicUrl } = await body.json();
-
-      // Step 2 — upload directly to S3 using the presigned URL
-      const s3Res = await fetch(uploadUrl, {
-        method:  'PUT',
-        body:    file,
-        headers: { 'Content-Type': file.type },
-      });
+      const s3Res = await fetch(uploadUrl, { method: 'PUT', body: file, headers: { 'Content-Type': file.type } });
       if (!s3Res.ok) throw new Error(`S3 responded with ${s3Res.status}`);
-
-      // Step 3 — auto-fill the URL field
       onUpdate(publicUrl);
     } catch (err) {
       console.error('Image upload failed:', err);
-      setUploadError('Error al subir. Verifica que el bucket beauty-station-images existe y tiene CORS habilitado.');
+      setUploadError('Error al subir. Verifica que el bucket beauty-station-images tiene CORS habilitado.');
     } finally {
       setUploading(false);
     }
   };
 
   return (
-    <div>
-      <div style={{ display: 'flex', gap: '8px', marginBottom: uploadError ? '2px' : '6px', alignItems: 'center' }}>
-        <span style={{ fontSize: '0.7rem', color: '#bbb', fontFamily: FONT, minWidth: '18px', textAlign: 'right' }}>
-          {index + 1}.
-        </span>
-
+    <div className="ac-image-row">
+      <div className="ac-image-row-inputs">
+        <span className="ac-image-num">{index + 1}.</span>
         {uploading ? (
-          <div style={{ flex: 1, padding: '7px 10px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '0.78rem', fontFamily: FONT, color: '#aaa', background: '#fafafa' }}>
-            Subiendo imagen…
-          </div>
+          <div className="ac-image-uploading">Subiendo imagen…</div>
         ) : (
           <input
             value={url}
             onChange={e => onUpdate(e.target.value)}
-            style={{ ...inputStyle, flex: 1, fontFamily: 'monospace', fontSize: '0.78rem' }}
+            className="ac-input ac-input--mono"
             placeholder="https://… o haz clic en Subir"
           />
         )}
-
-        {/* Hidden native file picker — accepts images only */}
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          style={{ display: 'none' }}
-          onChange={handleFileChange}
-        />
-
-        {/* Upload trigger */}
-        <button
-          onClick={() => { setUploadError(null); fileInputRef.current?.click(); }}
-          disabled={uploading}
-          title="Subir imagen desde tu computadora"
-          style={{
-            background: '#fff', border: '1px solid #7D4E61', color: '#7D4E61',
-            borderRadius: '4px', padding: '0 12px', cursor: uploading ? 'default' : 'pointer',
-            fontSize: '0.75rem', fontFamily: FONT, fontWeight: 600,
-            height: '36px', flexShrink: 0, opacity: uploading ? 0.5 : 1,
-          }}
-        >
-          {uploading ? '…' : 'Subir'}
+        <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
+        <button onClick={() => { setUploadError(null); fileInputRef.current?.click(); }} disabled={uploading} className="ac-btn ac-btn--upload" title="Subir imagen">
+          {uploading ? '…' : '↑ Subir'}
         </button>
-
-        <button onClick={onRemove} title="Eliminar imagen" style={removeBtn} disabled={uploading}>✕</button>
+        <button onClick={onRemove} className="ac-btn-remove" disabled={uploading} title="Eliminar imagen">✕</button>
       </div>
-
-      {/* Inline preview of uploaded image */}
       {!uploading && url && url.startsWith('http') && (
-        <div style={{ marginLeft: '28px', marginBottom: '6px' }}>
-          <img
-            src={url}
-            alt={`Imagen ${index + 1}`}
-            style={{ height: '60px', borderRadius: '4px', border: '1px solid #eee', objectFit: 'cover' }}
-            onError={e => { e.target.style.display = 'none'; }}
-          />
+        <div className="ac-image-preview-wrap">
+          <img src={url} alt={`Imagen ${index + 1}`} className="ac-image-preview" onError={e => { e.target.style.display = 'none'; }} />
         </div>
       )}
-
-      {uploadError && (
-        <p style={{ margin: '0 0 6px 28px', fontSize: '0.7rem', color: '#c62828', fontFamily: FONT }}>
-          {uploadError}
-        </p>
-      )}
+      {uploadError && <p className="ac-image-error">{uploadError}</p>}
     </div>
   );
 }
 
-// ── Shared primitives ───────────────────────────────────────────────────────
+// ── Shared primitives ────────────────────────────────────────────────────────
 
 function SectionDivider({ label }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px', marginTop: '4px' }}>
-      <span style={{ fontSize: '0.62rem', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#aaa', fontFamily: FONT, whiteSpace: 'nowrap' }}>{label}</span>
-      <div style={{ flex: 1, height: '1px', background: '#f0f0f0' }} />
+    <div className="ac-section-divider">
+      <span className="ac-section-divider-label">{label}</span>
+      <div className="ac-section-divider-line" />
     </div>
   );
 }
 
-function Field({ label, children }) {
+function Field({ label, hint, children }) {
   return (
-    <div style={{ marginBottom: '14px' }}>
-      <label style={labelStyle}>{label}</label>
+    <div className="ac-field">
+      <label className="ac-field-label">{label}</label>
+      {hint && <p className="ac-field-hint">{hint}</p>}
       {children}
     </div>
   );
@@ -576,39 +511,11 @@ function Field({ label, children }) {
 
 function Toggle({ label, checked, onChange }) {
   return (
-    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.84rem', fontFamily: FONT }}>
-      <div
-        onClick={() => onChange(!checked)}
-        style={{
-          width: '38px', height: '20px', borderRadius: '10px',
-          background: checked ? '#111' : '#ccc',
-          position: 'relative', transition: 'background 0.2s', cursor: 'pointer', flexShrink: 0,
-        }}
-      >
-        <div style={{
-          width: '14px', height: '14px', borderRadius: '50%', background: '#fff',
-          position: 'absolute', top: '3px',
-          left: checked ? '21px' : '3px',
-          transition: 'left 0.2s',
-        }} />
+    <label className="ac-toggle">
+      <div className={`ac-toggle-track${checked ? ' ac-toggle-track--on' : ''}`} onClick={() => onChange(!checked)}>
+        <div className="ac-toggle-thumb" />
       </div>
-      {label}
+      <span className="ac-toggle-label">{label}</span>
     </label>
   );
 }
-
-function Badge({ text, color = '#555' }) {
-  return (
-    <span style={{ background: '#f5f5f5', border: '1px solid #ddd', borderRadius: '4px', padding: '2px 7px', fontSize: '0.68rem', color, fontFamily: FONT, fontWeight: 600 }}>
-      {text}
-    </span>
-  );
-}
-
-const FONT       = "'Montserrat', sans-serif";
-const inputStyle = { width: '100%', padding: '8px 10px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '0.85rem', fontFamily: FONT, boxSizing: 'border-box', outline: 'none' };
-const labelStyle = { display: 'block', fontSize: '0.7rem', fontWeight: 700, marginBottom: '5px', color: '#666', textTransform: 'uppercase', letterSpacing: '0.5px', fontFamily: FONT };
-const primaryBtn = { background: '#111', color: '#fff', border: 'none', borderRadius: '4px', padding: '9px 18px', cursor: 'pointer', fontSize: '0.82rem', fontFamily: FONT, fontWeight: 600 };
-const ghostBtn   = { background: '#fff', color: '#333', border: '1px solid #ddd', borderRadius: '4px', padding: '9px 14px', cursor: 'pointer', fontSize: '0.82rem', fontFamily: FONT };
-const removeBtn  = { background: '#fff', border: '1px solid #e0e0e0', borderRadius: '4px', padding: '0 10px', cursor: 'pointer', color: '#c62828', fontSize: '1rem', fontFamily: FONT, height: '36px', flexShrink: 0 };
-const pageTitleStyle = { fontSize: '1.5rem', fontWeight: 700, marginBottom: '20px', letterSpacing: '1px', fontFamily: FONT };

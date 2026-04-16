@@ -3,6 +3,7 @@
 //        date range, pagination (50/page), and CSV export.
 
 import React, { useState, useEffect, useMemo } from 'react';
+import '../../styles/classes.css';
 import { get } from 'aws-amplify/api';
 
 const PAGE_SIZE = 50;
@@ -137,12 +138,12 @@ export default function AdminRegistrations() {
     <div>
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
-        <h1 style={pageTitleStyle}>Inscripciones</h1>
+        <h1 className="admin-page-title">Inscripciones</h1>
         <button onClick={exportCSV} style={primaryBtn}>Exportar CSV</button>
       </div>
 
       {/* Filters */}
-      <div style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '8px', padding: '14px 16px', marginBottom: '14px', display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'flex-end' }}>
+      <div style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '0', padding: '14px 16px', marginBottom: '14px', display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'flex-end' }}>
         <div>
           <label style={labelStyle}>Buscar</label>
           <input
@@ -183,7 +184,7 @@ export default function AdminRegistrations() {
       </p>
 
       {/* Table */}
-      <div style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '8px', overflowX: 'auto' }}>
+      <div style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '0', overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.8rem', fontFamily: FONT }}>
           <thead>
             <tr style={{ background: '#f5f5f5', borderBottom: '2px solid #e0e0e0' }}>
@@ -246,10 +247,10 @@ export default function AdminRegistrations() {
 }
 
 const FONT         = "'Montserrat', sans-serif";
-const inputStyle   = { padding: '7px 10px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '0.83rem', fontFamily: FONT, boxSizing: 'border-box', outline: 'none' };
+const inputStyle   = { padding: '7px 10px', border: '1px solid #ddd', borderRadius: '0', fontSize: '0.83rem', fontFamily: FONT, boxSizing: 'border-box', outline: 'none' };
 const labelStyle   = { display: 'block', fontSize: '0.68rem', fontWeight: 700, marginBottom: '4px', color: '#666', textTransform: 'uppercase', letterSpacing: '0.5px', fontFamily: FONT };
-const primaryBtn   = { background: '#111', color: '#fff', border: 'none', borderRadius: '4px', padding: '9px 18px', cursor: 'pointer', fontSize: '0.82rem', fontFamily: FONT, fontWeight: 600 };
-const ghostBtn     = { background: '#fff', color: '#333', border: '1px solid #ddd', borderRadius: '4px', padding: '9px 14px', cursor: 'pointer', fontSize: '0.82rem', fontFamily: FONT };
+const primaryBtn   = { background: '#111', color: '#fff', border: 'none', borderRadius: '0', padding: '9px 18px', cursor: 'pointer', fontSize: '0.82rem', fontFamily: FONT, fontWeight: 600 };
+const ghostBtn     = { background: '#fff', color: '#333', border: '1px solid #ddd', borderRadius: '0', padding: '9px 14px', cursor: 'pointer', fontSize: '0.82rem', fontFamily: FONT };
 const th           = { padding: '10px 12px', textAlign: 'left', fontWeight: 700, fontSize: '0.68rem', color: '#666', textTransform: 'uppercase', letterSpacing: '0.5px', whiteSpace: 'nowrap', fontFamily: FONT };
 const td           = { padding: '10px 12px', color: '#333', fontFamily: FONT, verticalAlign: 'top' };
-const pageTitleStyle = { fontSize: '1.5rem', fontWeight: 700, margin: 0, letterSpacing: '1px', fontFamily: FONT };
+const pageTitleStyle = { fontFamily: "'Montserrat', sans-serif", fontSize: '2.8rem', fontWeight: 300, letterSpacing: '5px', textTransform: 'uppercase', color: '#000000', margin: '0 0 22px 0' };

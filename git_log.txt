@@ -1,0 +1,92 @@
+﻿commit c3864268150c1efd39e6b49091d3ac3f01981e4a
+Author: Gabriel <grgonzalez345@gmail.com>
+Date:   Thu Apr 16 12:15:33 2026 -0400
+
+    Change title of admin panel of coupons
+
+ src/components/admin/AdminCoupons.js | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 93dc32a79edf69cc5e709bfc56d716ea8b27920f
+Author: Gabriel <grgonzalez345@gmail.com>
+Date:   Wed Apr 15 23:26:10 2026 -0400
+
+    completation of most details for admin panel
+
+ .claude/settings.local.json                        |   4 +-
+ amplify/backend/api/APIGatewayAuthStack.json       | 180 ++++++++
+ amplify/backend/api/checkoutApi/cli-inputs.json    |  17 +
+ .../function/processCheckout/custom-policies.json  |   3 +-
+ .../processCheckout-cloudformation-template.json   |   3 +-
+ .../backend/function/processCheckout/src/app.js    | 278 ++++++++++--
+ amplify/team-provider-info.json                    |   2 +-
+ src/App.js                                         |  13 +-
+ src/components/CourseDetails.js                    |   6 +-
+ src/components/Footer.js                           |   6 +-
+ src/components/admin/AdminCoupons.js               | 469 +++++++++++++++++++++
+ src/components/admin/AdminCourses.js               | 176 +++++++-
+ src/components/admin/AdminDashboard.js             |  49 ++-
+ src/context/CartContext.js                         |   7 +-
+ src/context/CourseDataContext.js                   |  13 +-
+ src/pages/AdminPage.js                             | 222 +++++-----
+ src/pages/BeautyStation.js                         |   2 +-
+ src/pages/CartPage.js                              | 111 ++++-
+ src/pages/StaffLogin.js                            | 152 +++++++
+ src/styles/CartPage.css                            | 136 ++++++
+ src/styles/footer.css                              |  30 ++
+ src/styles/modules.css                             |  28 +-
+ src/styles/staff-login.css                         | 181 ++++++++
+ 23 files changed, 1914 insertions(+), 174 deletions(-)
+
+commit 014aa441cfd51953e0f7af86400a30205bda72c7
+Author: Gabriel <grgonzalez345@gmail.com>
+Date:   Tue Apr 14 23:53:15 2026 -0400
+
+    Developing add image section for courses in admin panel
+
+ .claude/settings.local.json                        |  7 ++-
+ amplify/backend/api/APIGatewayAuthStack.json       | 60 ++++++++++++++++++++++
+ .../function/processCheckout/custom-policies.json  | 36 ++++++++++---
+ .../processCheckout-cloudformation-template.json   | 40 ++++++++++++++-
+ amplify/team-provider-info.json                    |  2 +-
+ 5 files changed, 136 insertions(+), 9 deletions(-)
+
+commit e7b1d5e264365482913e216b42bfa06539e14bd3
+Author: Gabriel <grgonzalez345@gmail.com>
+Date:   Tue Apr 14 23:33:56 2026 -0400
+
+    Add custom-policies.json to grant Lambda S3 and AdminLog permissions
+    
+    - s3:PutObject on beauty-station-images/* (enables presigned upload URLs)
+    - s3:GetObject on beauty-station-videos/* (enables presigned video URLs)
+    - Full DynamoDB access on AdminLog table (enables activity log writes)
+    
+    Uses Amplify custom-policies.json instead of the CloudFormation template
+    which was being reverted by the linter on every push.
+    
+    Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+
+ .../function/processCheckout/custom-policies.json  | 34 ++++++++++++++++------
+ 1 file changed, 25 insertions(+), 9 deletions(-)
+
+commit 0fa3609d02ac88d31807cec97315447fb6f2f78e
+Author: Gabriel <grgonzalez345@gmail.com>
+Date:   Tue Apr 14 23:12:46 2026 -0400
+
+    Implement 3.4: direct S3 image upload for course editor
+    
+    - Lambda: add PutObjectCommand + GET /admin/presigned-upload-url endpoint
+      generates a 5-minute presigned PUT URL for beauty-station-images bucket;
+      validates content-type is image/*, sanitizes key path
+    - API Gateway: add /admin/presigned-upload-url private route
+    - AdminCourses: replace URL-only text fields with ImageUploadRow component
+      that opens a file picker, PUTs directly to S3 via presigned URL, and
+      auto-fills the URL input with the permanent public S3 URL; shows inline
+      thumbnail preview after upload; keeps manual URL paste as fallback
+    
+    Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+
+ amplify/backend/api/checkoutApi/cli-inputs.json    |   8 ++
+ .../backend/function/processCheckout/src/app.js    |  42 +++++-
+ src/components/admin/AdminCourses.js               | 155 ++++++++++++++++++---
+ 3 files changed, 183 insertions(+), 22 deletions(-)

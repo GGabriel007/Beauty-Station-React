@@ -112,6 +112,17 @@ const GOOGLE_REVIEWS = [
 
 const PREVIEW_LENGTH = 220;
 
+/* ── Available service tags ── */
+const SERVICE_OPTIONS = [
+  'Bridal services',
+  'Makeup services',
+  'Hairstyling',
+  'Nail services',
+  'Skin care',
+  'Eyebrows & Lashes',
+  'Airbrush Makeup',
+];
+
 /* ── Star rating display / input ── */
 const StarRating = ({ value, onChange }) => (
   <div className="home-stars">
@@ -218,7 +229,7 @@ const BeautyStation = () => {
   });
   // Starts with hardcoded reviews; replaced by DB data once the fetch succeeds
   const [googleReviews, setGoogleReviews] = useState(GOOGLE_REVIEWS);
-  const [reviewForm, setReviewForm] = useState({ rating: 0, text: '' });
+  const [reviewForm, setReviewForm] = useState({ rating: 0, text: '', services: [] });
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
 
   useEffect(() => {
@@ -265,6 +276,7 @@ const BeautyStation = () => {
       rating: reviewForm.rating,
       date:   new Date().toLocaleDateString('es-GT', { month: 'long', year: 'numeric' }),
       text:   reviewForm.text.trim(),
+      services: reviewForm.services,
       source: 'user',
     };
 
@@ -272,7 +284,7 @@ const BeautyStation = () => {
     const updated = [...userReviews, newReview];
     setUserReviews(updated);
     localStorage.setItem('bs_reviews', JSON.stringify(updated));
-    setReviewForm({ rating: 0, text: '' });
+    setReviewForm({ rating: 0, text: '', services: [] });
     setReviewSubmitted(true);
 
     // Persist to DynamoDB so the admin panel and all other users can see it
@@ -280,7 +292,7 @@ const BeautyStation = () => {
       const op = post({
         apiName: 'checkoutApi',
         path: '/reviews',
-        options: { body: { name: newReview.name, rating: newReview.rating, text: newReview.text, date: newReview.date } },
+        options: { body: { name: newReview.name, rating: newReview.rating, text: newReview.text, date: newReview.date, services: newReview.services } },
       });
       await op.response;
       // Clear the localStorage cache so the next page load fetches fresh DB data
@@ -290,6 +302,23 @@ const BeautyStation = () => {
       console.error('Error saving review to DB:', err);
     }
   };
+
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth);
+    }
+  };
+
+  useEffect(() => {
+    checkScroll();
+    window.addEventListener('resize', checkScroll);
+    return () => window.removeEventListener('resize', checkScroll);
+  }, [allReviews.length]);
 
   const scroll = (direction) => {
     if (scrollRef.current) {
@@ -383,13 +412,17 @@ const BeautyStation = () => {
 
         {/* Carousel */}
         <div className="home-reviews-carousel-wrapper">
-          <button className="gallery-arrow left-arrow" onClick={() => scroll('left')}>&#10094;</button>
-          <div className="home-reviews-carousel" ref={scrollRef}>
+          {canScrollLeft && (
+            <button className="gallery-arrow left-arrow" onClick={() => scroll('left')}>&#10094;</button>
+          )}
+          <div className="home-reviews-carousel" ref={scrollRef} onScroll={checkScroll}>
             {allReviews.map(review => (
               <ReviewCard key={review.reviewId || review.id} review={review} />
             ))}
           </div>
-          <button className="gallery-arrow right-arrow" onClick={() => scroll('right')}>&#10095;</button>
+          {canScrollRight && (
+            <button className="gallery-arrow right-arrow" onClick={() => scroll('right')}>&#10095;</button>
+          )}
         </div>
 
         {/* Submit review */}
@@ -404,6 +437,32 @@ const BeautyStation = () => {
                   value={reviewForm.rating}
                   onChange={r => setReviewForm(prev => ({ ...prev, rating: r }))}
                 />
+
+                {/* Service tag selector */}
+                <div className="home-review-services-picker">
+                  <p className="home-review-services-picker-label">Servicios (opcional):</p>
+                  <div className="home-review-services-picker-tags">
+                    {SERVICE_OPTIONS.map(service => {
+                      const selected = reviewForm.services.includes(service);
+                      return (
+                        <button
+                          key={service}
+                          type="button"
+                          className={`home-review-service-pick-tag${selected ? ' home-review-service-pick-tag--active' : ''}`}
+                          onClick={() => setReviewForm(prev => ({
+                            ...prev,
+                            services: selected
+                              ? prev.services.filter(s => s !== service)
+                              : [...prev.services, service],
+                          }))}
+                        >
+                          {service}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
                 <textarea
                   className="home-review-textarea"
                   value={reviewForm.text}

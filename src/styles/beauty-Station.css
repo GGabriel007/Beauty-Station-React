@@ -555,6 +555,59 @@
     border-radius: 20px;
 }
 
+/* ── Tag picker inside the review form ── */
+.home-review-services-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.home-review-services-picker-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #aaa;
+    margin: 0;
+}
+
+.home-review-services-picker-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.home-review-service-pick-tag {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #cd929d;
+    background: #fdf0f5;
+    border: 1px solid #f0d8e2;
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+
+.home-review-service-pick-tag:hover {
+    background: #f7dde8;
+    border-color: #cd929d;
+}
+
+.home-review-service-pick-tag--active {
+    background: #cd929d;
+    color: #FFFFFF;
+    border-color: #cd929d;
+}
+
+.home-review-service-pick-tag--active:hover {
+    background: #b57390;
+    border-color: #b57390;
+}
+
 .home-review-toggle {
     background: none;
     border: none;

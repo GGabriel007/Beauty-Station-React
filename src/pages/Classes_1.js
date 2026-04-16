@@ -1,7 +1,45 @@
 // src/pages/Classes_1.js
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../styles/classes.css';
 import { Link, useLocation } from 'react-router-dom';
+import { useCourseData } from '../context/CourseDataContext';
+
+const CourseCard = ({ to, id, title, defaultPrimary, defaultHover, dateText, overrideBadge, swapDbImages }) => {
+  const coursesData = useCourseData();
+  const data = coursesData[id];
+
+  let primary = defaultPrimary;
+  let secondary = defaultHover;
+
+  if (data && Array.isArray(data.imageUrls) && data.imageUrls.some(u => u && u.trim())) {
+    const validUrls = data.imageUrls.filter(u => u && u.trim());
+    if (swapDbImages && validUrls.length > 1) {
+      // DB images are stored in wrong order for this course — swap them
+      primary   = validUrls[1];
+      secondary = validUrls[0];
+    } else {
+      primary   = validUrls[0];
+      secondary = validUrls.length > 1 ? validUrls[1] : validUrls[0];
+    }
+  }
+
+  return (
+    <Link to={to} className="course-grid-card">
+      <div className="course-grid-img-wrap">
+        <img className="course-grid-img course-grid-img--primary" src={primary} alt={title} />
+        <img className="course-grid-img course-grid-img--secondary" src={secondary} alt={`${title} Hover`} />
+        {overrideBadge && <div className="one-day-badge">{overrideBadge}</div>}
+      </div>
+      <div className="course-grid-info">
+        <p className="course-grid-name">{title}</p>
+        <div className="course-grid-date">
+          <span className="default-text">{dateText}</span>
+          <span className="hover-text">Más Información →</span>
+        </div>
+      </div>
+    </Link>
+  );
+};
 
 const Classes1 = () => {
   const location = useLocation();
@@ -10,6 +48,24 @@ const Classes1 = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
+
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth);
+    }
+  };
+
+  useEffect(() => {
+    // Initial check requires a small delay to ensure DOM is fully painted
+    setTimeout(checkScroll, 100);
+    window.addEventListener('resize', checkScroll);
+    return () => window.removeEventListener('resize', checkScroll);
+  }, []);
 
   const scroll = (direction) => {
     if (scrollRef.current) {
@@ -35,77 +91,62 @@ const Classes1 = () => {
 
       {/* ── Course grid ── */}
       <div className="course-grid-wrapper">
-        <button className="course-arrow course-arrow--left" onClick={() => scroll('left')}>&#10094;</button>
-        <div className="course-grid" ref={scrollRef}>
+        {canScrollLeft && (
+          <button className="course-arrow course-arrow--left" onClick={() => scroll('left')}>&#10094;</button>
+        )}
+        <div className="course-grid" ref={scrollRef} onScroll={checkScroll}>
 
-        <Link to="/classes/course/master-waves-intensivo" className="course-grid-card">
-          <div className="course-grid-img-wrap">
-            <img className="course-grid-img" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_Day/imagen_module_H.jpeg`} alt="Master en Waves Intensivo" />
-            <div className="one-day-badge">1 Día</div>
-          </div>
-          <div className="course-grid-info">
-            <p className="course-grid-name">Master en Waves Intensivo</p>
-            <div className="course-grid-date">
-              <span className="default-text">Bajo Cita</span>
-              <span className="hover-text">Más Información →</span>
-            </div>
-          </div>
-        </Link>
+        <CourseCard
+          to="/classes/course/master-waves-intensivo"
+          id="master-waves-intensivo"
+          title="Master en Waves Intensivo"
+          defaultPrimary={`${process.env.PUBLIC_URL}/images/Class_1/Module_Day/imagen_module_H.jpeg`}
+          defaultHover={`${process.env.PUBLIC_URL}/images/Class_1/Module_Day/Hair/imagen_module_2Hair.jpeg`}
+          dateText="Bajo Cita"
+          overrideBadge="1 Día"
+        />
 
-        <Link to="/classes/course/master-waves" className="course-grid-card">
-          <div className="course-grid-img-wrap">
-            <img className="course-grid-img" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/imagen_module_Hair.jpeg`} alt="Master en Waves" />
-          </div>
-          <div className="course-grid-info">
-            <p className="course-grid-name">Master en Waves</p>
-            <div className="course-grid-date">
-              <span className="default-text">27 Ene — 17 Feb</span>
-              <span className="hover-text">Más Información →</span>
-            </div>
-          </div>
-        </Link>
+        <CourseCard
+          to="/classes/course/master-waves"
+          id="master-waves"
+          title="Master en Waves"
+          defaultPrimary={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Hair/imagen_module_1Hair.jpeg`}
+          defaultHover={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Hair/imagen_module_2Hair.jpeg`}
+          dateText="27 Ene — 17 Feb"
+          swapDbImages
+        />
 
-        <Link to="/classes/course/peinado-eventos" className="course-grid-card">
-          <div className="course-grid-img-wrap">
-            <img className="course-grid-img" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_Hair.jpeg`} alt="Peinado para Eventos" />
-          </div>
-          <div className="course-grid-info">
-            <p className="course-grid-name">Peinado para Eventos</p>
-            <div className="course-grid-date">
-              <span className="default-text">24 Feb — 7 Abr</span>
-              <span className="hover-text">Más Información →</span>
-            </div>
-          </div>
-        </Link>
+        <CourseCard
+          to="/classes/course/peinado-eventos"
+          id="peinado-eventos"
+          title="Peinado para Eventos"
+          defaultPrimary={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/imagen_module_Hair.jpeg`}
+          defaultHover={`${process.env.PUBLIC_URL}/images/Class_1/Module_2/Hair/imagen_module_2Hair.jpeg`}
+          dateText="24 Feb — 7 Abr"
+        />
 
-        <Link to="/classes/course/maestria-novias" className="course-grid-card">
-          <div className="course-grid-img-wrap">
-            <img className="course-grid-img" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_Hair.jpeg`} alt="Maestría en Novias y Tendencias" />
-          </div>
-          <div className="course-grid-info">
-            <p className="course-grid-name">Maestría en Novias y Tendencias</p>
-            <div className="course-grid-date">
-              <span className="default-text">15 Abr — 7 May</span>
-              <span className="hover-text">Más Información →</span>
-            </div>
-          </div>
-        </Link>
+        <CourseCard
+          to="/classes/course/maestria-novias"
+          id="maestria-novias"
+          title="Maestría en Novias y Tendencias"
+          defaultPrimary={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/imagen_module_Hair.jpeg`}
+          defaultHover={`${process.env.PUBLIC_URL}/images/Class_1/Module_3/Hair/imagen_module_2Hair.jpeg`}
+          dateText="15 Abr — 7 May"
+        />
 
-        <Link to="/classes/course/curso-completo-peinado" className="course-grid-card">
-          <div className="course-grid-img-wrap">
-            <img className="course-grid-img" src={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_Hair.jpeg`} alt="Curso Completo" />
-          </div>
-          <div className="course-grid-info">
-            <p className="course-grid-name">Curso Completo</p>
-            <div className="course-grid-date">
-              <span className="default-text">27 Ene — 7 May</span>
-              <span className="hover-text">Más Información →</span>
-            </div>
-          </div>
-        </Link>
+        <CourseCard
+          to="/classes/course/curso-completo-peinado"
+          id="curso-completo-peinado"
+          title="Curso Completo"
+          defaultPrimary={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/imagen_module_Hair.jpeg`}
+          defaultHover={`${process.env.PUBLIC_URL}/images/Class_1/Module_4/Hair/imagen_module_2Hair.jpeg`}
+          dateText="27 Ene — 7 May"
+        />
 
         </div>
-        <button className="course-arrow course-arrow--right" onClick={() => scroll('right')}>&#10095;</button>
+        {canScrollRight && (
+          <button className="course-arrow course-arrow--right" onClick={() => scroll('right')}>&#10095;</button>
+        )}
       </div>
 
     </div>

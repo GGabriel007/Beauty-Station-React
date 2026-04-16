@@ -515,7 +515,8 @@ const CourseDetails = () => {
                                     price: priceInt,
                                     image: thumbnails[0],
                                     online: courseData.online || false,
-                                    courseId: courseId
+                                    courseId: courseId,
+                                    scheduleIndex: selectedScheduleIndex
                                 });
 
                                 toast(

@@ -92,8 +92,13 @@
     transform: translateY(-50%) scale(1.08);
 }
 
-.course-arrow--left  { left: 12px; }
-.course-arrow--right { right: 12px; }
+.course-arrow--left {
+    left: 12px;
+}
+
+.course-arrow--right {
+    right: 12px;
+}
 
 /* ===================================================
    Course grid — horizontal scroll row
@@ -156,7 +161,7 @@
     position: relative;
     overflow: hidden;
     width: 100%;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 1/1.7;
     flex-shrink: 0;
 }
 
@@ -166,10 +171,23 @@
     object-fit: cover;
     object-position: center top;
     display: block;
-    transition: transform 0.5s ease;
+    transition: transform 0.5s ease, opacity 0.5s ease;
 }
 
-.course-grid-card:hover .course-grid-img {
+.course-grid-img--secondary {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    z-index: 1;
+}
+
+.course-grid-card:hover .course-grid-img--primary {
+    opacity: 0;
+}
+
+.course-grid-card:hover .course-grid-img--secondary {
+    opacity: 1;
     transform: scale(1.05);
 }
 
@@ -314,3 +332,36 @@
         font-size: 0.9rem;
     }
 }
+
+/* ===================================================
+   Admin Panel — Shared Page Title
+   Responsive version of the admin pageTitleStyle.
+   Apply className="admin-page-title" instead of the 
+   inline pageTitleStyle object in every admin component.
+   =================================================== */
+.admin-page-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 300;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: #000000;
+    margin: 0 0 22px 0;
+    word-break: break-word;
+    line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+    .admin-page-title {
+        font-size: 1.9rem;
+        letter-spacing: 3px;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-page-title {
+        font-size: 1.3rem;
+        letter-spacing: 2px;
+        margin-bottom: 16px;
+    }
+}

@@ -59,8 +59,8 @@
 .classes-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 50px;
-    max-width: 80%;
+    gap: 36px;
+    max-width: 78%;
     margin: 70px auto 90px;
 }
 
@@ -87,7 +87,7 @@
     position: relative;
     overflow: hidden;
     width: 100%;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1 / 1.7;
     flex-shrink: 0;
 }
 
