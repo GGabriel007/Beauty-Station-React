@@ -28,6 +28,13 @@ const CartPage = () => {
   const [countryOpen, setCountryOpen] = useState(false);
   const countryRef = useRef(null);
 
+  // Coupon state
+  const [couponInput,    setCouponInput]    = useState('');
+  const [appliedCoupon,  setAppliedCoupon]  = useState(null);  // { couponCode, discountType, discountValue, discountAmount, description }
+  const [couponLoading,  setCouponLoading]  = useState(false);
+  const [couponError,    setCouponError]    = useState(null);
+  const [couponSuccess,  setCouponSuccess]  = useState(null);
+
   const COUNTRIES = [
     { code: '+502', label: '🇬🇹 Guatemala +502' },
     { code: '+1',   label: '🇺🇸 EE.UU. / Canadá +1' },
@@ -225,6 +232,7 @@ const CartPage = () => {
             cartItems: cartItems,
             IncludeKit: includeKit,
             TotalPrice: getTotalPrice(),
+            couponCode: appliedCoupon?.couponCode || null,
             recaptchaToken: recaptchaToken
           }
         }
@@ -350,9 +358,53 @@ const CartPage = () => {
     setFormData({ ...formData, [name]: formattedValue });
   };
 
-  const getTotalPrice = () => {
-    const total = cartItems.reduce((total, item) => total + item.price, 0);
+  const getSubtotal = () => {
+    const total = cartItems.reduce((sum, item) => sum + item.price, 0);
     return includeKit ? total + kitPrice + enrollmentFee : total + enrollmentFee;
+  };
+
+  const getTotalPrice = () => Math.max(0, getSubtotal() - (appliedCoupon?.discountAmount || 0));
+
+  const handleApplyCoupon = async () => {
+    if (!couponInput.trim()) return;
+    setCouponLoading(true);
+    setCouponError(null);
+    setCouponSuccess(null);
+    try {
+      const op = post({
+        apiName: 'checkoutApi',
+        path: '/coupons/validate',
+        options: { body: { couponCode: couponInput.trim().toUpperCase(), orderTotal: getSubtotal() } }
+      });
+      const { body } = await op.response;
+      const data = await body.json();
+      if (data.valid) {
+        setAppliedCoupon(data);
+        setCouponSuccess(`¡Cupón aplicado! ${data.discountType === 'percentage' ? `${data.discountValue}% de descuento` : `Q${data.discountValue} de descuento`}`);
+        setCouponInput('');
+      } else {
+        setCouponError(data.reason || 'Código de cupón no válido.');
+      }
+    } catch (err) {
+      let msg = 'No se pudo verificar el cupón. Intenta de nuevo.';
+      try {
+        if (err.response) {
+          const b = err.response.body;
+          const o = typeof b === 'string' ? JSON.parse(b) : await b.json();
+          if (o?.reason) msg = o.reason;
+        }
+      } catch (_) {}
+      setCouponError(msg);
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponSuccess(null);
+    setCouponError(null);
+    setCouponInput('');
   };
 
   const handleRemoveKit = () => {
@@ -684,6 +736,61 @@ const CartPage = () => {
               <span className="cp-summary-name">Inscripción</span>
               <span className="cp-summary-price">Q {enrollmentFee.toLocaleString('en-US')}.00</span>
             </div>
+
+            {/* ── Coupon input ── */}
+            <div className="cp-coupon-section">
+              {!appliedCoupon ? (
+                <>
+                  <p className="cp-coupon-label">¿Tienes un cupón de descuento?</p>
+                  <div className="cp-coupon-row">
+                    <input
+                      className="cp-coupon-input"
+                      type="text"
+                      value={couponInput}
+                      onChange={e => { setCouponInput(e.target.value.toUpperCase()); setCouponError(null); }}
+                      onKeyDown={e => e.key === 'Enter' && handleApplyCoupon()}
+                      placeholder="Código de cupón"
+                      maxLength={30}
+                      disabled={couponLoading}
+                    />
+                    <button
+                      className="cp-coupon-btn"
+                      onClick={handleApplyCoupon}
+                      disabled={couponLoading || !couponInput.trim()}
+                    >
+                      {couponLoading ? '…' : 'Aplicar'}
+                    </button>
+                  </div>
+                  {couponError && <p className="cp-coupon-error">{couponError}</p>}
+                </>
+              ) : (
+                <div className="cp-coupon-applied">
+                  <div className="cp-coupon-applied-info">
+                    <span className="cp-coupon-applied-code">{appliedCoupon.couponCode}</span>
+                    <span className="cp-coupon-applied-desc">
+                      {appliedCoupon.description || (appliedCoupon.discountType === 'percentage'
+                        ? `${appliedCoupon.discountValue}% de descuento`
+                        : `Q${appliedCoupon.discountValue} de descuento`)}
+                    </span>
+                  </div>
+                  <button className="cp-coupon-remove" onClick={handleRemoveCoupon} title="Quitar cupón">✕</button>
+                </div>
+              )}
+            </div>
+
+            {/* Discount row — only when coupon applied */}
+            {appliedCoupon && (
+              <div className="cp-summary-item cp-summary-discount">
+                <span className="cp-summary-name">
+                  Descuento ({appliedCoupon.discountType === 'percentage'
+                    ? `${appliedCoupon.discountValue}%`
+                    : `Q${appliedCoupon.discountValue}`})
+                </span>
+                <span className="cp-summary-price cp-discount-value">
+                  − Q {appliedCoupon.discountAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </span>
+              </div>
+            )}
 
             {/* Divider + Total */}
             <div className="cp-summary-divider"></div>

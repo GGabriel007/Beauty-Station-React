@@ -384,7 +384,7 @@ const CourseDetails = () => {
                             </div>
                             <div className="course-price-row">
                                 <span className="course-price-label">Inscripción</span>
-                                <span className="course-price-value">{fmtPrice(courseData.enrollment ?? courseData.enrollmentFee)}</span>
+                                <span className="course-price-value">{fmtPrice(courseData.enrollmentFee ?? courseData.enrollment)}</span>
                             </div>
                         </div>
 
@@ -550,8 +550,8 @@ const CourseDetails = () => {
                         )}
 
                         {courseData.promo && (
-                            <p className={courseData.promo.includes("DEMO") ? "Demo-text" : ""}>
-                                {courseData.promo.includes("DEMO") ? <strong>{courseData.promo}</strong> : courseData.promo}
+                            <p className="course-promo-text">
+                                {courseData.promo}
                             </p>
                         )}
 

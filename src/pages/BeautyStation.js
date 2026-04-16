@@ -386,7 +386,7 @@ const BeautyStation = () => {
           <button className="gallery-arrow left-arrow" onClick={() => scroll('left')}>&#10094;</button>
           <div className="home-reviews-carousel" ref={scrollRef}>
             {allReviews.map(review => (
-              <ReviewCard key={review.id} review={review} />
+              <ReviewCard key={review.reviewId || review.id} review={review} />
             ))}
           </div>
           <button className="gallery-arrow right-arrow" onClick={() => scroll('right')}>&#10095;</button>

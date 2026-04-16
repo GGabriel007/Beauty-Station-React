@@ -22,8 +22,9 @@ export default function AdminDashboard() {
       apiFetch('/admin/seats'),
       apiFetch('/admin/reviews'),
       apiFetch('/admin/courses'),
+      apiFetch('/admin/coupons').catch(() => []),
     ])
-      .then(([registrations, seats, reviews, courses]) => {
+      .then(([registrations, seats, reviews, courses, coupons]) => {
         // Revenue + enrollment count
         const totalRevenue     = registrations.reduce((sum, r) => sum + Number(r.TotalPrice || 0), 0);
         const totalEnrollments = registrations.length;
@@ -56,7 +57,16 @@ export default function AdminDashboard() {
           return (a.courseName || '').localeCompare(b.courseName || '');
         });
 
-        setStats({ totalRevenue, totalEnrollments, nearFull, deletedReviews, courseUpdates });
+        // Coupon stats
+        const couponList = Array.isArray(coupons) ? coupons : [];
+        const activeCoupons = couponList.filter(c => c.isActive && !(c.expiresAt && Date.now() > Number(c.expiresAt)));
+        const totalCouponUses = couponList.reduce((sum, c) => sum + Number(c.usageCount || 0), 0);
+        const topCoupons = [...couponList]
+          .sort((a, b) => Number(b.usageCount || 0) - Number(a.usageCount || 0))
+          .slice(0, 5);
+
+        setStats({ totalRevenue, totalEnrollments, nearFull, deletedReviews, courseUpdates,
+                   activeCoupons, totalCouponUses, topCoupons });
       })
       .catch(() => setError('Error al cargar el dashboard. Verifica que las tablas estén sembradas.'))
       .finally(() => setLoading(false));
@@ -74,10 +84,12 @@ export default function AdminDashboard() {
 
       {/* Summary cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '14px', marginBottom: '28px' }}>
-        <StatCard label="Ingresos Totales"       value={fmtQ(stats.totalRevenue)} />
-        <StatCard label="Inscripciones Totales"  value={stats.totalEnrollments} />
-        <StatCard label="Cursos con Pocos Cupos" value={stats.nearFull.length} accent={stats.nearFull.length > 0} />
+        <StatCard label="Ingresos Totales"            value={fmtQ(stats.totalRevenue)} />
+        <StatCard label="Inscripciones Totales"       value={stats.totalEnrollments} />
+        <StatCard label="Cursos con Pocos Cupos"      value={stats.nearFull.length} accent={stats.nearFull.length > 0} />
         <StatCard label="Reseñas Eliminadas (últ. 5)" value={stats.deletedReviews.length} />
+        <StatCard label="Cupones Activos"             value={stats.activeCoupons.length} />
+        <StatCard label="Usos de Cupones (total)"     value={stats.totalCouponUses} />
       </div>
 
       {/* Low-seat warning */}
@@ -96,6 +108,33 @@ export default function AdminDashboard() {
           : stats.deletedReviews.map(r => (
             <Row key={r.reviewId} left={r.name} right={`${fmtDate(r.deletedAt)} · por ${r.deletedBy || '?'}`} />
           ))
+        }
+      </Section>
+
+      {/* Coupon usage */}
+      <Section title="Cupones — Más Usados">
+        {stats.topCoupons.length === 0
+          ? <Empty text="No hay cupones creados aún." />
+          : stats.topCoupons.map(c => {
+              const expired = c.expiresAt && Date.now() > Number(c.expiresAt);
+              const status = !c.isActive ? 'Inactivo' : expired ? 'Expirado' : 'Activo';
+              return (
+                <Row
+                  key={c.couponCode}
+                  left={
+                    <span style={{ fontFamily: 'monospace', fontWeight: 700, letterSpacing: '1px', fontSize: '0.85rem' }}>
+                      {c.couponCode}
+                      {' '}
+                      <span style={{ fontFamily: FONT, fontWeight: 400, fontSize: '0.75rem', color: '#888' }}>
+                        ({c.discountType === 'percentage' ? `${c.discountValue}%` : `Q${c.discountValue}`})
+                      </span>
+                    </span>
+                  }
+                  right={`${c.usageCount || 0} uso${(c.usageCount || 0) !== 1 ? 's' : ''} · ${status}`}
+                  muted={!c.isActive || expired}
+                />
+              );
+            })
         }
       </Section>
 

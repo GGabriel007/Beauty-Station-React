@@ -14,6 +14,7 @@ import AdminOnlineCourse  from '../components/admin/AdminOnlineCourse';
 import AdminRegistrations from '../components/admin/AdminRegistrations';
 import AdminReviews       from '../components/admin/AdminReviews';
 import AdminSettings      from '../components/admin/AdminSettings';
+import AdminCoupons       from '../components/admin/AdminCoupons';
 
 // ── Design tokens (match header.css) ──────────────────────────────────────────
 const C = {
@@ -33,6 +34,7 @@ const TABS = [
   { id: 'online-course',  label: 'Curso en Línea'  },
   { id: 'registrations',  label: 'Inscripciones'   },
   { id: 'reviews',        label: 'Reseñas'         },
+  { id: 'coupons',        label: 'Cupones'         },
   { id: 'settings',       label: 'Configuración'   },
 ];
 
@@ -113,7 +115,7 @@ export default function AdminPage() {
 
   const userEmail  = user?.signInDetails?.loginId || user?.username || 'Admin';
   const activeLabel = TABS.find(t => t.id === activeTab)?.label || '';
-  const sidebarW    = collapsed ? 56 : 220;
+  const sidebarW    = collapsed ? 44 : 220;
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
@@ -161,22 +163,21 @@ export default function AdminPage() {
             </button>
           </div>
 
-          {/* Navigation */}
-          <nav style={{ flex: 1, paddingTop: '6px' }}>
-            {TABS.map(tab => {
+          {/* Navigation — hidden when collapsed */}
+          <nav style={{ flex: 1, paddingTop: '6px', overflow: 'hidden' }}>
+            {!collapsed && TABS.map(tab => {
               const active = activeTab === tab.id;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  title={collapsed ? tab.label : undefined}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: '10px',
-                    justifyContent: collapsed ? 'center' : 'flex-start',
+                    justifyContent: 'flex-start',
                     width: '100%',
-                    padding: collapsed ? '13px 0' : '12px 18px',
+                    padding: '12px 18px',
                     background: active ? C.roseLight : 'transparent',
                     borderLeft: active ? `3px solid ${C.rose}` : '3px solid transparent',
                     borderRight: 'none',
@@ -195,47 +196,43 @@ export default function AdminPage() {
                   onMouseEnter={e => { if (!active) e.currentTarget.style.color = C.roseDeep; }}
                   onMouseLeave={e => { if (!active) e.currentTarget.style.color = C.muted; }}
                 >
-                  {collapsed
-                    ? <span style={{ fontSize: '0.6rem', fontWeight: 700 }}>{tab.label.slice(0, 3).toUpperCase()}</span>
-                    : <span style={{ whiteSpace: 'nowrap' }}>{tab.label}</span>
-                  }
+                  <span style={{ whiteSpace: 'nowrap' }}>{tab.label}</span>
                 </button>
               );
             })}
           </nav>
 
-          {/* Staff info + logout */}
-          <div style={{ padding: collapsed ? '12px 8px' : '14px 16px', borderTop: `1px solid ${C.roseTint}` }}>
-            {!collapsed && (
+          {/* Staff info + logout — hidden when collapsed */}
+          {!collapsed && (
+            <div style={{ padding: '14px 16px', borderTop: `1px solid ${C.roseTint}` }}>
               <p style={{ fontSize: '0.67rem', color: C.muted, marginBottom: '10px', wordBreak: 'break-all', lineHeight: 1.5, letterSpacing: '0.3px' }}>
                 {userEmail}
               </p>
-            )}
-            <button
-              onClick={handleLogout}
-              title={collapsed ? 'Cerrar Sesión' : undefined}
-              style={{
-                width: '100%',
-                background: 'transparent',
-                border: `1.5px solid ${C.roseTint}`,
-                borderRadius: '50px',
-                padding: collapsed ? '8px 0' : '9px 14px',
-                color: C.rose,
-                cursor: 'pointer',
-                fontSize: '0.7rem',
-                fontFamily: FONT,
-                fontWeight: 600,
-                letterSpacing: '1px',
-                textTransform: 'uppercase',
-                transition: 'border-color 0.2s, color 0.2s',
-                textAlign: 'center',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = C.rose; e.currentTarget.style.color = C.roseDeep; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = C.roseTint; e.currentTarget.style.color = C.rose; }}
-            >
-              {collapsed ? '↩' : 'Cerrar Sesión'}
-            </button>
-          </div>
+              <button
+                onClick={handleLogout}
+                style={{
+                  width: '100%',
+                  background: 'transparent',
+                  border: `1.5px solid ${C.roseTint}`,
+                  borderRadius: '50px',
+                  padding: '9px 14px',
+                  color: C.rose,
+                  cursor: 'pointer',
+                  fontSize: '0.7rem',
+                  fontFamily: FONT,
+                  fontWeight: 600,
+                  letterSpacing: '1px',
+                  textTransform: 'uppercase',
+                  transition: 'border-color 0.2s, color 0.2s',
+                  textAlign: 'center',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = C.rose; e.currentTarget.style.color = C.roseDeep; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = C.roseTint; e.currentTarget.style.color = C.rose; }}
+              >
+                Cerrar Sesión
+              </button>
+            </div>
+          )}
         </aside>
       )}
 
@@ -244,65 +241,68 @@ export default function AdminPage() {
           ════════════════════════════════════════════════════════════════════ */}
       {isMobile && (
         <>
-          {/* Mobile overlay backdrop */}
-          {mobileOpen && (
-            <div
-              onClick={() => setMobileOpen(false)}
-              style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.25)', zIndex: 40 }}
-            />
-          )}
+          {/* Mobile overlay backdrop — fades in/out */}
+          <div
+            onClick={() => setMobileOpen(false)}
+            style={{
+              position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.35)', zIndex: 40,
+              opacity: mobileOpen ? 1 : 0,
+              pointerEvents: mobileOpen ? 'auto' : 'none',
+              transition: 'opacity 0.35s ease',
+            }}
+          />
 
-          {/* Mobile dropdown menu */}
-          {mobileOpen && (
-            <div style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 0,
-              background: C.white,
-              borderBottom: `1px solid ${C.roseTint}`,
-              zIndex: 50,
-              boxShadow: '0 4px 16px rgba(125,78,97,0.12)',
-              padding: '12px 0',
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 16px 12px', borderBottom: `1px solid ${C.roseTint}` }}>
-                <div>
-                  <p style={{ margin: 0, fontSize: '0.62rem', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', color: C.rose }}>Beauty Station</p>
-                  <p style={{ margin: 0, fontSize: '0.58rem', letterSpacing: '1px', color: C.muted }}>Panel de Administración</p>
-                </div>
-                <button onClick={() => setMobileOpen(false)} style={{ background: 'none', border: 'none', fontSize: '1.2rem', cursor: 'pointer', color: C.rose, lineHeight: 1 }}>✕</button>
+          {/* Mobile slide-down menu */}
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            background: C.white,
+            borderBottom: `1px solid ${C.roseTint}`,
+            zIndex: 50,
+            boxShadow: '0 8px 20px rgba(125,78,97,0.12)',
+            padding: '12px 0',
+            transform: mobileOpen ? 'translateY(0)' : 'translateY(-110%)',
+            transition: 'transform 0.35s ease-in-out',
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 16px 12px', borderBottom: `1px solid ${C.roseTint}` }}>
+              <div>
+                <p style={{ margin: 0, fontSize: '0.62rem', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', color: C.rose }}>Beauty Station</p>
+                <p style={{ margin: 0, fontSize: '0.58rem', letterSpacing: '1px', color: C.muted }}>Panel de Administración</p>
               </div>
-              {TABS.map(tab => (
-                <button
-                  key={tab.id}
-                  onClick={() => handleTabSelect(tab.id)}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '12px',
-                    width: '100%', padding: '14px 20px',
-                    background: activeTab === tab.id ? C.roseLight : 'transparent',
-                    border: 'none',
-                    borderLeft: activeTab === tab.id ? `3px solid ${C.rose}` : '3px solid transparent',
-                    color: activeTab === tab.id ? C.roseDeep : C.text,
-                    cursor: 'pointer', textAlign: 'left',
-                    fontSize: '0.8rem', fontWeight: activeTab === tab.id ? 700 : 500,
-                    fontFamily: FONT, letterSpacing: '0.8px', textTransform: 'uppercase',
-                  }}
-                >
-                  {tab.label}
-                </button>
-              ))}
-              <div style={{ padding: '14px 20px 2px', borderTop: `1px solid ${C.roseTint}`, marginTop: '4px' }}>
-                <p style={{ fontSize: '0.67rem', color: C.muted, margin: '0 0 10px' }}>{userEmail}</p>
-                <button onClick={handleLogout} style={{
-                  background: 'transparent', border: `1.5px solid ${C.roseTint}`, borderRadius: '50px',
-                  padding: '9px 20px', color: C.rose, cursor: 'pointer', fontSize: '0.72rem',
-                  fontFamily: FONT, fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase',
-                }}>
-                  Cerrar Sesión
-                </button>
-              </div>
+              <button onClick={() => setMobileOpen(false)} style={{ background: 'none', border: 'none', fontSize: '1.2rem', cursor: 'pointer', color: C.rose, lineHeight: 1 }}>✕</button>
             </div>
-          )}
+            {TABS.map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => handleTabSelect(tab.id)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '12px',
+                  width: '100%', padding: '14px 20px',
+                  background: activeTab === tab.id ? C.roseLight : 'transparent',
+                  border: 'none',
+                  borderLeft: activeTab === tab.id ? `3px solid ${C.rose}` : '3px solid transparent',
+                  color: activeTab === tab.id ? C.roseDeep : C.text,
+                  cursor: 'pointer', textAlign: 'left',
+                  fontSize: '0.8rem', fontWeight: activeTab === tab.id ? 700 : 500,
+                  fontFamily: FONT, letterSpacing: '0.8px', textTransform: 'uppercase',
+                }}
+              >
+                {tab.label}
+              </button>
+            ))}
+            <div style={{ padding: '14px 20px 2px', borderTop: `1px solid ${C.roseTint}`, marginTop: '4px' }}>
+              <p style={{ fontSize: '0.67rem', color: C.muted, margin: '0 0 10px' }}>{userEmail}</p>
+              <button onClick={handleLogout} style={{
+                background: 'transparent', border: `1.5px solid ${C.roseTint}`, borderRadius: '50px',
+                padding: '9px 20px', color: C.rose, cursor: 'pointer', fontSize: '0.72rem',
+                fontFamily: FONT, fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase',
+              }}>
+                Cerrar Sesión
+              </button>
+            </div>
+          </div>
         </>
       )}
 
@@ -318,11 +318,34 @@ export default function AdminPage() {
               <p style={{ margin: 0, fontSize: '0.58rem', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', color: C.rose }}>Beauty Station Admin</p>
               <p style={{ margin: 0, fontSize: '0.72rem', fontWeight: 700, color: C.text, textTransform: 'uppercase', letterSpacing: '0.8px' }}>{activeLabel}</p>
             </div>
+            {/* Animated 3-bar hamburger */}
             <button
-              onClick={() => setMobileOpen(true)}
-              style={{ background: 'none', border: `1.5px solid ${C.roseTint}`, borderRadius: '8px', padding: '8px 12px', cursor: 'pointer', color: C.rose, fontSize: '0.85rem', lineHeight: 1 }}
+              onClick={() => setMobileOpen(v => !v)}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '8px', position: 'relative', width: '44px', height: '36px', flexShrink: 0 }}
+              aria-label="Abrir menú"
             >
-              ☰
+              <span style={{
+                position: 'absolute', left: '8px', width: '28px', height: '2px', borderRadius: '1px',
+                background: mobileOpen ? C.roseDeep : C.rose,
+                top: '7px',
+                transform: mobileOpen ? 'translateY(9px) rotate(45deg)' : 'none',
+                transition: 'transform 0.35s ease, background-color 0.25s ease',
+              }} />
+              <span style={{
+                position: 'absolute', left: '8px', width: '28px', height: '2px', borderRadius: '1px',
+                background: C.rose,
+                top: '16px',
+                opacity: mobileOpen ? 0 : 1,
+                transform: mobileOpen ? 'scaleX(0)' : 'none',
+                transition: 'opacity 0.35s ease, transform 0.35s ease',
+              }} />
+              <span style={{
+                position: 'absolute', left: '8px', width: '28px', height: '2px', borderRadius: '1px',
+                background: mobileOpen ? C.roseDeep : C.rose,
+                top: '25px',
+                transform: mobileOpen ? 'translateY(-9px) rotate(-45deg)' : 'none',
+                transition: 'transform 0.35s ease, background-color 0.25s ease',
+              }} />
             </button>
           </div>
         )}
@@ -340,6 +363,7 @@ export default function AdminPage() {
         {activeTab === 'online-course'  && <AdminOnlineCourse />}
         {activeTab === 'registrations'  && <AdminRegistrations />}
         {activeTab === 'reviews'        && <AdminReviews />}
+        {activeTab === 'coupons'        && <AdminCoupons />}
         {activeTab === 'settings'       && <AdminSettings />}
       </main>
     </div>

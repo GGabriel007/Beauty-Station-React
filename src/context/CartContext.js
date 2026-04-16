@@ -106,9 +106,10 @@ export const CartProvider = ({ children }) => {
           checkUser();
           break;
         case 'signedOut':
-          // BUG FIX: Save the current cart to cloud FIRST using refs (not stale closures)
-          // so it's restored on next login. Then wipe locally.
-          saveCartToCloud(cartItemsRef.current, includeKitRef.current, userEmailRef.current);
+          // Do NOT call saveCartToCloud here — Amplify revokes credentials before
+          // this event fires, so the request would go out unauthenticated (403).
+          // The cart is already saved to the cloud on every mutation (addToCart,
+          // removeFromCart, handleSetIncludeKit), so no data is lost.
           setUserEmail(null);
           clearCartLocal();
           break;

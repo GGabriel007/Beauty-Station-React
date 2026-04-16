@@ -40,7 +40,7 @@ export default function AdminCourses() {
 
   return (
     <div>
-      <h1 style={pageTitleStyle}>Cursos ({courses.length})</h1>
+      <h1 style={pageTitleStyle}>Cursos</h1>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
         {courses.map(course =>
           editingId === course.courseId
@@ -94,15 +94,25 @@ function CourseCard({ course, onEdit }) {
 
 function CourseEditForm({ course, onSave, onClose }) {
   const [form, setForm] = useState({
-    description:     course.description     || '',
-    price:           course.price           ?? '',
-    enrollmentFee:   course.enrollmentFee   ?? '',
-    dates:           course.dates           || '',
-    scheduleOptions: Array.isArray(course.scheduleOptions) ? [...course.scheduleOptions] : [],
-    imageUrls:       Array.isArray(course.imageUrls)       ? [...course.imageUrls]       : [],
-    promoText:       course.promoText       || '',
-    promoActive:     !!course.promoActive,
-    isVisible:       course.isVisible !== false,
+    description:       course.description       || '',
+    price:             course.price             ?? '',
+    enrollmentFee:     course.enrollmentFee     ?? '',
+    dates:             course.dates             || '',
+    instructor:        course.instructor        || '',
+    level:             course.level             || '',
+    materialsRequired: course.materialsRequired || '',
+    installments:      course.installments      || '',
+    promo:             course.promo             || '',
+    scheduleOptions:   Array.isArray(course.scheduleOptions) ? [...course.scheduleOptions] : [],
+    imageUrls:         Array.isArray(course.imageUrls)       ? [...course.imageUrls]       : [],
+    classes:           Array.isArray(course.classes)
+                         ? course.classes.map(c => ({ ...c }))
+                         : [],
+    complexClasses:    Array.isArray(course.complexClasses)
+                         ? course.complexClasses.map(cc => ({ ...cc, sessions: [...(cc.sessions || [])] }))
+                         : [],
+    promoActive:       !!course.promoActive,
+    isVisible:         course.isVisible !== false,
   });
 
   // Tracks the persisted state shown in the footer; updates after each successful save
@@ -127,6 +137,20 @@ function CourseEditForm({ course, onSave, onClose }) {
   const removeImageUrl = i       => set('imageUrls', form.imageUrls.filter((_, idx) => idx !== i));
   const updateImageUrl = (i, v) => set('imageUrls', form.imageUrls.map((u, idx) => idx === i ? v : u));
 
+  // Classes helpers
+  const addClass         = ()         => set('classes', [...form.classes, { name: '', date: '', topics: '' }]);
+  const addBreak         = ()         => set('classes', [...form.classes, { isBreak: true, text: '' }]);
+  const removeClass      = i          => set('classes', form.classes.filter((_, idx) => idx !== i));
+  const updateClass      = (i, field, v) => set('classes', form.classes.map((c, idx) => idx === i ? { ...c, [field]: v } : c));
+
+  // ComplexClasses helpers
+  const addComplexClass         = ()         => set('complexClasses', [...form.complexClasses, { title: '', sessions: [''] }]);
+  const removeComplexClass      = i          => set('complexClasses', form.complexClasses.filter((_, idx) => idx !== i));
+  const updateComplexTitle      = (i, v)     => set('complexClasses', form.complexClasses.map((cc, idx) => idx === i ? { ...cc, title: v } : cc));
+  const addComplexSession       = i          => set('complexClasses', form.complexClasses.map((cc, idx) => idx === i ? { ...cc, sessions: [...cc.sessions, ''] } : cc));
+  const removeComplexSession    = (i, si)    => set('complexClasses', form.complexClasses.map((cc, idx) => idx === i ? { ...cc, sessions: cc.sessions.filter((_, sidx) => sidx !== si) } : cc));
+  const updateComplexSession    = (i, si, v) => set('complexClasses', form.complexClasses.map((cc, idx) => idx === i ? { ...cc, sessions: cc.sessions.map((s, sidx) => sidx === si ? v : s) } : cc));
+
   const handleSave = async () => {
     setSaving(true);
     setSaveError(null);
@@ -139,6 +163,22 @@ function CourseEditForm({ course, onSave, onClose }) {
         // Strip empty strings from arrays
         scheduleOptions: form.scheduleOptions.filter(s => s.trim() !== ''),
         imageUrls:       form.imageUrls.filter(u => u.trim() !== ''),
+        // Trim plain text fields
+        instructor:        form.instructor.trim()        || null,
+        level:             form.level.trim()             || null,
+        materialsRequired: form.materialsRequired.trim() || null,
+        installments:      form.installments.trim()      || null,
+        promo:             form.promo.trim()             || null,
+        // Class lists — strip empty entries
+        classes: form.classes
+          .filter(c => c.isBreak ? c.text?.trim() : (c.name?.trim() || c.topics?.trim()))
+          .map(c => c.isBreak
+            ? { isBreak: true, text: c.text.trim() }
+            : { name: c.name.trim(), date: c.date?.trim() || '', topics: c.topics?.trim() || '' }
+          ),
+        complexClasses: form.complexClasses
+          .filter(cc => cc.title?.trim())
+          .map(cc => ({ title: cc.title.trim(), sessions: (cc.sessions || []).filter(s => s.trim()) })),
       };
       await apiPut(`/admin/courses/${course.courseId}`, payload);
 
@@ -184,13 +224,35 @@ function CourseEditForm({ course, onSave, onClose }) {
       {/* ── Content ── */}
       <SectionDivider label="Contenido" />
 
+      <Field label="Impartido Por">
+        <input value={form.instructor} onChange={e => set('instructor', e.target.value)} style={inputStyle} placeholder="Ej: NUESTRO TEAM DE PROFESIONALES" />
+      </Field>
+
       <Field label="Descripción">
         <textarea value={form.description} onChange={e => set('description', e.target.value)} rows={4} style={{ ...inputStyle, resize: 'vertical' }} placeholder="Descripción detallada del módulo…" />
       </Field>
 
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
+        <Field label="Nivel">
+          <input value={form.level} onChange={e => set('level', e.target.value)} style={inputStyle} placeholder="Ej: Principiante/Intermedio" />
+        </Field>
+        <Field label="Materiales Requeridos">
+          <input value={form.materialsRequired} onChange={e => set('materialsRequired', e.target.value)} style={inputStyle} placeholder="Ej: Plancha, tubo y cepillo" />
+        </Field>
+      </div>
+
       <Field label="Fechas del Curso">
         <input value={form.dates} onChange={e => set('dates', e.target.value)} style={inputStyle} placeholder="Ej: 27 DE ENERO – 17 DE FEBRERO" />
       </Field>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
+        <Field label="Cuotas / Pagos">
+          <input value={form.installments} onChange={e => set('installments', e.target.value)} style={inputStyle} placeholder="Ej: HASTA 3 CUOTAS SIN RECARGO" />
+        </Field>
+        <Field label="Texto de Promo (detalle del curso)">
+          <input value={form.promo} onChange={e => set('promo', e.target.value)} style={inputStyle} placeholder="Ej: *DEMO MAKEUP GRATIS" />
+        </Field>
+      </div>
 
       {/* ── Schedule options ── */}
       <SectionDivider label="Horarios" />
@@ -237,18 +299,94 @@ function CourseEditForm({ course, onSave, onClose }) {
         <button onClick={addImageUrl} style={{ ...ghostBtn, marginTop: '4px', fontSize: '0.78rem' }}>+ Agregar imagen</button>
       </Field>
 
-      {/* ── Promo & visibility ── */}
-      <SectionDivider label="Promoción y Visibilidad" />
-
-      <Field label="Texto Promocional">
-        <input
-          value={form.promoText}
-          onChange={e => set('promoText', e.target.value)}
-          style={inputStyle}
-          placeholder="Ej: ¡Inscripción gratis hasta el 15 de julio!"
-        />
+      {/* ── Classes ── */}
+      <SectionDivider label="Clases" />
+      <Field label="Lista de Clases">
+        <p style={{ margin: '0 0 10px', fontSize: '0.75rem', color: '#999', fontFamily: FONT }}>
+          Cada fila es una clase. Usa "Agregar descanso" para semanas sin clase (ej: Semana Santa).
+        </p>
+        {form.classes.map((cls, i) => (
+          <div key={i} style={{ marginBottom: '8px' }}>
+            {cls.isBreak ? (
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#aaa', fontFamily: FONT, minWidth: '52px', textTransform: 'uppercase' }}>Descanso</span>
+                <input
+                  value={cls.text || ''}
+                  onChange={e => updateClass(i, 'text', e.target.value)}
+                  style={{ ...inputStyle, flex: 1, fontStyle: 'italic' }}
+                  placeholder="Ej: SEMANA SANTA (NO HAY CLASE)"
+                />
+                <button onClick={() => removeClass(i)} style={removeBtn} title="Eliminar">✕</button>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#bbb', fontFamily: FONT, minWidth: '18px', textAlign: 'right' }}>{i + 1}.</span>
+                <input
+                  value={cls.name || ''}
+                  onChange={e => updateClass(i, 'name', e.target.value)}
+                  style={{ ...inputStyle, width: '90px', flexShrink: 0 }}
+                  placeholder="Clase 1:"
+                />
+                <input
+                  value={cls.date || ''}
+                  onChange={e => updateClass(i, 'date', e.target.value)}
+                  style={{ ...inputStyle, width: '130px', flexShrink: 0 }}
+                  placeholder="Martes 27 de Enero"
+                />
+                <input
+                  value={cls.topics || ''}
+                  onChange={e => updateClass(i, 'topics', e.target.value)}
+                  style={{ ...inputStyle, flex: 1 }}
+                  placeholder="Tema de la clase"
+                />
+                <button onClick={() => removeClass(i)} style={removeBtn} title="Eliminar">✕</button>
+              </div>
+            )}
+          </div>
+        ))}
+        <div style={{ display: 'flex', gap: '8px', marginTop: '6px' }}>
+          <button onClick={addClass} style={{ ...ghostBtn, fontSize: '0.78rem' }}>+ Agregar clase</button>
+          <button onClick={addBreak}  style={{ ...ghostBtn, fontSize: '0.78rem' }}>+ Agregar descanso</button>
+        </div>
       </Field>
 
+      {/* ── Complex Classes (Masterclass + Práctica pairs) ── */}
+      <SectionDivider label="Módulos Complejos (Masterclass / Práctica)" />
+      <Field label="Módulos con Sesiones">
+        <p style={{ margin: '0 0 10px', fontSize: '0.75rem', color: '#999', fontFamily: FONT }}>
+          Para módulos que tienen varias sesiones por tema (ej: Maestría con Masterclass + Práctica).
+        </p>
+        {form.complexClasses.map((cc, i) => (
+          <div key={i} style={{ border: '1px solid #f0f0f0', borderRadius: '6px', padding: '12px 14px', marginBottom: '10px' }}>
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'center' }}>
+              <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#bbb', fontFamily: FONT, minWidth: '22px' }}>#{i + 1}</span>
+              <input
+                value={cc.title || ''}
+                onChange={e => updateComplexTitle(i, e.target.value)}
+                style={{ ...inputStyle, flex: 1, fontWeight: 600 }}
+                placeholder="Título del módulo (ej: Semirecogido con ondas retro)"
+              />
+              <button onClick={() => removeComplexClass(i)} style={removeBtn} title="Eliminar módulo">✕</button>
+            </div>
+            {(cc.sessions || []).map((session, si) => (
+              <div key={si} style={{ display: 'flex', gap: '8px', marginBottom: '6px', paddingLeft: '30px' }}>
+                <input
+                  value={session}
+                  onChange={e => updateComplexSession(i, si, e.target.value)}
+                  style={{ ...inputStyle, flex: 1, fontSize: '0.78rem' }}
+                  placeholder="Ej: Clase 11: Masterclass Miércoles 15 de Abril"
+                />
+                <button onClick={() => removeComplexSession(i, si)} style={removeBtn} title="Eliminar sesión">✕</button>
+              </div>
+            ))}
+            <button onClick={() => addComplexSession(i)} style={{ ...ghostBtn, marginLeft: '30px', marginTop: '2px', fontSize: '0.75rem' }}>+ Sesión</button>
+          </div>
+        ))}
+        <button onClick={addComplexClass} style={{ ...ghostBtn, fontSize: '0.78rem' }}>+ Agregar módulo complejo</button>
+      </Field>
+
+      {/* ── Visibility ── */}
+      <SectionDivider label="Visibilidad" />
       <div style={{ display: 'flex', gap: '28px', marginBottom: '18px', flexWrap: 'wrap' }}>
         <Toggle label="Promo activa"        checked={form.promoActive} onChange={v => set('promoActive', v)} />
         <Toggle label="Visible en el sitio" checked={form.isVisible}   onChange={v => set('isVisible',  v)} />

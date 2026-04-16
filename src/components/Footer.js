@@ -1,5 +1,6 @@
 // src/components/Footer.js
 import React from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/footer.css';
 
 const Footer = () => {
@@ -26,7 +27,10 @@ const Footer = () => {
         </div>
         </div>
         <div className="footer2">
-        <p className="text-footer">© 2024 by Beauty Station</p>
+          <p className="text-footer">© 2024 by Beauty Station</p>
+          <Link to="/staff-login" className="footer-staff-link">
+            Acceso Empleados
+          </Link>
         </div>
     </div>
   );

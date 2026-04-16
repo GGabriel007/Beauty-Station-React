@@ -29,7 +29,18 @@ export function CourseDataProvider({ children }) {
           // (e.g. images.folder/count/instructor stay even if admin only saved price).
           const merged = { ...hardcodedCourses };
           for (const [id, dbCourse] of Object.entries(data)) {
-            merged[id] = { ...(hardcodedCourses[id] || {}), ...dbCourse };
+            const base = hardcodedCourses[id] || {};
+            const mergedCourse = { ...base };
+            for (const [key, val] of Object.entries(dbCourse)) {
+              // If the DB value is an empty array but hardcoded has entries,
+              // treat it as "no admin override" and keep the hardcoded default.
+              if (Array.isArray(val) && val.length === 0 &&
+                  Array.isArray(base[key]) && base[key].length > 0) {
+                continue;
+              }
+              mergedCourse[key] = val;
+            }
+            merged[id] = mergedCourse;
           }
           setCoursesData(merged);
         }

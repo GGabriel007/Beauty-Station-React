@@ -481,6 +481,142 @@
     text-align: right;
 }
 
+/* ── Coupon ── */
+.cp-coupon-section {
+    margin: 14px 0 4px;
+    padding: 12px 14px;
+    background: #fdf7f9;
+    border: 1px dashed #E8CBD4;
+    border-radius: 8px;
+}
+
+.cp-coupon-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #888;
+    margin: 0 0 8px;
+}
+
+.cp-coupon-row {
+    display: flex;
+    gap: 8px;
+}
+
+.cp-coupon-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1.5px solid #E8CBD4;
+    border-radius: 6px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #7D4E61;
+    outline: none;
+    background: #fff;
+    transition: border-color 0.2s;
+}
+
+.cp-coupon-input:focus {
+    border-color: #cd929d;
+}
+
+.cp-coupon-input:disabled {
+    opacity: 0.6;
+}
+
+.cp-coupon-btn {
+    padding: 8px 16px;
+    background: #7D4E61;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+}
+
+.cp-coupon-btn:hover:not(:disabled) {
+    background: #5c3749;
+}
+
+.cp-coupon-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.cp-coupon-error {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    color: #c62828;
+    margin: 6px 0 0;
+    font-weight: 600;
+}
+
+/* Applied coupon row */
+.cp-coupon-applied {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.cp-coupon-applied-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cp-coupon-applied-code {
+    font-family: monospace;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 1.5px;
+    color: #2e7d32;
+}
+
+.cp-coupon-applied-desc {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    color: #555;
+}
+
+.cp-coupon-remove {
+    background: none;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 4px 9px;
+    cursor: pointer;
+    color: #aaa;
+    font-size: 0.85rem;
+    line-height: 1;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.cp-coupon-remove:hover {
+    color: #c62828;
+    border-color: #ffcdd2;
+}
+
+/* Discount line in summary */
+.cp-summary-item.cp-summary-discount {
+    border-bottom: none;
+    padding: 4px 0 0;
+}
+
+.cp-discount-value {
+    color: #2e7d32 !important;
+    font-weight: 700;
+}
+
 /* ── Empty cart ── */
 .cp-empty {
     display: flex;

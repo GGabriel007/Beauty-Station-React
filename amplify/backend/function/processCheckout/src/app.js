@@ -66,6 +66,19 @@ const IMAGES_BUCKET    = process.env.IMAGES_BUCKET_NAME    || 'beauty-station-im
 
 const OWNER_EMAIL = process.env.OWNER_EMAIL || 'g.a.gramirez007@gmail.com';
 
+// ─── HTML escaping helper ─────────────────────────────────────────────────────
+// Prevents HTML injection when user-supplied strings are embedded in email templates.
+// React auto-escapes on the frontend, but email bodies are raw HTML strings built
+// in this Lambda, so we must escape manually here.
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 // ─── Admin Activity Log helper ────────────────────────────────────────────────
 // Writes a log entry to the AdminLog DynamoDB table.
 // Non-fatal: if the table doesn't exist or the write fails the operation continues.
@@ -298,15 +311,28 @@ app.get('/my-orders', async function (req, res) {
 
 app.post('/checkout', async function (req, res) {
   try {
-    const { email, Name, userName, DPI, phoneNumber, cartItems, IncludeKit, TotalPrice } = req.body;
+    const { email, Name, userName, DPI, phoneNumber, cartItems, IncludeKit, TotalPrice, couponCode } = req.body;
+
+    // ── Input sanitization: trim and cap every user-supplied string before any
+    //    use in DB writes or email templates. Prevents oversized payloads and
+    //    HTML injection in email bodies.
+    const safeEmail    = String(email    || '').trim().toLowerCase().slice(0, 254);
+    const safeName     = String(Name     || '').trim().slice(0, 120);
+    const safeUserName = String(userName || '').trim().slice(0, 120);
+    const safeDPI      = String(DPI      || '').trim().slice(0, 30);
+    const safePhone    = String(phoneNumber || '').trim().slice(0, 25);
+    const safeItems    = (Array.isArray(cartItems) ? cartItems : []).map(item => ({
+      ...item,
+      name: String(item.name || '').trim().slice(0, 150),
+    }));
 
     // 1a. PRE-CHECK ONLINE OWNERSHIP: Prevent duplicate purchase of online courses
-    const onlineItems = cartItems.filter(item => item.online);
+    const onlineItems = safeItems.filter(item => item.online);
     if (onlineItems.length > 0) {
       const existingData = await ddbDocClient.send(new ScanCommand({
         TableName: 'Payments',
         FilterExpression: 'email = :email',
-        ExpressionAttributeValues: { ':email': email }
+        ExpressionAttributeValues: { ':email': safeEmail }
       }));
       for (const item of onlineItems) {
         const alreadyOwned = (existingData.Items || []).some(order =>
@@ -324,7 +350,7 @@ app.post('/checkout', async function (req, res) {
     try {
       let expectedTotal = 0;
       let allPricesFound = true;
-      for (const item of cartItems) {
+      for (const item of safeItems) {
         const courseId = cartNameToCourseId[item.name];
         if (courseId) {
           const courseData = await ddbDocClient.send(new GetCommand({ TableName: 'CourseSettings', Key: { courseId } }));
@@ -345,19 +371,36 @@ app.post('/checkout', async function (req, res) {
       const enrollmentFee = enrollmentSettings.Item ? Number(enrollmentSettings.Item.value) : 200;
       expectedTotal += enrollmentFee;
 
+      // Apply coupon discount to expected total before comparing
+      let couponDiscount = 0;
+      let resolvedCoupon = null;
+      if (couponCode) {
+        const couponResult = await resolveCoupon(couponCode, expectedTotal);
+        if (!couponResult.valid) {
+          return res.status(400).json({ error: `Cupón inválido: ${couponResult.reason}` });
+        }
+        couponDiscount = couponResult.discountAmount;
+        resolvedCoupon = couponResult.coupon;
+        expectedTotal = Math.max(0, expectedTotal - couponDiscount);
+      }
+
       if (allPricesFound && expectedTotal > 0 && Math.abs(Number(TotalPrice) - expectedTotal) > 1) {
-        console.warn(`PRICE MISMATCH: Client sent Q${TotalPrice}, expected Q${expectedTotal} for order by ${email}. Rejecting.`);
+        console.warn(`PRICE MISMATCH: Client sent Q${TotalPrice}, expected Q${expectedTotal} for order by ${safeEmail}. Rejecting.`);
         return res.status(400).json({
           error: `El precio enviado (Q${TotalPrice}) no coincide con el precio actual (Q${expectedTotal}). Por favor, recarga la página y vuelve a intentarlo.`
         });
       }
+
+      // Store resolved coupon on req so the payment step can use it
+      req._resolvedCoupon   = resolvedCoupon;
+      req._couponDiscount   = couponDiscount;
     } catch (auditErr) {
       // CourseSettings table not seeded yet — skip validation
       console.info('Price validation skipped (CourseSettings not available):', auditErr.message);
     }
 
     // 1b. PRE-CHECK INVENTORY: Verify seats exist in DynamoDB 'Modulos' before processing payment
-    for (const item of cartItems) {
+    for (const item of safeItems) {
       const moduleId = moduleIds[item.name];
       if (moduleId) {
         const data = await ddbDocClient.send(new GetCommand({ TableName: 'Modulos', Key: { id: moduleId } }));
@@ -376,7 +419,7 @@ app.post('/checkout', async function (req, res) {
     }
 
     // 2. DEDUCT INVENTORY: Remove purchased seats securely
-    for (const item of cartItems) {
+    for (const item of safeItems) {
       const moduleId = moduleIds[item.name];
       if (moduleId) {
         // Safe mathematical subtraction isolated in the AWS Cloud
@@ -439,17 +482,35 @@ app.post('/checkout', async function (req, res) {
     const paymentId = crypto.randomUUID();
     const paymentData = {
       id: paymentId,
-      email: email,
-      Name: Name,
-      userName: userName || '',
-      DPI: DPI || '',
-      phoneNumber: phoneNumber || '',
-      Items: cartItems.map(item => item.name).join(', ') + (IncludeKit ? ', Kit de pieles perfectas' : ''),
-      TotalPrice: TotalPrice,
-      Timestamp: Date.now()
+      email: safeEmail,
+      Name: safeName,
+      userName: safeUserName,
+      DPI: safeDPI,
+      phoneNumber: safePhone,
+      Items: safeItems.map(item => item.name).join(', ') + (IncludeKit ? ', Kit de pieles perfectas' : ''),
+      TotalPrice: Number(TotalPrice),
+      Timestamp: Date.now(),
+      ...(req._resolvedCoupon ? {
+        couponCode:     req._resolvedCoupon.couponCode,
+        couponDiscount: req._couponDiscount,
+      } : {}),
     };
 
     await ddbDocClient.send(new PutCommand({ TableName: 'Payments', Item: paymentData }));
+
+    // Increment coupon usage count after confirmed payment
+    if (req._resolvedCoupon) {
+      try {
+        await ddbDocClient.send(new UpdateCommand({
+          TableName: 'Coupons',
+          Key: { couponCode: req._resolvedCoupon.couponCode },
+          UpdateExpression: 'SET usageCount = if_not_exists(usageCount, :zero) + :inc',
+          ExpressionAttributeValues: { ':inc': 1, ':zero': 0 },
+        }));
+      } catch (couponErr) {
+        console.warn('Failed to increment coupon usage:', couponErr.message);
+      }
+    }
 
     // 4. GOOGLE SHEETS: Log each purchased course into its own sheet tab
     try {
@@ -457,7 +518,7 @@ app.post('/checkout', async function (req, res) {
       const dateStr = new Date(paymentData.Timestamp).toLocaleDateString('es-GT', { year: 'numeric', month: 'long', day: 'numeric' });
       const receiptId = paymentData.id.split('-')[0].toUpperCase();
 
-      for (const item of cartItems) {
+      for (const item of safeItems) {
         const info = courseWhatsappInfo[item.name];
         if (!info) continue; // skip items with no course mapping (e.g. kit)
 
@@ -480,7 +541,7 @@ app.post('/checkout', async function (req, res) {
         });
       }
       // Log online course enrollments to their own sheet tab
-      for (const item of cartItems) {
+      for (const item of safeItems) {
         if (!item.online) continue;
         const onlineCourse = Object.values(ONLINE_COURSES).find(c => c.cartName === item.name);
         if (!onlineCourse) continue;
@@ -513,7 +574,7 @@ app.post('/checkout', async function (req, res) {
     // Build one WhatsApp entry per purchased course (deduplicated by course name)
     const seenCourses = new Set();
     const whatsappEntries = [];
-    for (const item of cartItems) {
+    for (const item of safeItems) {
       const info = courseWhatsappInfo[item.name];
       if (info && !seenCourses.has(info.displayName)) {
         seenCourses.add(info.displayName);
@@ -529,7 +590,7 @@ app.post('/checkout', async function (req, res) {
           <p style="color: #555; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; margin-top: 5px;">Recibo de Inscripción Oficial</p>
         </div>
 
-        <p style="font-size: 16px; color: #333; line-height: 1.5;">Estimado/a <strong>${paymentData.Name || ""}</strong>,</p>
+        <p style="font-size: 16px; color: #333; line-height: 1.5;">Estimado/a <strong>${escapeHtml(paymentData.Name)}</strong>,</p>
         <p style="font-size: 16px; color: #333; line-height: 1.5;">Hemos procesado tu inscripción exitosamente. A continuación encontrarás el detalle oficial de tu recibo.</p>
         
         <div style="background-color: #f7f7f7; padding: 20px; border-radius: 4px; margin: 25px 0;">
@@ -545,11 +606,11 @@ app.post('/checkout', async function (req, res) {
             </tr>
             <tr>
               <td style="padding: 6px 0; color: #555;"><strong>Identificación (DPI/Pasaporte):</strong></td>
-              <td style="padding: 6px 0; text-align: right; color: #000;">${paymentData.DPI || "No proporcionado"}</td>
+              <td style="padding: 6px 0; text-align: right; color: #000;">${escapeHtml(paymentData.DPI) || "No proporcionado"}</td>
             </tr>
             <tr>
               <td style="padding: 6px 0; color: #555;"><strong>Teléfono Autorizado:</strong></td>
-              <td style="padding: 6px 0; text-align: right; color: #000;">${paymentData.phoneNumber || "No proporcionado"}</td>
+              <td style="padding: 6px 0; text-align: right; color: #000;">${escapeHtml(paymentData.phoneNumber) || "No proporcionado"}</td>
             </tr>
           </table>
         </div>
@@ -559,7 +620,7 @@ app.post('/checkout', async function (req, res) {
           <ul style="padding: 0; list-style-type: none; margin: 0;">
             ${itemsArray.map(item => `
               <li style="padding: 12px 0; border-bottom: 1px solid #eee; font-size: 15px; color: #333;">
-                <span style="font-weight: bold;">&#8226;</span> ${item.trim()}
+                <span style="font-weight: bold;">&#8226;</span> ${escapeHtml(item.trim())}
               </li>
             `).join("")}
           </ul>
@@ -577,7 +638,7 @@ app.post('/checkout', async function (req, res) {
         </div>
         ` : ''}
 
-        ${cartItems.some(i => i.online) ? `
+        ${safeItems.some(i => i.online) ? `
         <div style="margin: 30px 0; background-color: #fdf4ff; border: 1px solid #e9d5ff; border-radius: 8px; padding: 24px; text-align: center;">
           <h3 style="font-size: 15px; text-transform: uppercase; color: #000; letter-spacing: 1px; margin-top: 0; margin-bottom: 12px;">¿Cómo acceder a tu Curso en Línea?</h3>
           <ol style="text-align: left; display: inline-block; font-size: 14px; color: #444; margin: 0 0 20px 0; padding-left: 20px; line-height: 2;">
@@ -635,11 +696,11 @@ app.post('/checkout', async function (req, res) {
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #ddd; border-radius: 8px;">
                   <h2 style="color: #000; border-bottom: 2px solid #f1b2c9; padding-bottom: 10px;">Nueva Inscripción Recibida</h2>
                   <table style="width: 100%; font-size: 14px; border-collapse: collapse;">
-                    <tr><td style="padding: 8px 0; color: #555; width: 40%;"><strong>Nombre:</strong></td><td style="padding: 8px 0;">${paymentData.Name}</td></tr>
-                    <tr><td style="padding: 8px 0; color: #555;"><strong>Email:</strong></td><td style="padding: 8px 0;">${paymentData.email}</td></tr>
-                    <tr><td style="padding: 8px 0; color: #555;"><strong>Teléfono:</strong></td><td style="padding: 8px 0;">${paymentData.phoneNumber || 'No proporcionado'}</td></tr>
-                    <tr><td style="padding: 8px 0; color: #555;"><strong>DPI/Pasaporte:</strong></td><td style="padding: 8px 0;">${paymentData.DPI || 'No proporcionado'}</td></tr>
-                    <tr><td style="padding: 8px 0; color: #555;"><strong>Curso(s):</strong></td><td style="padding: 8px 0;">${paymentData.Items}</td></tr>
+                    <tr><td style="padding: 8px 0; color: #555; width: 40%;"><strong>Nombre:</strong></td><td style="padding: 8px 0;">${escapeHtml(paymentData.Name)}</td></tr>
+                    <tr><td style="padding: 8px 0; color: #555;"><strong>Email:</strong></td><td style="padding: 8px 0;">${escapeHtml(paymentData.email)}</td></tr>
+                    <tr><td style="padding: 8px 0; color: #555;"><strong>Teléfono:</strong></td><td style="padding: 8px 0;">${escapeHtml(paymentData.phoneNumber) || 'No proporcionado'}</td></tr>
+                    <tr><td style="padding: 8px 0; color: #555;"><strong>DPI/Pasaporte:</strong></td><td style="padding: 8px 0;">${escapeHtml(paymentData.DPI) || 'No proporcionado'}</td></tr>
+                    <tr><td style="padding: 8px 0; color: #555;"><strong>Curso(s):</strong></td><td style="padding: 8px 0;">${escapeHtml(paymentData.Items)}</td></tr>
                     <tr><td style="padding: 8px 0; color: #555;"><strong>Total Pagado:</strong></td><td style="padding: 8px 0;"><strong>Q ${paymentData.TotalPrice}.00</strong></td></tr>
                     <tr><td style="padding: 8px 0; color: #555;"><strong>Fecha:</strong></td><td style="padding: 8px 0;">${new Date(paymentData.Timestamp).toLocaleDateString('es-GT', { year: 'numeric', month: 'long', day: 'numeric' })}</td></tr>
                     <tr><td style="padding: 8px 0; color: #555;"><strong>No. Recibo:</strong></td><td style="padding: 8px 0;">${paymentData.id.split('-')[0].toUpperCase()}</td></tr>
@@ -875,7 +936,7 @@ app.get('/reviews', async function (req, res) {
 // SUBMIT A NEW REVIEW (public — no auth required)
 app.post('/reviews', async function (req, res) {
   try {
-    const { name, rating, text, date } = req.body || {};
+    const { name, rating, text } = req.body || {};
     if (!text || !text.trim()) return res.status(400).json({ error: 'El texto de la reseña es requerido.' });
 
     const reviewId = `u_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
@@ -886,7 +947,7 @@ app.post('/reviews', async function (req, res) {
         name:      (name  || 'Usuario').trim().slice(0, 80),
         rating:    Math.min(5, Math.max(1, Number(rating) || 5)),
         text:      text.trim().slice(0, 2000),
-        date:      date || new Date().toLocaleDateString('es-GT', { month: 'long', year: 'numeric' }),
+        date:      new Date().toLocaleDateString('es-GT', { month: 'long', year: 'numeric' }),
         source:    'user',
         isVisible: true,
         createdAt: Date.now(),
@@ -1183,6 +1244,163 @@ app.get('/admin/presigned-upload-url', requireAdmin, async function (req, res) {
   } catch (error) {
     console.error('Admin: error generating presigned upload URL:', error);
     res.status(500).json({ error: 'Error al generar URL de subida. Verifica que el bucket beauty-station-images existe en AWS.' });
+  }
+});
+
+// ─── Coupon helpers ──────────────────────────────────────────────────────────
+
+// Internal: validate a coupon against an order total.
+// Returns { valid, coupon, discountAmount } or { valid: false, reason }
+async function resolveCoupon(rawCode, orderTotal) {
+  if (!rawCode || !String(rawCode).trim()) return { valid: false, reason: 'No se proporcionó código.' };
+  const code = String(rawCode).trim().toUpperCase();
+  try {
+    const result = await ddbDocClient.send(new GetCommand({ TableName: 'Coupons', Key: { couponCode: code } }));
+    const c = result.Item;
+    if (!c)           return { valid: false, reason: 'Código de cupón no válido.' };
+    if (!c.isActive)  return { valid: false, reason: 'Este cupón no está activo actualmente.' };
+    if (c.expiresAt && Date.now() > Number(c.expiresAt))
+                      return { valid: false, reason: 'Este cupón ya expiró.' };
+    if (c.usageLimit != null && Number(c.usageCount || 0) >= Number(c.usageLimit))
+                      return { valid: false, reason: 'Este cupón ha alcanzado su límite de uso.' };
+    if (c.minimumOrderAmount != null && orderTotal < Number(c.minimumOrderAmount))
+                      return { valid: false, reason: `Este cupón requiere un pedido mínimo de Q${c.minimumOrderAmount}.` };
+
+    const discountAmount = c.discountType === 'percentage'
+      ? Math.round(orderTotal * Number(c.discountValue) / 100 * 100) / 100
+      : Math.min(Number(c.discountValue), orderTotal);
+
+    return { valid: true, coupon: c, discountAmount };
+  } catch (err) {
+    console.error('resolveCoupon error:', err);
+    return { valid: false, reason: 'Error al verificar el cupón.' };
+  }
+}
+
+// PUBLIC: Validate a coupon code and return the discount (no internal data exposed).
+// Body: { couponCode, orderTotal }
+app.post('/coupons/validate', async function (req, res) {
+  const { couponCode, orderTotal } = req.body || {};
+  const total = Number(orderTotal) || 0;
+  const result = await resolveCoupon(couponCode, total);
+  if (!result.valid) return res.status(400).json({ valid: false, reason: result.reason });
+  const c = result.coupon;
+  res.json({
+    valid: true,
+    couponCode: c.couponCode,
+    discountType: c.discountType,
+    discountValue: Number(c.discountValue),
+    discountAmount: result.discountAmount,
+    description: c.description || '',
+  });
+});
+
+// ADMIN: List all coupons
+app.get('/admin/coupons', requireAdmin, async function (req, res) {
+  try {
+    const data = await ddbDocClient.send(new ScanCommand({ TableName: 'Coupons' }));
+    const sorted = (data.Items || []).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    res.json(sorted);
+  } catch (error) {
+    console.error('Admin: error listing coupons:', error);
+    res.status(500).json({ error: 'Error al listar cupones.' });
+  }
+});
+
+// ADMIN: Create a new coupon
+app.post('/admin/coupons', requireAdmin, async function (req, res) {
+  try {
+    const { couponCode, discountType, discountValue, description, isActive,
+            usageLimit, minimumOrderAmount, expiresAt } = req.body || {};
+
+    if (!couponCode || !couponCode.trim())
+      return res.status(400).json({ error: 'El código del cupón es requerido.' });
+    if (!['percentage', 'fixed'].includes(discountType))
+      return res.status(400).json({ error: 'Tipo de descuento inválido.' });
+    if (discountValue == null || Number(discountValue) <= 0)
+      return res.status(400).json({ error: 'El valor del descuento debe ser mayor a 0.' });
+    if (discountType === 'percentage' && Number(discountValue) > 100)
+      return res.status(400).json({ error: 'El porcentaje no puede ser mayor a 100.' });
+
+    const code = couponCode.trim().toUpperCase().replace(/[^A-Z0-9_-]/g, '');
+    if (!code) return res.status(400).json({ error: 'Código de cupón inválido.' });
+
+    // Prevent duplicate
+    const existing = await ddbDocClient.send(new GetCommand({ TableName: 'Coupons', Key: { couponCode: code } }));
+    if (existing.Item) return res.status(409).json({ error: `El código "${code}" ya existe.` });
+
+    const item = {
+      couponCode:          code,
+      discountType,
+      discountValue:       Number(discountValue),
+      description:         (description || '').trim().slice(0, 200),
+      isActive:            isActive !== false,
+      usageLimit:          usageLimit != null && String(usageLimit).trim() !== '' ? Number(usageLimit) : null,
+      usageCount:          0,
+      minimumOrderAmount:  minimumOrderAmount != null && String(minimumOrderAmount).trim() !== '' ? Number(minimumOrderAmount) : null,
+      expiresAt:           expiresAt != null && String(expiresAt).trim() !== '' ? Number(expiresAt) : null,
+      createdAt:           Date.now(),
+      createdBy:           req.adminEmail,
+    };
+    await ddbDocClient.send(new PutCommand({ TableName: 'Coupons', Item: item }));
+    await writeActivityLog(req.adminEmail, `Created coupon: ${code}`, null, `${discountType} ${discountValue}`);
+    res.json({ success: true, coupon: item });
+  } catch (error) {
+    console.error('Admin: error creating coupon:', error);
+    res.status(500).json({ error: 'Error al crear el cupón.' });
+  }
+});
+
+// ADMIN: Update an existing coupon
+app.put('/admin/coupons/:code', requireAdmin, async function (req, res) {
+  try {
+    const code = req.params.code.toUpperCase();
+    const { discountType, discountValue, description, isActive,
+            usageLimit, minimumOrderAmount, expiresAt } = req.body || {};
+
+    const names  = { '#ua': 'lastUpdatedAt', '#ub': 'lastUpdatedBy' };
+    const values = { ':ua': Date.now(), ':ub': req.adminEmail };
+    const parts  = ['#ua = :ua', '#ub = :ub'];
+
+    const set = (attr, val) => {
+      names[`#${attr}`]  = attr;
+      values[`:${attr}`] = val;
+      parts.push(`#${attr} = :${attr}`);
+    };
+
+    if (discountType  !== undefined) set('discountType',  discountType);
+    if (discountValue !== undefined) set('discountValue', Number(discountValue));
+    if (description   !== undefined) set('description',   String(description).trim().slice(0, 200));
+    if (isActive      !== undefined) set('isActive',      Boolean(isActive));
+    set('usageLimit',         usageLimit != null && String(usageLimit).trim() !== '' ? Number(usageLimit) : null);
+    set('minimumOrderAmount', minimumOrderAmount != null && String(minimumOrderAmount).trim() !== '' ? Number(minimumOrderAmount) : null);
+    set('expiresAt',          expiresAt  != null && String(expiresAt).trim()  !== '' ? Number(expiresAt)  : null);
+
+    await ddbDocClient.send(new UpdateCommand({
+      TableName: 'Coupons',
+      Key: { couponCode: code },
+      UpdateExpression: `SET ${parts.join(', ')}`,
+      ExpressionAttributeNames:  names,
+      ExpressionAttributeValues: values,
+    }));
+    await writeActivityLog(req.adminEmail, `Updated coupon: ${code}`, null, null);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Admin: error updating coupon:', error);
+    res.status(500).json({ error: 'Error al actualizar el cupón.' });
+  }
+});
+
+// ADMIN: Delete a coupon permanently
+app.delete('/admin/coupons/:code', requireAdmin, async function (req, res) {
+  try {
+    const code = req.params.code.toUpperCase();
+    await ddbDocClient.send(new DeleteCommand({ TableName: 'Coupons', Key: { couponCode: code } }));
+    await writeActivityLog(req.adminEmail, `Deleted coupon: ${code}`, null, null);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Admin: error deleting coupon:', error);
+    res.status(500).json({ error: 'Error al eliminar el cupón.' });
   }
 });
 

@@ -416,6 +416,20 @@
   margin-bottom: 6px;
 }
 
+/* Course promo label — shown below description on detail page */
+.course-promo-text {
+  font-size: 14px;
+  font-weight: 700;
+  font-style: italic;
+  color: #b5405a;
+  background-color: #fdf0f3;
+  border-left: 3px solid #cd929d;
+  padding: 7px 12px;
+  border-radius: 0 6px 6px 0;
+  margin: 10px 0;
+  letter-spacing: 0.3px;
+}
+
 /* Section headers */
 .class_links-module {
   display: block;
@@ -480,6 +494,7 @@ ul {
 
 .course-schedule-btn {
   flex: 1;
+  min-width: 0;
   padding: 11px 16px;
   border: 1.5px solid #cd929d;
   background: #FFFFFF;
@@ -493,7 +508,9 @@ ul {
   border-radius: 4px;
   transition: all 0.2s ease;
   opacity: 0.55;
-  white-space: nowrap;
+  white-space: normal;
+  word-break: break-word;
+  text-align: center;
 }
 
 .course-schedule-btn--active {
@@ -1059,9 +1076,16 @@ ul {
     letter-spacing: 1.5px;
   }
 
+  .course-schedule-buttons {
+    flex-direction: column;
+  }
+
   .course-schedule-btn {
+    flex: none;
+    width: 100%;
     font-size: 9px;
-    padding: 10px 12px;
+    padding: 10px 14px;
+    text-align: center;
   }
 
   .modal-image {

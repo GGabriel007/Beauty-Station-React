@@ -46,7 +46,9 @@
       "Bash(amplify status:*)",
       "Bash(aws logs:*)",
       "Bash(MSYS_NO_PATHCONV=1 aws logs describe-log-groups --log-group-name-prefix '/aws/lambda/processCheckout' --region us-east-1)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\({k: list\\(v.keys\\(\\)\\) for k,v in d.items\\(\\)}, indent=2\\)\\)\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); resources=d.get\\('Resources',{}\\); [print\\(k,v.get\\('Type',''\\)\\) for k,v in resources.items\\(\\)]\")"
     ]
   }
 }

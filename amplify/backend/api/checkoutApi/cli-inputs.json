@@ -179,6 +179,23 @@
         "setting": "private",
         "auth": ["read"]
       }
+    },
+    "/admin/coupons": {
+      "name": "/admin/coupons",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "private",
+        "auth": ["read", "create", "update", "delete"]
+      }
+    },
+    "/coupons/validate": {
+      "name": "/coupons/validate",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "protected",
+        "auth": ["create"],
+        "guest": ["create"]
+      }
     }
   }
 }

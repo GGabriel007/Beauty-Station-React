@@ -97,6 +97,31 @@
     font-family: 'Montserrat', sans-serif;
     letter-spacing: 1px;
     text-transform: uppercase;
+    gap: 12px;
+}
+
+/* ─── Staff portal link ─────────────────────────────────────────────────────── */
+
+.footer-staff-link {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #b8a0a8;
+    text-decoration: none;
+    border: 1px solid #E8CBD4;
+    border-radius: 50px;
+    padding: 5px 14px;
+    transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.footer-staff-link:hover {
+    color: #7D4E61;
+    border-color: #cd929d;
+    background-color: #fff;
 }
 
 @media (max-width: 1019px) {
@@ -122,6 +147,11 @@
 
     .footer2 {
         font-size: 12px;
+        gap: 10px;
+    }
+
+    .footer-staff-link {
+        font-size: 0.6rem;
     }
 
     .footer {

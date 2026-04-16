@@ -19,6 +19,7 @@ import Classes2 from './pages/Classes_2';
 import CourseDetails from './components/CourseDetails';
 import CartPage from './pages/CartPage';
 import Login from './pages/Login';
+import StaffLogin from './pages/StaffLogin';
 import Dashboard from './pages/Dashboard';
 import CoursePlayer from './pages/CoursePlayer';
 import { CartProvider, CartContext } from './context/CartContext';
@@ -29,7 +30,7 @@ function App() {
   return (
     <CartProvider>
       <CourseDataProvider>
-        <Router>
+        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <AppLayout />
         </Router>
       </CourseDataProvider>
@@ -41,12 +42,13 @@ function App() {
 // The admin panel gets its own full-page shell; all site chrome is hidden there.
 function AppLayout() {
   const location = useLocation();
-  const isAdmin  = location.pathname === '/admin';
+  const isAdmin       = location.pathname === '/admin';
+  const isStaffLogin  = location.pathname === '/staff-login';
 
   return (
     <div className="App">
       {!isAdmin && <Header />}
-      {!isAdmin && <SiteNoticeBanner />}
+      {!isAdmin && !isStaffLogin && <SiteNoticeBanner />}
       <Routes basename="/Beauty-Station-React">
         <Route path="/" element={<BeautyStation />} />
         <Route path="/classes" element={<BeautySClasses />} />
@@ -58,6 +60,7 @@ function AppLayout() {
 
         {/* Auth routes */}
         <Route path="/login" element={<Login />} />
+        <Route path="/staff-login" element={<StaffLogin />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/mis-cursos/:courseId" element={<CoursePlayer />} />
 
@@ -68,7 +71,7 @@ function AppLayout() {
       </Routes>
       <AuthRedirectHandler />
       <AuthRouteWatcher />
-      {!isAdmin && <CartButton />}
+      {!isAdmin && !isStaffLogin && <CartButton />}
       {!isAdmin && <Footer />}
       <ToastContainer
         position="top-center"
@@ -103,6 +106,8 @@ const AuthRedirectHandler = () => {
   useEffect(() => {
     const unsubscribe = Hub.listen('auth', ({ payload }) => {
       if (payload.event === 'signedIn') {
+        // StaffLogin handles its own group-check redirect — don't interfere.
+        if (sessionStorage.getItem('staffLogin')) return;
         toast.success('¡Bienvenido/a! Has iniciado sesión exitosamente.', { autoClose: 3000 });
         const redirect = sessionStorage.getItem('loginRedirect') || '/classes';
         sessionStorage.removeItem('loginRedirect');

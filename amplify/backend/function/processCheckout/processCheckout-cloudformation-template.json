@@ -188,7 +188,8 @@
                 "arn:aws:dynamodb:*:*:table/CourseSettings",
                 "arn:aws:dynamodb:*:*:table/Reviews",
                 "arn:aws:dynamodb:*:*:table/SiteSettings",
-                "arn:aws:dynamodb:*:*:table/AdminLog"
+                "arn:aws:dynamodb:*:*:table/AdminLog",
+                "arn:aws:dynamodb:*:*:table/Coupons"
               ],
               "Effect": "Allow"
             },
