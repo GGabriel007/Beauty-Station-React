@@ -50,6 +50,9 @@ function StaffLoginInner() {
   useEffect(() => {
     window.scrollTo(0, 0);
     sessionStorage.setItem('staffLogin', 'true');
+    const last = sessionStorage.getItem('lastLoginPage');
+    sessionStorage.setItem('lastLoginPage', 'staff');
+    if (last === 'user') window.location.reload();
     return () => sessionStorage.removeItem('staffLogin');
   }, []);
 

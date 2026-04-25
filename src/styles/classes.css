@@ -107,8 +107,10 @@
     display: flex;
     flex-direction: row;
     overflow-x: scroll;
-    gap: 28px;
-    padding: 40px 0 50px;
+    gap: 75px;
+    padding-right: 200px;
+    padding-top: 40px;
+    padding-bottom: 50px;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
 }
@@ -139,7 +141,7 @@
     overflow: hidden;
     box-shadow: 0 3px 16px rgba(160, 100, 122, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    width: 22vw;
+    width: 19vw;
     flex-shrink: 0;
 }
 
@@ -161,7 +163,7 @@
     position: relative;
     overflow: hidden;
     width: 100%;
-    aspect-ratio: 1/1.7;
+    aspect-ratio: 1/1.6;
     flex-shrink: 0;
 }
 
@@ -198,6 +200,8 @@
     flex-direction: column;
     gap: 10px;
     flex: 1;
+    overflow: hidden;
+    min-width: 0;
 }
 
 .course-grid-name {
@@ -241,10 +245,10 @@
 /* ── Date pill — hover reveals CTA ── */
 .course-grid-date {
     position: relative;
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
-    padding: 7px 35px;
+    padding: 7px 12px;
     background-color: #F0E2E9;
     color: #cd929d;
     border: 1px solid #E8CBD4;
@@ -255,9 +259,11 @@
     text-transform: uppercase;
     overflow: hidden;
     transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
-    align-self: flex-start;
+    align-self: stretch;
     min-height: 30px;
     white-space: nowrap;
+    box-sizing: border-box;
+    width: 100%;
 }
 
 .course-grid-date .default-text {
@@ -294,6 +300,19 @@
 }
 
 /* ===================================================
+   Large tablet — max-width 1200px
+   =================================================== */
+@media (max-width: 1200px) {
+    .course-grid-card {
+        width: 26vw;
+    }
+
+    .course-grid {
+        gap: 40px;
+    }
+}
+
+/* ===================================================
    Tablet — max-width 900px
    =================================================== */
 @media (max-width: 900px) {
@@ -305,6 +324,14 @@
     .top-information-class {
         padding: 65px 20px 55px;
     }
+
+    .course-grid-card {
+        width: 36vw;
+    }
+
+    .course-grid {
+        gap: 24px;
+    }
 }
 
 /* ===================================================
@@ -312,7 +339,11 @@
    =================================================== */
 @media (max-width: 500px) {
     .course-grid-card {
-        width: 55vw;
+        width: 60vw;
+    }
+
+    .course-grid {
+        gap: 16px;
     }
 
     .course-arrow {
@@ -364,4 +395,4 @@
         letter-spacing: 2px;
         margin-bottom: 16px;
     }
-}
+}

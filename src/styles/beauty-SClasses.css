@@ -58,9 +58,9 @@
    =================================================== */
 .classes-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 36px;
-    max-width: 78%;
+    grid-template-columns: repeat(3, 21vw);
+    gap: 55px;
+    width: fit-content;
     margin: 70px auto 90px;
 }
 
@@ -87,7 +87,7 @@
     position: relative;
     overflow: hidden;
     width: 100%;
-    aspect-ratio: 1 / 1.7;
+    aspect-ratio: 1 / 1.6;
     flex-shrink: 0;
 }
 
@@ -150,13 +150,22 @@
 }
 
 /* ===================================================
-   Tablet — max-width 768px
+   Large tablet — max-width 1200px
    =================================================== */
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
     .classes-grid {
-        grid-template-columns: 1fr;
-        max-width: 345px;
-        gap: 28px;
+        grid-template-columns: repeat(3, 25vw);
+        gap: 30px;
+    }
+}
+
+/* ===================================================
+   Tablet — max-width 900px
+   =================================================== */
+@media (max-width: 900px) {
+    .classes-grid {
+        grid-template-columns: repeat(2, 38vw);
+        gap: 24px;
         margin: 50px auto 70px;
     }
 
@@ -170,9 +179,52 @@
 }
 
 /* ===================================================
-   Mobile — max-width 480px
+   Mobile — max-width 500px
    =================================================== */
-@media (max-width: 480px) {
+@media (max-width: 500px) {
+    .classes-grid {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+        gap: 36px;
+        padding: 30px 0 40px 8%;
+        width: 100%;
+        box-sizing: border-box;
+        margin: 0 0 20px;
+        scroll-snap-type: x mandatory;
+        scroll-padding-left: 8%;
+    }
+
+    .classes-grid::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .classes-grid::-webkit-scrollbar-track {
+        background: #EDD8DE;
+        border-radius: 10px;
+    }
+
+    .classes-grid::-webkit-scrollbar-thumb {
+        background: #cd929d;
+        border-radius: 10px;
+    }
+
+    .classes-card {
+        flex-shrink: 0;
+        width: 68vw;
+        scroll-snap-align: start;
+    }
+
+    .classes-card:first-child {
+        margin-left: 0;
+    }
+
+    .classes-card:last-child {
+        margin-right: 5%;
+    }
+
     .classes-hero {
         padding: 55px 24px 50px;
     }
@@ -185,9 +237,4 @@
     .classes-hero-body {
         font-size: 0.95rem;
     }
-
-    .classes-grid {
-        margin: 40px 13% 60px;
-    }
-
 }

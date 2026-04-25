@@ -60,9 +60,9 @@ const validatePassword = (value) => {
     return 'Debe incluir al menos un carácter especial (ej. @, #, !).';
 };
 
-// ─── Confirm Sign-Up: Cancel button ───────────────────────────────────────────
+// ─── Cancel footer (shared by multiple steps) ─────────────────────────────────
 
-function ConfirmSignUpFooter() {
+function CancelFooter() {
   const { toSignIn } = useAuthenticator();
   return (
     <div className="confirm-cancel-footer">
@@ -75,7 +75,13 @@ function ConfirmSignUpFooter() {
 
 const authenticatorComponents = {
   ConfirmSignUp: {
-    Footer: ConfirmSignUpFooter,
+    Footer: CancelFooter,
+  },
+  ForgotPassword: {
+    Footer: CancelFooter,
+  },
+  ConfirmResetPassword: {
+    Footer: CancelFooter,
   },
 };
 
@@ -86,6 +92,9 @@ const Login = () => {
 
   React.useEffect(() => {
     window.scrollTo(0, 0);
+    const last = sessionStorage.getItem('lastLoginPage');
+    sessionStorage.setItem('lastLoginPage', 'user');
+    if (last === 'staff') window.location.reload();
   }, []);
 
   // If the user navigates directly to /login while already authenticated,

@@ -116,9 +116,9 @@
 
 .home-cards-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 50px;
-    max-width: 80%;
+    grid-template-columns: repeat(3, 21vw);
+    gap: 55px;
+    width: fit-content;
     margin: 0 auto 40px;
 }
 
@@ -869,9 +869,8 @@
     }
 
     .home-cards-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 14px;
-
+        grid-template-columns: repeat(3, 25vw);
+        gap: 30px;
     }
 
     .home-split {
@@ -944,10 +943,43 @@
     }
 
     .home-cards-grid {
-        grid-template-columns: 1fr;
-        margin-left: auto;
-        margin-right: auto;
-        gap: 16px;
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+        gap: 36px;
+        padding: 10px 0 30px 8%;
+        width: 100vw;
+        margin-left: -16px;
+        box-sizing: border-box;
+        margin-bottom: 20px;
+        scroll-snap-type: x mandatory;
+        scroll-padding-left: 8%;
+    }
+
+    .home-cards-grid::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .home-cards-grid::-webkit-scrollbar-track {
+        background: #EDD8DE;
+        border-radius: 10px;
+    }
+
+    .home-cards-grid::-webkit-scrollbar-thumb {
+        background: #cd929d;
+        border-radius: 10px;
+    }
+
+    .home-card {
+        flex-shrink: 0;
+        width: 68vw;
+        scroll-snap-align: start;
+    }
+
+    .home-card:last-child {
+        margin-right: 8%;
     }
 
     .home-split-media {
