@@ -35,6 +35,13 @@ const CartPage = () => {
   const [couponError,    setCouponError]    = useState(null);
   const [couponSuccess,  setCouponSuccess]  = useState(null);
 
+  // Cart context — declared early so useEffects below can reference cartItems/includeKit
+  const { cartItems, removeFromCart, clearCart, includeKit, setIncludeKit } = useContext(CartContext);
+  const hasOnlineItem = cartItems.some(item => item.online);
+  const [notification, setNotification] = useState("");
+  const [notificationError, setNotificationError] = useState("");
+  const [purchaseSuccess, setPurchaseSuccess] = useState(false);
+
   const COUNTRIES = [
     { code: '+502', label: '🇬🇹 Guatemala +502' },
     { code: '+1',   label: '🇺🇸 EE.UU. / Canadá +1' },
@@ -114,7 +121,7 @@ const CartPage = () => {
   const [formData, setFormData] = useState({
     'emailAddress': '',
     'entry.1580443907': '',
-    'entry.1295397219': '',
+    'entry.1295397219': '',  // merged NIT / identification field
     'entry.1830117511': '',
     phoneCountry: '+502',
     cardNumber: '',
@@ -122,7 +129,6 @@ const CartPage = () => {
     cvv: '',
     name: '',
     nameCard: '',
-    'entry.1913110792': ''
   });
 
   useEffect(() => {
@@ -140,6 +146,22 @@ const CartPage = () => {
       }).catch(err => console.error("Error pre-filling cart data", err));
     }
   }, [authStatus, user]);
+
+  // Auto-fill NIT field: CF when total < Q2,000, clear it when total goes above
+  useEffect(() => {
+    const subtotal = cartItems.reduce((sum, item) => sum + item.price, 0)
+      + (includeKit ? kitPrice + enrollmentFee : enrollmentFee);
+    const total = Math.max(0, subtotal - (appliedCoupon?.discountAmount || 0));
+    setFormData(prev => {
+      if (total < 2000 && prev['entry.1295397219'] !== 'CF') {
+        return { ...prev, 'entry.1295397219': 'CF' };
+      }
+      if (total >= 2000 && prev['entry.1295397219'] === 'CF') {
+        return { ...prev, 'entry.1295397219': '' };
+      }
+      return prev;
+    });
+  }, [cartItems, includeKit, appliedCoupon, kitPrice, enrollmentFee]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -193,6 +215,11 @@ const CartPage = () => {
       }
     }
 
+    if (getTotalPrice() >= 2000 && !formData['entry.1295397219'].trim()) {
+      setNotificationError('Por favor ingresa tu NIT de facturación. Es requerido para compras mayores a Q2,000.');
+      return;
+    }
+
     if (!validateCardNumber(formData.cardNumber)) {
       setNotificationError(DOMPurify.sanitize("¡Tarjeta inválida!"));
       return;
@@ -228,6 +255,7 @@ const CartPage = () => {
             Name: DOMPurify.sanitize(formData.name),
             userName: DOMPurify.sanitize(formData['entry.1580443907']),
             DPI: DOMPurify.sanitize(formData['entry.1295397219']),
+            NIT: DOMPurify.sanitize(formData['entry.1295397219']),
             phoneNumber: DOMPurify.sanitize(`${formData.phoneCountry} ${formData['entry.1830117511']}`),
             cartItems: cartItems,
             IncludeKit: includeKit,
@@ -280,12 +308,6 @@ const CartPage = () => {
   const location = useLocation();
   useEffect(() => { window.scrollTo(0, 0); }, [location]);
 
-  const { cartItems, removeFromCart, clearCart, includeKit, setIncludeKit } = useContext(CartContext);
-  const hasOnlineItem = cartItems.some(item => item.online);
-  const [notification, setNotification] = useState("");
-  const [notificationError, setNotificationError] = useState("");
-  const [purchaseSuccess, setPurchaseSuccess] = useState(false);
-
   const moduleIds = {
     'Master Waves 2PM a 4PM': '1Qk3ZTR8Mu9cvxdGGVYER',
     'Master Waves 6PM a 8PM': '2lAsVcE1N0gZl4Iiki3GP',
@@ -332,7 +354,7 @@ const CartPage = () => {
         formattedValue = value.replace(/[^a-zA-Z0-9.@_+-]/g, '').slice(0, 100);
         break;
       case 'entry.1295397219':
-        formattedValue = value.replace(/\D/g, '').slice(0, 20);
+        formattedValue = value.replace(/[^0-9\-]/g, '').slice(0, 20);
         break;
       case 'entry.1830117511':
         formattedValue = value.replace(/\D/g, '').slice(0, 15);
@@ -345,9 +367,6 @@ const CartPage = () => {
         break;
       case 'cvv':
         formattedValue = value.replace(/\D/g, '').slice(0, 4);
-        break;
-      case 'entry.1913110792':
-        formattedValue = value.replace(/[^0-9CcFf]/g, '').slice(0, 15);
         break;
       case 'entry.1580443907':
         formattedValue = value.replace(/[^a-zA-Z0-9._]/g, '').slice(0, 40);
@@ -364,6 +383,8 @@ const CartPage = () => {
   };
 
   const getTotalPrice = () => Math.max(0, getSubtotal() - (appliedCoupon?.discountAmount || 0));
+
+  const isAboveNITThreshold = getTotalPrice() >= 2000;
 
   const handleApplyCoupon = async () => {
     if (!couponInput.trim()) return;
@@ -537,15 +558,26 @@ const CartPage = () => {
               />
 
               <label className="cp-label" htmlFor="identification">
-                Número de Identificación:*
-                <span className="cp-label-sub"> (DPI o número de Pasaporte)</span>
+                {isAboveNITThreshold
+                  ? <>NIT de Facturación:* <span className="cp-label-sub">(requerido para montos iguales o mayores a Q2,000)</span></>
+                  : <>NIT / Identificación <span className="cp-label-sub">— CF aplicado automáticamente</span></>
+                }
               </label>
               <input
-                type="tel" id="identification" name="entry.1295397219"
+                type="text" id="identification" name="entry.1295397219"
                 value={formData['entry.1295397219']}
-                onChange={handleChange} maxLength={20}
-                title="Ingresa solamente números" pattern="\d+" required
+                onChange={isAboveNITThreshold ? handleChange : undefined}
+                readOnly={!isAboveNITThreshold}
+                maxLength={20}
+                placeholder={isAboveNITThreshold ? '12345678-9' : 'CF'}
+                title={isAboveNITThreshold ? 'Solo números y guiones (-)' : 'CF aplicado automáticamente para montos menores a Q2,000'}
+                required
+                style={!isAboveNITThreshold ? { background: '#f5f5f5', color: '#999', cursor: 'default' } : undefined}
               />
+              {isAboveNITThreshold
+                ? <p className="cp-field-hint">Solo se permiten números y guiones (-). Si estás fuera de Guatemala, ingresa el número de tu pasaporte.</p>
+                : <p className="cp-field-hint">Si estás fuera de Guatemala, ingresa el número de tu pasaporte en lugar del NIT.</p>
+              }
 
               <label className="cp-label" htmlFor="whatsapp">Número de Teléfono:*</label>
               <div className="cp-phone-row">
@@ -581,18 +613,6 @@ const CartPage = () => {
                   onChange={handleChange} placeholder="XXXX-XXXX" required
                 />
               </div>
-
-              <label className="cp-label" htmlFor="nit">
-                Datos de facturación NIT:*
-                <span className="cp-label-sub"> Ingresa NIT o CF</span>
-              </label>
-              <input
-                type="text" id="nit" name="entry.1913110792"
-                value={formData['entry.1913110792']}
-                onChange={handleChange} maxLength={15}
-                placeholder="1234456778941"
-                title="Coloca tu NIT o CF" required
-              />
 
               <div className="cp-section-divider"></div>
               <p className="cp-section-title">Datos de Pago</p>

@@ -90,6 +90,11 @@ export default function AdminSettings() {
         <SettingRow label="Precio del Kit de Pieles (Q)" settingKey="kitPrice"      initial={settings.kitPrice?.value          ?? ''} type="number" />
       </Section>
 
+      {/* ── Kit description ── */}
+      <Section title="Descripción del Kit de Pieles Perfectas">
+        <KitDescriptionRow initialText={settings.kitDescription?.value ?? ''} />
+      </Section>
+
       {/* ── Security ── */}
       <Section title="Seguridad">
         <SettingRow label="PIN de Seguridad (Finanzas)" settingKey="adminPin" initial={settings.adminPin?.value ?? '1234'} type="password" />
@@ -339,6 +344,52 @@ function ActivityLog() {
           </table>
         </div>
       )}
+    </div>
+  );
+}
+
+// ── Kit description textarea ──────────────────────────────────────────────────
+
+function KitDescriptionRow({ initialText }) {
+  const [text,   setText]   = useState(initialText);
+  const [saving, setSaving] = useState(false);
+  const [saved,  setSaved]  = useState(false);
+  const [err,    setErr]    = useState(null);
+
+  const handleSave = async () => {
+    setSaving(true); setErr(null); setSaved(false);
+    try {
+      await apiPut('/admin/site-settings/kitDescription', { value: text });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    } catch {
+      setErr('Error al guardar.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div>
+      <label style={labelStyle}>
+        Descripción visible en el acordeón "¿Qué incluye el Kit?" de los cursos de maquillaje
+      </label>
+      <textarea
+        value={text}
+        onChange={e => setText(e.target.value)}
+        rows={5}
+        placeholder="Ej: El kit incluye una base, corrector, labiales, pinceles profesionales y más..."
+        style={{
+          width: '100%', padding: '8px 10px', border: '1px solid #ddd',
+          borderRadius: '0', fontSize: '0.85rem', fontFamily: FONT,
+          boxSizing: 'border-box', resize: 'vertical', outline: 'none',
+          marginBottom: '10px', marginTop: '6px', lineHeight: '1.5',
+        }}
+      />
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <SaveButton saving={saving} saved={saved} onClick={handleSave} wide />
+        {err && <span style={errStyle}>{err}</span>}
+      </div>
     </div>
   );
 }

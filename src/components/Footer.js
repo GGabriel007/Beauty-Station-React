@@ -1,9 +1,12 @@
 // src/components/Footer.js
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import '../styles/footer.css';
 
 const Footer = () => {
+  const { pathname } = useLocation();
+  const showAdminLink = pathname === '/login' || pathname === '/dashboard';
+
   return (
     <div className="footer">
         <div className="action">
@@ -28,9 +31,11 @@ const Footer = () => {
         </div>
         <div className="footer2">
           <p className="text-footer">© 2024 by Beauty Station</p>
-          <Link to="/staff-login" className="footer-staff-link">
-            Acceso Empleados
-          </Link>
+          {showAdminLink && (
+            <Link to="/staff-login" className="footer-staff-link">
+              ACCESO ADMINISTRATIVO
+            </Link>
+          )}
         </div>
     </div>
   );

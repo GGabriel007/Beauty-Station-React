@@ -361,25 +361,26 @@ const BeautyStation = () => {
             </div>
           </Link>
 
-          <Link to="/classes/course/curso-en-linea" className="home-card home-card--link">
-            <div className="home-card-img-wrap">
-              <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Makeup/imagen_module_1Mkup.jpeg`} alt="Cursos en Línea" className="home-card-img" />
-            </div>
-            <div className="home-card-body">
-              <p className="home-card-name">CURSOS EN LÍNEA</p>
-              <span className="home-card-btn">MÁS INFORMACIÓN </span>
-            </div>
-          </Link>
-
           <Link to="/servicio-a-domicilio" className="home-card home-card--link">
             <div className="home-card-img-wrap">
               <img src={`${process.env.PUBLIC_URL}/images/home_eventos_mirror.jpg`} alt="Eventos" className="home-card-img" />
             </div>
             <div className="home-card-body">
-              <p className="home-card-name">EVENTOS</p>
+              <p className="home-card-name">SERVICIO A DOMICILIO</p>
               <span className="home-card-btn">MÁS INFORMACIÓN </span>
             </div>
           </Link>
+
+          <div className="home-card home-card--disabled">
+            <div className="home-card-img-wrap">
+              <img src={`${process.env.PUBLIC_URL}/images/Class_1/Module_1/Makeup/imagen_module_1Mkup.jpeg`} alt="Cursos en Línea" className="home-card-img" />
+            </div>
+            <div className="home-card-body">
+              <span className="home-card-coming-soon">PRÓXIMAMENTE</span>
+              <p className="home-card-name">CURSOS EN LÍNEA</p>
+              <span className="home-card-btn home-card-btn--muted">MÁS INFORMACIÓN </span>
+            </div>
+          </div>
 
         </div>
       </section>

@@ -554,10 +554,118 @@
   font-family: 'Montserrat', sans-serif;
 }
 
+/* ── Category tabs ── */
+.ac-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #e8e8e8;
+}
+
+.ac-tab {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 10px 22px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  color: #aaa;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.ac-tab:hover { color: #7D4E61; }
+
+.ac-tab--active {
+  color: #7D4E61;
+  border-bottom-color: #7D4E61;
+}
+
+/* ── Card actions (edit + delete) ── */
+.ac-card-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+  align-items: flex-start;
+}
+
+/* ── Danger button ── */
+.ac-btn--danger {
+  background: #fff;
+  color: #c62828;
+  border: 1.5px solid #e88080;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 9px 14px;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background 0.15s ease;
+}
+
+.ac-btn--danger:hover:not(:disabled) {
+  background: #fdecea;
+}
+
+.ac-btn--danger:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* ── Delete confirm row (inline in card) ── */
+.ac-delete-confirm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ac-delete-confirm-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.76rem;
+  color: #c62828;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ── Add course button (full-width) ── */
+.ac-btn--add-course {
+  width: 100%;
+  text-align: center;
+  padding: 12px;
+  margin-top: 4px;
+}
+
+/* ── Create form wrapper ── */
+.ac-create-form {
+  background: #fff;
+  border: 2px dashed #cd929d;
+  padding: 24px 20px 20px;
+}
+
 /* ===================================================
    Mobile — max-width 600px
    =================================================== */
 @media (max-width: 600px) {
+  /* Card: allow action row to drop below info on narrow screens */
+  .ac-card {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .ac-card-actions,
+  .ac-delete-confirm {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .ac-delete-confirm-text {
+    width: 100%;
+    text-align: right;
+  }
+
   .ac-form {
     padding: 18px 14px 16px;
   }

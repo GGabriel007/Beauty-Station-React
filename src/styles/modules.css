@@ -801,6 +801,54 @@ ul {
   font-family: 'Montserrat', sans-serif;
 }
 
+/* ── Kit info expandable section ── */
+.kit-info-section {
+  width: 100%;
+  margin-bottom: 6px;
+}
+
+.kit-info-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  border-top: 1px solid #f0dde7;
+  padding: 10px 0;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #cd929d;
+  text-align: left;
+  transition: color 0.2s ease;
+}
+
+.kit-info-toggle:hover {
+  color: #b57390;
+}
+
+.kit-info-body {
+  background: #fdf0f5;
+  border: 1px solid #f0dde7;
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+.kit-info-text {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.87rem;
+  color: #7a5a68;
+  line-height: 1.65;
+  margin: 0;
+  font-style: italic;
+  text-align: center;
+}
+
 /* ── Notifications / cart ── */
 .add-to-cart-button {
   background-color: #ed93b4;

@@ -1,6 +1,11 @@
 export const coursesInfo = {
     // Hair Modules
     "master-waves": {
+        category: 'hair',
+        cardOrder: 2,
+        cardImage: 'Class_1/Module_1/Hair/imagen_module_1Hair.jpeg',
+        cardImageHover: 'Class_1/Module_1/Hair/imagen_module_2Hair.jpeg',
+        swapImages: true,
         whatsappLink: "https://chat.whatsapp.com/KasPTeI9ag0DJiRAzUXjoN",
         courseName: "Master Waves",
         title: "MASTER EN WAVES",
@@ -29,6 +34,10 @@ export const coursesInfo = {
         }
     },
     "peinado-eventos": {
+        category: 'hair',
+        cardOrder: 3,
+        cardImage: 'Class_1/Module_2/imagen_module_Hair.jpeg',
+        cardImageHover: 'Class_1/Module_2/Hair/imagen_module_2Hair.jpeg',
         whatsappLink: "https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn",
         courseName: "Peinado para eventos",
         title: "PEINADO PARA EVENTOS",
@@ -59,6 +68,10 @@ export const coursesInfo = {
         }
     },
     "maestria-novias": {
+        category: 'hair',
+        cardOrder: 4,
+        cardImage: 'Class_1/Module_3/imagen_module_Hair.jpeg',
+        cardImageHover: 'Class_1/Module_3/Hair/imagen_module_2Hair.jpeg',
         whatsappLink: "https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn",
         courseName: "Maestrías en novias y tendencias",
         title: "MAESTRÍAS EN NOVIAS Y TENDENCIAS",
@@ -86,6 +99,12 @@ export const coursesInfo = {
         },
     },
     "master-waves-intensivo": {
+        category: 'hair',
+        cardOrder: 1,
+        cardImage: 'Class_1/Module_Day/imagen_module_H.jpeg',
+        cardImageHover: 'Class_1/Module_Day/Hair/imagen_module_2Hair.jpeg',
+        cardDateText: 'Bajo Cita',
+        overrideBadge: '1 Día',
         whatsappLink: "https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn",
         courseName: "Master Waves Intensivo 1 Día",
         title: "MASTER EN WAVES",
@@ -119,6 +138,10 @@ export const coursesInfo = {
         }
     },
     "curso-completo-peinado": {
+        category: 'hair',
+        cardOrder: 5,
+        cardImage: 'Class_1/Module_4/imagen_module_Hair.jpeg',
+        cardImageHover: 'Class_1/Module_4/Hair/imagen_module_2Hair.jpeg',
         whatsappLink: "https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn",
         courseName: "Curso Completo Peinado",
         title: "CURSO COMPLETO",
@@ -162,6 +185,7 @@ export const coursesInfo = {
 
     // Online Course
     "curso-en-linea": {
+        category: 'online',
         courseName: "Curso en Línea",
         title: "CURSO",
         subtitle: "EN LÍNEA",
@@ -186,6 +210,10 @@ export const coursesInfo = {
 
     // Makeup Modules
     "pieles-perfectas": {
+        category: 'makeup',
+        cardOrder: 1,
+        cardImage: 'Class_1/Module_1/imagen_module_Mkup.jpeg',
+        cardImageHover: 'Class_1/Module_1/Makeup/imagen_module_2Mkup.jpeg',
         whatsappLink: "https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn",
         courseName: "Pieles Perfectas",
         title: "PIELES PERFECTAS",
@@ -215,6 +243,10 @@ export const coursesInfo = {
         }
     },
     "maquillaje-social": {
+        category: 'makeup',
+        cardOrder: 2,
+        cardImage: 'Class_1/Module_2/imagen_module_Mkup.jpeg',
+        cardImageHover: 'Class_1/Module_2/Makeup/imagen_module_2Mkup.jpeg',
         whatsappLink: "https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn",
         courseName: "Maquillaje Social",
         title: "MAQUILLAJE SOCIAL",
@@ -245,6 +277,10 @@ export const coursesInfo = {
         }
     },
     "maestria-novias-makeup": {
+        category: 'makeup',
+        cardOrder: 3,
+        cardImage: 'Class_1/Module_3/imagen_module_Mkup.jpeg',
+        cardImageHover: 'Class_1/Module_3/Makeup/imagen_module_2Mkup.jpeg',
         whatsappLink: "https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn",
         courseName: "Maestría en Novias y Tendencias",
         title: "MAESTRÍA EN NOVIAS Y TENDENCIAS",
@@ -273,6 +309,10 @@ export const coursesInfo = {
         }
     },
     "curso-completo-maquillaje": {
+        category: 'makeup',
+        cardOrder: 4,
+        cardImage: 'Class_1/Module_4/imagen_module_Mkup.jpeg',
+        cardImageHover: 'Class_1/Module_4/Makeup/imagen_module_2Mkup.jpeg',
         whatsappLink: "https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn",
         courseName: "Curso Completo Maquillaje",
         title: "CURSO COMPLETO",

@@ -42,7 +42,12 @@ export function CourseDataProvider({ children }) {
             }
             merged[id] = mergedCourse;
           }
-          setCoursesData(merged);
+          // Filter out soft-deleted courses before exposing to public pages
+          const visible = {};
+          for (const [id, course] of Object.entries(merged)) {
+            if (!course.deleted) visible[id] = course;
+          }
+          setCoursesData(visible);
         }
       } catch (err) {
         // Table not seeded yet or network error — silently keep hardcoded data

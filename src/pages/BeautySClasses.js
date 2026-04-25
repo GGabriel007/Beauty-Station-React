@@ -1,6 +1,7 @@
 // src/pages/BeautySClasses.js
 import React, { useEffect } from 'react';
 import '../styles/beauty-SClasses.css';
+import '../styles/beauty-Station.css';
 import { Link, useLocation } from 'react-router-dom';
 
 const BeautySClasses = () => {
@@ -29,50 +30,48 @@ const BeautySClasses = () => {
       {/* ── Category cards grid ── */}
       <section className="classes-grid">
 
-        <Link to="/classes/classes-2" className="classes-card">
-          <div className="classes-card-media">
+        <Link to="/classes/classes-2" className="home-card home-card--link">
+          <div className="home-card-img-wrap">
             <img
               src={`${process.env.PUBLIC_URL}/images/Class_1/imagen_Module_Mkup.jpeg`}
               alt="Cursos de Maquillaje"
-              className="classes-card-img"
+              className="home-card-img"
             />
-            <div className="classes-card-label">Maquillaje</div>
           </div>
-          <div className="classes-card-footer">
-            <span className="classes-card-title">Maquillaje</span>
-            <span className="classes-card-arrow">→</span>
+          <div className="home-card-body">
+            <p className="home-card-name">MAQUILLAJE</p>
+            <span className="home-card-btn">MÁS INFORMACIÓN</span>
           </div>
         </Link>
 
-        <Link to="/classes/course/curso-en-linea" className="classes-card">
-          <div className="classes-card-media">
-            <img
-              src={`${process.env.PUBLIC_URL}/images/cursos_graduadas.jpg`}
-              alt="Cursos en Línea"
-              className="classes-card-img"
-            />
-            <div className="classes-card-label">Cursos en Línea</div>
-          </div>
-          <div className="classes-card-footer">
-            <span className="classes-card-title">Cursos en Línea</span>
-            <span className="classes-card-arrow">→</span>
-          </div>
-        </Link>
-
-        <Link to="/classes/classes-1" className="classes-card">
-          <div className="classes-card-media">
+        <Link to="/classes/classes-1" className="home-card home-card--link">
+          <div className="home-card-img-wrap">
             <img
               src={`${process.env.PUBLIC_URL}/images/Class_1/imagen_Module_Hair.jpeg`}
               alt="Cursos de Peinado"
-              className="classes-card-img"
+              className="home-card-img"
             />
-            <div className="classes-card-label">Peinado</div>
           </div>
-          <div className="classes-card-footer">
-            <span className="classes-card-title">Peinado</span>
-            <span className="classes-card-arrow">→</span>
+          <div className="home-card-body">
+            <p className="home-card-name">PEINADO</p>
+            <span className="home-card-btn">MÁS INFORMACIÓN</span>
           </div>
         </Link>
+
+        <div className="home-card home-card--disabled">
+          <div className="home-card-img-wrap">
+            <img
+              src={`${process.env.PUBLIC_URL}/images/cursos_graduadas.jpg`}
+              alt="Cursos en Línea"
+              className="home-card-img"
+            />
+          </div>
+          <div className="home-card-body">
+            <span className="home-card-coming-soon">PRÓXIMAMENTE</span>
+            <p className="home-card-name">CURSOS EN LÍNEA</p>
+            <span className="home-card-btn home-card-btn--muted">MÁS INFORMACIÓN</span>
+          </div>
+        </div>
 
       </section>
     </div>

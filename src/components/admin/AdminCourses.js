@@ -1,11 +1,10 @@
 // src/components/admin/AdminCourses.js
-// 2.3 + 3.4 — Course cards with inline edit forms and direct S3 image upload.
-
 import React, { useState, useEffect, useRef } from 'react';
 import '../../styles/classes.css';
 import '../../styles/admin-courses.css';
 import { get, put } from 'aws-amplify/api';
 import SecurityPinModal from './SecurityPinModal';
+import { coursesInfo as hardcodedCourses } from '../../config/courseData';
 
 async function apiFetch(path) {
   const op = get({ apiName: 'checkoutApi', path });
@@ -19,15 +18,42 @@ async function apiPut(path, data) {
   return body.json();
 }
 
+const slugify = (s) =>
+  s.toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+
 export default function AdminCourses() {
-  const [courses,   setCourses]   = useState([]);
-  const [loading,   setLoading]   = useState(true);
-  const [error,     setError]     = useState(null);
-  const [editingId, setEditingId] = useState(null);
+  const [courses,        setCourses]        = useState([]);
+  const [loading,        setLoading]        = useState(true);
+  const [error,          setError]          = useState(null);
+  const [activeTab,      setActiveTab]      = useState('hair');
+  const [editingId,      setEditingId]      = useState(null);
+  const [isCreating,     setIsCreating]     = useState(false);
 
   useEffect(() => {
     apiFetch('/admin/courses')
-      .then(data => setCourses(Array.isArray(data) ? data : []))
+      .then(dbData => {
+        const dbMap = {};
+        (Array.isArray(dbData) ? dbData : []).forEach(c => { dbMap[c.courseId] = c; });
+
+        // Merge hardcoded base + DB overrides so all courses appear even before admin edits
+        const merged = [];
+        for (const [id, hc] of Object.entries(hardcodedCourses)) {
+          if (dbMap[id]) {
+            merged.push({ ...hc, ...dbMap[id], courseId: id });
+          } else {
+            merged.push({ ...hc, courseId: id });
+          }
+        }
+        // DB-only courses (admin-created, not in hardcoded)
+        for (const [id, dc] of Object.entries(dbMap)) {
+          if (!hardcodedCourses[id]) merged.push(dc);
+        }
+
+        setCourses(merged);
+      })
       .catch(() => setError('Error al cargar los cursos.'))
       .finally(() => setLoading(false));
   }, []);
@@ -36,7 +62,23 @@ export default function AdminCourses() {
     setCourses(prev => prev.map(c => c.courseId === courseId ? { ...c, ...updates } : c));
   };
 
-  const handleClose = () => setEditingId(null);
+  const handleDeleted = (courseId) => {
+    setCourses(prev => prev.map(c => c.courseId === courseId ? { ...c, deleted: true } : c));
+    if (editingId === courseId) setEditingId(null);
+  };
+
+  const handleCreated = (newCourse) => {
+    setCourses(prev => [...prev, newCourse]);
+    setIsCreating(false);
+    setEditingId(newCourse.courseId);
+  };
+
+  const visibleCourses = courses.filter(c => !c.deleted);
+  const tabCourses     = visibleCourses
+    .filter(c => c.category === activeTab)
+    .sort((a, b) => (a.cardOrder ?? 99) - (b.cardOrder ?? 99));
+
+  const existingIds = courses.map(c => c.courseId);
 
   if (loading) return <p className="ac-status-text">Cargando cursos…</p>;
   if (error)   return <p className="ac-status-text ac-status-error">{error}</p>;
@@ -44,21 +86,62 @@ export default function AdminCourses() {
   return (
     <div>
       <h1 className="admin-page-title">Cursos</h1>
+
+      {/* ── Category tabs ── */}
+      <div className="ac-tabs">
+        <button
+          className={`ac-tab${activeTab === 'hair' ? ' ac-tab--active' : ''}`}
+          onClick={() => { setActiveTab('hair'); setEditingId(null); setIsCreating(false); }}
+        >
+          Peinado
+        </button>
+        <button
+          className={`ac-tab${activeTab === 'makeup' ? ' ac-tab--active' : ''}`}
+          onClick={() => { setActiveTab('makeup'); setEditingId(null); setIsCreating(false); }}
+        >
+          Maquillaje
+        </button>
+      </div>
+
       <div className="ac-list">
-        {courses.map(course =>
+        {tabCourses.map(course =>
           editingId === course.courseId
             ? <CourseEditForm
                 key={course.courseId}
-                course={courses.find(c => c.courseId === course.courseId)}
+                course={course}
                 onSave={updates => handleSaved(course.courseId, updates)}
-                onClose={handleClose}
+                onDelete={() => handleDeleted(course.courseId)}
+                onClose={() => setEditingId(null)}
               />
             : <CourseCard
                 key={course.courseId}
                 course={course}
-                onEdit={() => setEditingId(course.courseId)}
+                onEdit={() => { setIsCreating(false); setEditingId(course.courseId); }}
+                onDelete={() => handleDeleted(course.courseId)}
               />
         )}
+
+        {tabCourses.length === 0 && !isCreating && (
+          <p className="ac-empty-text">No hay cursos en esta categoría.</p>
+        )}
+
+        {/* ── Add course ── */}
+        {isCreating
+          ? <CourseCreateForm
+              category={activeTab}
+              existingIds={existingIds}
+              onSave={handleCreated}
+              onClose={() => setIsCreating(false)}
+            />
+          : (
+            <button
+              className="ac-btn ac-btn--add ac-btn--add-course"
+              onClick={() => { setEditingId(null); setIsCreating(true); }}
+            >
+              + Agregar Curso de {activeTab === 'hair' ? 'Peinado' : 'Maquillaje'}
+            </button>
+          )
+        }
       </div>
     </div>
   );
@@ -66,41 +149,191 @@ export default function AdminCourses() {
 
 // ── Course summary card ──────────────────────────────────────────────────────
 
-function CourseCard({ course, onEdit }) {
+function CourseCard({ course, onEdit, onDelete }) {
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting,      setDeleting]      = useState(false);
+  const [deleteError,   setDeleteError]   = useState(null);
+  const [pinOpen,       setPinOpen]       = useState(false);
+
   const fmtDate = ts => ts
     ? new Date(ts).toLocaleDateString('es-GT', { month: 'short', day: 'numeric', year: 'numeric' })
     : null;
+
+  const doDelete = async () => {
+    setDeleting(true);
+    setDeleteError(null);
+    try {
+      await apiPut(`/admin/courses/${course.courseId}`, { deleted: true });
+      onDelete();
+    } catch {
+      setDeleteError('Error al eliminar.');
+      setDeleting(false);
+      setConfirmDelete(false);
+    }
+  };
+
   return (
-    <div className="ac-card">
-      <div className="ac-card-info">
-        <div className="ac-card-title-row">
-          <h3 className="ac-card-name">{course.courseName}</h3>
-          <div className="ac-card-badges">
-            {!course.isVisible  && <span className="ac-badge ac-badge--hidden">Oculto</span>}
-            {course.promoActive && <span className="ac-badge ac-badge--promo">Promo activa</span>}
+    <>
+      <div className="ac-card">
+        <div className="ac-card-info">
+          <div className="ac-card-title-row">
+            <h3 className="ac-card-name">{course.courseName}</h3>
+            <div className="ac-card-badges">
+              {!course.isVisible  && <span className="ac-badge ac-badge--hidden">Oculto</span>}
+              {course.promoActive && <span className="ac-badge ac-badge--promo">Promo activa</span>}
+            </div>
           </div>
-        </div>
-        <p className="ac-card-price">
-          Q{course.price ?? '—'}
-          {course.enrollmentFee != null && ` · Inscripción Q${course.enrollmentFee}`}
-        </p>
-        {course.lastUpdatedAt && (
-          <p className="ac-card-meta">
-            Actualizado: {fmtDate(course.lastUpdatedAt)} · {course.lastUpdatedBy || '?'}
+          <p className="ac-card-price">
+            Q{course.price ?? '—'}
+            {course.enrollmentFee != null && ` · Inscripción Q${course.enrollmentFee}`}
           </p>
+          {course.lastUpdatedAt && (
+            <p className="ac-card-meta">
+              Actualizado: {fmtDate(course.lastUpdatedAt)} · {course.lastUpdatedBy || '?'}
+            </p>
+          )}
+          {deleteError && <p className="ac-feedback ac-feedback--error" style={{ marginTop: 6 }}>{deleteError}</p>}
+        </div>
+
+        {confirmDelete ? (
+          <div className="ac-delete-confirm">
+            <span className="ac-delete-confirm-text">¿Eliminar este curso?</span>
+            <button
+              onClick={() => { setConfirmDelete(false); setPinOpen(true); }}
+              disabled={deleting}
+              className="ac-btn ac-btn--danger"
+            >
+              {deleting ? '…' : 'Sí, eliminar'}
+            </button>
+            <button
+              onClick={() => setConfirmDelete(false)}
+              disabled={deleting}
+              className="ac-btn ac-btn--ghost"
+            >
+              Cancelar
+            </button>
+          </div>
+        ) : (
+          <div className="ac-card-actions">
+            <button onClick={onEdit} className="ac-btn ac-btn--primary">Editar</button>
+            <button onClick={() => setConfirmDelete(true)} className="ac-btn ac-btn--danger">Eliminar</button>
+          </div>
         )}
       </div>
-      <button onClick={onEdit} className="ac-btn ac-btn--primary">Editar</button>
-    </div>
+
+      <SecurityPinModal
+        isOpen={pinOpen}
+        onSuccess={() => { setPinOpen(false); doDelete(); }}
+        onClose={() => setPinOpen(false)}
+        message={`Estás a punto de eliminar "${course.courseName}". Ingresa el PIN de seguridad para confirmar.`}
+      />
+    </>
+  );
+}
+
+// ── Minimal create form ──────────────────────────────────────────────────────
+
+function CourseCreateForm({ category, existingIds, onSave, onClose }) {
+  const [name,     setName]     = useState('');
+  const [saving,   setSaving]   = useState(false);
+  const [error,    setError]    = useState(null);
+  const [pinOpen,  setPinOpen]  = useState(false);
+
+  const generateId = (rawName) => {
+    const base = slugify(rawName);
+    if (!base) return '';
+    let id = base;
+    let n  = 2;
+    while (existingIds.includes(id)) id = `${base}-${n++}`;
+    return id;
+  };
+
+  const courseId = generateId(name);
+
+  const triggerCreate = () => {
+    if (!name.trim()) { setError('El nombre del curso es requerido.'); return; }
+    if (!courseId)    { setError('No se pudo generar el ID del curso.'); return; }
+    setError(null);
+    setPinOpen(true);
+  };
+
+  const handleCreate = async () => {
+    setSaving(true);
+    try {
+      const newCourse = {
+        courseId,
+        courseName: name.trim(),
+        category,
+        isVisible: true,
+        deleted: false,
+        scheduleOptions: [],
+        classes: [],
+      };
+      await apiPut(`/admin/courses/${courseId}`, newCourse);
+      onSave(newCourse);
+    } catch {
+      setError('Error al crear el curso. Inténtalo de nuevo.');
+      setSaving(false);
+    }
+  };
+
+  return (
+    <>
+      <div className="ac-create-form">
+        <div className="ac-form-header">
+          <div>
+            <p className="ac-form-header-label">Nuevo curso de {category === 'hair' ? 'Peinado' : 'Maquillaje'}</p>
+            <h3 className="ac-form-header-title">Crear Curso</h3>
+          </div>
+          <button onClick={onClose} className="ac-btn ac-btn--ghost">✕ Cancelar</button>
+        </div>
+
+        <Field label="Nombre del Curso" hint="El nombre que verán los estudiantes en la página de cursos.">
+          <input
+            value={name}
+            onChange={e => setName(e.target.value)}
+            className="ac-input"
+            placeholder="Ej: Ondas Perfectas"
+            autoFocus
+          />
+        </Field>
+
+        {name.trim() && (
+          <p className="ac-hint-text">ID generado: <code style={{ background: '#f3f3f3', padding: '1px 6px' }}>{courseId}</code></p>
+        )}
+
+        {error && <p className="ac-feedback ac-feedback--error">⚠ {error}</p>}
+
+        <div className="ac-save-row" style={{ marginTop: 8 }}>
+          <button
+            onClick={triggerCreate}
+            disabled={saving || !name.trim()}
+            className="ac-btn ac-btn--primary"
+          >
+            {saving ? 'Creando…' : 'Crear y Editar'}
+          </button>
+          <button onClick={onClose} className="ac-btn ac-btn--ghost">Cancelar</button>
+        </div>
+        <p className="ac-hint-text" style={{ marginTop: 8 }}>
+          Después de crear, podrás agregar precio, imágenes, horarios y más desde la pantalla de edición.
+        </p>
+      </div>
+
+      <SecurityPinModal
+        isOpen={pinOpen}
+        onSuccess={() => { setPinOpen(false); handleCreate(); }}
+        onClose={() => setPinOpen(false)}
+        message={`Estás a punto de crear el curso "${name.trim()}". Ingresa el PIN de seguridad para continuar.`}
+      />
+    </>
   );
 }
 
 // ── Inline edit form ─────────────────────────────────────────────────────────
 
-function CourseEditForm({ course, onSave, onClose }) {
+function CourseEditForm({ course, onSave, onDelete, onClose }) {
   const formRef = useRef(null);
 
-  // Scroll the form into view as soon as it opens
   useEffect(() => {
     if (formRef.current) {
       formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -128,38 +361,38 @@ function CourseEditForm({ course, onSave, onClose }) {
                          : [],
     promoActive:       !!course.promoActive,
     isVisible:         course.isVisible !== false,
+    category:          course.category || 'hair',
   });
 
   const [savedMeta, setSavedMeta] = useState({
-    lastUpdatedAt: course.lastUpdatedAt  || null,
-    lastUpdatedBy: course.lastUpdatedBy  || null,
+    lastUpdatedAt: course.lastUpdatedAt || null,
+    lastUpdatedBy: course.lastUpdatedBy || null,
   });
 
-  const [saving,    setSaving]    = useState(false);
-  const [saveError, setSaveError] = useState(null);
-  const [justSaved, setJustSaved] = useState(false);
-  const [pinAction, setPinAction] = useState(null);
+  const [saving,         setSaving]         = useState(false);
+  const [saveError,      setSaveError]      = useState(null);
+  const [justSaved,      setJustSaved]      = useState(false);
+  const [pinAction,      setPinAction]      = useState(null);
+  const [pinMessage,     setPinMessage]     = useState('');
+  const [confirmDelete,  setConfirmDelete]  = useState(false);
+  const [deleting,       setDeleting]       = useState(false);
 
   const set = (key, val) => setForm(f => ({ ...f, [key]: val }));
 
-  // Schedule helpers
   const addSchedule    = ()      => setForm(f => ({ ...f, scheduleOptions: [...f.scheduleOptions, ''], whatsappLinks: [...f.whatsappLinks, ''] }));
   const removeSchedule = i       => setForm(f => ({ ...f, scheduleOptions: f.scheduleOptions.filter((_, idx) => idx !== i), whatsappLinks: f.whatsappLinks.filter((_, idx) => idx !== i) }));
   const updateSchedule = (i, v)  => set('scheduleOptions', form.scheduleOptions.map((s, idx) => idx === i ? v : s));
   const updateWhatsapp = (i, v)  => set('whatsappLinks', form.whatsappLinks.map((w, idx) => idx === i ? v : w));
 
-  // Image URL helpers
   const addImageUrl    = ()      => set('imageUrls', [...form.imageUrls, '']);
   const removeImageUrl = i       => set('imageUrls', form.imageUrls.filter((_, idx) => idx !== i));
   const updateImageUrl = (i, v)  => set('imageUrls', form.imageUrls.map((u, idx) => idx === i ? v : u));
 
-  // Classes helpers
   const addClass         = ()            => set('classes', [...form.classes, { name: '', date: '', topics: '' }]);
   const addBreak         = ()            => set('classes', [...form.classes, { isBreak: true, text: '' }]);
   const removeClass      = i             => set('classes', form.classes.filter((_, idx) => idx !== i));
   const updateClass      = (i, field, v) => set('classes', form.classes.map((c, idx) => idx === i ? { ...c, [field]: v } : c));
 
-  // ComplexClasses helpers
   const addComplexClass      = ()         => set('complexClasses', [...form.complexClasses, { title: '', sessions: [''] }]);
   const removeComplexClass   = i          => set('complexClasses', form.complexClasses.filter((_, idx) => idx !== i));
   const updateComplexTitle   = (i, v)     => set('complexClasses', form.complexClasses.map((cc, idx) => idx === i ? { ...cc, title: v } : cc));
@@ -171,6 +404,7 @@ function CourseEditForm({ course, onSave, onClose }) {
     const priceChanged = String(form.price ?? '') !== String(course.price ?? '');
     const feeChanged   = String(form.enrollmentFee ?? '') !== String(course.enrollmentFee ?? '');
     if (priceChanged || feeChanged) {
+      setPinMessage('Estás modificando el precio de un curso. Ingresa el PIN de seguridad para continuar.');
       setPinAction(() => handleSave);
     } else {
       handleSave();
@@ -218,6 +452,23 @@ function CourseEditForm({ course, onSave, onClose }) {
     }
   };
 
+  const triggerDelete = () => {
+    setConfirmDelete(false);
+    setPinMessage(`Estás a punto de eliminar "${course.courseName}". Ingresa el PIN de seguridad para confirmar.`);
+    setPinAction(() => doDelete);
+  };
+
+  const doDelete = async () => {
+    setDeleting(true);
+    try {
+      await apiPut(`/admin/courses/${course.courseId}`, { deleted: true });
+      onDelete();
+    } catch {
+      setSaveError('Error al eliminar el curso.');
+      setDeleting(false);
+    }
+  };
+
   const fmtDate = ts => ts
     ? new Date(ts).toLocaleDateString('es-GT', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
     : null;
@@ -231,7 +482,20 @@ function CourseEditForm({ course, onSave, onClose }) {
           <p className="ac-form-header-label">Editando curso</p>
           <h3 className="ac-form-header-title">{course.courseName}</h3>
         </div>
-        <button onClick={onClose} className="ac-btn ac-btn--ghost">✕ Cerrar</button>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {confirmDelete ? (
+            <>
+              <span className="ac-delete-confirm-text">¿Eliminar?</span>
+              <button onClick={triggerDelete} disabled={deleting} className="ac-btn ac-btn--danger">
+                {deleting ? '…' : 'Sí'}
+              </button>
+              <button onClick={() => setConfirmDelete(false)} className="ac-btn ac-btn--ghost">No</button>
+            </>
+          ) : (
+            <button onClick={() => setConfirmDelete(true)} className="ac-btn ac-btn--danger">Eliminar</button>
+          )}
+          <button onClick={onClose} className="ac-btn ac-btn--ghost">✕ Cerrar</button>
+        </div>
       </div>
 
       {/* ── PRECIOS ── */}
@@ -420,7 +684,7 @@ function CourseEditForm({ course, onSave, onClose }) {
         isOpen={!!pinAction}
         onSuccess={() => { const ac = pinAction; setPinAction(null); if (ac) ac(); }}
         onClose={() => setPinAction(null)}
-        message="Estás modificando el precio de un curso. Ingresa el PIN de seguridad para continuar."
+        message={pinMessage}
       />
     </div>
   );

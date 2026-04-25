@@ -63,13 +63,6 @@ const DB_KEY_MAP = {
     "curso-en-linea-0": "Curso en Línea"
 };
 
-const MAKEUP_COURSES = [
-    'pieles-perfectas',
-    'maquillaje-social',
-    'maestria-novias-makeup',
-    'curso-completo-maquillaje'
-];
-
 // Returns all known cart-item names for a courseId (e.g. "master-waves" → ["master waves 2pm a 4pm", "master waves 6pm a 8pm"])
 // Uses exact key format ${id}-0, ${id}-1, ... to avoid false matches like "maestria-novias-makeup" when looking up "maestria-novias"
 const getCourseCartNames = (id) => {
@@ -91,13 +84,14 @@ const CourseDetails = () => {
     const { addToCart, cartItems, includeKit, setIncludeKit } = useContext(CartContext);
     const { user, authStatus } = useAuthenticator(context => [context.user, context.authStatus]);
 
-    const isMakeupCourse = MAKEUP_COURSES.includes(courseId);
+    const isMakeupCourse = courseData?.category === 'makeup';
 
     const [availableSeats, setAvailableSeats] = useState(null);
     const [selectedScheduleIndex, setSelectedScheduleIndex] = useState(null);
     const [allDbItems, setAllDbItems] = useState([]);
     const [alreadyOwned, setAlreadyOwned] = useState(false);
     const [kitAvailable, setKitAvailable] = useState(true);
+    const [kitDescription, setKitDescription] = useState('');
 
     const activeDbKey = DB_KEY_MAP[`${courseId}-${selectedScheduleIndex}`];
 
@@ -106,13 +100,16 @@ const CourseDetails = () => {
 
         async function fetchSeats() {
             try {
-                const restOperation = get({
-                    apiName: 'checkoutApi',
-                    path: '/modulos'
-                });
-                const response = await restOperation.response;
-                const dbItems = await response.body.json();
+                const seatsOp    = get({ apiName: 'checkoutApi', path: '/modulos' });
+                const settingsOp = get({ apiName: 'checkoutApi', path: '/admin/site-settings' });
+                const [seatsResp, settingsResp] = await Promise.all([seatsOp.response, settingsOp.response]);
+                const dbItems      = await seatsResp.body.json();
+                const settingsData = await settingsResp.body.json();
                 setAllDbItems(dbItems);
+                const descSetting = Array.isArray(settingsData)
+                    ? settingsData.find(s => s.settingKey === 'kitDescription')
+                    : null;
+                if (descSetting?.value) setKitDescription(descSetting.value);
             } catch (err) {
                 console.error("Error fetching live seats:", err);
             }
@@ -179,6 +176,7 @@ const CourseDetails = () => {
     const [selectedImage, setSelectedImage] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isWhatsAppOpen, setIsWhatsAppOpen] = useState(false);
+    const [isKitInfoOpen, setIsKitInfoOpen] = useState(false);
 
     const {
         whatsappForm,
@@ -414,29 +412,49 @@ const CourseDetails = () => {
                         </div>
 
                         {isMakeupCourse && (
-                            <label
-                                className="kit-checkbox-container"
-                                htmlFor="kit-checkbox"
-                                onClick={!kitAvailable ? (e) => {
-                                    e.preventDefault();
-                                    toast.warn('El Kit de Pieles Perfectas no está disponible en este momento.', { autoClose: 4000 });
-                                } : undefined}
-                                style={!kitAvailable ? { cursor: 'default', opacity: 0.55 } : undefined}
-                            >
-                                <input
-                                    type="checkbox"
-                                    id="kit-checkbox"
-                                    checked={includeKit}
-                                    disabled={!kitAvailable}
-                                    onChange={(e) => setIncludeKit(e.target.checked)}
-                                />
-                                <span className="kit-checkbox-label">
-                                    {kitAvailable
-                                        ? 'Incluir "Kit de Pieles Perfectas" Q. 5,900.00'
-                                        : 'Kit de Pieles Perfectas — Sin stock disponible'
-                                    }
-                                </span>
-                            </label>
+                            <>
+                                <label
+                                    className="kit-checkbox-container"
+                                    htmlFor="kit-checkbox"
+                                    onClick={!kitAvailable ? (e) => {
+                                        e.preventDefault();
+                                        toast.warn('El Kit de Pieles Perfectas no está disponible en este momento.', { autoClose: 4000 });
+                                    } : undefined}
+                                    style={!kitAvailable ? { cursor: 'default', opacity: 0.55 } : undefined}
+                                >
+                                    <input
+                                        type="checkbox"
+                                        id="kit-checkbox"
+                                        checked={includeKit}
+                                        disabled={!kitAvailable}
+                                        onChange={(e) => setIncludeKit(e.target.checked)}
+                                    />
+                                    <span className="kit-checkbox-label">
+                                        {kitAvailable
+                                            ? 'Incluir "Kit de Pieles Perfectas" Q. 5,900.00'
+                                            : 'Kit de Pieles Perfectas — Sin stock disponible'
+                                        }
+                                    </span>
+                                </label>
+
+                                <div className="kit-info-section">
+                                    <button
+                                        className="kit-info-toggle"
+                                        onClick={() => setIsKitInfoOpen(!isKitInfoOpen)}
+                                    >
+                                        <span>¿Qué incluye el Kit de Pieles Perfectas?</span>
+                                        <FiChevronDown className={`whatsapp-chevron ${isKitInfoOpen ? 'chevron-open' : ''}`} />
+                                    </button>
+
+                                    {isKitInfoOpen && (
+                                        <div className="kit-info-body">
+                                            <p className="kit-info-text">
+                                                {kitDescription || 'La información detallada del contenido del kit estará disponible próximamente. ¡Estamos preparando algo especial para ti!'}
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                            </>
                         )}
 
                         {courseData.online && alreadyOwned && (

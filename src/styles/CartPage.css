@@ -88,6 +88,13 @@
     font-size: 0.75rem;
 }
 
+.cp-field-hint {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.70rem;
+    color: #b57390;
+    margin: 3px 0 8px;
+}
+
 /* ── Inputs (scoped to cp-section to avoid global override conflicts) ── */
 .cp-section input {
     padding: 11px 14px;

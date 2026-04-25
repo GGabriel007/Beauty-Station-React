@@ -62,7 +62,7 @@ const Header = () => {
           <li><Link className={`header-button ${getActiveClass('/')}`} to="/" onClick={() => setMenuOpen(false)}>HOME</Link></li>
           <li><Link className={`header-button ${getActiveClass('/classes')}`} to="/classes" onClick={() => setMenuOpen(false)}>CURSOS</Link></li>
           <li><a className={`header-button ${getActiveClass('/cart')}`} href="/cart" onClick={handleCartClick}>CARRITO</a></li>
-          <li><Link className={`header-button ${getActiveClass('/servicio-a-domicilio')}`} to="/servicio-a-domicilio" onClick={() => setMenuOpen(false)}>EVENTOS</Link></li>
+          <li><Link className={`header-button ${getActiveClass('/servicio-a-domicilio')}`} to="/servicio-a-domicilio" onClick={() => setMenuOpen(false)}>SERVICIO A DOMICILIO</Link></li>
           <li><Link className={`header-button ${getActiveClass('/nosotros')}`} to="/nosotros" onClick={() => setMenuOpen(false)}>NOSOTROS</Link></li>
 
           {authStatus === 'authenticated' ? (

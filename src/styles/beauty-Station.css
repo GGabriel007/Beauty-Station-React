@@ -218,6 +218,42 @@
     background-color: #b57390;
 }
 
+/* ── Disabled / coming-soon card ── */
+.home-card--disabled {
+    cursor: not-allowed;
+    opacity: 0.80;
+}
+
+.home-card.home-card--disabled:hover {
+    transform: none;
+    box-shadow: 0 2px 14px rgba(200, 140, 170, 0.10);
+}
+
+.home-card.home-card--disabled:hover .home-card-img {
+    transform: none;
+}
+
+.home-card-coming-soon {
+    display: block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.60rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #b57390;
+    background: #fdf0f5;
+    border: 1px solid #e8cbd4;
+    border-radius: 20px;
+    padding: 4px 14px;
+    margin: 0 auto 8px;
+    width: fit-content;
+}
+
+.home-card-btn--muted {
+    background-color: #ddb8c0;
+    pointer-events: none;
+}
+
 /* ===================================================
    3. Split sections — kept for reference (unused)
    =================================================== */
