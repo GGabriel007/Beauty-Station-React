@@ -477,7 +477,7 @@ const CourseDetails = () => {
                                 const priceRaw = courseData.price != null ? String(courseData.price).replace(/\D/g, '') : "0";
                                 const priceInt = parseInt(priceRaw, 10) || 0;
 
-                                const cartItemName = activeDbKey || `${courseData.title} ${courseData.scheduleOptions[selectedScheduleIndex]}`;
+                                const cartItemName = activeDbKey || `${courseData.courseName || courseData.title} ${courseData.scheduleOptions[selectedScheduleIndex]}`;
 
                                 const itemNameLower = cartItemName.toLowerCase();
 
