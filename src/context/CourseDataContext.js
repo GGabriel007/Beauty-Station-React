@@ -27,11 +27,19 @@ export function CourseDataProvider({ children }) {
           // Deep merge per course: hardcoded is the base for each course,
           // DB fields override field-by-field so hardcoded fills any gaps
           // (e.g. images.folder/count/instructor stay even if admin only saved price).
+          //
+          // scheduleOptions is code-controlled: it maps 1-to-1 with DB_KEY_MAP in
+          // CourseDetails.js, so any DB value (which may be stale) is ignored and the
+          // hardcoded array is always used as the source of truth.
+          const CODE_ONLY_FIELDS = new Set(['scheduleOptions']);
+
           const merged = { ...hardcodedCourses };
           for (const [id, dbCourse] of Object.entries(data)) {
             const base = hardcodedCourses[id] || {};
             const mergedCourse = { ...base };
             for (const [key, val] of Object.entries(dbCourse)) {
+              // Never let DB override code-controlled fields.
+              if (CODE_ONLY_FIELDS.has(key)) continue;
               // If the DB value is an empty array but hardcoded has entries,
               // treat it as "no admin override" and keep the hardcoded default.
               if (Array.isArray(val) && val.length === 0 &&
