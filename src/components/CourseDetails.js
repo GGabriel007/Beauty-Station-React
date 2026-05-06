@@ -396,7 +396,7 @@ const CourseDetails = () => {
                         <div className="course-schedule-container">
                             <label className="course-schedule-label">Elige tu Horario de Inscripción:</label>
                             <div className="course-schedule-buttons">
-                                {courseData.scheduleOptions.map((opt, idx) => (
+                                {(courseData.scheduleOptions || []).map((opt, idx) => (
                                     <button
                                         key={idx}
                                         type="button"
@@ -611,9 +611,9 @@ const CourseDetails = () => {
                             </ul>
                         )}
 
-                        <p className="class_links-module">{courseData.scheduleOptions.length > 1 ? "Horarios Disponibles" : "Horario"}</p>
+                        <p className="class_links-module">{(courseData.scheduleOptions || []).length > 1 ? "Horarios Disponibles" : "Horario"}</p>
                         <ul>
-                            {courseData.scheduleOptions.map((opt, idx) => (
+                            {(courseData.scheduleOptions || []).map((opt, idx) => (
                                 <li key={idx}>{opt}</li>
                             ))}
                         </ul>

@@ -28,9 +28,11 @@ export function CourseDataProvider({ children }) {
           // DB fields override field-by-field so hardcoded fills any gaps
           // (e.g. images.folder/count/instructor stay even if admin only saved price).
           //
-          // scheduleOptions is code-controlled: it maps 1-to-1 with DB_KEY_MAP in
-          // CourseDetails.js, so any DB value (which may be stale) is ignored and the
-          // hardcoded array is always used as the source of truth.
+          // scheduleOptions maps 1-to-1 with DB_KEY_MAP so stale DB values must not
+          // override the authoritative hardcoded array for known courses.
+          // Admin-created courses have no hardcoded base, so they MUST use the DB value.
+          // The check below skips the DB value only when the hardcoded base already
+          // defines scheduleOptions with at least one entry.
           const CODE_ONLY_FIELDS = new Set(['scheduleOptions']);
 
           const merged = { ...hardcodedCourses };
@@ -38,8 +40,9 @@ export function CourseDataProvider({ children }) {
             const base = hardcodedCourses[id] || {};
             const mergedCourse = { ...base };
             for (const [key, val] of Object.entries(dbCourse)) {
-              // Never let DB override code-controlled fields.
-              if (CODE_ONLY_FIELDS.has(key)) continue;
+              // Skip DB override for code-controlled fields only when the hardcoded
+              // base already defines them — admin-created courses fall through here.
+              if (CODE_ONLY_FIELDS.has(key) && Array.isArray(base[key]) && base[key].length > 0) continue;
               // If the DB value is an empty array but hardcoded has entries,
               // treat it as "no admin override" and keep the hardcoded default.
               if (Array.isArray(val) && val.length === 0 &&
