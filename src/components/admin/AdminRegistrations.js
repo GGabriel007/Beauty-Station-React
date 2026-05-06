@@ -1,6 +1,7 @@
 // src/components/admin/AdminRegistrations.js
-// 2.5 — Read-only registrations table with search, course filter,
-//        date range, pagination (50/page), and CSV export.
+// Read-only registrations table with search, course filter, source filter,
+// date range, pagination (50/page), and CSV export.
+// Shows registration source (web vs. admin) and payment method per row.
 
 import React, { useState, useEffect, useMemo } from 'react';
 import '../../styles/classes.css';
@@ -50,6 +51,7 @@ export default function AdminRegistrations() {
   const [error,         setError]         = useState(null);
   const [search,        setSearch]        = useState('');
   const [filterCourse,  setFilterCourse]  = useState('');
+  const [filterSource,  setFilterSource]  = useState('');  // '' | 'web' | 'admin'
   const [dateFrom,      setDateFrom]      = useState('');
   const [dateTo,        setDateTo]        = useState('');
   const [page,          setPage]          = useState(1);
@@ -89,29 +91,40 @@ export default function AdminRegistrations() {
         if (!hasMatch) return false;
       }
 
+      if (filterSource) {
+        const src = r.registrationSource || 'online';
+        if (filterSource === 'admin' && src !== 'admin')  return false;
+        if (filterSource === 'web'   && src === 'admin')  return false;
+      }
+
       if (fromTs && (r.Timestamp || 0) < fromTs) return false;
       if (toTs   && (r.Timestamp || 0) > toTs)   return false;
       return true;
     });
-  }, [registrations, search, filterCourse, dateFrom, dateTo]);
+  }, [registrations, search, filterCourse, filterSource, dateFrom, dateTo]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const paginated  = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  const clearFilters = () => { setSearch(''); setFilterCourse(''); setDateFrom(''); setDateTo(''); setPage(1); };
-  const hasFilters   = search || filterCourse || dateFrom || dateTo;
+  const clearFilters = () => { setSearch(''); setFilterCourse(''); setFilterSource(''); setDateFrom(''); setDateTo(''); setPage(1); };
+  const hasFilters   = search || filterCourse || filterSource || dateFrom || dateTo;
 
   const exportCSV = () => {
-    const headers = ['Nombre', 'Email', 'Teléfono', 'Curso(s)', 'Horario', 'Total (Q)', 'Fecha'];
+    const headers = ['Nombre', 'Email', 'Teléfono', 'Curso(s)', 'Horario', 'Total (Q)', 'Pago', 'Origen', 'Registrado por', 'Fecha'];
     const rows    = filtered.map(r => {
       const { courses, schedules } = parseItems(r.Items);
+      const src = r.registrationSource === 'admin' ? 'Admin' : 'Web';
+      const pago = r.paymentMethod === 'Cash' ? 'Efectivo' : 'Tarjeta/Web';
       return [
-        r.Name        || '',
-        r.email       || '',
-        r.phoneNumber || '',
+        r.Name          || '',
+        r.email         || '',
+        r.phoneNumber   || '',
         courses.replace(/\n/g, ' | '),
         schedules.replace(/\n/g, ' | '),
-        r.TotalPrice  || '',
+        r.TotalPrice    || '',
+        pago,
+        src,
+        r.registeredBy  || '',
         r.Timestamp ? new Date(r.Timestamp).toLocaleDateString('es-GT') : '',
       ];
     });
@@ -165,6 +178,18 @@ export default function AdminRegistrations() {
           </select>
         </div>
         <div>
+          <label style={labelStyle}>Origen</label>
+          <select
+            value={filterSource}
+            onChange={e => { setFilterSource(e.target.value); setPage(1); }}
+            style={{ ...inputStyle, width: '140px' }}
+          >
+            <option value="">Todos</option>
+            <option value="web">Web</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div>
           <label style={labelStyle}>Desde</label>
           <input type="date" value={dateFrom} onChange={e => { setDateFrom(e.target.value); setPage(1); }} style={{ ...inputStyle, width: '140px' }} />
         </div>
@@ -188,7 +213,7 @@ export default function AdminRegistrations() {
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.8rem', fontFamily: FONT }}>
           <thead>
             <tr style={{ background: '#f5f5f5', borderBottom: '2px solid #e0e0e0' }}>
-              {['Nombre', 'Email', 'Teléfono', 'Curso(s)', 'Horario', 'Total', 'Fecha'].map(h => (
+              {['Nombre', 'Email', 'Teléfono', 'Curso(s)', 'Horario', 'Total', 'Pago', 'Origen', 'Fecha'].map(h => (
                 <th key={h} style={th}>{h}</th>
               ))}
             </tr>
@@ -196,12 +221,14 @@ export default function AdminRegistrations() {
           <tbody>
             {paginated.length === 0 ? (
               <tr>
-                <td colSpan={7} style={{ padding: '28px', textAlign: 'center', color: '#bbb', fontFamily: FONT }}>
+                <td colSpan={9} style={{ padding: '28px', textAlign: 'center', color: '#bbb', fontFamily: FONT }}>
                   Sin resultados para los filtros aplicados.
                 </td>
               </tr>
             ) : paginated.map((r, i) => {
               const { courses, schedules } = parseItems(r.Items);
+              const isAdmin = r.registrationSource === 'admin';
+              const pago    = r.paymentMethod === 'Cash' ? 'Efectivo' : 'Tarjeta';
               return (
                 <tr key={r.id || i} style={{ borderBottom: '1px solid #f5f5f5' }}>
                   <td style={td}>{r.Name        || '—'}</td>
@@ -218,6 +245,39 @@ export default function AdminRegistrations() {
                     ))}
                   </td>
                   <td style={{ ...td, whiteSpace: 'nowrap' }}>Q{r.TotalPrice || 0}</td>
+                  <td style={{ ...td, whiteSpace: 'nowrap' }}>
+                    <span style={{
+                      display:    'inline-block',
+                      padding:    '2px 9px',
+                      fontSize:   '0.72rem',
+                      fontWeight: 600,
+                      fontFamily: FONT,
+                      background: r.paymentMethod === 'Cash' ? '#f0fdf4' : '#f5f5f5',
+                      color:      r.paymentMethod === 'Cash' ? '#166534' : '#555',
+                      border:     `1px solid ${r.paymentMethod === 'Cash' ? '#bbf7d0' : '#e0e0e0'}`,
+                    }}>
+                      {pago}
+                    </span>
+                  </td>
+                  <td style={{ ...td, whiteSpace: 'nowrap' }}>
+                    <span style={{
+                      display:    'inline-block',
+                      padding:    '2px 9px',
+                      fontSize:   '0.72rem',
+                      fontWeight: 600,
+                      fontFamily: FONT,
+                      background: isAdmin ? '#FFF0F5' : '#EFF6FF',
+                      color:      isAdmin ? '#7D4E61' : '#1e40af',
+                      border:     `1px solid ${isAdmin ? '#E8CBD4' : '#bfdbfe'}`,
+                    }}>
+                      {isAdmin ? 'Admin' : 'Web'}
+                    </span>
+                    {isAdmin && r.registeredBy && (
+                      <div style={{ fontSize: '0.68rem', color: '#aaa', marginTop: '2px', fontFamily: FONT }}>
+                        {r.registeredBy.split('@')[0]}
+                      </div>
+                    )}
+                  </td>
                   <td style={{ ...td, whiteSpace: 'nowrap', color: '#888' }}>{fmtDate(r.Timestamp)}</td>
                 </tr>
               );

@@ -106,6 +106,7 @@ async function writeActivityLog(staffEmail, action, oldValue, newValue) {
 const courseWhatsappInfo = {
   'Master Waves 2PM a 4PM':                        { displayName: 'Master Waves',                        link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
   'Master Waves 6PM a 8PM':                        { displayName: 'Master Waves',                        link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
+  'Master Waves Intensivo 1 Día 9AM a 4PM':        { displayName: 'Master Waves Intensivo 1 Día',        link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
   'Peinados Para Eventos 2PM a 4PM':               { displayName: 'Peinado Para Eventos',                link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
   'Peinados Para Eventos 6PM a 8PM':               { displayName: 'Peinado Para Eventos',                link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
   'Maestrías en Novias y Tendencias 2PM a 4PM':    { displayName: 'Maestrías en Novias y Tendencias',    link: 'https://chat.whatsapp.com/JRSFAlseSai0aLaMx4Qmbn' },
@@ -147,6 +148,7 @@ const ONLINE_COURSES = {
 const moduleIds = {
   'Master Waves 2PM a 4PM': '1Qk3ZTR8Mu9cvxdGGVYER',
   'Master Waves 6PM a 8PM': '2lAsVcE1N0gZl4Iiki3GP',
+  'Master Waves Intensivo 1 Día 9AM a 4PM': 'intensivo-mw-1dia-9am4pm',
   'Peinados Para Eventos 2PM a 4PM': '3ASSXgw602WiVe4HpldAP',
   'Peinados Para Eventos 6PM a 8PM': '4rfA37M4cMXl6iO6bSwW4',
   'Maestrías en Novias y Tendencias 2PM a 4PM': '5rHw64GkL6be0GIqiVM17',
@@ -168,6 +170,7 @@ const moduleIds = {
 const cartNameToCourseId = {
   'Master Waves 2PM a 4PM': 'master-waves',
   'Master Waves 6PM a 8PM': 'master-waves',
+  'Master Waves Intensivo 1 Día 9AM a 4PM': 'master-waves-intensivo',
   'Peinados Para Eventos 2PM a 4PM': 'peinado-eventos',
   'Peinados Para Eventos 6PM a 8PM': 'peinado-eventos',
   'Maestrías en Novias y Tendencias 2PM a 4PM': 'maestria-novias',
@@ -188,10 +191,10 @@ const cartNameToCourseId = {
 const cartItemNameToScheduleIndex = {
   'Master Waves 2PM a 4PM': 0,
   'Master Waves 6PM a 8PM': 1,
+  'Master Waves Intensivo 1 Día 9AM a 4PM': 0,
   'Peinados Para Eventos 2PM a 4PM': 0,
   'Peinados Para Eventos 6PM a 8PM': 1,
-  'Maestrías en Novias y Tendencias 2PM a 4PM': 0,
-  'Maestrías en Novias y Tendencias 6PM a 8PM': 1,
+  'Maestrías en Novias y Tendencias 6PM a 8PM': 0,
   'Curso Completo Peinado 2PM a 4PM': 0,
   'Curso Completo Peinado 6PM a 8PM': 1,
   'Pieles Perfectas 2PM a 4PM': 0,
@@ -253,11 +256,28 @@ function requireAdmin(req, res, next) {
   }
 }
 
-// PUBLIC SEAT INVENTORY: Fetches DynamoDB seat counts safely for Public Browsers
+// PUBLIC SEAT INVENTORY: Fetches DynamoDB seat counts safely for Public Browsers.
+// Deduplicates by attribute name, preferring the canonical moduleId item so that
+// stale items written under random IDs don't shadow the authoritative seat count.
 app.get('/modulos', async function (req, res) {
   try {
     const data = await ddbDocClient.send(new ScanCommand({ TableName: 'Modulos' }));
-    res.json(data.Items || []);
+    const items = data.Items || [];
+
+    // For each course attribute, keep only the item whose id matches the canonical
+    // moduleId. If no canonical item exists yet, keep whatever item has the attribute.
+    const byAttr = {};
+    for (const item of items) {
+      for (const key of Object.keys(item)) {
+        if (key === 'id') continue;
+        const canonicalId = moduleIds[key];
+        if (!byAttr[key] || item.id === canonicalId) {
+          byAttr[key] = item;
+        }
+      }
+    }
+
+    res.json(Object.values(byAttr));
   } catch (error) {
     console.error("Error fetching Modulos:", error);
     res.status(500).json({ error: 'Hubo un error al buscar asientos.' });
@@ -1223,6 +1243,35 @@ app.put('/admin/seats/:moduleId', requireAdmin, async function (req, res) {
   }
 });
 
+// DELETE A MODULOS ENTRY (removes the course attribute; deletes the item if that was its only attribute)
+app.delete('/admin/seats/:moduleId', requireAdmin, async function (req, res) {
+  try {
+    const { moduleId } = req.params;
+    const { courseName } = req.query;
+    if (!courseName) return res.status(400).json({ error: 'courseName es requerido.' });
+
+    // Remove just the course attribute first
+    await ddbDocClient.send(new UpdateCommand({
+      TableName: 'Modulos',
+      Key: { id: moduleId },
+      UpdateExpression: 'REMOVE #cn',
+      ExpressionAttributeNames: { '#cn': courseName },
+    }));
+
+    // If the item now has no attributes besides 'id', delete it entirely
+    const remaining = await ddbDocClient.send(new GetCommand({ TableName: 'Modulos', Key: { id: moduleId } }));
+    if (remaining.Item && Object.keys(remaining.Item).filter(k => k !== 'id').length === 0) {
+      await ddbDocClient.send(new DeleteCommand({ TableName: 'Modulos', Key: { id: moduleId } }));
+    }
+
+    await writeActivityLog(req.adminEmail, `Deleted legacy seat entry: ${courseName}`, null, null);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Admin: error deleting seat entry:', error);
+    res.status(500).json({ error: 'Error al eliminar la entrada.' });
+  }
+});
+
 // GET LESSONS FOR AN ONLINE COURSE (includes s3Key for admin use)
 app.get('/admin/lessons/:courseId', requireAdmin, async function (req, res) {
   try {
@@ -1465,6 +1514,97 @@ app.delete('/admin/coupons/:code', requireAdmin, async function (req, res) {
   } catch (error) {
     console.error('Admin: error deleting coupon:', error);
     res.status(500).json({ error: 'Error al eliminar el cupón.' });
+  }
+});
+
+// ADMIN: Manual student registration (cash payment, source = 'admin')
+app.post('/admin/manual-register', requireAdmin, async function (req, res) {
+  try {
+    const { studentName, email, phoneNumber, dpi, itemName, coursePrice, enrollmentFee, totalPrice, notes } = req.body || {};
+
+    // Required field validation
+    if (!studentName || !String(studentName).trim()) return res.status(400).json({ error: 'El nombre del alumno es requerido.' });
+    if (!email       || !String(email).trim())       return res.status(400).json({ error: 'El email es requerido.' });
+    if (!phoneNumber || !String(phoneNumber).trim())  return res.status(400).json({ error: 'El teléfono es requerido.' });
+    if (!itemName    || !String(itemName).trim())     return res.status(400).json({ error: 'El curso y horario son requeridos.' });
+    if (totalPrice == null || isNaN(Number(totalPrice))) return res.status(400).json({ error: 'El precio total es requerido.' });
+
+    const safeName   = String(studentName).trim().slice(0, 120);
+    const safeEmail  = String(email).trim().toLowerCase().slice(0, 254);
+    const safePhone  = String(phoneNumber).trim().slice(0, 25);
+    const safeDPI    = String(dpi || 'CF').trim().slice(0, 30);
+    const safeItem   = String(itemName).trim().slice(0, 150);
+    const safeTotal  = Number(totalPrice);
+    const safeNotes  = String(notes || '').trim().slice(0, 500);
+
+    // DPI/NIT required for orders >= Q2,000
+    if (safeTotal >= 2000 && (!dpi || !String(dpi).trim() || String(dpi).trim().toUpperCase() === 'CF')) {
+      return res.status(400).json({ error: 'Se requiere DPI/NIT para inscripciones de Q2,000 o más.' });
+    }
+
+    // Check seat availability
+    const moduleId = moduleIds[safeItem];
+    if (moduleId) {
+      const data = await ddbDocClient.send(new GetCommand({ TableName: 'Modulos', Key: { id: moduleId } }));
+      if (!data.Item || Number(data.Item[safeItem] || 0) <= 0) {
+        return res.status(400).json({ error: `No hay más asientos disponibles para ${safeItem}.` });
+      }
+    }
+
+    // Deduct one seat
+    if (moduleId) {
+      await ddbDocClient.send(new UpdateCommand({
+        TableName: 'Modulos',
+        Key: { id: moduleId },
+        UpdateExpression: 'SET #name = #name - :inc',
+        ExpressionAttributeNames: { '#name': safeItem },
+        ExpressionAttributeValues: { ':inc': 1 },
+      }));
+      // Low-seat alert
+      try {
+        const afterDeduct = await ddbDocClient.send(new GetCommand({ TableName: 'Modulos', Key: { id: moduleId } }));
+        const remaining = afterDeduct.Item ? Number(afterDeduct.Item[safeItem]) : null;
+        if (remaining !== null && remaining <= 2) {
+          await sesClient.send(new SendEmailCommand({
+            Source: OWNER_EMAIL,
+            Destination: { ToAddresses: [OWNER_EMAIL] },
+            Message: {
+              Subject: { Data: `Pocos lugares disponibles: ${safeItem}`, Charset: 'UTF-8' },
+              Body: { Text: { Data: `Solo quedan ${remaining} lugar(es) para "${safeItem}".\nInscripción manual realizada por: ${req.adminEmail}.\n\n- Beauty Station`, Charset: 'UTF-8' } },
+            },
+          }));
+        }
+      } catch (alertErr) {
+        console.warn('Low-seat alert failed:', alertErr.message);
+      }
+    }
+
+    // Persist registration to Payments table
+    const paymentId = crypto.randomUUID();
+    const paymentData = {
+      id:                 paymentId,
+      email:              safeEmail,
+      Name:               safeName,
+      phoneNumber:        safePhone,
+      DPI:                safeDPI,
+      Items:              safeItem,
+      TotalPrice:         safeTotal,
+      Timestamp:          Date.now(),
+      registrationSource: 'admin',
+      paymentMethod:      'Cash',
+      registeredBy:       req.adminEmail,
+      ...(safeNotes ? { notes: safeNotes } : {}),
+    };
+
+    await ddbDocClient.send(new PutCommand({ TableName: 'Payments', Item: paymentData }));
+
+    // Log the admin action
+    await writeActivityLog(req.adminEmail, `Manual registration: ${safeItem} → ${safeEmail}`, null, paymentId);
+
+    res.json({ success: true, paymentId });
+  } catch (error) {
+    console.error('Admin: error creating manual registration:', error);
+    res.status(500).json({ error: 'Error al crear la inscripción manual.' });
   }
 });
 

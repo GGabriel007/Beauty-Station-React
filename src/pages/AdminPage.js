@@ -14,7 +14,8 @@ import AdminOnlineCourse  from '../components/admin/AdminOnlineCourse';
 import AdminRegistrations from '../components/admin/AdminRegistrations';
 import AdminReviews       from '../components/admin/AdminReviews';
 import AdminSettings      from '../components/admin/AdminSettings';
-import AdminCoupons       from '../components/admin/AdminCoupons';
+import AdminCoupons               from '../components/admin/AdminCoupons';
+import AdminManualRegistration   from '../components/admin/AdminManualRegistration';
 
 // ── Design tokens (match header.css) ──────────────────────────────────────────
 const C = {
@@ -29,13 +30,14 @@ const C = {
 const FONT = "'Montserrat', sans-serif";
 
 const TABS = [
-  { id: 'dashboard',      label: 'Dashboard'      },
-  { id: 'courses',        label: 'Cursos'          },
-  { id: 'online-course',  label: 'Curso en Línea'  },
-  { id: 'registrations',  label: 'Inscripciones'   },
-  { id: 'reviews',        label: 'Reseñas'         },
-  { id: 'coupons',        label: 'Cupones'         },
-  { id: 'settings',       label: 'Configuración'   },
+  { id: 'dashboard',        label: 'Dashboard'        },
+  { id: 'courses',          label: 'Cursos'           },
+  { id: 'online-course',    label: 'Curso en Línea'   },
+  { id: 'registrations',    label: 'Inscripciones'    },
+  { id: 'manual-register',  label: 'Inscribir Alumno' },
+  { id: 'reviews',          label: 'Reseñas'          },
+  { id: 'coupons',          label: 'Cupones'          },
+  { id: 'settings',         label: 'Configuración'    },
 ];
 
 export default function AdminPage() {
@@ -373,13 +375,14 @@ export default function AdminPage() {
         )}
 
         {/* Tab content */}
-        {activeTab === 'dashboard'      && <AdminDashboard />}
-        {activeTab === 'courses'        && <AdminCourses />}
-        {activeTab === 'online-course'  && <AdminOnlineCourse />}
-        {activeTab === 'registrations'  && <AdminRegistrations />}
-        {activeTab === 'reviews'        && <AdminReviews />}
-        {activeTab === 'coupons'        && <AdminCoupons />}
-        {activeTab === 'settings'       && <AdminSettings />}
+        {activeTab === 'dashboard'       && <AdminDashboard />}
+        {activeTab === 'courses'         && <AdminCourses />}
+        {activeTab === 'online-course'   && <AdminOnlineCourse />}
+        {activeTab === 'registrations'   && <AdminRegistrations />}
+        {activeTab === 'manual-register' && <AdminManualRegistration />}
+        {activeTab === 'reviews'         && <AdminReviews />}
+        {activeTab === 'coupons'         && <AdminCoupons />}
+        {activeTab === 'settings'        && <AdminSettings />}
       </main>
     </div>
   );

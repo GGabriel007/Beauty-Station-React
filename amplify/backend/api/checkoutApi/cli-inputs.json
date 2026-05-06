@@ -153,7 +153,7 @@
       "lambdaFunction": "processCheckout",
       "permissions": {
         "setting": "private",
-        "auth": ["read", "update"]
+        "auth": ["read", "update", "delete"]
       }
     },
     "/admin/lessons/{courseId}": {

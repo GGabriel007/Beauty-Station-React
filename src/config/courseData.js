@@ -91,7 +91,7 @@ export const coursesInfo = {
             { title: "Peinado alto Kim Kardashian", sessions: ["Clase 17: Masterclass Miércoles 6 de Mayo 6 PM", "Clase 18: Jueves 7 de Mayo, evaluación final y entrega de portafolio (EN MODELO)"] }
         ],
         scheduleOptions: [
-            "Miércoles 4PM y Jueves 4PM ó 6PM"
+            "Miércoles y Jueves 6PM a 8PM"
         ],
         images: {
             folder: "Class_1/Module_3/Hair",
@@ -354,4 +354,20 @@ export const coursesInfo = {
             extension: "Mkup"
         }
     }
+};
+
+// Canonical item names per courseId — must stay in sync with DB_KEY_MAP in
+// CourseDetails.js and moduleIds in the backend app.js.
+// Used by admin tools (AdminSettings, AdminManualRegistration) so every
+// seat operation targets the exact same Modulos keys the customer checkout uses.
+export const courseCanonicalItems = {
+  'master-waves':              ['Master Waves 2PM a 4PM',                          'Master Waves 6PM a 8PM'],
+  'peinado-eventos':           ['Peinados Para Eventos 2PM a 4PM',                 'Peinados Para Eventos 6PM a 8PM'],
+  'maestria-novias':           ['Maestrías en Novias y Tendencias 6PM a 8PM'],
+  'master-waves-intensivo':    ['Master Waves Intensivo 1 Día 9AM a 4PM'],
+  'curso-completo-peinado':    ['Curso Completo Peinado 2PM a 4PM',                'Curso Completo Peinado 6PM a 8PM'],
+  'pieles-perfectas':          ['Pieles Perfectas 2PM a 4PM',                      'Pieles Perfectas 6PM a 8PM'],
+  'maquillaje-social':         ['Maquillaje Social 2PM a 4PM',                     'Maquillaje Social 6PM a 8PM'],
+  'maestria-novias-makeup':    ['Maestría en Novias y Tendencias 6PM a 8PM'],
+  'curso-completo-maquillaje': ['Curso Completo Maquillaje 2PM a 4PM',             'Curso Completo Maquillaje 6PM a 8PM'],
 };
