@@ -91,7 +91,13 @@ const CourseDetails = () => {
     const [kitAvailable, setKitAvailable] = useState(true);
     const [kitDescription, setKitDescription] = useState('');
 
-    const activeDbKey = DB_KEY_MAP[`${courseId}-${selectedScheduleIndex}`];
+    // For hardcoded courses DB_KEY_MAP has the canonical Modulos attribute name.
+    // For admin-created courses (not in DB_KEY_MAP) build the key the same way
+    // AdminSettings writes it: "<courseName> <scheduleOption>".
+    const activeDbKey = DB_KEY_MAP[`${courseId}-${selectedScheduleIndex}`]
+        || (selectedScheduleIndex !== null && courseData?.scheduleOptions?.[selectedScheduleIndex] != null
+            ? `${courseData?.courseName || courseData?.title} ${courseData?.scheduleOptions[selectedScheduleIndex]}`
+            : undefined);
 
     useEffect(() => {
         if (!courseData) return;
@@ -481,12 +487,17 @@ const CourseDetails = () => {
 
                                 const itemNameLower = cartItemName.toLowerCase();
 
-                                // 1. Per-course duplication check — matches against the actual DB key
-                                //    names so it works for every course regardless of how
-                                //    courseData.title is worded in Spanish.
+                                // 1. Per-course duplication check — prevents adding a second schedule
+                                //    for the same course. For hardcoded courses the names come from
+                                //    DB_KEY_MAP; for admin-created courses derive them from scheduleOptions.
                                 const courseCartNames = getCourseCartNames(courseId);
+                                const effectiveCartNames = courseCartNames.length > 0
+                                    ? courseCartNames
+                                    : (courseData.scheduleOptions || []).map(opt =>
+                                        `${courseData.courseName || courseData.title} ${opt}`.toLowerCase()
+                                      );
                                 const isAlreadyInCart = cartItems.some(item =>
-                                    courseCartNames.includes(item.name.toLowerCase())
+                                    effectiveCartNames.includes(item.name.toLowerCase())
                                 );
 
                                 if (isAlreadyInCart) {
