@@ -25,6 +25,7 @@ import CoursePlayer from './pages/CoursePlayer';
 import { CartProvider, CartContext } from './context/CartContext';
 import { CourseDataProvider } from './context/CourseDataContext';
 import AdminPage from './pages/AdminPage';
+import Portafolio from './pages/Portafolio';
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function AppLayout() {
         <Route path="/classes" element={<BeautySClasses />} />
         <Route path="/servicio-a-domicilio" element={<BeautySDomicilio />} />
         <Route path="/nosotros" element={<BeautySContacto />} />
+        <Route path="/portafolio" element={<Portafolio />} />
         <Route path="/classes/classes-1" element={<Classes1 />} />
         <Route path="/classes/classes-2" element={<Classes2 />} />
         <Route path="/classes/course/:courseId" element={<CourseDetails />} />

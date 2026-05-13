@@ -50,10 +50,14 @@ const app = express();
 app.use(bodyParser.json());
 app.use(awsServerlessExpressMiddleware.eventContext());
 
-// Enable CORS perfectly for the React frontend
+// Enable CORS for the React frontend.
+// OPTIONS preflight must be answered with 200 before any auth middleware runs —
+// otherwise requireAdmin rejects it with 401 and the browser blocks the real request.
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  if (req.method === "OPTIONS") return res.sendStatus(200);
   next();
 });
 
@@ -652,43 +656,21 @@ app.post('/checkout', async function (req, res) {
 
     const customerHtml = `
       <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e0e0e0; border-radius: 8px; color: #111;">
-        
+
         <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 20px;">
           <h1 style="color: #000; font-size: 28px; font-weight: bold; margin: 0; letter-spacing: 2px;">BEAUTY STATION</h1>
-          <p style="color: #555; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; margin-top: 5px;">Recibo de Inscripción Oficial</p>
         </div>
 
-        <p style="font-size: 16px; color: #333; line-height: 1.5;">Estimado/a <strong>${escapeHtml(paymentData.Name)}</strong>,</p>
-        <p style="font-size: 16px; color: #333; line-height: 1.5;">Hemos procesado tu inscripción exitosamente. A continuación encontrarás el detalle oficial de tu recibo.</p>
-        
-        <div style="background-color: #f7f7f7; padding: 20px; border-radius: 4px; margin: 25px 0;">
-          <h3 style="margin-top: 0; font-size: 14px; text-transform: uppercase; color: #000; letter-spacing: 1px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">Detalles de Facturación</h3>
-          <table style="width: 100%; font-size: 14px; border-collapse: collapse;">
-            <tr>
-              <td style="padding: 6px 0; color: #555;"><strong>No. Recibo:</strong></td>
-              <td style="padding: 6px 0; text-align: right; color: #000;">${paymentData.id.split('-')[0].toUpperCase()}</td>
-            </tr>
-            <tr>
-              <td style="padding: 6px 0; color: #555;"><strong>Fecha:</strong></td>
-              <td style="padding: 6px 0; text-align: right; color: #000;">${new Date(paymentData.Timestamp).toLocaleDateString('es-GT', { year: 'numeric', month: 'long', day: 'numeric'})}</td>
-            </tr>
-            <tr>
-              <td style="padding: 6px 0; color: #555;"><strong>Identificación (DPI/Pasaporte):</strong></td>
-              <td style="padding: 6px 0; text-align: right; color: #000;">${escapeHtml(paymentData.DPI) || "No proporcionado"}</td>
-            </tr>
-            <tr>
-              <td style="padding: 6px 0; color: #555;"><strong>Teléfono Autorizado:</strong></td>
-              <td style="padding: 6px 0; text-align: right; color: #000;">${escapeHtml(paymentData.phoneNumber) || "No proporcionado"}</td>
-            </tr>
-          </table>
-        </div>
+        <p style="font-size: 22px; font-weight: bold; color: #000; margin: 0 0 8px 0;">Bienvenido/a ${escapeHtml(paymentData.Name)}</p>
+        <p style="font-size: 16px; color: #333; line-height: 1.6; margin: 0 0 6px 0;">Ya eres parte de la familia Beauty Station.</p>
+        <p style="font-size: 16px; color: #333; line-height: 1.6; margin: 0 0 30px 0;">Hemos procesado tu inscripción exitosamente. A continuación encontrarás el detalle oficial de tu recibo.</p>
 
-        <div style="margin: 30px 0;">
-          <h3 style="font-size: 14px; text-transform: uppercase; color: #000; letter-spacing: 1px; border-bottom: 1px solid #000; padding-bottom: 10px;">Módulos Adquiridos</h3>
+        <div style="margin: 0 0 30px 0;">
+          <h3 style="font-size: 14px; text-transform: uppercase; color: #000; letter-spacing: 1px; border-bottom: 1px solid #000; padding-bottom: 10px; margin-top: 0;">Módulos Adquiridos</h3>
           <ul style="padding: 0; list-style-type: none; margin: 0;">
             ${itemsArray.map(item => `
               <li style="padding: 12px 0; border-bottom: 1px solid #eee; font-size: 15px; color: #333;">
-                <span style="font-weight: bold;">&#8226;</span> ${escapeHtml(item.trim())}
+                &#8226; ${escapeHtml(item.trim())}
               </li>
             `).join("")}
           </ul>
@@ -721,10 +703,6 @@ app.post('/checkout', async function (req, res) {
         </div>
         ` : ''}
 
-        <div style="text-align: right; margin-top: 20px; background-color: #000; color: #fff; padding: 15px; border-radius: 4px;">
-          <h2 style="font-size: 20px; font-weight: bold; margin: 0; letter-spacing: 1px;">TOTAL CANCELADO: Q ${paymentData.TotalPrice || 0}.00</h2>
-        </div>
-
         <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; font-size: 12px; color: #777; line-height: 1.5;">
           <p style="margin: 0 0 10px 0;">*Los pagos para este curso son necesarios para asegurar su cupo y no son reembolsables bajo ninguna circunstancia. En caso de cancelación o ausencia, incluyendo enfermedad, no se permite el canje por otros cursos, servicios o productos.</p>
           <p style="margin: 0 0 15px 0;">Si tienes alguna pregunta, por favor contáctanos directamente a través de WhatsApp.</p>
@@ -737,7 +715,7 @@ app.post('/checkout', async function (req, res) {
       const { data, error } = await resend.emails.send({
         from: 'Beauty Station <onboarding@resend.dev>',
         to: paymentData.email,
-        subject: 'Confimación de Pago - Beauty Station',
+        subject: 'Confirmación de Pago - Beauty Station',
         html: customerHtml,
       });
 
@@ -1537,46 +1515,48 @@ app.post('/admin/manual-register', requireAdmin, async function (req, res) {
     const safeTotal  = Number(totalPrice);
     const safeNotes  = String(notes || '').trim().slice(0, 500);
 
-    // DPI/NIT required for orders >= Q2,000
-    if (safeTotal >= 2000 && (!dpi || !String(dpi).trim() || String(dpi).trim().toUpperCase() === 'CF')) {
-      return res.status(400).json({ error: 'Se requiere DPI/NIT para inscripciones de Q2,000 o más.' });
+    // Resolve moduleId: use static map for hardcoded courses, scan Modulos for admin-created ones
+    let moduleId = moduleIds[safeItem];
+    if (!moduleId) {
+      const scanResult = await ddbDocClient.send(new ScanCommand({ TableName: 'Modulos' }));
+      for (const row of (scanResult.Items || [])) {
+        if (safeItem in row) { moduleId = row.id; break; }
+      }
     }
 
-    // Check seat availability
-    const moduleId = moduleIds[safeItem];
-    if (moduleId) {
-      const data = await ddbDocClient.send(new GetCommand({ TableName: 'Modulos', Key: { id: moduleId } }));
-      if (!data.Item || Number(data.Item[safeItem] || 0) <= 0) {
-        return res.status(400).json({ error: `No hay más asientos disponibles para ${safeItem}.` });
-      }
+    // Always enforce seat availability — reject if no entry found or count is 0
+    if (!moduleId) {
+      return res.status(400).json({ error: `No hay cupos configurados para ${safeItem}. Configura los cupos en la pestaña Configuración antes de inscribir alumnos.` });
+    }
+    const seatData = await ddbDocClient.send(new GetCommand({ TableName: 'Modulos', Key: { id: moduleId } }));
+    if (!seatData.Item || Number(seatData.Item[safeItem] || 0) <= 0) {
+      return res.status(400).json({ error: `No hay más asientos disponibles para ${safeItem}.` });
     }
 
     // Deduct one seat
-    if (moduleId) {
-      await ddbDocClient.send(new UpdateCommand({
-        TableName: 'Modulos',
-        Key: { id: moduleId },
-        UpdateExpression: 'SET #name = #name - :inc',
-        ExpressionAttributeNames: { '#name': safeItem },
-        ExpressionAttributeValues: { ':inc': 1 },
-      }));
-      // Low-seat alert
-      try {
-        const afterDeduct = await ddbDocClient.send(new GetCommand({ TableName: 'Modulos', Key: { id: moduleId } }));
-        const remaining = afterDeduct.Item ? Number(afterDeduct.Item[safeItem]) : null;
-        if (remaining !== null && remaining <= 2) {
-          await sesClient.send(new SendEmailCommand({
-            Source: OWNER_EMAIL,
-            Destination: { ToAddresses: [OWNER_EMAIL] },
-            Message: {
-              Subject: { Data: `Pocos lugares disponibles: ${safeItem}`, Charset: 'UTF-8' },
-              Body: { Text: { Data: `Solo quedan ${remaining} lugar(es) para "${safeItem}".\nInscripción manual realizada por: ${req.adminEmail}.\n\n- Beauty Station`, Charset: 'UTF-8' } },
-            },
-          }));
-        }
-      } catch (alertErr) {
-        console.warn('Low-seat alert failed:', alertErr.message);
+    await ddbDocClient.send(new UpdateCommand({
+      TableName: 'Modulos',
+      Key: { id: moduleId },
+      UpdateExpression: 'SET #name = #name - :inc',
+      ExpressionAttributeNames: { '#name': safeItem },
+      ExpressionAttributeValues: { ':inc': 1 },
+    }));
+    // Low-seat alert
+    try {
+      const afterDeduct = await ddbDocClient.send(new GetCommand({ TableName: 'Modulos', Key: { id: moduleId } }));
+      const remaining = afterDeduct.Item ? Number(afterDeduct.Item[safeItem]) : null;
+      if (remaining !== null && remaining <= 2) {
+        await sesClient.send(new SendEmailCommand({
+          Source: OWNER_EMAIL,
+          Destination: { ToAddresses: [OWNER_EMAIL] },
+          Message: {
+            Subject: { Data: `Pocos lugares disponibles: ${safeItem}`, Charset: 'UTF-8' },
+            Body: { Text: { Data: `Solo quedan ${remaining} lugar(es) para "${safeItem}".\nInscripción manual realizada por: ${req.adminEmail}.\n\n- Beauty Station`, Charset: 'UTF-8' } },
+          },
+        }));
       }
+    } catch (alertErr) {
+      console.warn('Low-seat alert failed:', alertErr.message);
     }
 
     // Persist registration to Payments table
@@ -1597,6 +1577,58 @@ app.post('/admin/manual-register', requireAdmin, async function (req, res) {
     };
 
     await ddbDocClient.send(new PutCommand({ TableName: 'Payments', Item: paymentData }));
+
+    // Send confirmation email to student via Resend (same format as checkout)
+    try {
+      const waInfo = courseWhatsappInfo[safeItem];
+      const adminReceiptHtml = `
+        <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e0e0e0; border-radius: 8px; color: #111;">
+
+          <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 20px;">
+            <h1 style="color: #000; font-size: 28px; font-weight: bold; margin: 0; letter-spacing: 2px;">BEAUTY STATION</h1>
+          </div>
+
+          <p style="font-size: 22px; font-weight: bold; color: #000; margin: 0 0 8px 0;">Bienvenido/a ${escapeHtml(paymentData.Name)}</p>
+          <p style="font-size: 16px; color: #333; line-height: 1.6; margin: 0 0 6px 0;">Ya eres parte de la familia Beauty Station.</p>
+          <p style="font-size: 16px; color: #333; line-height: 1.6; margin: 0 0 30px 0;">Hemos procesado tu inscripción exitosamente. A continuación encontrarás el detalle oficial de tu recibo.</p>
+
+          <div style="margin: 0 0 30px 0;">
+            <h3 style="font-size: 14px; text-transform: uppercase; color: #000; letter-spacing: 1px; border-bottom: 1px solid #000; padding-bottom: 10px; margin-top: 0;">Módulos Adquiridos</h3>
+            <ul style="padding: 0; list-style-type: none; margin: 0;">
+              <li style="padding: 12px 0; border-bottom: 1px solid #eee; font-size: 15px; color: #333;">
+                &#8226; ${escapeHtml(safeItem)}
+              </li>
+            </ul>
+          </div>
+
+          ${waInfo ? `
+          <div style="margin: 30px 0; background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px; text-align: center;">
+            <h3 style="font-size: 14px; text-transform: uppercase; color: #000; letter-spacing: 1px; margin-top: 0; margin-bottom: 8px;">Grupo de WhatsApp</h3>
+            <p style="font-size: 14px; color: #555; margin: 0 0 16px 0;">Únete al grupo de WhatsApp de tu curso para recibir avisos, materiales y novedades.</p>
+            <a href="${waInfo.link}" style="display: inline-block; background-color: #25D366; color: #ffffff; padding: 12px 28px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 14px; letter-spacing: 0.5px;">
+              Unirme — ${escapeHtml(waInfo.displayName)}
+            </a>
+          </div>
+          ` : ''}
+
+          <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; font-size: 12px; color: #777; line-height: 1.5;">
+            <p style="margin: 0 0 10px 0;">*Los pagos para este curso son necesarios para asegurar su cupo y no son reembolsables bajo ninguna circunstancia. En caso de cancelación o ausencia, incluyendo enfermedad, no se permite el canje por otros cursos, servicios o productos.</p>
+            <p style="margin: 0 0 15px 0;">Si tienes alguna pregunta, por favor contáctanos directamente a través de WhatsApp.</p>
+            <p style="margin: 0; font-weight: bold; color: #000; letter-spacing: 2px;">© BEAUTY STATION</p>
+          </div>
+        </div>
+      `;
+      const { data: emailData, error: emailError } = await resend.emails.send({
+        from: 'Beauty Station <onboarding@resend.dev>',
+        to: paymentData.email,
+        subject: 'Confirmación de Inscripción - Beauty Station',
+        html: adminReceiptHtml,
+      });
+      if (emailError) console.error('Manual registration email failed:', emailError);
+      else            console.log('Manual registration email sent:', emailData);
+    } catch (emailErr) {
+      console.error('Manual registration email error:', emailErr);
+    }
 
     // Log the admin action
     await writeActivityLog(req.adminEmail, `Manual registration: ${safeItem} → ${safeEmail}`, null, paymentId);

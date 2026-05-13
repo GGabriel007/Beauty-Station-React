@@ -188,6 +188,14 @@
         "auth": ["read", "create", "update", "delete"]
       }
     },
+    "/admin/manual-register": {
+      "name": "/admin/manual-register",
+      "lambdaFunction": "processCheckout",
+      "permissions": {
+        "setting": "private",
+        "auth": ["create"]
+      }
+    },
     "/coupons/validate": {
       "name": "/coupons/validate",
       "lambdaFunction": "processCheckout",

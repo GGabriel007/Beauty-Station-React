@@ -3,10 +3,33 @@
 // Course list comes from /admin/courses (CourseSettings) so newly created courses
 // appear immediately. Seat counts are overlaid from /modulos where available.
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import '../../styles/classes.css';
 import { get, post } from 'aws-amplify/api';
-import { courseCanonicalItems } from '../../config/courseData';
+import { courseCanonicalItems, coursesInfo } from '../../config/courseData';
+
+const COUNTRIES = [
+  { code: '+502', label: '🇬🇹 Guatemala +502' },
+  { code: '+1',   label: '🇺🇸 EE.UU. / Canadá +1' },
+  { code: '+52',  label: '🇲🇽 México +52' },
+  { code: '+503', label: '🇸🇻 El Salvador +503' },
+  { code: '+504', label: '🇭🇳 Honduras +504' },
+  { code: '+505', label: '🇳🇮 Nicaragua +505' },
+  { code: '+506', label: '🇨🇷 Costa Rica +506' },
+  { code: '+507', label: '🇵🇦 Panamá +507' },
+  { code: '+57',  label: '🇨🇴 Colombia +57' },
+  { code: '+58',  label: '🇻🇪 Venezuela +58' },
+  { code: '+51',  label: '🇵🇪 Perú +51' },
+  { code: '+56',  label: '🇨🇱 Chile +56' },
+  { code: '+54',  label: '🇦🇷 Argentina +54' },
+  { code: '+55',  label: '🇧🇷 Brasil +55' },
+  { code: '+593', label: '🇪🇨 Ecuador +593' },
+  { code: '+591', label: '🇧🇴 Bolivia +591' },
+  { code: '+595', label: '🇵🇾 Paraguay +595' },
+  { code: '+598', label: '🇺🇾 Uruguay +598' },
+  { code: '+34',  label: '🇪🇸 España +34' },
+  { code: '+44',  label: '🇬🇧 Reino Unido +44' },
+];
 
 const FONT = "'Montserrat', sans-serif";
 const C = {
@@ -31,25 +54,6 @@ async function apiPost(path, data) {
   return body.json();
 }
 
-// Build the canonical item name (e.g., "Master Waves 2PM a 4PM") from a course
-// name and a raw schedule option string (e.g., "Opción 1: 2PM A 4PM").
-// Returns null if no recognizable time pattern is found.
-function buildItemName(courseName, scheduleOption) {
-  const match = scheduleOption.match(/(\d+)\s*([AP]M)\s+[Aa]\s+(\d+)\s*([AP]M)/i);
-  if (!match) return null;
-  const [, h1, m1, h2, m2] = match;
-  return `${courseName} ${h1}${m1.toUpperCase()} a ${h2}${m2.toUpperCase()}`;
-}
-
-// Human-readable schedule label from a schedule option string.
-// "Opción 1: 2PM A 4PM" → "2PM a 4PM"
-function getScheduleDisplay(scheduleOption) {
-  const match = scheduleOption.match(/(\d+)\s*([AP]M)\s+[Aa]\s+(\d+)\s*([AP]M)/i);
-  if (!match) return scheduleOption;
-  const [, h1, m1, h2, m2] = match;
-  return `${h1}${m1.toUpperCase()} a ${h2}${m2.toUpperCase()}`;
-}
-
 const EMPTY_FORM = {
   studentName: '',
   email:       '',
@@ -65,7 +69,12 @@ export default function AdminManualRegistration() {
   const [courseMap,     setCourseMap]     = useState({});   // { courseId: courseObj }
   const [enrollmentFee, setEnrollmentFee] = useState(200);
 
-  const [selectedItem,  setSelectedItem]  = useState('');   // canonical item name
+  const [phoneCountry,  setPhoneCountry]  = useState('+502'); // persists between submissions
+  const [countryOpen,   setCountryOpen]   = useState(false);
+  const countryRef = useRef(null);
+
+  const [selectedCourseName, setSelectedCourseName] = useState(''); // course name (first dropdown)
+  const [selectedItem,  setSelectedItem]  = useState('');   // canonical item name (second dropdown)
   const [selectedCourseId, setSelectedCourseId] = useState(''); // to look up price
   const [coursePrice,   setCoursePrice]   = useState(0);    // editable
   const [form,          setForm]          = useState(EMPTY_FORM);
@@ -107,6 +116,17 @@ export default function AdminManualRegistration() {
       .finally(() => setLoading(false));
   }, []);
 
+  // Close country dropdown when clicking outside
+  useEffect(() => {
+    const handler = (e) => {
+      if (countryRef.current && !countryRef.current.contains(e.target)) {
+        setCountryOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
   // ── Derived state ──────────────────────────────────────────────────────────
 
   // Build course groups from CourseSettings (admin courses) so new courses appear
@@ -119,9 +139,6 @@ export default function AdminManualRegistration() {
       const schedOpts = course.scheduleOptions;
       if (!Array.isArray(schedOpts) || schedOpts.length === 0) continue;
 
-      // Use canonical item names for known courses so the item name sent to
-      // the backend always matches moduleIds / DB_KEY_MAP. Fall back to
-      // buildItemName only for admin-created courses without a canonical entry.
       const canonicalNames = courseCanonicalItems[course.courseId];
       const options = [];
       if (canonicalNames) {
@@ -132,14 +149,11 @@ export default function AdminManualRegistration() {
           options.push({ itemName, schedule, seats: seatMap[itemName] });
         }
       } else {
+        // For admin-created courses, use the same item name format as AdminSettings
+        // so seat counts from Configuración are matched correctly: "<courseName> <scheduleOption>"
         for (const opt of schedOpts) {
-          const itemName = buildItemName(course.courseName, opt);
-          if (!itemName) continue;
-          options.push({
-            itemName,
-            schedule: getScheduleDisplay(opt),
-            seats: seatMap[itemName],
-          });
+          const itemName = `${course.courseName} ${opt}`;
+          options.push({ itemName, schedule: opt, seats: seatMap[itemName] });
         }
       }
       if (options.length > 0) {
@@ -150,26 +164,31 @@ export default function AdminManualRegistration() {
     return groups;
   }, [courseMap, seatMap]);
 
-  const courseNames = useMemo(() => Object.keys(courseGroups).sort(), [courseGroups]);
-
-  // Schedules for the currently selected course name
-  const selectedCourseName = selectedItem
-    ? Object.keys(courseGroups).find(name =>
-        courseGroups[name].options.some(o => o.itemName === selectedItem)
-      ) || ''
-    : '';
+  // Split course names into hair / makeup / other buckets (same as Configuración)
+  const categoryBuckets = useMemo(() => {
+    const hair = [], makeup = [], other = [];
+    for (const [name, group] of Object.entries(courseGroups)) {
+      const course = courseMap[group.courseId];
+      const cat = course?.category || coursesInfo[group.courseId]?.category;
+      if      (cat === 'hair')   hair.push(name);
+      else if (cat === 'makeup') makeup.push(name);
+      else                       other.push(name);
+    }
+    hair.sort(); makeup.sort(); other.sort();
+    return { hair, makeup, other };
+  }, [courseGroups, courseMap]);
 
   const schedules = selectedCourseName
     ? (courseGroups[selectedCourseName]?.options || [])
     : [];
 
-  // seatsLeft: number = known count, undefined = no Modulos entry (new/untracked course)
-  const seatsLeft = selectedItem ? seatMap[selectedItem] : undefined;
-  const seatsKnown  = seatsLeft !== undefined;
-  const seatsEmpty  = seatsKnown && seatsLeft <= 0;
+  // seatsLeft: number = known count, undefined = no Modulos entry (seats not yet configured)
+  const seatsLeft  = selectedItem ? seatMap[selectedItem] : undefined;
+  const seatsKnown = seatsLeft !== undefined;
+  // Block when seats are unknown (never configured) OR when the known count is 0
+  const seatsEmpty = !seatsKnown || seatsLeft <= 0;
 
-  const total       = coursePrice + enrollmentFee;
-  const dpiRequired = total >= 2000;
+  const total = coursePrice + enrollmentFee;
 
   // Auto-fill price from CourseSettings when selection changes
   useEffect(() => {
@@ -182,16 +201,12 @@ export default function AdminManualRegistration() {
     }
   }, [selectedCourseId, courseMap]);
 
-  // Reset DPI to CF when total drops below Q2,000
-  useEffect(() => {
-    if (!dpiRequired) setForm(f => ({ ...f, dpi: 'CF' }));
-  }, [dpiRequired]);
-
   // ── Handlers ───────────────────────────────────────────────────────────────
 
   const setField = (field, value) => setForm(f => ({ ...f, [field]: value }));
 
   const handleCourseNameChange = (name) => {
+    setSelectedCourseName(name);
     setSelectedItem('');
     setSelectedCourseId('');
     setSubmitResult(null);
@@ -199,7 +214,6 @@ export default function AdminManualRegistration() {
     const group = courseGroups[name];
     if (!group) return;
     setSelectedCourseId(group.courseId);
-    // Auto-select when only one schedule option
     if (group.options.length === 1) setSelectedItem(group.options[0].itemName);
   };
 
@@ -215,8 +229,6 @@ export default function AdminManualRegistration() {
     if (!form.email.trim())       return 'El email es requerido.';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) return 'El email no tiene un formato válido.';
     if (!form.phone.trim())       return 'El número de teléfono es requerido.';
-    if (dpiRequired && (!form.dpi.trim() || form.dpi.trim().toUpperCase() === 'CF'))
-      return 'Se requiere DPI/NIT para inscripciones de Q2,000 o más.';
     return null;
   };
 
@@ -231,7 +243,7 @@ export default function AdminManualRegistration() {
       const result = await apiPost('/admin/manual-register', {
         studentName:   form.studentName.trim(),
         email:         form.email.trim().toLowerCase(),
-        phoneNumber:   form.phone.trim(),
+        phoneNumber:   `${phoneCountry} ${form.phone.trim()}`,
         dpi:           form.dpi.trim() || 'CF',
         itemName:      selectedItem,
         coursePrice,
@@ -248,7 +260,7 @@ export default function AdminManualRegistration() {
       }
 
       // Reset student fields; keep course selection for multi-registration speed
-      setForm({ studentName: '', email: '', phone: '', dpi: dpiRequired ? '' : 'CF', notes: '' });
+      setForm({ studentName: '', email: '', phone: '', dpi: 'CF', notes: '' });
 
     } catch (err) {
       let message = 'Error al registrar al alumno. Intenta de nuevo.';
@@ -314,9 +326,27 @@ export default function AdminManualRegistration() {
                 style={inputStyle}
               >
                 <option value="">— Seleccionar curso —</option>
-                {courseNames.map(name => (
-                  <option key={name} value={name}>{name}</option>
-                ))}
+                {categoryBuckets.hair.length > 0 && (
+                  <optgroup label="Cabello (Hair)">
+                    {categoryBuckets.hair.map(name => (
+                      <option key={name} value={name}>{name}</option>
+                    ))}
+                  </optgroup>
+                )}
+                {categoryBuckets.makeup.length > 0 && (
+                  <optgroup label="Maquillaje (Makeup)">
+                    {categoryBuckets.makeup.map(name => (
+                      <option key={name} value={name}>{name}</option>
+                    ))}
+                  </optgroup>
+                )}
+                {categoryBuckets.other.length > 0 && (
+                  <optgroup label="Otros">
+                    {categoryBuckets.other.map(name => (
+                      <option key={name} value={name}>{name}</option>
+                    ))}
+                  </optgroup>
+                )}
               </select>
             </Field>
 
@@ -332,11 +362,11 @@ export default function AdminManualRegistration() {
                     <option
                       key={s.itemName}
                       value={s.itemName}
-                      disabled={s.seats !== undefined && s.seats <= 0}
+                      disabled={s.seats === undefined || s.seats <= 0}
                     >
                       {s.schedule}
                       {s.seats === undefined
-                        ? ' — cupos sin configurar'
+                        ? ' — SIN CUPOS (sin configurar)'
                         : s.seats > 0
                           ? ` — ${s.seats} lugar${s.seats !== 1 ? 'es' : ''}`
                           : ' — SIN CUPOS'}
@@ -353,26 +383,23 @@ export default function AdminManualRegistration() {
                 alignItems: 'center',
                 padding:    '8px 14px',
                 marginTop:  '8px',
-                background: !seatsKnown ? '#f9fafb'
-                          : seatsLeft > 3 ? '#f0fdf4'
-                          : seatsLeft > 0 ? '#fffbeb'
+                background: seatsKnown && seatsLeft > 3 ? '#f0fdf4'
+                          : seatsKnown && seatsLeft > 0 ? '#fffbeb'
                           : '#fff5f5',
                 border: `1px solid ${
-                  !seatsKnown ? '#e5e7eb'
-                  : seatsLeft > 3 ? '#bbf7d0'
-                  : seatsLeft > 0 ? '#fcd34d'
+                  seatsKnown && seatsLeft > 3 ? '#bbf7d0'
+                  : seatsKnown && seatsLeft > 0 ? '#fcd34d'
                   : '#fed7d7'
                 }`,
-                color: !seatsKnown ? '#6b7280'
-                      : seatsLeft > 3 ? '#166534'
-                      : seatsLeft > 0 ? '#92400e'
-                      : '#9b1c1c',
+                color: seatsKnown && seatsLeft > 3 ? '#166534'
+                     : seatsKnown && seatsLeft > 0 ? '#92400e'
+                     : '#9b1c1c',
                 fontSize:   '0.82rem',
                 fontFamily: FONT,
                 fontWeight: 600,
               }}>
                 {!seatsKnown
-                  ? 'Cupos no configurados — se puede inscribir igualmente'
+                  ? 'Sin cupos configurados — configura cupos en la pestaña Configuración'
                   : seatsLeft > 0
                     ? `${seatsLeft} lugar${seatsLeft !== 1 ? 'es' : ''} disponible${seatsLeft !== 1 ? 's' : ''}`
                     : 'Sin cupos disponibles — inscripción bloqueada'}
@@ -432,10 +459,8 @@ export default function AdminManualRegistration() {
               <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#666', textTransform: 'uppercase', letterSpacing: '0.5px', fontFamily: FONT }}>
                 NIT / DPI
               </span>
-              <p style={{ margin: '5px 0 0', fontSize: '0.8rem', fontFamily: FONT, color: dpiRequired ? '#92400e' : C.muted }}>
-                {dpiRequired
-                  ? 'Requerido — total ≥ Q2,000'
-                  : 'CF (Consumidor Final) — total < Q2,000'}
+              <p style={{ margin: '5px 0 0', fontSize: '0.8rem', fontFamily: FONT, color: C.muted }}>
+                CF (Consumidor Final) — opcional
               </p>
             </div>
           </Card>
@@ -465,26 +490,83 @@ export default function AdminManualRegistration() {
             </Field>
 
             <Field label="Teléfono *">
-              <input
-                type="tel"
-                value={form.phone}
-                onChange={e => setField('phone', e.target.value)}
-                placeholder="+502 0000 0000"
-                style={inputStyle}
-              />
+              <div style={{ display: 'flex' }}>
+                <div style={{ position: 'relative', flexShrink: 0 }} ref={countryRef}>
+                  <button
+                    type="button"
+                    onClick={() => setCountryOpen(o => !o)}
+                    style={{
+                      height: '100%',
+                      padding: '8px 10px',
+                      border: '1px solid #ddd',
+                      borderRight: 'none',
+                      background: '#f9f9f9',
+                      cursor: 'pointer',
+                      fontFamily: FONT,
+                      fontSize: '0.83rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      whiteSpace: 'nowrap',
+                      outline: 'none',
+                      borderRadius: 0,
+                    }}
+                  >
+                    <span>{phoneCountry}</span>
+                    <span style={{ fontSize: '0.6rem', color: '#888' }}>{countryOpen ? '▴' : '▾'}</span>
+                  </button>
+                  {countryOpen && (
+                    <ul style={{
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      zIndex: 999,
+                      background: '#fff',
+                      border: '1px solid #ddd',
+                      margin: 0,
+                      padding: 0,
+                      listStyle: 'none',
+                      minWidth: '220px',
+                      maxHeight: '240px',
+                      overflowY: 'auto',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
+                    }}>
+                      {COUNTRIES.map(c => (
+                        <li
+                          key={c.code}
+                          onClick={() => { setPhoneCountry(c.code); setCountryOpen(false); }}
+                          style={{
+                            padding: '9px 14px',
+                            cursor: 'pointer',
+                            fontSize: '0.82rem',
+                            fontFamily: FONT,
+                            background: phoneCountry === c.code ? C.roseLight : 'transparent',
+                            borderBottom: '1px solid #f5f5f5',
+                          }}
+                        >
+                          {c.label}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+                <input
+                  type="tel"
+                  value={form.phone}
+                  onChange={e => setField('phone', e.target.value)}
+                  placeholder="XXXX-XXXX"
+                  style={{ ...inputStyle, flex: 1 }}
+                />
+              </div>
             </Field>
 
-            <Field label={dpiRequired ? 'DPI / NIT *' : 'DPI / NIT'}>
+            <Field label="DPI / NIT">
               <input
                 type="text"
                 value={form.dpi}
                 onChange={e => setField('dpi', e.target.value)}
-                placeholder={dpiRequired ? 'Número de DPI o NIT requerido' : 'CF'}
-                style={{
-                  ...inputStyle,
-                  borderColor: dpiRequired && (!form.dpi.trim() || form.dpi.trim().toUpperCase() === 'CF')
-                    ? '#fca5a5' : '#ddd',
-                }}
+                placeholder="CF"
+                style={inputStyle}
               />
             </Field>
           </div>
