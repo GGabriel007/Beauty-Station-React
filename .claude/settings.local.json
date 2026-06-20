@@ -55,7 +55,18 @@
       "WebFetch(domain:master.d121neu4gkwbak.amplifyapp.com)",
       "WebFetch(domain:ban0m5jvz3.execute-api.us-east-1.amazonaws.com)",
       "Bash(gh run *)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\gagra\\\\SkillStorm\\\\React\\\\Beauty-Station-React\" -Directory)",
+      "Bash(Select-Object Name)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\gagra\\\\SkillStorm\\\\React\\\\Beauty-Station-React\" -Recurse -Force)",
+      "Bash(Select-Object -First 50)",
+      "Bash(Copy-Item *)",
+      "Bash(cp \"c:/Users/gagra/Pictures/Beauty Station/WhatsApp Image 2026-05-12 at 1.42.40 PM.jpeg\" \"C:/Users/gagra/SkillStorm/React/Beauty-Station-React/public/images/portafolio_bodas_1.jpg\")",
+      "Bash(cp \"c:/Users/gagra/Pictures/Beauty Station/WhatsApp Image 2026-05-12 at 2.02.17 PM.jpeg\" \"C:/Users/gagra/SkillStorm/React/Beauty-Station-React/public/images/portafolio_bodas_2.jpg\")",
+      "Bash(cp \"c:/Users/gagra/Pictures/Beauty Station/WhatsApp Image 2026-05-12 at 1.52.53 PM.jpeg\" \"C:/Users/gagra/SkillStorm/React/Beauty-Station-React/public/images/portafolio_bodas_3.jpg\")",
+      "Bash(cp \"c:/Users/gagra/Pictures/Beauty Station/WhatsApp Image 2026-05-12 at 2.01.08 PM.jpeg\" \"C:/Users/gagra/SkillStorm/React/Beauty-Station-React/public/images/portafolio_bodas_4.jpg\")",
+      "Bash(cp \"c:/Users/gagra/Pictures/Beauty Station/WhatsApp Image 2026-05-12 at 1.45.50 PM.jpeg\" \"C:/Users/gagra/SkillStorm/React/Beauty-Station-React/public/images/portafolio_bodas_5.jpg\")",
+      "Bash(git *)"
     ]
   }
 }

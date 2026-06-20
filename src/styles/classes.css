@@ -55,79 +55,16 @@
 }
 
 /* ===================================================
-   Course grid wrapper + arrows
-   =================================================== */
-.course-grid-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    margin: 20px 0 0;
-}
-
-.course-arrow {
-    position: absolute;
-    top: 45%;
-    transform: translateY(-50%);
-    background: #FFFFFF;
-    border: 1px solid #E8CBD4;
-    border-radius: 50%;
-    width: 48px;
-    height: 48px;
-    font-size: 18px;
-    color: #cd929d;
-    cursor: pointer;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.25s ease;
-    box-shadow: 0 2px 10px rgba(160, 100, 122, 0.2);
-    flex-shrink: 0;
-}
-
-.course-arrow:hover {
-    background: #cd929d;
-    color: #FFFFFF;
-    border-color: #cd929d;
-    transform: translateY(-50%) scale(1.08);
-}
-
-.course-arrow--left {
-    left: 12px;
-}
-
-.course-arrow--right {
-    right: 12px;
-}
-
-/* ===================================================
-   Course grid — horizontal scroll row
+   Course grid — 2-column at all sizes
    =================================================== */
 .course-grid {
-    display: flex;
-    flex-direction: row;
-    overflow-x: scroll;
-    gap: 75px;
-    padding-right: 200px;
-    padding-top: 40px;
-    padding-bottom: 50px;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-}
-
-.course-grid::-webkit-scrollbar {
-    height: 14px;
-}
-
-.course-grid::-webkit-scrollbar-track {
-    background: #EDD8DE;
-    border-radius: 10px;
-}
-
-.course-grid::-webkit-scrollbar-thumb {
-    background: #cd929d;
-    border-radius: 10px;
-    border: 2px solid #EDD8DE;
+    display: grid;
+    grid-template-columns: repeat(2, 21vw);
+    gap: 55px;
+    width: fit-content;
+    margin: 40px auto 60px;
+    padding: 0 24px;
+    box-sizing: border-box;
 }
 
 /* ===================================================
@@ -141,8 +78,7 @@
     overflow: hidden;
     box-shadow: 0 3px 16px rgba(160, 100, 122, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    width: 19vw;
-    flex-shrink: 0;
+    border-radius: 0;
 }
 
 .course-grid-card:hover {
@@ -150,20 +86,12 @@
     box-shadow: 0 14px 34px rgba(160, 100, 122, 0.22);
 }
 
-.course-grid-card:first-child {
-    margin-left: 5%;
-}
-
-.course-grid-card:last-child {
-    margin-right: 5%;
-}
-
 /* ── Image ── */
 .course-grid-img-wrap {
     position: relative;
     overflow: hidden;
     width: 100%;
-    aspect-ratio: 1/1.6;
+    aspect-ratio: 4/5;
     flex-shrink: 0;
 }
 
@@ -196,6 +124,7 @@
 /* ── Card info ── */
 .course-grid-info {
     padding: 16px 18px 20px;
+    background-color: #f7ebe6;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -247,27 +176,31 @@
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 7px 12px;
+    justify-content: flex-start;
+    padding: 5px 9px;
     background-color: #F0E2E9;
     color: #cd929d;
     border: 1px solid #E8CBD4;
     font-family: 'Montserrat', sans-serif;
     font-weight: 600;
-    font-size: 10px;
-    letter-spacing: 0.8px;
+    font-size: 8px;
+    letter-spacing: 0.3px;
     text-transform: uppercase;
     overflow: hidden;
     transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
-    align-self: stretch;
-    min-height: 30px;
+    align-self: flex-start;
+    max-width: 100%;
+    min-height: 26px;
     white-space: nowrap;
     box-sizing: border-box;
-    width: 100%;
 }
 
 .course-grid-date .default-text {
     transition: opacity 0.25s ease;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
 }
 
 .course-grid-date .hover-text {
@@ -279,10 +212,10 @@
     opacity: 0;
     transition: opacity 0.25s ease;
     font-weight: 700;
-    letter-spacing: 1px;
-    font-size: 10px;
+    letter-spacing: 0.5px;
+    font-size: 8px;
     white-space: nowrap;
-    padding: 0 8px;
+    padding: 0 6px;
 }
 
 .course-grid-card:hover .course-grid-date {
@@ -300,20 +233,7 @@
 }
 
 /* ===================================================
-   Large tablet — max-width 1200px
-   =================================================== */
-@media (max-width: 1200px) {
-    .course-grid-card {
-        width: 26vw;
-    }
-
-    .course-grid {
-        gap: 40px;
-    }
-}
-
-/* ===================================================
-   Tablet — max-width 900px
+   Tablet — max-width 900px: drop to 2 columns
    =================================================== */
 @media (max-width: 900px) {
     .header-information-class {
@@ -325,29 +245,26 @@
         padding: 65px 20px 55px;
     }
 
-    .course-grid-card {
-        width: 36vw;
-    }
-
     .course-grid {
-        gap: 24px;
+        grid-template-columns: repeat(2, 25vw);
+        gap: 30px;
+        width: fit-content;
+        padding: 0 16px;
+        margin: 32px auto 50px;
     }
 }
 
 /* ===================================================
-   Mobile — max-width 500px
+   Mobile — max-width 600px
    =================================================== */
-@media (max-width: 500px) {
-    .course-grid-card {
-        width: 60vw;
-    }
-
+@media (max-width: 600px) {
     .course-grid {
-        gap: 16px;
-    }
-
-    .course-arrow {
-        display: none;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+        width: auto;
+        max-width: 100%;
+        padding: 0 12px;
+        margin: 24px auto 40px;
     }
 
     .header-information-class {
@@ -361,6 +278,29 @@
 
     .subheader-information-class {
         font-size: 0.9rem;
+    }
+
+    .course-grid-date {
+        font-size: 7px;
+        letter-spacing: 0.2px;
+        padding: 4px 7px;
+        min-height: 22px;
+    }
+
+    .course-grid-date .hover-text {
+        font-size: 7px;
+        letter-spacing: 0.3px;
+    }
+}
+
+/* ===================================================
+   Very small — max-width 380px
+   =================================================== */
+@media (max-width: 380px) {
+    .course-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 0 8px;
     }
 }
 

@@ -1,14 +1,47 @@
 // src/pages/BeautySDomicilio.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import '../styles/beauty-SDomicilio.css';
 import { useLocation } from 'react-router-dom';
 
+const GALLERY_IMAGES = [
+  { src: `${process.env.PUBLIC_URL}/images/domicilio_gal1.jpg`, alt: 'Bridal Event 1' },
+  { src: `${process.env.PUBLIC_URL}/images/domicilio_gal3.jpg`, alt: 'Bridal Event 2' },
+  { src: `${process.env.PUBLIC_URL}/images/domicilio_gal2.jpg`, alt: 'Bridal Event 3' },
+  { src: `${process.env.PUBLIC_URL}/images/domicilio_gal4.jpg`, alt: 'Bridal Event 4' },
+  { src: `${process.env.PUBLIC_URL}/images/domicilio_gal6.jpg`, alt: 'Bridal Event 5' },
+  { src: `${process.env.PUBLIC_URL}/images/domicilio_gal5.jpg`, alt: 'Bridal Event 6' },
+  { src: `${process.env.PUBLIC_URL}/images/domicilio_gal7.jpg`, alt: 'Bridal Event 7' },
+  { src: `${process.env.PUBLIC_URL}/images/domicilio_gal9.jpg`, alt: 'Bridal Event 8' },
+  { src: `${process.env.PUBLIC_URL}/images/domicilio_gal8.jpg`, alt: 'Bridal Event 9' },
+];
+
 const BeautySDomicilio = () => {
   const location = useLocation();
+  const [lightboxIndex, setLightboxIndex] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
+
+  const openLightbox = (index) => setLightboxIndex(index);
+  const closeLightbox = () => setLightboxIndex(null);
+
+  const goNext = useCallback(() =>
+    setLightboxIndex(i => (i + 1) % GALLERY_IMAGES.length), []);
+
+  const goPrev = useCallback(() =>
+    setLightboxIndex(i => (i - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length), []);
+
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    const onKey = (e) => {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') goNext();
+      if (e.key === 'ArrowLeft') goPrev();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [lightboxIndex, goNext, goPrev]);
 
   const [formData, setFormData] = useState({
     'emailAddress' : '',
@@ -210,23 +243,36 @@ const BeautySDomicilio = () => {
 
         {/* Bottom Section: Gallery Grid */}
         <div className="domicilio-gallery-section">
-           <div className="domicilio-gallery-grid">
-              {/* Newly Uploaded Bridal Images */}
-              <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal1.jpg`} alt="Bridal Event Preview 1" className="gallery-img-item" />
-              <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal3.jpg`} alt="Bridal Event Preview 2" className="gallery-img-item" />
-              <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal2.jpg`} alt="Bridal Event Preview 3" className="gallery-img-item" />
-              <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal4.jpg`} alt="Bridal Event Preview 4" className="gallery-img-item" />
-              <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal6.jpg`} alt="Bridal Event Preview 5" className="gallery-img-item" />
-              
-              {/* Newly Uploaded Bridal Images (Set 2) */}
-              <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal5.jpg`} alt="Bridal Event Preview 6" className="gallery-img-item" />
-              <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal7.jpg`} alt="Bridal Event Preview 7" className="gallery-img-item" />
-              <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal9.jpg`} alt="Bridal Event Preview 8" className="gallery-img-item" />
-              <img src={`${process.env.PUBLIC_URL}/images/domicilio_gal8.jpg`} alt="Bridal Event Preview 9" className="gallery-img-item" />
-           </div>
+          <div className="domicilio-gallery-grid">
+            {GALLERY_IMAGES.map((img, i) => (
+              <img
+                key={i}
+                src={img.src}
+                alt={img.alt}
+                className="gallery-img-item"
+                onClick={() => openLightbox(i)}
+              />
+            ))}
+          </div>
         </div>
 
       </div>
+
+      {/* Lightbox */}
+      {lightboxIndex !== null && (
+        <div className="lb-overlay" onClick={closeLightbox}>
+          <button className="lb-close" onClick={closeLightbox}>&#x2715;</button>
+          <button className="lb-arrow lb-arrow--prev" onClick={(e) => { e.stopPropagation(); goPrev(); }}>&#8249;</button>
+          <img
+            className="lb-img"
+            src={GALLERY_IMAGES[lightboxIndex].src}
+            alt={GALLERY_IMAGES[lightboxIndex].alt}
+            onClick={(e) => e.stopPropagation()}
+          />
+          <button className="lb-arrow lb-arrow--next" onClick={(e) => { e.stopPropagation(); goNext(); }}>&#8250;</button>
+          <p className="lb-counter">{lightboxIndex + 1} / {GALLERY_IMAGES.length}</p>
+        </div>
+      )}
     </>
   );
 };

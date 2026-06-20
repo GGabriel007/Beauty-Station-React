@@ -1,5 +1,5 @@
 // src/pages/Classes_2.js
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import '../styles/classes.css';
 import { Link, useLocation } from 'react-router-dom';
 import { useCourseData } from '../context/CourseDataContext';
@@ -42,8 +42,7 @@ const CourseCard = ({ id, course }) => {
 };
 
 const Classes2 = () => {
-  const location  = useLocation();
-  const scrollRef = useRef(null);
+  const location    = useLocation();
   const coursesData = useCourseData();
 
   const makeupCourses = Object.entries(coursesData)
@@ -53,29 +52,6 @@ const Classes2 = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
-
-  const [canScrollLeft,  setCanScrollLeft]  = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-
-  const checkScroll = () => {
-    if (scrollRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-      setCanScrollLeft(scrollLeft > 0);
-      setCanScrollRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth);
-    }
-  };
-
-  useEffect(() => {
-    setTimeout(checkScroll, 100);
-    window.addEventListener('resize', checkScroll);
-    return () => window.removeEventListener('resize', checkScroll);
-  }, [makeupCourses.length]);
-
-  const scroll = (direction) => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: direction === 'left' ? -280 : 280, behavior: 'smooth' });
-    }
-  };
 
   return (
     <div className="information-class">
@@ -94,18 +70,10 @@ const Classes2 = () => {
       </div>
 
       {/* ── Course grid ── */}
-      <div className="course-grid-wrapper">
-        {canScrollLeft && (
-          <button className="course-arrow course-arrow--left" onClick={() => scroll('left')}>&#10094;</button>
-        )}
-        <div className="course-grid" ref={scrollRef} onScroll={checkScroll}>
-          {makeupCourses.map(([id, course]) => (
-            <CourseCard key={id} id={id} course={course} />
-          ))}
-        </div>
-        {canScrollRight && (
-          <button className="course-arrow course-arrow--right" onClick={() => scroll('right')}>&#10095;</button>
-        )}
+      <div className="course-grid">
+        {makeupCourses.map(([id, course]) => (
+          <CourseCard key={id} id={id} course={course} />
+        ))}
       </div>
 
     </div>

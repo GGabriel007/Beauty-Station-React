@@ -187,9 +187,9 @@
 }
 
 /* ===================================================
-   Large tablet — max-width 1200px
+   Large tablet — max-width 1150px
    =================================================== */
-@media (max-width: 1200px) {
+@media (max-width: 1150px) {
     .classes-grid {
         grid-template-columns: repeat(3, 25vw);
         gap: 30px;
@@ -200,12 +200,6 @@
    Tablet — max-width 900px
    =================================================== */
 @media (max-width: 900px) {
-    .classes-grid {
-        grid-template-columns: repeat(2, 38vw);
-        gap: 24px;
-        margin: 50px auto 70px;
-    }
-
     .classes-hero-title {
         font-size: 2.4rem;
     }
@@ -216,9 +210,9 @@
 }
 
 /* ===================================================
-   Mobile — max-width 500px
+   Mobile — max-width 600px
    =================================================== */
-@media (max-width: 500px) {
+@media (max-width: 600px) {
     .classes-grid {
         display: flex;
         flex-direction: row;

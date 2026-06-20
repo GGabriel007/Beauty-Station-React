@@ -64,7 +64,7 @@ const Header = () => {
           <li><Link className={`header-button ${getActiveClass('/portafolio')}`} to="/portafolio" onClick={() => setMenuOpen(false)}>PORTAFOLIO</Link></li>
           <li><a className={`header-button ${getActiveClass('/cart')}`} href="/cart" onClick={handleCartClick}>CARRITO</a></li>
           <li><Link className={`header-button ${getActiveClass('/servicio-a-domicilio')}`} to="/servicio-a-domicilio" onClick={() => setMenuOpen(false)}>SERVICIO A DOMICILIO</Link></li>
-          <li><Link className={`header-button ${getActiveClass('/nosotros')}`} to="/nosotros" onClick={() => setMenuOpen(false)}>NOSOTROS</Link></li>
+          <li><Link className={`header-button ${getActiveClass('/nosotros')}`} to="/nosotros" onClick={() => setMenuOpen(false)}>ABOUT US</Link></li>
 
           {authStatus === 'authenticated' ? (
             <>
